@@ -63,6 +63,7 @@ function generateTimeSeries()
 function generateChart()
 {
 	var dates = generateTimeSeries();
+	// the list of account for witch we want to create a graph
 	var accounts = {}
 	accounts[1] = {account:'Gr=100' };
 	accounts[2] = {account:'Gr=4'};
