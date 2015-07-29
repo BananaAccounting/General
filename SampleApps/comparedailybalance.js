@@ -20,7 +20,7 @@
 // @task = app.command
 // @outputformat = none
 // @inputdatasource = none
-// @doctype = 100.*
+// @doctype = 100.*;110.*;130.*
 // @timeout = -1
 //
 
