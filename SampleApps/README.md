@@ -15,8 +15,9 @@ It takes a mt940 or ISO20022 bank statements file, and show if there are differe
 This app will show ho to create a chart using C3 javascript library.  
 It is a very basic, in the function generateChart you specify the accounts or groups number. 
 
+##ch.banana.apps.details.js
 
-
+This app will show a detailed report of the Profit/Loss Account.
 
 
 
