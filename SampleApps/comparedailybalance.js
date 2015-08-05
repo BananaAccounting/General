@@ -23,6 +23,7 @@
 // @doctype = 100.*;110.*;130.*
 // @timeout = -1
 //
+// TODO Add table budget
 
 function exec(string) {
     // This script compare the transaction included in the file compare
