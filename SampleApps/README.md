@@ -19,6 +19,10 @@ It is a very basic, in the function generateChart you specify the accounts or gr
 
 This app will show a detailed report of the Profit/Loss Account.
 
+##comparestwoaccountingfiles.js
+
+This app will show the differences between two accounting files.
+
 
 
 
