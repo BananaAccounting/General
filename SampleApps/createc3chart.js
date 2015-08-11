@@ -13,8 +13,7 @@
 // limitations under the License.
 //
 // Create a file that use the C3 chart libraries
-// @doctype = nodocument
-// @id = ch.banana.demo.c3.chart
+// @id = ch.banana.demo.createc3chart
 // @description = Create a C3 chart
 // @doctype = 100.*;110.*;130.*
 // @task = export.file
