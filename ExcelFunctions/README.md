@@ -8,6 +8,7 @@ File description
 * BananaFunctionsUseAll.xlsm Excel a simple file with examples for how to use all functions. 
 * BananaFunctions.bas The User defined functions. 
   Use this to add the User Defined Functions to an excisting Excel file. 
+* BananaFunctions.zip. It include all the file necessary to test the functionalities. Including the example accounting files.  
   
 
 
