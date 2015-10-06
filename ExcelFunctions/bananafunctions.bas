@@ -24,7 +24,7 @@ Const MAXLASTQUERY = 10
 Dim lastQuery(0 To MAXLASTQUERY) As String
 
 Public Function BFunctionsVersion() As String
-BFunctionsVersion = "2015-10-04"
+BFunctionsVersion = "2015-10-06"
 End Function
 Public Function BAccountDescription(fileName As String, account As String, Optional column As String = "") As String
 Application.Volatile
@@ -112,7 +112,11 @@ If Len(dateIso) = 10 Then
     End If
 End Function
 
-Public Function BFileName(fileName As String) As String
+Public Function BFileName(fileName As String, Optional disableConnection As String = "") As String
+If disableConnection <> "0" And Len(disableConnection) > 0 Then
+    BFileName = ""
+    Exit Function
+End If
 Dim myUrl As String
 myUrl = "info/Base/FileName"
 Dim temp As String
@@ -243,6 +247,7 @@ On Error Resume Next
     BananaIsRunning = False
     End If
 End Function
+
 
 
 
