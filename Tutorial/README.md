@@ -1,5 +1,11 @@
 #BananaApp Tutorial
 
+**To download the files**
+
+1. clic on the link of the file name
+2. clic on the button **Row** or right clic on the button **Row** and choose "Save as"
+
+
 Tutorial1.ac2 contains in the table Documents a series of tutorial scripts 
 1. Start Banana Accounting
 2. Open the ac2 tutorial file 
