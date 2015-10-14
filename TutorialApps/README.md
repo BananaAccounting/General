@@ -6,9 +6,10 @@
 2. clic on the button **Row** or right clic on the button **Row** and choose "Save as"
 
 ##Embedded BananaApp
-Banana Accounting can be embedded in the accounting file. By this way you do not need to install the BananaApp.
-The tutorial make use of this feature to show the different possibilitties.
-To use the tutorial
+Banana Accounting can be embedded in the accounting file.  
+The tutorial is an accounting file that includes many BananaApps that show the different possibilitties. 
+
+To use the tutorial: 
 
 1. Start Banana Accounting 8
 2. Download and open the ac2 tutorial file 
