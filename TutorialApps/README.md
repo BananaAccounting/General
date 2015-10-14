@@ -5,9 +5,13 @@
 1. clic on the link of the file name
 2. clic on the button **Row** or right clic on the button **Row** and choose "Save as"
 
+## Documentation
+* [BananaApp Documentation] (http://doc8.banana.ch/en/node/4065)
+
 ##Embedded BananaApp
-Banana Accounting can be embedded in the accounting file.  
-The tutorial is an accounting file that includes many BananaApps that show the different possibilitties. 
+BananaApps can be embedded in the accounting file.
+Embedded script run only for the specific file, but don't need to be installed. 
+A  tutorial is a  Banana accounting file that includes many BananaApps that show how to construct the BananaApp and let  experiment by changing the code. 
 
 To use the tutorial: 
 
