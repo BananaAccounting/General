@@ -16,7 +16,7 @@
 // @version = 1.0
 // @pubdate = 2015-07-29
 // @publisher = Banana.ch SA
-// @description = Compare Balance with mt940/ISO20022 file
+// @description = Reconcile account with mt940/ISO20022 file
 // @task = app.command
 // @outputformat = none
 // @inputdatasource = none
