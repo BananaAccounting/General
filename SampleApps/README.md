@@ -23,6 +23,7 @@ This app will show a detailed report of the Profit/Loss Account.
 
 This app will show the differences between two accounting files.
 
+##ch.banana.apps.segments.js
 
-
+This app will show a report containing a detailed subdivision of the segments with balances.
 
