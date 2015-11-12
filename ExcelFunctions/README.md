@@ -4,9 +4,9 @@ Excel User Defined functions that allow to retrieve data from Banana Accounting 
 For more information see http://doc8.banana.ch/en/node/4999
 
 File description
-* BananaFunctions.xlsm Excel a simple file  with example Visual Basic User Defined Functions
-* BananaFunctionsUseAll.xlsm Excel a simple file with examples for how to use all functions. 
-* BananaFunctions.bas The User defined functions. 
+* BananaSync.xlsm Excel a simple file  with example Visual Basic User Defined Functions
+* BananaSyncUseAll.xlsm Excel a simple file with examples for how to use all functions. 
+* BananaSync.bas The User defined functions. 
   Use this to add the User Defined Functions to an excisting Excel file. 
 * BananaFunctions.zip. It include all the file necessary to test the functionalities. Including the example accounting files.  
   
