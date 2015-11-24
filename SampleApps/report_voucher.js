@@ -16,10 +16,9 @@
 // @api = 1.0
 // @pubdate = 2015-11-23
 // @publisher = Banana.ch SA
-// @description = Swiss Red Cross - Report Voucher (Example)
+// @description = Report Voucher
 // @task = app.command
-// @doctype = *.*
-// @docproperties = redcross
+// @doctype = 100.*;110.*
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
