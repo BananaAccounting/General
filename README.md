@@ -8,21 +8,19 @@ This repository contains file that are of general use.
 * Directory TutorialApps. BananaAccounting file with embedded apps.
 
 
-
-
 **Download the files**
 
 1. Click on the link of the file
 2. Click on the button **Row** or right-click on the button **"Row"** and "Save page as" 
 
-##BananaApp report
-Example of a BananaApp
-* [company_2015.ac2] (https://github.com/BananaAccounting/General/raw/master/SampleFiles/company-2015.ac2)
-* [report_vaucher.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/SampleApps/report_voucher.js)
+##See a BananaApp in action 
+By following this step you will see a Banana App voucher report. The voucher report print the transaction's data.  
 
-[Documentation Banana 8] (http://doc8.banana.ch/en/node/7709)
+* Start Banana Accounting
+* Download and open the file [company_2015.ac2] (https://github.com/BananaAccounting/General/raw/master/SampleFiles/company-2015.ac2)
+* Download and install the BananaApp report [report_vaucher.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/SampleApps/report_voucher.js)  
+See  [how to install and run a BananaApp] (http://doc8.banana.ch/en/node/7709)
+* Position the cursor on the transaction line that you want to print a voucher.
+* Execute the Banana App (menu Apps ->Voucher)
 
-##Use the examples files
-1. Download the example ac2 file
-2. Download and install the BananaApp
-3. Open the example file and execute the the App
+
