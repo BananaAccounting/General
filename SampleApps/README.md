@@ -27,3 +27,7 @@ This app will show the differences between two accounting files.
 
 This app will show a report containing a detailed subdivision of the segments with balances.
 
+##report_voucher.js
+
+This app will show a report containing a detailed payment voucher for the Swiss Red Cross.
+
