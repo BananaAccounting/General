@@ -26,10 +26,10 @@
 var param = {};
 param = {
     "systemPaymentVoucherNo" : "00001",
-    "projectName" : "Vietnam Disaster Risk Reduction CA MAV",
-    "projectNumber" : "445435",
-    "paidTo" : "Virasat Nguyen",
-    "description" : "R Nguyen project monitoring expenses Ca Mau 01-03 Jan 2014",
+    "projectName" : "Vietnam Disaster Risk Reduction",
+    "projectNumber" : "123456",
+    "paidTo" : "Mario Rossi",
+    "description" : "Project monitoring expenses Jan 2014",
     "paidIn" : "",
     "chequeNumber" : "",
     "preparedBy" : "Person 1",
