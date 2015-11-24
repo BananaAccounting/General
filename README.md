@@ -19,7 +19,8 @@ This repository contains file that are of general use.
 Example of a BananaApp
 * [company_2015.ac2] (https://github.com/BananaAccounting/General/raw/master/SampleFiles/company-2015.ac2)
 * [report_vaucher.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/SampleApps/report_voucher.js)
-* [Documentation Banana 8] (http://doc8.banana.ch/en/node/7709)
+
+[Documentation Banana 8] (http://doc8.banana.ch/en/node/7709)
 
 ##Use the examples files
 1. Download the example ac2 file
