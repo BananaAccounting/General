@@ -18,7 +18,7 @@
 // @publisher = Banana.ch SA
 // @description = Report Voucher
 // @task = app.command
-// @doctype = 100.*;110.*
+// @doctype = 100.*;110.*;130.*
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
