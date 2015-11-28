@@ -22,9 +22,15 @@ Option Explicit
 'Save lastQuery for debug purposes
 Const MAXLASTQUERY = 10
 Dim lastQuery(0 To MAXLASTQUERY) As String
-
+'Reset in
+' To avoid continuing error, maybe there is a better solution
+Const MAXERROR = 5
+Dim requestNumber As Integer
+Dim lastRequestNumber As Integer
+Dim errorCount As Integer
+'Return the version date
 Public Function BFunctionsVersion() As String
-BFunctionsVersion = "2015-10-06"
+BFunctionsVersion = "2015-11-28"
 End Function
 Public Function BAccountDescription(fileName As String, account As String, Optional column As String = "") As String
 Application.Volatile
@@ -53,11 +59,12 @@ End Function
 Public Function BBalanceGet(fileName As String, account As String, cmd As String, valueName As String, Optional period As String = "") As Double
 Application.Volatile
 Dim myUrl As String
+Dim myQuery As String
 myUrl = cmd & "/" & account & "/" & valueName
-If Not IsEmpty(period) Then
-    myUrl = myUrl & "?period=" & period
+If Len(period) > 0 Then
+    myQuery = "period=" & period
     End If
-BBalanceGet = Val(BQuery(fileName, myUrl))
+BBalanceGet = Val(BQuery(fileName, myUrl, myQuery))
 End Function
 Public Function BBudgetAmount(fileName As String, account As String, Optional period As String = "") As Double
 ' Retrieve the Amount for Balance
@@ -73,9 +80,11 @@ End Function
 Public Function BBudgetInterest(fileName As String, account As String, interestRate As String, Optional period As String = "")
 Application.Volatile
 Dim myUrl As String
-myUrl = "budgetinterest/" & account & "?rate=" & interestRate
-If Not IsEmpty(period) Then
-    myUrl = myUrl & "&period=" & period
+Dim myQuery As String
+myUrl = "budgetinterest/" & account
+myQuery = "rate=" & interestRate
+If Len(period) > 0 Then
+    myQuery = myQuery & "&period=" & period
     End If
 BBudgetInterest = Val(BQuery(fileName, myUrl))
 End Function
@@ -106,7 +115,7 @@ If Len(dateIso) = 10 Then
 End Function
 Public Function BEndPeriod(fileName As String, Optional period As String = "") As Date
 Dim dateIso As String
-dateIso = BHttpQuery(fileName, "endperiod?period=" & period)
+dateIso = BHttpQuery(fileName, "endperiod", "period=" & period)
 If Len(dateIso) = 10 Then
     BEndPeriod = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
     End If
@@ -121,7 +130,7 @@ Dim myUrl As String
 myUrl = "info/Base/FileName"
 Dim temp As String
 temp = BHttpQuery(fileName, myUrl)
-If temp <> "" Then
+If Len(temp) > 0 Then
     BFileName = Mid(temp, InStrRev(temp, "/") + 1)
 Else
     BFileName = ""
@@ -130,11 +139,13 @@ End Function
 Public Function BInterest(fileName As String, account As String, interestRate As String, Optional period As String = "")
 Application.Volatile
 Dim myUrl As String
-myUrl = "interest/" & account & "?rate=" & interestRate
+Dim myQuery As String
+myUrl = "interest/" & account
+myQuery = "rate=" & interestRate
 If Not IsEmpty(period) Then
-    myUrl = myUrl & "&period=" & period
+    myQuery = myQuery & "&period=" & period
     End If
-BInterest = Val(BQuery(fileName, myUrl))
+BInterest = Val(BQuery(fileName, myUrl, myQuery))
 
 End Function
 Public Function BInfo(fileName As String, sectionXml As String, idXml As String) As String
@@ -155,7 +166,7 @@ BOpening = Val(BBalanceGet(fileName, account, "balance", "opening", period))
 End Function
 Public Function BStartPeriod(fileName As String, Optional period As String = "") As Date
 Dim dateIso As String
-dateIso = BHttpQuery(fileName, "startperiod?period=" & period)
+dateIso = BHttpQuery(fileName, "startperiod", "period=" & period)
 If Len(dateIso) = 10 Then
     BStartPeriod = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
     End If
@@ -178,13 +189,15 @@ If Len(column) > 0 Then
 BVatDescription = BHttpQuery(fileName, myUrl)
 End Function
 
-Public Function BQuery(fileName As String, query As String) As String
+Public Function BQuery(fileName As String, url As String, Optional query As String = "") As String
 Application.Volatile
-BQuery = BHttpQuery(fileName, query)
+BQuery = BHttpQuery(fileName, url, query)
 End Function
 Public Sub RecalculateAll()
 'First do some change to the spreadsheet
 'We create a named range and delete it
+requestNumber = requestNumber + 1
+errorCount = 0
 On Error Resume Next
 ActiveWorkbook.Names("someChanges").Delete
 ActiveWorkbook.Names.Add Name:="someChanges", RefersTo:="=XEX1048575"
@@ -193,10 +206,40 @@ ActiveWorkbook.Names("someChanges").Delete
 Application.CalculateFullRebuild
 End Sub
 'We call the Banana Accounting web server
-Private Function BHttpQuery(fileName As String, query As String) As String
+Private Function BHttpQuery(fileName As String, url As String, Optional query As String = "") As String
 ' Example query
 ' http://localhost:8081/v1/doc/company-2015.ac2/balance/1000/balance
-If fileName = "" Then
+BHttpQuery = ""
+' we do not want to repeat the same error
+If (lastRequestNumber = requestNumber And errorCount > MAXERROR) Then
+    Exit Function
+End If
+lastRequestNumber = requestNumber
+If Len(fileName) = 0 Then
+    Exit Function
+End If
+Dim oHttp As Object
+Err.Number = 0
+On Error Resume Next
+'for MAC remove comment
+'Set oHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+If Err.Number > 0 Then
+    BHttpQuery = BHttpQuery_Mac(fileName, url, query)
+    Exit Function
+End If
+BHttpQuery = BHttpQueryWindows(fileName, url, query)
+End Function
+'Windows We call the Banana Accounting web server using WinHttpRequest
+Private Function BHttpQueryWindows(fileName As String, url As String, query As String) As String
+' Example query
+' http://localhost:8081/v1/doc/company-2015.ac2/balance/1000/balance
+BHttpQueryWindows = ""
+' we do not want to repeat the same error
+If (lastRequestNumber = requestNumber And errorCount > MAXERROR) Then
+    Exit Function
+End If
+lastRequestNumber = requestNumber
+If Len(fileName) = 0 Then
     Exit Function
 End If
 Dim myUrl As String
@@ -205,32 +248,133 @@ Dim BananaHostName As String
 'retrieve optiona hostName
 On Error Resume Next
 BananaHostName = Range("BananaHostName").Value
-If BananaHostName = "" Then
+If Len(BananaHostName) = 0 Then
     BananaHostName = "localhost:8081"
 End If
+
+On Error Resume Next
 Set oHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
-myUrl = "http://" & BananaHostName & "/v1/doc/" & fileName & "/" & query
+If Err.Number > 0 Then
+    MsgBox "Could not create object 'WinHttp.WinHttpRequest.5.1'"
+    errorCount = errorCount + 1
+    Exit Function
+End If
+myUrl = "http://" & BananaHostName & "/v1/doc/" & fileName & "/" & url & "?" & query
 ' save last query for debug purpose
 Dim i As Integer
 For i = 0 To (MAXLASTQUERY - 1)
     lastQuery(i) = lastQuery(i + 1)
 Next i
 lastQuery(MAXLASTQUERY) = myUrl
-oHttp.Open "GET", myUrl, False
+oHttp.Open "POST", myUrl, False
 On Error Resume Next
 oHttp.send
 If Err.Number = 0 Then
     If oHttp.Status < 300 Then
-        BHttpQuery = oHttp.responseText
+        errorCount = 0
+        BHttpQueryWindows = oHttp.responseText
         '' result of query not correct query
-        If Left(BHttpQuery, 6) = "<html " Then
-            BHttpQuery = ""
+        If Left(BHttpQueryWindows, 6) = "<html " Then
+            BHttpQueryWindows = ""
         End If
     Else
+    errorCount = errorCount + 1
     '
     End If
+Else
+    errorCount = errorCount + 1
 End If
 End Function
+
+'We call the Banana Accounting web server
+Private Function BHttpQuery_Mac(fileName As String, url As String, query As String) As String
+' Example query
+' http://localhost:8081/v1/doc/company-2015.ac2/balance/1000/balance
+BHttpQuery_Mac = ""
+' we do not want to repeat the same error
+If (lastRequestNumber = requestNumber And errorCount > MAXERROR) Then
+    Exit Function
+End If
+lastRequestNumber = requestNumber
+If Len(fileName) = 0 Then
+    Exit Function
+End If
+'MsgBox "MAC not supported"
+'Exit Function
+Dim myUrl As String
+Dim BananaHostName As String
+'retrieve optiona hostName
+On Error Resume Next
+BananaHostName = Range("BananaHostName").Value
+If Len(BananaHostName) = 0 Then
+    BananaHostName = "localhost:8081"
+End If
+Dim src As Worksheet
+Set src = ThisWorkbook.Sheets("Start")
+src.Range("$A$50").Value = ""
+myUrl = "http://" & BananaHostName & "/v1/doc/" & fileName & "/" & url & "?" & query
+' save last query for debug purpose
+Dim qt As QueryTable
+Dim count As Integer
+While src.QueryTables.count > 0
+    src.QueryTables(1).Delete
+Wend
+Err.Number = 0
+Set qt = src.QueryTables.Add(Connection:="URL;" & myUrl, Destination:=src.Range("$A$50"))
+With qt
+    .BackgroundQuery = True
+    .TablesOnlyFromHTML = True
+    .SaveData = True
+    .BackgroundQuery = False
+End With
+On Error Resume Next
+qt.Refresh
+If Err.Number = 0 Then
+    BHttpQuery_Mac = src.Range("$A$50").Value
+End If
+End Function
+
+'Private Declare Function popen Lib "libc.dylib" (ByVal command As String, ByVal mode As String) As Long
+'Private Declare Function pclose Lib "libc.dylib" (ByVal file As Long) As Long
+'Private Declare Function fread Lib "libc.dylib" (ByVal outStr As String, ByVal size As Long, ByVal items As Long, ByVal stream As Long) As Long
+'Private Declare Function feof Lib "libc.dylib" (ByVal file As Long) As Long
+Function execShell_Mac(command As String, Optional ByRef exitCode As Long) As String
+Dim file As Long
+file = popen(command, "r")
+
+If file = 0 Then
+    Exit Function
+End If
+
+While feof(file) = 0
+    Dim chunk As String
+    Dim read As Long
+    chunk = Space(50)
+    read = fread(chunk, 1, Len(chunk) - 1, file)
+    If read > 0 Then
+        chunk = Left$(chunk, read)
+        execShell_Mac = execShell_Mac & chunk
+    End If
+Wend
+
+exitCode = pclose(file)
+End Function
+
+Function getHTTP_Mac(sUrl As String, sQuery As String) As String
+
+Dim sCmd As String
+Dim sResult As String
+Dim lExitCode As Long
+
+sCmd = "curl --get -d """ & sQuery & """" & " " & sUrl
+sResult = execShell_Mac(sCmd, lExitCode)
+
+' ToDo check lExitCode
+
+getHTTP_Mac = sResult
+
+End Function
+
 'Not working and not used
 'It vould be interesting to check if Banana is running
 'In case is not runninn to avoid making queries
@@ -250,6 +394,8 @@ End Function
 
 
 
-
-
+'history
+'2015-11-28  Start adding support for mac
+'            Separated url from query
+			 
 
