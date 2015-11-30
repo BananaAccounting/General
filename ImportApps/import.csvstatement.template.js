@@ -19,7 +19,7 @@
 // @description = Import CSV
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
-// @docproperties = ImportCsv
+// @docproperties = 
 // @outputformat = transactions.simple
 // @inputdatasource = openfiledialog
 // @timeout = -1
@@ -58,6 +58,17 @@ function defineConversionParam() {
 	/** SPECIFY THE SEPARATOR AND THE TEXT DELIMITER USED IN THE CSV FILE */
 	convertionParam.separator = ';';
 	convertionParam.textDelim = '"';
+
+	/** SPECIFY AT WHICH ROW OF THE CSV FILE IS THE HEADER (COLUMN TITLES)
+	We suppose the data will always begin right away after the header line */
+	convertionParam.headerLineStart = 0;
+	convertionParam.dataLineStart = 1;
+
+
+   /** SPECIFY THE COLUMN TO USE FOR SORTING
+   If empty the data are not sorted */
+   convertionParam.sortColum = "Date";
+   convertionParam.sortDescending = false;
 	/** END */
 
 	convertionParam.rowConverter = function(inputRow) {
@@ -74,6 +85,8 @@ function defineConversionParam() {
 		convertedRow["Description"] = inputRow["Kommentar"];
 		convertedRow["_Description2"] = inputRow["Gruppe nach"];
 		convertedRow["Income"] = inputRow["Betrag"];
+		// use the toInternalNumberFormat if the decimal separator is not "."
+		//convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Überweisungsdatum"], ",");
 		//convertedRow["Expenses"] = inputRow["Total"];
 		convertedRow["VatCode"] = inputRow["MWST Code"];
 		convertedRow["ContraAccount"] = inputRow["Kategorie"];
@@ -97,7 +110,7 @@ function preProcessInData(inData) {
 //The purpose of this function is to let the user specify how to convert the categories
 function postProcessIntermediaryData(intermediaryData) {
 
-	/** INSERT HERE THE LIST OF ACCOUNTS NAME AND THE CONVERSION NUMBER */
+	/** INSERT HERE THE LIST OF ACCOUNTS NAME AND THE CONVERSION NUMBER 
 	*   If the content of "Account" is the same of the text 
 	*   it will be replaced by the account number given */
 	//Accounts conversion
@@ -208,8 +221,8 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 	var csvFile = Banana.Converter.csvToArray(inData, convertionParam.separator, convertionParam.textDelim);
 
 	//Variables used to save the columns titles and the rows values
-	var columns = getHeaderData(csvFile); //array
-	var rows = getRowData(csvFile); //array of array
+	var columns = getHeaderData(csvFile, convertionParam.headerLineStart); //array
+	var rows = getRowData(csvFile, convertionParam.dataLineStart); //array of array
 
 	//Load the form with data taken from the array. Create objects
 	loadForm(form, columns, rows);
@@ -263,8 +276,11 @@ function loadForm(form, columns, rows) {
 
 
 //The purpose of this function is to return all the titles of the columns
-function getHeaderData(csvFile) {
-	var headerData = csvFile[0];
+function getHeaderData(csvFile, startLineNumber) {
+	if (!startLineNumber) {
+		startLineNumber = 0;
+	}
+	var headerData = csvFile[startLineNumber];
 	for (var i = 0; i < headerData.length; i++) {
 
 		headerData[i] = headerData[i].trim();
@@ -278,9 +294,12 @@ function getHeaderData(csvFile) {
 
 
 //The purpose of this function is to return all the data of the rows
-function getRowData(csvFile) {
+function getRowData(csvFile, startLineNumber) {
+	if (!startLineNumber) {
+		startLineNumber = 1;
+	}
 	var rowData = [];
-	for (var i = 1; i < csvFile.length; i++) {
+	for (var i = startLineNumber; i < csvFile.length; i++) {
 		rowData.push(csvFile[i]);
 	}
 	return rowData;
