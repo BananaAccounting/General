@@ -1,7 +1,11 @@
 #Import App
 
 ##Sample file import.csvstatement.template.js
-Script that allows the user to import data from CSV file to the Banana document.
+Script that allows the user to import data from proprietary CSV file to the Banana document.
+The ImportApp translate the data from  the propietary to the format specified for bananaimport (a text file with tab separated header and data). See also:
+* [Banana ImportApp documentation] (https://doc8.banana.ch/en/node/4731)
+* [Banana import format documentation] (https://doc8.banana.ch/en/node/3713)
+
 
 The user can define:
 * the parameters for the conversion of the CSV file
@@ -10,6 +14,7 @@ The user can define:
 * eventually add functions that perform desired tasks
 
 #Develop you own CSV Import App
+If you want to develop
 * Create a copy the import.csvstatement.template.js 
 * Change the id and the description
 * Add as a normal BananaApp 
