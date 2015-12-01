@@ -24,7 +24,6 @@ If you want to develop an app that converts a proprietary file to a Banana compa
 * Change the file and test with your data
 * For debugging see https://doc8.banana.ch/en/node/4735
 * Once you are done you can eventually install the App as an import App https://doc8.banana.ch/en/node/4731
-* 
 
 #Contribute your ImportApp
 We welcome people that develop and contribute back the developlments, that may be useful for other (for example proprietary e-bank statements).  
