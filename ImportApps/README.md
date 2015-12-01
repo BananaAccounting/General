@@ -13,11 +13,11 @@ The user can define:
 * eventually the conversion of the accounts/categories
 * eventually add functions that perform desired tasks
 
-#Develop you own CSV Import App
-If you want to develop
+#Develop you own CSV ImportApp
+If you want to develop an app that tranlsate a proprietary file to a Banana compatible import file: 
 * Create a copy the import.csvstatement.template.js 
 * Change the id and the description
-* Add as a normal BananaApp 
+* Add the file as a normal BananaApp see [Documentation Manage Apps] (https://doc8.banana.ch/en/node/7709)
 * Change the file and test with you data.
 * For debugging see https://doc8.banana.ch/en/node/4735
 * Once you are done install the App as an import App https://doc8.banana.ch/en/node/4731
