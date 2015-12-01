@@ -1,11 +1,12 @@
-#Import App
-
-##Sample file import.csvstatement.template.js
-Script that allows the user to import data from proprietary CSV file to the Banana document.
+#ImportApps
 The ImportApp translate the data from  the propietary to the format specified for bananaimport (a text file with tab separated header and data). See also:
 * [Banana ImportApp documentation] (https://doc8.banana.ch/en/node/4731)
 * [Banana import format documentation] (https://doc8.banana.ch/en/node/3713)
+* List of [ImportApps that we have already developed] (https://www.banana.ch/portal/addons/filters?app=Banana80) and are available to users.
 
+
+##Sample file import.csvstatement.template.js
+Script that allows the user to import data from proprietary CSV file to the Banana document.
 
 The user can define:
 * the parameters for the conversion of the CSV file
@@ -25,7 +26,7 @@ If you want to develop an app that tranlsate a proprietary file to a Banana comp
 
 #Contribute your ImportApp
 We welcome people that develop and contribute back the developlments, that may be usefull for other (for example proprietary e-bank statements).  
-We plan to create a specific repository with all the [ImportApps that we have already deveveloped] (https://www.banana.ch/portal/addons/filters) and are available to the BananaUsers.
+We plan to create a specific repository on github with all theImportApps that we have already deveveloped and that are available to the BananaUsers.
 
 * Set the name of the ImportApp to file import.2 lettercountry code.bank name.format.js, for example "import.ch.ubs.csv.js".
 * License terms must be apache 2.0 
