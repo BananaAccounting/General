@@ -29,7 +29,13 @@ If you want to develop an app that converts a proprietary file to a Banana compa
 We welcome people that develop and contribute back the developlments, that may be useful for other (for example proprietary e-bank statements).  
 We plan to create a specific repository on github with all ImportApps that we have already deveveloped and that are available to the Banana Users.
 
-* Set the ImportApp's file name to "import".<2 letterForTheCountry>.<codeBankName>.<format>.js (for example "import.ch.ubs.csv.js")
+* Set the ImportApp's file name:
+ * "import" 
+ * 2 letters for the country (for example "ch")
+ * code bank name (for example "ubs")
+ * format (for example "csv")
+ * .js
+ * (Example: "import.ch.ubs.csv.js")
 * License terms must be apache 2.0 
 * Create and example file with just few rows with the name "import.ch.ubs.csv.csv" (or the more appropriate extension")
 * Create a pull request on this directory or send the file to info@banana.ch
