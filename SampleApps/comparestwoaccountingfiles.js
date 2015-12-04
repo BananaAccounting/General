@@ -15,7 +15,7 @@
 //
 // @id = ch.banana.apps.comparestwoaccountingfiles
 // @version = 1.0
-// @pubdate = 2015-03-06
+// @pubdate = 2015-12-04
 // @publisher = Banana.ch SA
 // @description = Compare two accounting files
 // @task = app.command
@@ -26,12 +26,13 @@
 // @timeout = -1
 //
 
+
+/**
+	Main function
+*/
 function exec(string) {
     
-    //versione
-	var pubdate = "2015-03-06";
-
-	// check if we are on an opened document
+	//Check if we are on an opened document
 	if (!Banana.document)
 		return;
 	var transactions = Banana.document.table('Transactions');
@@ -39,86 +40,82 @@ function exec(string) {
 	var exchangeRates = Banana.document.table('ExchangeRates');
 	var vatCodes = Banana.document.table('VatCodes');
 	var categories = Banana.document.table('Categories');
-
+	var budget = Banana.document.table('Budget');
 	
-	
-	
-	//Apro il secondo file, quello da comparare.
-	//Finestra per scegliere quale file .ac2 aprire
+	//Open a dialog window asking the user to select the .ac2 file to compare
 	var file2 = Banana.application.openDocument("*.*");
 	
-	//Se aperto/esiste
+	//Check if the file has been selected and opened
 	if(!file2){
 		return;
 	}
 	else{
 		
-		//variabili per il file2
+		//Variables used for the file2
 		var transactions1 = file2.table('Transactions');
 		var accounts1 = file2.table('Accounts');
 		var exchangeRates1 = file2.table('ExchangeRates');
 		var vatCodes1 = file2.table('VatCodes');
 		var categories1 = file2.table('Categories');
+		var budget1 = file2.table('Budget');
 
-
-		
-		
-		//Pulizia schermata messaggi a ogni avvio dello script
+		//Clear all the messages from the messages tab
 		Banana.document.clearMessages();
 		file2.clearMessages();
 		
-		//Report per prove di stampa
-		//var report = Banana.Report.newReport("Confronto contabilità");
 				
-		
-
 		//------------------------------------------------------------------------------//
-		// INIZIO VERIFICA
+		// COMPARE THE TWO FILES
 		//------------------------------------------------------------------------------//
 		
 		var flag = false;
 			
-		//1) Chiamata della funzione per comparare l'arrotondamento. Se ci sono differenze alza un flag.
+		//1) Function call to compare the rounding. If there are differences the flag is set to true
 		if(compareArrotondamento(file2)) {
 			flag = true;
 		}
 		
-		//2) Chiamata della funzione per comparare il numero decimali. Se ci sono differenze alza un flag.
+		//2) Function call to compare the decimals numbers. If there are differences the flag is set to true
 		if(compareDecimali(file2)){
 			flag = true;
 		}
 		
-		//3) Chiamata della funzione per comparare l'arrotondamento IVA. Se ci sono differenze alza un flag.
+		//3) Function call to compare the VAT rounding. If there are differences the flag is set to true
 		if(compareArrotondamentoIva(file2)){
 			flag = true;
 		}
 	
-		//4) Chiamata della funzione per comparare le tabelle Conti e Estratti Conti. Se ci sono differenze alza un flag.
+		//4) Function call to compare the tables Accounts and Bank Statement. If there are differences the flag is set to true
 		if(compareEstrattiConti(accounts, accounts1, transactions, transactions1, file2)){
 			flag = true;
 		}
 		
-		//Chiamata della funzione per comparare le tabelle Categorie. Se ci sono differenze alza un flag.
+		//5) Function call to compare the tables Categories. If there are differences the flag is set to true
 		if(compareEstrattiConti(categories, categories1, transactions, transactions1, file2)){
 			flag = true;
 		}
 		
-		//5) Chiamata della funzione per comparare le tabelle Cambi. Se ci sono differenze alza un flag.
+		//6) Function call to compare the tables Exchange rate table. If there are differences the flag is set to true
 		if(compareCambio(exchangeRates, exchangeRates1, file2)){
 			flag = true;
 		}
 
-		//6) Chiamata della funzione per comparare le tabelle Conti IVA. Se ci sono differenze alza un flag.
+		//7) Function call to compare the tables VAT Accounts. If there are differences the flag is set to true
 		if(compareIva(vatCodes, vatCodes1, file2)){
 			flag = true;
 		}
 	
-		//7) Chiamata della funzione per comparare le tabelle Registrazioni. Se ci sono differenze alza un flag.
+		//8) Function call to compare the tables Transactions. If there are differences the flag is set to true
 		if(compareTransactions(transactions, transactions1, file2)){
 			flag = true;
 		}
-		
-		//Se non esistono differenze viene mostrato un messaggio.
+
+		//9) Function call to compare the tables Budget. If there are differences the flag is set to true
+		if(compareBudget(budget, budget1, file2)){
+			flag = true;
+		}
+	
+		//Shows a messages if there are not differences between the two files
 		if(!flag){
 			var openingDate = Banana.document.info("AccountingDataBase","OpeningDate");
 			var dataVerifica = getDataFinaleDiVerifica(transactions, transactions1);
@@ -128,67 +125,38 @@ function exec(string) {
 			+ "> al <"
 			+ Banana.Converter.toLocaleDateFormat(dataVerifica)
 			+ ">");
-		}
-		
-	} //fine file2 aperto
-
-	
-/*	
-	//------------------------------------------------------------------------------//
-	// CREAZIONE/STAMPA DEL REPORT 
-	//------------------------------------------------------------------------------//
-	// Styles
-	var stylesheet = CreaStyleSheet1();
-	
-	//Stampa report
-	Banana.Report.preview(report, stylesheet);
-	*/
+		}	
+	}
 }
 
 
-
-
-
 //------------------------------------------------------------------------------//
-// FUNZIONI
+// FUNCTIONS
 //------------------------------------------------------------------------------//
 
-//Funzione che verifica che il conto sia effettivamente un conto
-function verificaConto(conto){
+/**
+	Function that checks that the Account is valid
+*/
+function verificaConto(conto) {
 	var controllo = 1;
-	if(!Banana.document.table('Accounts').findRowByValue('Account',conto) || !conto){
+	if (!Banana.document.table('Accounts').findRowByValue('Account',conto) || !conto) {
 		return false;
-	}
-	else{
+	} else{
 		return true;
 	}
 }
 
 
-
-//Funzione per stampare (sul report) un array contentente dei valori
-//Usato per testare
-function stampaArray(array, report){
-	report.addParagraph(" ");
-	report.addParagraph("Stampo Array:");
-	for(i=0; i<array.length; i++){
-		report.addParagraph(array[i]);
-	}
-	report.addParagraph(" ");
-}
-
-
-
-
-//Funzione che, dati due arrays, ritorna un array con tutte le differenze
-//Utile per trovare le differenze di due arrays
-function diffArray(a, b){
+/**
+	Function that compares two arrays and returns an array containing all the differences
+*/
+function diffArray(a, b) {
 	var seen = [], diff = [];
-	for(var i=0; i<a.length; i++){
+	for (var i = 0; i < a.length; i++) {
 		seen[a[i]] = true;
 	}
-	for(var i=0; i<b.length; i++){
-		if(!seen[b[i]]){
+	for(var i = 0; i < b.length; i++) {
+		if (!seen[b[i]]) {
 			diff.push(b[i]);
 		}
 	}
@@ -196,82 +164,67 @@ function diffArray(a, b){
 }
 
 
-
-
-
-//Funzione che, data la tabella ACCOUNTS (piano dei conti) 
-//ritorna in un array TUTTI i CONTI presenti nel PIANO DEI CONTI
+/**
+	Function that returns an array containing all the accounts of the table Accounts
+*/
 function getAccounts(tabella){
 	
-	var tRow =""
-	var conto ="";
+	var tRow = "";
 	var arrConti = [];
-	
-	//report.addParagraph("CONTI:");
-	//var stampaTabella1 = report.addTable("tableProva1");
-	
-	for(i=0; i<tabella.rowCount; i++){ //-480
-		tRow = tabella.row(i);
-		conto = tRow.value('Account');
 		
-		if(conto){
-			//tableRow = stampaTabella1.addRow();
-			//tableRow.addCell(conto);
-			arrConti.push(conto);
+	for(var i = 0; i < tabella.rowCount; i++) {
+		tRow = tabella.row(i);
+
+		if (tRow.value('Account')) {
+			arrConti.push(tRow.value('Account'));
 		}
 	}
 	return arrConti;
 }
 
 
+/**
+	Function that returns an array containing all the UniqueID of the rows for the given table
+*/
+function getUniqueIds(tabella) {
 
-
-//Funzione che, data una tabella 
-//ritorna in un array TUTTI gli UNIQUEID delle righe presenti
-function getUniqueIds(tabella){
-	var tRow =""
-	var id ="";
+	var tRow = "";
 	var arrUniqueIds = [];
 	
-	for(i=0; i<tabella.rowCount; i++){
+	for (var i = 0; i < tabella.rowCount; i++) {
 		tRow = tabella.row(i);
-		id = tRow.uniqueId;
-		
-		if(id){
-			arrUniqueIds.push(id);
+
+		if(tRow.uniqueId){
+			arrUniqueIds.push(tRow.uniqueId);
 		}
 	}
 	return arrUniqueIds;
 }
 
 
-
-//Funzione che data una tabella e una colonna, ritorna in un array tutti gli elementi della colonna
-function getTableByKey(table, keyColumn){
-	var tRow =""
-	var key ="";
+/**
+	Function that, given a table and a column, returns an array containing all the elements of the column
+*/
+function getTableByKey(table, keyColumn) {
+	
+	var tRow = "";
 	var arrElements = [];
 	
-	for(i=0; i<table.rowCount; i++){
+	for(var i = 0; i < table.rowCount; i++) {
 		tRow = table.row(i);
-		key = tRow.value(keyColumn);
-		
-		if(key){
-			arrElements.push(key);
+
+		if(tRow.value(keyColumn)){
+			arrElements.push(tRow.value(keyColumn));
 		}	
 	}
 	return arrElements;
 }
 
 
-
-
-
-
-
-
-//Funzione che, date due tabelle, estrae l'ultima data (per ogni tabella) e ritorna quella "più giovane"
-//Usata per estrarre le date dalle tabelle REGISTRAZIONI in modo da utilizzare la data corretta
+/**
+	Function that, given two tables, extract the last date of each table and returns "youngest".
+	It is used to extract the dates from the table Transactions in order to use the correct one
+*/
 function getDataFinaleDiVerifica(tab1, tab2){
 
 	var data1 = getLastTransactionDate(tab1);
@@ -291,15 +244,16 @@ function getDataFinaleDiVerifica(tab1, tab2){
 }
 
 
-
-
-//Funzione che, data una tabella, estrae tutte le DATE e ritorna L'ULTIMA
-function getLastTransactionDate(tab1){
+/**
+	Function that reads all the dates and returns the last one for the given table
+*/
+function getLastTransactionDate(tab1) {
 	var data = "";
 	var dataRow = "";
-	for(i=0; i<tab1.rowCount; i++){
+	for (var i = 0; i < tab1.rowCount; i++) {
 		dataRow = tab1.value(i, "Date");
-		if(dataRow > data){
+		
+		if (dataRow > data) {
 			data = dataRow;
 		}
 	}
@@ -307,75 +261,77 @@ function getLastTransactionDate(tab1){
 }
 
 
+/**
+	Function that compares the rounding between the two files
+*/
+function compareArrotondamento(file) {
 
-
-//Funzione che, passato il file esterno, confronta il tipo di arrotondamento fra i due files.
-function compareArrotondamento(file){
 	var tipoArrotondamento1 = Banana.document.info("Base","RoundingType");
 	var tipoArrotondamento2 = file.info("Base","RoundingType");
 	
-	if(tipoArrotondamento1 != tipoArrotondamento2){
+	if (tipoArrotondamento1 != tipoArrotondamento2) {
 			Banana.document.addMessage("Contabilità tipo arrotondamento differente: base <" 
 			+ tipoArrotondamento1 +">, nuovo <" + tipoArrotondamento2 + ">");
 		return true;
-	}
-	else{
+	} else {
 		return false;
 	}
 }
 
 
-
-//Funzione che, passato il file esterno, confronta il numero di decimali fra i due files.
-function compareDecimali(file){
+/**
+	Function that compares the decimals numbers between the two files
+*/
+function compareDecimali(file) {
+	
 	var numeroDecimali1 = Banana.document.info("Base","DecimalsAmounts");
 	var numeroDecimali2 = file.info("Base","DecimalsAmounts");
 
-	if(numeroDecimali1 != numeroDecimali2){
+	if (numeroDecimali1 != numeroDecimali2) {
 			Banana.document.addMessage("Contabilità numero decimali differente: base <" 
 			+ numeroDecimali1 +">, nuovo <" + numeroDecimali2 + ">");
 		return true;
-	}
-	else{
+	} else {
 		return false;
 	}
 }
 
 
-//Funzione che, passato il file esterno, confronta l'arrotondamento dell'IVA fra i due files.
-function compareArrotondamentoIva(file){
+/**
+	Function that compares the VAT rounding between the two files
+*/
+function compareArrotondamentoIva(file) {
+	
 	var arrIva1 = Banana.document.info("AccountingDataBase","VatRounding");
 	var arrIva2 = file.info("AccountingDataBase","VatRounding");
 
-	if(arrIva1 != arrIva2){
+	if (arrIva1 != arrIva2) {
 			Banana.document.addMessage("Contabilità arrotondamento IVA differente: base <" 
 			+ arrIva1 +">, nuovo <" + arrIva2 + ">");
 		return true;
-	}
-	else{
+	} else {
 		return false;
 	}
 }
 
 
-
-
-//Funzione che fa la comparazione degli ESTRATTI CONTO di 2 files.
-//Date le due tabelle del PIANO DEI CONTI dei due files, le due tabelle delle REGISTRAZIONI, il file esterno...
-//vengono estratti tutti i CONTI (di entrambi i files)
-//per ogni conto viene creata la tabella relativa dell'ESTRATTO CONTO (di entrambi i files)
-//dall'estratto conto vengono estratti i valori di SALDO APERTURA (di entrambi i files) se esistono 
-//dall'estratto conto vengono estratti i valori del SALDO FINALE (di entrambi i files) fino alla "data finale di verifica"
-//i valori del FILE1 e del FILE2 sono confrontati fra di loro SOLO se appartenenti allo stesso CONTO (stesso numero)
-//le eventuali differenze vengono visualizzate sottoforma di messaggi nel FILE1 (siccome è il file principale ed è quello sul quale si sta lavorando).
-//Inoltre vengono confrontati i valori relativi al tipo di arrotondamento, numero di decimali, arrotondamento IVA.
-function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabTransactions2, file){
+/**
+	Function that compares the Bank Statements of the two files.
+	Given the Accounts and Transactions tables of the two files, the function:
+	- extracts all the accounts numbers
+	- for each account creates the Bank Statement table
+	- from the bank statement extracts the Opening and the final balance
+	- the values between the two files are compared only if belonging to the same account
+	- any differences are shown as messages into the primary file (the one opened in Banana)
+	- compares the rounding type, decimals numbers, VAT rounding
+**/
+function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabTransactions2, file) {
 	
-	if(!tabAccounts1 || !tabAccounts2){
+	if (!tabAccounts1 || !tabAccounts2) {
 		return false;
 	}
 	
-	if(!tabTransactions1 || !tabTransactions2){
+	if (!tabTransactions1 || !tabTransactions2) {
 		return false;
 	}
 	
@@ -403,13 +359,13 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 				tabellaEstrattoConto1 = Banana.document.currentCard(numeroConto1);
 					
 				if(verificaConto(numeroConto1)){
-					//Se sono lo stesso conto (stesso numero)
+					//Check if the accounts are the same
 					if(numeroConto1 == numeroConto2){
 						currentBal1 = Banana.document.currentBalance(numeroConto1,'', dataVerifica);
 						openingBalance1 = currentBal1.opening;
 						endBalance1 = currentBal1.balance;
-														
-						//Comparazione: se ci sono differenze stampo messaggio e alzo un flag.
+						
+						//Compare, if there are differences set the flag to true								
 						if(openingBalance1 != openingBalance2){
 							tRow1.addMessage("Conto <" + numeroConto1 + " " + descrizione + "> saldo d'apertura differente: base <" 
 							+ Banana.Converter.toLocaleNumberFormat(openingBalance1)
@@ -422,21 +378,20 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 							+ ">, nuovo <" + 	Banana.Converter.toLocaleNumberFormat(endBalance2) + ">");
 							flag = true;
 						}
-					} //if equal						
-				} //if conto1 exists
-			} //for j
-		} //if conto2 exists
-	} //for i
+					}				
+				}
+			}
+		}
+	}
 	
-	
-	//Controllo di eventuali Conti AGGIUNTi e/o ELIMINATI nel File2 rispetto al File1
+	//Check of any added/removed accounts of the File2
 	arrContiFile1 = getAccounts(tabAccounts1);
 	arrContiFile2 = getAccounts(tabAccounts2);
 		
 	arrDifferenze1 = diffArray(arrContiFile2, arrContiFile1);
 	arrDifferenze2 = diffArray(arrContiFile1, arrContiFile2);
 	
-	//Conti ELIMINATI
+	//Deleted accounts
 	if(arrDifferenze1.length > 0){				
 		for(i=0; i<tabAccounts1.rowCount; i++){
 			var tRow1 = tabAccounts1.row(i); 
@@ -453,7 +408,7 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 		}
 		flag = true;
 	}
-	//Conti AGGIUNTI
+	//Added accounts
 	if(arrDifferenze2.length > 0){
 		var nameString = file.info("Base","FileName");
 		var nameArray = nameString.split('/');
@@ -478,10 +433,9 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 }
 
 
-
-
-//Function that, given two ExchangeRates tables,
-//compare all the rows with equal Currency Reference and Currency
+/**
+	Function that, given two ExchangeRates tables, compares all the rows with equal Currency Reference and Currency
+*/
 function compareCambio(table1, table2, file){
 	
 	if(!table1 || !table2){
@@ -567,10 +521,10 @@ function compareCambio(table1, table2, file){
 							flag = true;
 						}
 					}					
-				}//data1
-			}//for j
-		}//data2	
-	}//for i	
+				}
+			}
+		}
+	}
 		
 	
 	//Check if there are any added and/or deleted ExchangeRates
@@ -636,11 +590,9 @@ function compareCambio(table1, table2, file){
 }
 
 
-
-
-
-//Function that, given two Vat tables,
-//compares the rows with equal Vat Code
+/**
+	Function that, given two VAT tables, compares the rows with equal Vat Code
+*/
 function compareIva(table1, table2, file){
 	
 	if(!table1 || !table2){
@@ -763,13 +715,11 @@ function compareIva(table1, table2, file){
 							flag = true;
 						}
 					}					
-				}//vatCode_1
-			}//for j
-		}//vatCode_2	
-	} // for i
+				}
+			}
+		}
+	}
 	
-	
-		
 	//Check if there are any added and/or deleted rows
 	arrUniqueIdsFile1 = getUniqueIds(table1);
 	arrUniqueIdsFile2 = getUniqueIds(table2);
@@ -842,12 +792,11 @@ function compareIva(table1, table2, file){
 }
 
 
-
-
-
-//Function that, given two tables of TRANSACTIONS and the second file,
-//compares all the transactions finding the differences (columns)
-//compares the two tables finding the deleted and added rows
+/**
+	Function that, given two Transactions tables and the second file:
+	- compares all the transactions finding the differences (columns)
+	- compares the two tables finding the deleted and added rows
+*/
 function compareTransactions(tabTransactions1, tabTransactions2, file){
 	
 	if(!tabTransactions1 || !tabTransactions2){
@@ -974,11 +923,11 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 							tRow1.addMessage("Registrazione <" + description1 + "> modificato CC3: base <" + cc3_1 + ">, nuovo <" + cc3_2 + ">");
 							flag = true;
 						}
-					} //uniqueId
-				} //data1
-			} //for j
-		} //data2
-	} //for i	
+					}
+				}
+			}
+		}
+	}
 
 	//Check if there are any added and/or deleted transactions
 	arrUniqueIdsFile1 = getUniqueIds(tabTransactions1);
@@ -1058,21 +1007,280 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 }
 
 
+/**
+	Function that compares the two Budget tables finding all the differences
+*/
+function compareBudget(tabBudget1, tabBudget2, file){
 
-//Funzione per la creazione degli stili per il report
-function CreaStyleSheet1() {
-	var docStyles = Banana.Report.newStyleSheet();
-	var pageStyle = docStyles.addStyle("@page");
-  	pageStyle.setAttribute("margin", "20m 15mm 15mm 25mm");
-		
-	//Tabella
-	var tableStyle1 = docStyles.addStyle(".tableProva1");
-	tableStyle1.setAttribute("width", "100%");
-  	tableStyle1.setAttribute("border-left", "thin solid black");
-	tableStyle1.setAttribute("border-top", "thin solid black");
-	tableStyle1.setAttribute("border-bottom", "thin solid black");
-	tableStyle1.setAttribute("border-right", "thin solid black");
-  	docStyles.addStyle("table.tableProva1 td", "border-top: thin solid black; border-left: thin solid black; border-bottom: thin solid black; padding: 3px;");	
+	if(!tabBudget1 || !tabBudget2){
+		return false;
+	}
+
+	var tRow1, tRow2 = "";
+	var dataVerifica = getDataFinaleDiVerifica(tabBudget1, tabBudget2);
+	var uniqueId1, uniqueId2 ="";
+	var data1, data2 = "";
+	var dataEnd1, dataEnd2 = "";
+	var repeat1, repeat2 = ""; 
+	var description1, description2 = ""; 
+	var accountDebit1, accountDebit2 = "";
+	var accountCredit1, accountCredit2 = "";
+	var quantity1, quantity2 = "";
+	var unitReference1, unitReference2 = "";
+	var unitPrice1, unitPrice2 = "";
+	var formulaAmountBaseCurrency1, formulaAmountBaseCurrency2 = "";
+	var amount1, amount2 = "";
+	var amountTotal1, amountTotal2 = "";
+	var vatCode1, vatCode2 = "";
+	var vatRate1, vatRate2 = "";
+	var arrDifferenze1 = [];
+	var arrDifferenze2 = [];
+	var flag = false;
+
 	
-	return docStyles;
+	for(i=0; i<tabBudget2.rowCount; i++){
+		
+		tRow2 = tabBudget2.row(i);	
+		uniqueId2 = tRow2.uniqueId;
+		data2 = tRow2.value('Date');
+		dataEnd2 = tRow2.value('DateEnd');
+		repeat2 = tRow2.value('Repeat');
+		description2 = tRow2.value('Description');
+		accountDebit2 = tRow2.value('AccountDebit');
+		accountCredit2 = tRow2.value('AccountCredit');
+		quantity2 = tRow2.value('Quantity');
+		unitReference2 = tRow2.value('UnitReference');
+		unitPrice2 = tRow2.value('UnitPrice');
+		formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
+		amount2 = tRow2.value('Amount');
+		amountTotal2 = tRow2.value('AmountTotal');
+		vatCode2 = tRow2.value('VatCode');
+		vatRate2 = tRow2.value('VatRate');
+				
+		//if(data2 && data2 <= dataVerifica){
+		if(data2){
+	
+			for(j=0; j<tabBudget1.rowCount; j++){
+			
+				tRow1 = tabBudget1.row(j);	
+				uniqueId1 = tRow1.uniqueId;
+				data1 = tRow1.value('Date');
+				dataEnd1 = tRow1.value('DateEnd');
+				repeat1 = tRow1.value('Repeat');
+				description1 = tRow1.value('Description');
+				accountDebit1 = tRow1.value('AccountDebit');
+				accountCredit1 = tRow1.value('AccountCredit');
+				quantity1 = tRow1.value('Quantity');
+				unitReference1 = tRow1.value('UnitReference');
+				unitPrice1 = tRow1.value('UnitPrice');
+				formulaAmountBaseCurrency1 = tRow1.value('FormulaAmountBaseCurrency');
+				amount1 = tRow1.value('Amount');
+				amountTotal1 = tRow1.value('AmountTotal');
+				vatCode1 = tRow1.value('VatCode');
+				vatRate1 = tRow1.value('VatRate');
+				
+				//if(data1 && data1 <= dataVerifica){
+				if(data1){
+
+					//If uniqueIds are equal then begins the comparison
+					if(uniqueId1 == uniqueId2){
+						
+						//Show differences if column values are different
+						if(data1 != data2){
+							tRow1.addMessage("modificato Data: base <" + Banana.Converter.toLocaleDateFormat(data1) 
+							+ ">, nuovo <" + Banana.Converter.toLocaleDateFormat(data2) + ">");
+							flag = true;
+						}
+						if(dataEnd1 != dataEnd2){
+							tRow1.addMessage("modificato DataEnd: base <" + Banana.Converter.toLocaleDateFormat(dataEnd1) 
+							+ ">, nuovo <" + Banana.Converter.toLocaleDateFormat(dataEnd2) + ">");
+							flag = true;
+						}
+						if(repeat1 != repeat2){
+							tRow1.addMessage("modificato Repeat: base <" + repeat1 + ">, nuovo <" + repeat2 + ">");
+							flag = true;
+						}
+						if(description1 != description2){
+							tRow1.addMessage("modificato Descrizione: base <" + description1 + ">, nuovo <" + description2 + ">");
+							flag = true;
+						}
+						if(accountDebit1 != accountDebit2){
+							tRow1.addMessage("modificato Dare: base <" + accountDebit1 + ">, nuovo <" + accountDebit2 + ">");
+							flag = true;
+						}
+						if(accountCredit1 != accountCredit2){
+							tRow1.addMessage("modificato Avere: base <" + accountCredit1 + ">, nuovo <" + accountCredit2 + ">");
+							flag = true;
+						}
+						if(quantity1 != quantity2){
+							tRow1.addMessage("modificato Quantity: base <" + quantity1 + ">, nuovo <" + quantity2 + ">");
+							flag = true;
+						}
+						if(unitReference1 != unitReference2){
+							tRow1.addMessage("modificato UnitReference: base <" + unitReference1 + ">, nuovo <" + unitReference2 + ">");
+							flag = true;
+						}
+						if(unitPrice1 != unitPrice2){
+							tRow1.addMessage("modificato UnitPrice: base <" + unitPrice1 + ">, nuovo <" + unitPrice2 + ">");
+							flag = true;
+						}
+						if(formulaAmountBaseCurrency1 != formulaAmountBaseCurrency2){
+							tRow1.addMessage("modificato FormulaAmountBaseCurrency: base <" + formulaAmountBaseCurrency1 
+							+ ">, nuovo <" + formulaAmountBaseCurrency2 + ">");
+							flag = true;
+						}
+						if(amount1 != amount2){
+							tRow1.addMessage("modificato Importo: base <" + Banana.Converter.toLocaleNumberFormat(amount1) + ">, nuovo <" + Banana.Converter.toLocaleNumberFormat(amount2) + ">");
+							flag = true;
+						}
+						if(amountTotal1 != amountTotal2){
+							tRow1.addMessage("modificato AmountTotal: base <" + Banana.Converter.toLocaleNumberFormat(amountTotal1)
+							+ ">, nuovo <" + Banana.Converter.toLocaleNumberFormat(amountTotal2) + ">");
+							flag = true;
+						}
+						if(vatCode1 != vatCode2){
+							tRow1.addMessage("modificato Cod. IVA: base <" + vatCode1 + ">, nuovo <" + vatCode2 + ">");
+							flag = true;
+						}
+						if(vatRate1 != vatRate2){
+							tRow1.addMessage("modificato %IVA: base <" + vatRate1 + ">, nuovo <" + vatRate2 + ">");
+							flag = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//Check if there are any added and/or deleted transactions
+	arrUniqueIdsFile1 = getUniqueIds(tabBudget1);
+	arrUniqueIdsFile2 = getUniqueIds(tabBudget2);
+	
+	arrDifferenze1 = diffArray(arrUniqueIdsFile2,arrUniqueIdsFile1); Banana.console.log(arrDifferenze1);
+	arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2); Banana.console.log(arrDifferenze2);
+	
+	//Deleted transactions
+	if(arrDifferenze1.length > 0){
+		for(i=0; i<tabBudget1.rowCount; i++){
+			var tRow1 = tabBudget1.row(i);
+			var idTab = tRow1.uniqueId;
+			data1 = tRow1.value('Date');
+			dataEnd1 = tRow1.value('DateEnd');
+			repeat1 = tRow1.value('Repeat');
+			description1 = tRow1.value('Description');
+			accountDebit1 = tRow1.value('AccountDebit');
+			accountCredit1 = tRow1.value('AccountCredit');
+			quantity1 = tRow1.value('Quantity');
+			unitReference1 = tRow1.value('UnitReference');
+			unitPrice1 = tRow1.value('UnitPrice');
+			formulaAmountBaseCurrency1 = tRow1.value('FormulaAmountBaseCurrency');
+			amount1 = tRow1.value('Amount');
+			amountTotal1 = tRow1.value('AmountTotal');
+			vatCode1 = tRow1.value('VatCode');
+			vatRate1 = tRow1.value('VatRate');
+			
+			for(j=0; j<arrDifferenze1.length; j++){
+				var idArr = arrDifferenze1[j];
+				
+				if(idTab == idArr){
+					tRow1.addMessage("Riga eliminata: <" 
+						+ Banana.Converter.toLocaleDateFormat(data1)
+						+ ", "
+						+ Banana.Converter.toLocaleDateFormat(dataEnd1)
+						+ ", "
+						+ repeat1
+						+ ", " 
+						+ description1 
+						+ ", " 
+						+ accountDebit1 
+						+ ", " 
+						+ accountCredit1
+						+ ", "
+						+ Banana.Converter.toLocaleNumberFormat(quantity1)
+						+ ", "
+						+ unitReference1
+						+ ", "
+						+ Banana.Converter.toLocaleNumberFormat(unitPrice1)
+						+ ", "
+						+ formulaAmountBaseCurrency1
+						+ ", " 
+						+ Banana.Converter.toLocaleNumberFormat(amount1)
+						+ ", " 
+						+ Banana.Converter.toLocaleNumberFormat(amountTotal1) 
+						+ ", " 
+						+ vatCode1 
+						+ ", " 
+						+ vatRate1
+					);
+				}
+			}
+		}
+		flag = true;
+	}
+	
+	//Added transactions
+	var nameString = file.info("Base","FileName");
+	var nameArray = nameString.split('/');
+	var fileName = nameArray[nameArray.length - 1];
+
+	if(arrDifferenze2.length > 0){
+		for(i=0; i<tabBudget2.rowCount; i++){
+			var tRow2 = tabBudget2.row(i);
+			var idTab = tRow2.uniqueId;
+			data2 = tRow2.value('Date');
+			dataEnd2 = tRow2.value('DateEnd');
+			repeat2 = tRow2.value('Repeat');
+			description2 = tRow2.value('Description');
+			accountDebit2 = tRow2.value('AccountDebit');
+			accountCredit2 = tRow2.value('AccountCredit');
+			quantity2 = tRow2.value('Quantity');
+			unitReference2 = tRow2.value('UnitReference');
+			unitPrice2 = tRow2.value('UnitPrice');
+			formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
+			amount2 = tRow2.value('Amount');
+			amountTotal2 = tRow2.value('AmountTotal');
+			vatCode2 = tRow2.value('VatCode');
+			vatRate2 = tRow2.value('VatRate');
+			
+			for(j=0; j<arrDifferenze2.length; j++){
+				var idArr = arrDifferenze2[j];
+				
+				if(idTab == idArr){
+					tRow2.addMessage("Riga aggiunta: <"
+						+ Banana.Converter.toLocaleDateFormat(data2)
+						+ ", "
+						+ Banana.Converter.toLocaleDateFormat(dataEnd2)
+						+ ", "
+						+ repeat2
+						+ ", " 
+						+ description2 
+						+ ", " 
+						+ accountDebit2 
+						+ ", " 
+						+ accountCredit2
+						+ ", "
+						+ Banana.Converter.toLocaleNumberFormat(quantity2)
+						+ ", "
+						+ unitReference2
+						+ ", "
+						+ Banana.Converter.toLocaleNumberFormat(unitPrice2)
+						+ ", "
+						+ formulaAmountBaseCurrency2
+						+ ", " 
+						+ Banana.Converter.toLocaleNumberFormat(amount2)
+						+ ", " 
+						+ Banana.Converter.toLocaleNumberFormat(amountTotal2) 
+						+ ", " 
+						+ vatCode2 
+						+ ", " 
+						+ vatRate2
+					);
+				}
+			}
+		}
+		flag = true;
+	}
+
+	return flag;
 }
+
