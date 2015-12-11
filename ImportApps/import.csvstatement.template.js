@@ -71,22 +71,30 @@ function defineConversionParam() {
    convertionParam.sortDescending = false;
 	/** END */
 
+	/* rowConvert is a function that convert the inputRow (passed as parameter)
+	*  to a convertedRow object 
+	* - inputRow is an object where the properties is the column name found in the CSV file
+	* - convertedRow is an  object where the properties are the column name to be exported in Banana 
+	* For each column that you need to export in Banana create a line that create convertedRow column 
+	* The right part can be any fuction or value 
+	* Remember that in Banana
+	* - Date must be in the format "yyyy-mm-dd"
+	* - Number decimal separator must be "." and there should be no thousand separator */
 	convertionParam.rowConverter = function(inputRow) {
 		var convertedRow = {};
 
-
 		/** MODIFY THE FIELDS NAME AND THE CONVERTION HERE 
 		*   The right part is a statements that is then executed for each inputRow
-		*   inputRow is a javascript object where the property is the FieldName  */
 		
 		/*   Field that start with the underscore "_" will not be exported 
 		*    Create this fields so that you can use-it in the postprocessing function */
+		/* use the Banana.Converter.toInternalDateFormat to convert to the appropriate date format */
 		convertedRow["Date"] = Banana.Converter.toInternalDateFormat(inputRow["Überweisungsdatum"], "dd.mm.yy");
 		convertedRow["Description"] = inputRow["Kommentar"];
 		convertedRow["_Description2"] = inputRow["Gruppe nach"];
-		convertedRow["Income"] = inputRow["Betrag"];
-		// use the toInternalNumberFormat if the decimal separator is not "."
-		//convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Überweisungsdatum"], ",");
+		/* use the Banana.Converter.toInternalNumberFormat to convert to the appropriate number format 
+		*  we already have negative amounts in Betrag and don't need the to fill the column Expenses*/
+		convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Betrag"], ",");
 		//convertedRow["Expenses"] = inputRow["Total"];
 		convertedRow["VatCode"] = inputRow["MWST Code"];
 		convertedRow["ContraAccount"] = inputRow["Kategorie"];
