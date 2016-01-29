@@ -25,6 +25,7 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 ## Tutorial available
 [Tutorial1.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
 
+[Tutorial2.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
  
 
 
