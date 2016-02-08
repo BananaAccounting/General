@@ -21,7 +21,7 @@ This app will show a detailed report of the Profit/Loss Account.
 
 ##comparestwoaccountingfiles.js
 
-This app will show the differences between two accounting files.
+This app will show the differences between two accounting files. It is very useful when at some point it is needed to compare data.
 
 ##ch.banana.apps.segments.js
 
