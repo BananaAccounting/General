@@ -15,7 +15,7 @@
 //
 // @id = ch.banana.apps.comparestwoaccountingfiles
 // @version = 1.0
-// @pubdate = 2015-12-04
+// @pubdate = 2016-01-20
 // @publisher = Banana.ch SA
 // @description = Compare two accounting files
 // @task = app.command
@@ -41,6 +41,7 @@ function exec(string) {
 	var vatCodes = Banana.document.table('VatCodes');
 	var categories = Banana.document.table('Categories');
 	var budget = Banana.document.table('Budget');
+	var documents = Banana.document.table('Documents');
 	
 	//Open a dialog window asking the user to select the .ac2 file to compare
 	var file2 = Banana.application.openDocument("*.*");
@@ -58,6 +59,7 @@ function exec(string) {
 		var vatCodes1 = file2.table('VatCodes');
 		var categories1 = file2.table('Categories');
 		var budget1 = file2.table('Budget');
+		var documents1 = file2.table('Documents');
 
 		//Clear all the messages from the messages tab
 		Banana.document.clearMessages();
@@ -71,37 +73,37 @@ function exec(string) {
 		var flag = false;
 			
 		//1) Function call to compare the rounding. If there are differences the flag is set to true
-		if(compareArrotondamento(file2)) {
+		if(compareRounding(file2)) {
 			flag = true;
 		}
 		
 		//2) Function call to compare the decimals numbers. If there are differences the flag is set to true
-		if(compareDecimali(file2)){
+		if(compareDecimals(file2)){
 			flag = true;
 		}
 		
 		//3) Function call to compare the VAT rounding. If there are differences the flag is set to true
-		if(compareArrotondamentoIva(file2)){
+		if(compareRoundingVat(file2)){
 			flag = true;
 		}
 	
 		//4) Function call to compare the tables Accounts and Bank Statement. If there are differences the flag is set to true
-		if(compareEstrattiConti(accounts, accounts1, transactions, transactions1, file2)){
+		if(compareBankStatements(accounts, accounts1, transactions, transactions1, file2)){
 			flag = true;
 		}
 		
 		//5) Function call to compare the tables Categories. If there are differences the flag is set to true
-		if(compareEstrattiConti(categories, categories1, transactions, transactions1, file2)){
+		if(compareBankStatements(categories, categories1, transactions, transactions1, file2)){
 			flag = true;
 		}
 		
 		//6) Function call to compare the tables Exchange rate table. If there are differences the flag is set to true
-		if(compareCambio(exchangeRates, exchangeRates1, file2)){
+		if(compareExchangeRates(exchangeRates, exchangeRates1, file2)){
 			flag = true;
 		}
 
 		//7) Function call to compare the tables VAT Accounts. If there are differences the flag is set to true
-		if(compareIva(vatCodes, vatCodes1, file2)){
+		if(compareVatTable(vatCodes, vatCodes1, file2)){
 			flag = true;
 		}
 	
@@ -114,17 +116,19 @@ function exec(string) {
 		if(compareBudget(budget, budget1, file2)){
 			flag = true;
 		}
+
+		//10) Function call to compare the tables Documents. If there are differences the flag is set to true
+		if (compareDocuments(documents, documents1)) {
+			flag = true;
+		}
 	
 		//Shows a messages if there are not differences between the two files
 		if(!flag){
 			var openingDate = Banana.document.info("AccountingDataBase","OpeningDate");
-			var dataVerifica = getDataFinaleDiVerifica(transactions, transactions1);
+			var dataVerifica = getDateOfVerification(transactions, transactions1);
 			
-			Banana.Ui.showInformation("Informazione", "Nessuna differenza dal <" 
-			+ Banana.Converter.toLocaleDateFormat(openingDate) 
-			+ "> al <"
-			+ Banana.Converter.toLocaleDateFormat(dataVerifica)
-			+ ">");
+			Banana.Ui.showInformation("Information", "No differences from <" + Banana.Converter.toLocaleDateFormat(openingDate) 
+			+ "> to <"+ Banana.Converter.toLocaleDateFormat(dataVerifica) + ">");
 		}	
 	}
 }
@@ -137,7 +141,7 @@ function exec(string) {
 /**
 	Function that checks that the Account is valid
 */
-function verificaConto(conto) {
+function checkAccount(conto) {
 	var controllo = 1;
 	if (!Banana.document.table('Accounts').findRowByValue('Account',conto) || !conto) {
 		return false;
@@ -222,10 +226,10 @@ function getTableByKey(table, keyColumn) {
 
 
 /**
-	Function that, given two tables, extract the last date of each table and returns "youngest".
+	Function that, given two tables, extract the last date of each table and returns the "youngest".
 	It is used to extract the dates from the table Transactions in order to use the correct one
 */
-function getDataFinaleDiVerifica(tab1, tab2){
+function getDateOfVerification(tab1, tab2){
 
 	var data1 = getLastTransactionDate(tab1);
 	var data2 = getLastTransactionDate(tab2);	
@@ -264,14 +268,13 @@ function getLastTransactionDate(tab1) {
 /**
 	Function that compares the rounding between the two files
 */
-function compareArrotondamento(file) {
+function compareRounding(file) {
 
 	var tipoArrotondamento1 = Banana.document.info("Base","RoundingType");
 	var tipoArrotondamento2 = file.info("Base","RoundingType");
 	
 	if (tipoArrotondamento1 != tipoArrotondamento2) {
-			Banana.document.addMessage("Contabilità tipo arrotondamento differente: base <" 
-			+ tipoArrotondamento1 +">, nuovo <" + tipoArrotondamento2 + ">");
+			Banana.document.addMessage("[Accounting] different type of rounding: CURRENT <" + tipoArrotondamento1 +">, OTHER <" + tipoArrotondamento2 + ">");
 		return true;
 	} else {
 		return false;
@@ -282,14 +285,13 @@ function compareArrotondamento(file) {
 /**
 	Function that compares the decimals numbers between the two files
 */
-function compareDecimali(file) {
+function compareDecimals(file) {
 	
 	var numeroDecimali1 = Banana.document.info("Base","DecimalsAmounts");
 	var numeroDecimali2 = file.info("Base","DecimalsAmounts");
 
 	if (numeroDecimali1 != numeroDecimali2) {
-			Banana.document.addMessage("Contabilità numero decimali differente: base <" 
-			+ numeroDecimali1 +">, nuovo <" + numeroDecimali2 + ">");
+			Banana.document.addMessage("[Accounting] different number of decimals: CURRENT <" + numeroDecimali1 +">, OTHER <" + numeroDecimali2 + ">");
 		return true;
 	} else {
 		return false;
@@ -300,14 +302,13 @@ function compareDecimali(file) {
 /**
 	Function that compares the VAT rounding between the two files
 */
-function compareArrotondamentoIva(file) {
+function compareRoundingVat(file) {
 	
 	var arrIva1 = Banana.document.info("AccountingDataBase","VatRounding");
 	var arrIva2 = file.info("AccountingDataBase","VatRounding");
 
 	if (arrIva1 != arrIva2) {
-			Banana.document.addMessage("Contabilità arrotondamento IVA differente: base <" 
-			+ arrIva1 +">, nuovo <" + arrIva2 + ">");
+			Banana.document.addMessage("[Accounting] different VAT rounding: CURRENT <" + arrIva1 +">, OTHER <" + arrIva2 + ">");
 		return true;
 	} else {
 		return false;
@@ -325,7 +326,7 @@ function compareArrotondamentoIva(file) {
 	- any differences are shown as messages into the primary file (the one opened in Banana)
 	- compares the rounding type, decimals numbers, VAT rounding
 **/
-function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabTransactions2, file) {
+function compareBankStatements(tabAccounts1, tabAccounts2, tabTransactions1, tabTransactions2, file) {
 	
 	if (!tabAccounts1 || !tabAccounts2) {
 		return false;
@@ -339,43 +340,43 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 	var arrContiFile1 = [], arrContiFile2 = [], arrDifferenze1 = [], arrDifferenze2 = []; 
 	var tabellaEstrattoConto1, tabellaEstrattoConto2 = "";
 	var tRow1, tRow2 ="";
-	var dataVerifica = getDataFinaleDiVerifica(tabTransactions1, tabTransactions2);
+	var dataVerifica = getDateOfVerification(tabTransactions1, tabTransactions2);
 	var flag = false;
 			
-	for(i=0; i<tabAccounts2.rowCount; i++){
+	for (var i = 0; i < tabAccounts2.rowCount; i++) {
 		tRow2 = tabAccounts2.row(i);
 		numeroConto2 = tRow2.value('Account');
 		tabellaEstrattoConto2 = file.currentCard(numeroConto2);
 	
-		if(verificaConto(numeroConto2)){
+		if (checkAccount(numeroConto2)) {
 			currentBal2 = file.currentBalance(numeroConto2,'', dataVerifica);
 			openingBalance2 = currentBal2.opening;
 			endBalance2 = currentBal2.balance;
 			
-			for(j=0; j<tabAccounts1.rowCount; j++){
+			for (var j = 0; j < tabAccounts1.rowCount; j++) {
 				tRow1 = tabAccounts1.row(j); 
 				numeroConto1 = tRow1.value('Account');
 				descrizione = tRow1.value('Description');
 				tabellaEstrattoConto1 = Banana.document.currentCard(numeroConto1);
 					
-				if(verificaConto(numeroConto1)){
+				if (checkAccount(numeroConto1)) {
 					//Check if the accounts are the same
-					if(numeroConto1 == numeroConto2){
+					if (numeroConto1 == numeroConto2) {
 						currentBal1 = Banana.document.currentBalance(numeroConto1,'', dataVerifica);
 						openingBalance1 = currentBal1.opening;
 						endBalance1 = currentBal1.balance;
 						
 						//Compare, if there are differences set the flag to true								
-						if(openingBalance1 != openingBalance2){
-							tRow1.addMessage("Conto <" + numeroConto1 + " " + descrizione + "> saldo d'apertura differente: base <" 
+						if (openingBalance1 != openingBalance2) {
+							tRow1.addMessage("Account <" + numeroConto1 + " " + descrizione + "> different opening balance: CURRENT <" 
 							+ Banana.Converter.toLocaleNumberFormat(openingBalance1)
-							+ ">, nuovo <" + 	Banana.Converter.toLocaleNumberFormat(openingBalance2) + ">");
+							+ ">, OTHER <" + 	Banana.Converter.toLocaleNumberFormat(openingBalance2) + ">");
 							flag = true;
 						}
-						if(endBalance1 != endBalance2){
-							tRow1.addMessage("Conto <" + numeroConto1 + " " + descrizione + "> saldo al <" + Banana.Converter.toLocaleDateFormat(dataVerifica) 
-							+ "> differente: base <" + Banana.Converter.toLocaleNumberFormat(endBalance1)
-							+ ">, nuovo <" + 	Banana.Converter.toLocaleNumberFormat(endBalance2) + ">");
+						if (endBalance1 != endBalance2) {
+							tRow1.addMessage("Account <" + numeroConto1 + " " + descrizione + "> balance at <" + Banana.Converter.toLocaleDateFormat(dataVerifica) 
+							+ "> different: CURRENT <" + Banana.Converter.toLocaleNumberFormat(endBalance1)
+							+ ">, OTHER <" + 	Banana.Converter.toLocaleNumberFormat(endBalance2) + ">");
 							flag = true;
 						}
 					}				
@@ -392,38 +393,40 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 	arrDifferenze2 = diffArray(arrContiFile1, arrContiFile2);
 	
 	//Deleted accounts
-	if(arrDifferenze1.length > 0){				
-		for(i=0; i<tabAccounts1.rowCount; i++){
+	if (arrDifferenze1.length > 0) {				
+		for (var i = 0; i < tabAccounts1.rowCount; i++) {
 			var tRow1 = tabAccounts1.row(i); 
 			var numeroContoTab = tRow1.value('Account');
 			var descrizione = tRow1.value('Description');
 			
-			for(j=0; j<arrDifferenze1.length; j++){
+			for (var j = 0; j < arrDifferenze1.length; j++) {
 				var numeroContoArr = arrDifferenze1[j];
 				
-				if(numeroContoTab == numeroContoArr){
-					tRow1.addMessage("Conto <" + numeroContoTab + " " + descrizione + "> eliminato");
+				if (numeroContoTab == numeroContoArr) {
+					//Add messages to the "current" file
+					tRow1.addMessage("Account <" + numeroContoTab + " " + descrizione + "> deleted in OTHER and not in CURRENT"); 
 				}
 			}
 		}
 		flag = true;
 	}
 	//Added accounts
-	if(arrDifferenze2.length > 0){
-		var nameString = file.info("Base","FileName");
-		var nameArray = nameString.split('/');
-		var fileName = nameArray[nameArray.length - 1];	
-
-		for(i=0; i<tabAccounts2.rowCount; i++){
+	if (arrDifferenze2.length > 0) {
+		for (var i = 0; i < tabAccounts2.rowCount; i++) {
 			var tRow2 = tabAccounts2.row(i); 
 			var numeroContoTab = tRow2.value('Account');
 			var descrizione = tRow2.value('Description');
 				
-			for(j=0; j<arrDifferenze2.length; j++){
+			for (var j = 0; j < arrDifferenze2.length; j++) {
 				var numeroContoArr = arrDifferenze2[j];
 					
-				if(numeroContoTab == numeroContoArr){
-					tRow2.addMessage("Conto <" + numeroContoTab + " " + descrizione + "> aggiunto in <" + fileName + ">");
+				if (numeroContoTab == numeroContoArr) {
+
+					//Add message to the "current" file, specifying the row of the "other" file
+					var r = parseInt(tRow2.rowNr);
+					var rr = r+1;
+
+					Banana.document.addMessage("[Accounts: Row " + rr + "] Account <" + numeroContoTab + " " + descrizione + "> added in OTHER and not in CURRENT");
 				}
 			}
 		}
@@ -436,9 +439,9 @@ function compareEstrattiConti(tabAccounts1, tabAccounts2, tabTransactions1, tabT
 /**
 	Function that, given two ExchangeRates tables, compares all the rows with equal Currency Reference and Currency
 */
-function compareCambio(table1, table2, file){
+function compareExchangeRates(table1, table2, file){
 	
-	if(!table1 || !table2){
+	if (!table1 || !table2) {
 		return false;
 	}
 	
@@ -468,12 +471,12 @@ function compareCambio(table1, table2, file){
 	var flag = false;
 	
 	
-	for(i=0; i<table2.rowCount; i++){
+	for (var i = 0; i < table2.rowCount; i++) {
 		tRow2 = table2.row(i);
 		data2 = tRow2.value('Date');
 		
 		//Check if Date are NULL then begins comparison
-		if(!data2 && !tRow2.isEmpty){	
+		if (!data2 && !tRow2.isEmpty) {	
 
 			currencyReference2 = tRow2.value('CurrencyReference');
 			currency2 = tRow2.value('Currency');
@@ -482,10 +485,9 @@ function compareCambio(table1, table2, file){
 			rate2 = tRow2.value('Rate');
 			rateOpening2 = tRow2.value('RateOpening');
 						
-			for(j=0; j<table1.rowCount; j++){
+			for (var j = 0; j < table1.rowCount; j++) {
 				tRow1 = table1.row(j);
 				data1 = tRow1.value('Date');
-			
 				currencyReference1 = tRow1.value('CurrencyReference');
 				currency1 = tRow1.value('Currency');
 				description1 = tRow1.value('Description');
@@ -494,30 +496,30 @@ function compareCambio(table1, table2, file){
 				rateOpening1 = tRow1.value('RateOpening');
 			
 				//Check if Date are NULL then begins comparison
-				if(!data1 && !tRow1.isEmpty){
+				if (!data1 && !tRow1.isEmpty) {
 
 					//If Currency Reference are equal then begins the comparison
-					if((currencyReference1 == currencyReference2) && (currency1 == currency2)){
+					if ((currencyReference1 == currencyReference2) && (currency1 == currency2)) {
 						
 						//Show differences if column values are different						
-						if(description1 != description2){
-							tRow1.addMessage("Cambio <" +  currencyReference1 + "," + currency1 + "> modificato <" 
-							+ "Testo" + ">: base <" + description1 + ">, nuovo <" + description2 + ">");
+						if (description1 != description2) {
+							tRow1.addMessage("Exchange rate <" +  currencyReference1 + "," + currency1 + "> edited <" 
+							+ "Text" + ">: CURRENT <" + description1 + ">, OTHER <" + description2 + ">");
 							flag = true;
 						}
-						if(multiplier1 != multiplier2){
-							tRow1.addMessage("Cambio <" +  currencyReference1 + "," + currency1 + "> modificato <" 
-							+ "Moltiplicatore" + ">: base <" + multiplier1 + ">, nuovo <" + multiplier2 + ">");
+						if (multiplier1 != multiplier2) {
+							tRow1.addMessage("Exchange rate <" +  currencyReference1 + "," + currency1 + "> edited <" 
+							+ "Multiplier" + ">: CURRENT <" + multiplier1 + ">, OTHER <" + multiplier2 + ">");
 							flag = true;
 						}
-						if(rate1 != rate2){
-							tRow1.addMessage("Cambio <" +  currencyReference1 + "," + currency1 + "> modificato <" 
-							+ "Cambio" + ">: base <" + rate1 + ">, nuovo <" + rate2 + ">");
+						if (rate1 != rate2) {
+							tRow1.addMessage("Exchange rate <" +  currencyReference1 + "," + currency1 + "> edited <" 
+							+ "Rate" + ">: CURRENT <" + rate1 + ">, OTHER <" + rate2 + ">");
 							flag = true;
 						}
-						if(rateOpening1 != rateOpening2){
-							tRow1.addMessage("Cambio <" +  currencyReference1 + "," + currency1 + "> modificato <" 
-							+ "Cambio apertura" + ">: base <" + rateOpening1 + ">, nuovo <" + rateOpening2 + ">");
+						if (rateOpening1 != rateOpening2) {
+							tRow1.addMessage("Exchange rate <" +  currencyReference1 + "," + currency1 + "> edited <" 
+							+ "Opening rate" + ">: CURRENT <" + rateOpening1 + ">, OTHER <" + rateOpening2 + ">");
 							flag = true;
 						}
 					}					
@@ -535,11 +537,10 @@ function compareCambio(table1, table2, file){
 	arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2);
 	
 	//Deleted ExchangeRates
-	if(arrDifferenze1.length > 0){
-		for(i=0; i<table1.rowCount; i++){
+	if (arrDifferenze1.length > 0) {
+		for (var i = 0; i < table1.rowCount; i++) {
 			var tRow1 = table1.row(i);
 			var idTab = tRow1.uniqueId;
-
 			currencyReference1 = tRow1.value('CurrencyReference');
 			currency1 = tRow1.value('Currency');
 			description1 = tRow1.value('Description');
@@ -547,12 +548,13 @@ function compareCambio(table1, table2, file){
 			rate1 = tRow1.value('Rate');
 			rateOpening1 = tRow1.value('RateOpening');
 			
-			for(j=0; j<arrDifferenze1.length; j++){
+			for (var j = 0; j < arrDifferenze1.length; j++) {
 				var idArr = arrDifferenze1[j];
 				
-				if(idTab == idArr){
-					tRow1.addMessage("Cambio <" + currencyReference1 + "," + currency1 + "> eliminato: <" + currencyReference1 + ", " + currency1
-					+ ", " + description1 + ", " + multiplier1 + ", " + rate1 + ", " + rateOpening1 + ">");	
+				if (idTab == idArr) {
+					//Add a message to the "current" file
+					tRow1.addMessage("Exchange rate <" + currencyReference1 + "," + currency1 + "> deleted in OTHER and not in CURRENT: <" 
+					+ currencyReference1 + ", " + currency1 + ", " + description1 + ", " + multiplier1 + ", " + rate1 + ", " + rateOpening1 + ">");	
 				}
 			}
 		}
@@ -560,12 +562,8 @@ function compareCambio(table1, table2, file){
 	}
 	
 	//Added ExchangeRates
-	if(arrDifferenze2.length > 0){
-		var nameString = file.info("Base","FileName");
-		var nameArray = nameString.split('/');
-		var fileName = nameArray[nameArray.length - 1];
-		
-		for(i=0; i<table2.rowCount; i++){
+	if (arrDifferenze2.length > 0) {		
+		for (var i = 0; i < table2.rowCount; i++) {
 			var tRow2 = table2.row(i);
 			var idTab = tRow2.uniqueId;
 			currencyReference2 = tRow2.value('CurrencyReference');
@@ -575,11 +573,16 @@ function compareCambio(table1, table2, file){
 			rate2 = tRow2.value('Rate');
 			rateOpening2 = tRow2.value('RateOpening');
 			
-			for(j=0; j<arrDifferenze2.length; j++){
+			for (var j = 0; j < arrDifferenze2.length; j++) {
 				var idArr = arrDifferenze2[j];
 				
-				if(idTab == idArr){
-					tRow2.addMessage("Cambio <" + currencyReference2 + "," + currency2 + "> aggiunto in <" + fileName + ">: <" + currencyReference2 + ", " + currency2
+				if (idTab == idArr) {
+					//Add message to the "current" file, specifying the row of the "other" file
+					var r = parseInt(tRow2.rowNr);
+					var rr = r+1;
+
+					Banana.document.addMessage("[Exchange rates: Row " + rr + "] Exchange rate <" + currencyReference2 + "," + currency2 
+					+ "> added in OTHER and not in CURRENT: <" + currencyReference2 + ", " + currency2
 					+ ", " + description2 + ", " + multiplier2 + ", " + rate2 + ", " + rateOpening2 + ">");
 				}
 			}
@@ -593,9 +596,9 @@ function compareCambio(table1, table2, file){
 /**
 	Function that, given two VAT tables, compares the rows with equal Vat Code
 */
-function compareIva(table1, table2, file){
+function compareVatTable(table1, table2, file) {
 	
-	if(!table1 || !table2){
+	if (!table1 || !table2) {
 		return false;
 	}
 	
@@ -631,11 +634,11 @@ function compareIva(table1, table2, file){
 	var flag = false;
 		
 	
-	for(i=0; i<table2.rowCount; i++){
+	for (var i = 0; i < table2.rowCount; i++) {
 		tRow2 = table2.row(i);
 		vatCode_2 = tRow2.value('VatCode');
 		
-		if(vatCode_2){	
+		if (vatCode_2) {	
 
 			description_2 = tRow2.value('Description');
 			gr_2 = tRow2.value('Gr');
@@ -648,7 +651,7 @@ function compareIva(table1, table2, file){
 			vatAccount_2 = tRow2.value('VatAccount');
 			
 			
-			for(j=0; j<table1.rowCount; j++){
+			for (var j = 0; j < table1.rowCount; j++) {
 				tRow1 = table1.row(j);
 			
 				vatCode_1 = tRow1.value('VatCode');
@@ -663,55 +666,55 @@ function compareIva(table1, table2, file){
 				vatAccount_1 = tRow1.value('VatAccount');
 				
 				
-				if(vatCode_1){
+				if (vatCode_1) {
 					
 					//If Vat Code are equal then begins the comparison
-					if(vatCode_1 == vatCode_2){					
+					if (vatCode_1 == vatCode_2) {					
 					
 						//Show differences if column values are different
-						if(description_1 != description_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "Descrizione" + ">: base <" + description_1 + ">, nuovo <" + description_2 + ">");
+						if (description_1 != description_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "Description" + ">: CURRENT <" + description_1 + ">, OTHER <" + description_2 + ">");
 							flag = true;
 						}
-						if(gr_1 != gr_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "Gr" + ">: base <" + gr_1 + ">, nuovo <" + gr_2 + ">");
+						if (gr_1 != gr_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "Gr" + ">: CURRENT <" + gr_1 + ">, OTHER <" + gr_2 + ">");
 							flag = true;
 						}
-						if(gr1_1 != gr1_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "Gr1" + ">: base <" + gr1_1 + ">, nuovo <" + gr1_2 + ">");
+						if (gr1_1 != gr1_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "Gr1" + ">: CURRENT <" + gr1_1 + ">, OTHER <" + gr1_2 + ">");
 							flag = true;
 						}
-						if(isDue_1 != isDue_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "IVA dovuta" + ">: base <" + isDue_1 + ">, nuovo <" + isDue_2 + ">");
+						if (isDue_1 != isDue_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "VAT due" + ">: CURRENT <" + isDue_1 + ">, OTHER <" + isDue_2 + ">");
 							flag = true;
 						}
-						if(amountType_1 != amountType_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "Tipo importo" + ">: base <" + amountType_1 + ">, nuovo <" + amountType_2 + ">");
+						if (amountType_1 != amountType_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "Amount type" + ">: CURRENT <" + amountType_1 + ">, OTHER <" + amountType_2 + ">");
 							flag = true;
 						}
-						if(vatRate_1 != vatRate_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "%IVA" + ">: base <" + vatRate_1 + ">, nuovo <" + vatRate_2 + ">");
+						if (vatRate_1 != vatRate_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "%VAT rate" + ">: CURRENT <" + vatRate_1 + ">, OTHER <" + vatRate_2 + ">");
 							flag = true;
 						}
-						if(vatRateOnGross_1 != vatRateOnGross_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "%IVA sul lordo" + ">: base <" + vatRateOnGross_1 + ">, nuovo <" + vatRateOnGross_2 + ">");
+						if (vatRateOnGross_1 != vatRateOnGross_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "%VAT rate on gross" + ">: CURRENT <" + vatRateOnGross_1 + ">, OTHER <" + vatRateOnGross_2 + ">");
 							flag = true;
 						}
-						if(vatPercentNonDeductible_1 != vatPercentNonDeductible_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "%Non.Ded." + ">: base <" + vatPercentNonDeductible_1 + ">, nuovo <" + vatPercentNonDeductible_2 + ">");
+						if (vatPercentNonDeductible_1 != vatPercentNonDeductible_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "%VAT non deductible" + ">: CURRENT <" + vatPercentNonDeductible_1 + ">, OTHER <" + vatPercentNonDeductible_2 + ">");
 							flag = true;
 						}
-						if(vatAccount_1 != vatAccount_2){
-							tRow1.addMessage("Codice IVA <" +  vatCode_1 + "> modificato <" 
-							+ "Conto IVA" + ">: base <" + vatAccount_1 + ">, nuovo <" + vatAccount_2 + ">");
+						if (vatAccount_1 != vatAccount_2) {
+							tRow1.addMessage("VAT code <" +  vatCode_1 + "> edited <" 
+							+ "VAT account" + ">: CURRENT <" + vatAccount_1 + ">, OTHER <" + vatAccount_2 + ">");
 							flag = true;
 						}
 					}					
@@ -728,8 +731,8 @@ function compareIva(table1, table2, file){
 	arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2);
 	
 	//Deleted rows
-	if(arrDifferenze1.length > 0){
-		for(i=0; i<table1.rowCount; i++){
+	if (arrDifferenze1.length > 0) {
+		for (var i = 0; i < table1.rowCount; i++) {
 			var tRow1 = table1.row(i);
 			var idTab = tRow1.uniqueId;
 			vatCode_1 = tRow1.value('VatCode');
@@ -743,11 +746,11 @@ function compareIva(table1, table2, file){
 			vatPercentNonDeductible_1 = tRow1.value('VatPercentNonDeductible');
 			vatAccount_1 = tRow1.value('VatAccount');
 			
-			for(j=0; j<arrDifferenze1.length; j++){
+			for (var j = 0; j < arrDifferenze1.length; j++) {
 				var idArr = arrDifferenze1[j];
 				
-				if(idTab == idArr){
-					tRow1.addMessage("Codice IVA <" + vatCode_1 + "> eliminato: <" + vatCode_1 + ", " + description_1
+				if (idTab == idArr) {
+					tRow1.addMessage("VAT code <" + vatCode_1 + "> deleted in OTHER and not in CURRENT: <" + vatCode_1 + ", " + description_1
 					+ ", " + gr_1 + ", " + gr1_1 + ", " + isDue_1 + ", " + amountType_1 + ", " + vatRate_1 + ", " + vatRateOnGross_1
 					+ ", " + vatPercentNonDeductible_1 + ", " + vatAccount_1 + ">");
 				}
@@ -757,12 +760,12 @@ function compareIva(table1, table2, file){
 	}
 	
 	//Added rows
-	if(arrDifferenze2.length > 0){
-		var nameString = file.info("Base","FileName");
-		var nameArray = nameString.split('/');
-		var fileName = nameArray[nameArray.length - 1];
+	if (arrDifferenze2.length > 0) {
+		// var nameString = file.info("Base","FileName");
+		// var nameArray = nameString.split('/');
+		// var fileName = nameArray[nameArray.length - 1];
 		
-		for(i=0; i<table2.rowCount; i++){
+		for (var i = 0; i < table2.rowCount; i++) {
 			var tRow2 = table2.row(i);
 			var idTab = tRow2.uniqueId;
 			vatCode_2 = tRow2.value('VatCode');
@@ -776,13 +779,18 @@ function compareIva(table1, table2, file){
 			vatPercentNonDeductible_2 = tRow2.value('VatPercentNonDeductible');
 			vatAccount_2 = tRow2.value('VatAccount');
 			
-			for(j=0; j<arrDifferenze2.length; j++){
+			for (var j = 0; j < arrDifferenze2.length; j++) {
 				var idArr = arrDifferenze2[j];
 				
-				if(idTab == idArr){
-					tRow2.addMessage("Codice IVA <" + vatCode_2 + "> aggiunto in <" + fileName + ">: <" + vatCode_2 + ", " + description_2
-					+ ", " + gr_2 + ", " + gr1_2 + ", " + isDue_2 + ", " + amountType_2 + ", " + vatRate_2 + ", " + vatRateOnGross_2
-					+ ", " + vatPercentNonDeductible_2 + ", " + vatAccount_2 + ">");
+				if (idTab == idArr) {
+
+					//Add message to the "current" file, specifying the row of the "other" file
+					var r = parseInt(tRow2.rowNr);
+					var rr = r+1;
+
+					Banana.document.addMessage("[VAT Codes: Row " + rr + "] VAT code <" + vatCode_2 + "> added in OTHER and not in CURRENT: <" 
+					+ vatCode_2 + ", " + description_2 + ", " + gr_2 + ", " + gr1_2 + ", " + isDue_2 + ", " + amountType_2 + ", " + vatRate_2 
+					+ ", " + vatRateOnGross_2 + ", " + vatPercentNonDeductible_2 + ", " + vatAccount_2 + ">");
 				}
 			}
 		}
@@ -797,14 +805,14 @@ function compareIva(table1, table2, file){
 	- compares all the transactions finding the differences (columns)
 	- compares the two tables finding the deleted and added rows
 */
-function compareTransactions(tabTransactions1, tabTransactions2, file){
+function compareTransactions(tabTransactions1, tabTransactions2, file) {
 	
-	if(!tabTransactions1 || !tabTransactions2){
+	if (!tabTransactions1 || !tabTransactions2) {
 		return false;
 	}
 	
 	var tRow1, tRow2 = "";
-	var dataVerifica = getDataFinaleDiVerifica(tabTransactions1, tabTransactions2);
+	var dataVerifica = getDateOfVerification(tabTransactions1, tabTransactions2);
 	var uniqueId1, uniqueId2 ="";
 	var data1, data2 = ""; 
 	var description1, description2 = ""; 
@@ -824,7 +832,7 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 	var flag = false;
 
 	
-	for(i=0; i<tabTransactions2.rowCount; i++){
+	for (var i = 0; i < tabTransactions2.rowCount; i++) {
 		
 		tRow2 = tabTransactions2.row(i);	
 		uniqueId2 = tRow2.uniqueId;
@@ -842,9 +850,9 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 		cc2_2 = tRow2.value('Cc2');
 		cc3_2 = tRow2.value('Cc3');
 				
-		if(data2 && data2 <= dataVerifica){	
+		if (data2 && data2 <= dataVerifica) {	
 	
-			for(j=0; j<tabTransactions1.rowCount; j++){
+			for (var j = 0; j < tabTransactions1.rowCount; j++) {
 			
 				tRow1 = tabTransactions1.row(j);
 				uniqueId1 = tRow1.uniqueId;
@@ -862,65 +870,65 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 				cc2_1 = tRow1.value('Cc2');
 				cc3_1 = tRow1.value('Cc3');	
 				
-				if(data1 && data1 <= dataVerifica){
+				if (data1 && data1 <= dataVerifica) {
 
 					//If uniqueIds are equal then begins the comparison
-					if(uniqueId1 == uniqueId2){
+					if (uniqueId1 == uniqueId2) {
 						
 						//Show differences if column values are different
-						if(data1 != data2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Data: base <" + Banana.Converter.toLocaleDateFormat(data1) 
-							+ ">, nuovo <" + Banana.Converter.toLocaleDateFormat(data2) + ">");
+						if (data1 != data2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Date: CURRENT <" + Banana.Converter.toLocaleDateFormat(data1) 
+							+ ">, OTHER <" + Banana.Converter.toLocaleDateFormat(data2) + ">");
 							flag = true;
 						}
-						if(description1 != description2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Descrizione: base <" + description1 + ">, nuovo <" + description2 + ">");
+						if (description1 != description2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Description: CURRENT <" + description1 + ">, OTHER <" + description2 + ">");
 							flag = true;
 						}
-						if(accountDebit1 != accountDebit2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Dare: base <" + accountDebit1 + ">, nuovo <" + accountDebit2 + ">");
+						if (accountDebit1 != accountDebit2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Debit: CURRENT <" + accountDebit1 + ">, OTHER <" + accountDebit2 + ">");
 							flag = true;
 						}
-						if(accountCredit1 != accountCredit2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Avere: base <" 
-							+ accountCredit1 + ">, nuovo <" + accountCredit2 + ">");
+						if (accountCredit1 != accountCredit2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Credit: CURRENT <" 
+							+ accountCredit1 + ">, OTHER <" + accountCredit2 + ">");
 							flag = true;
 						}
-						if(amount1 != amount2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Importo: base <" + Banana.Converter.toLocaleNumberFormat(amount1)
-							+ ">, nuovo <" + Banana.Converter.toLocaleNumberFormat(amount2) + ">");
+						if (amount1 != amount2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Amount: CURRENT <" + Banana.Converter.toLocaleNumberFormat(amount1)
+							+ ">, OTHER <" + Banana.Converter.toLocaleNumberFormat(amount2) + ">");
 							flag = true;
 						}
-						if(moneta1 != moneta2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Moneta: base <" + moneta1 + ">, nuovo <" + moneta2 + ">");
+						if (moneta1 != moneta2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Currency: CURRENT <" + moneta1 + ">, OTHER <" + moneta2 + ">");
 							flag = true;
 						}
-						if(cambio1 != cambio2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Cambio: base <" + cambio1 + ">, nuovo <" + cambio2 + ">");
+						if (cambio1 != cambio2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited Exchange rate: CURRENT <" + cambio1 + ">, OTHER <" + cambio2 + ">");
 							flag = true;
 						}
-						if(vatCode1 != vatCode2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato Cod. IVA: base <" + vatCode1 + ">, nuovo <" + vatCode2 + ">");
+						if (vatCode1 != vatCode2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited VAT code: CURRENT <" + vatCode1 + ">, OTHER <" + vatCode2 + ">");
 							flag = true;
 						}
-						if(vatRate1 != vatRate2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato %IVA: base <" + vatRate1 + ">, nuovo <" + vatRate2 + ">");
+						if (vatRate1 != vatRate2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited %VAT: CURRENT <" + vatRate1 + ">, OTHER <" + vatRate2 + ">");
 							flag = true;
 						}
-						if(vatPosted1 != vatPosted2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato IVA Contab.: base <" + vatPosted1 + ">, nuovo <" + vatPosted2 + ">");
+						if (vatPosted1 != vatPosted2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited IVA posted: CURRENT <" + vatPosted1 + ">, OTHER <" + vatPosted2 + ">");
 							flag = true;
 						}
-						if(cc1_1 != cc1_2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato CC1: base <" + cc1_1 + ">, nuovo <" + cc1_2 + ">");
+						if (cc1_1 != cc1_2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited CC1: CURRENT <" + cc1_1 + ">, OTHER <" + cc1_2 + ">");
 							flag = true;
 						}
-						if(cc2_1 != cc2_2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato CC2: base <" + cc2_1 + ">, nuovo <" + cc2_2 + ">");
+						if (cc2_1 != cc2_2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited CC2: CURRENT <" + cc2_1 + ">, OTHER <" + cc2_2 + ">");
 							flag = true;
 						}
-						if(cc3_1 != cc3_2){
-							tRow1.addMessage("Registrazione <" + description1 + "> modificato CC3: base <" + cc3_1 + ">, nuovo <" + cc3_2 + ">");
+						if (cc3_1 != cc3_2) {
+							tRow1.addMessage("Transaction <" + description1 + "> edited CC3: CURRENT <" + cc3_1 + ">, OTHER <" + cc3_2 + ">");
 							flag = true;
 						}
 					}
@@ -937,8 +945,8 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 	arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2);
 	
 	//Deleted transactions
-	if(arrDifferenze1.length > 0){
-		for(i=0; i<tabTransactions1.rowCount; i++){
+	if (arrDifferenze1.length > 0) {
+		for (var i = 0; i < tabTransactions1.rowCount; i++) {
 			var tRow1 = tabTransactions1.row(i);
 			var idTab = tRow1.uniqueId;
 			data1 = tRow1.value('Date');
@@ -955,13 +963,13 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 			cc2_1 = tRow1.value('Cc2');
 			cc3_1 = tRow1.value('Cc3');	
 			
-			for(j=0; j<arrDifferenze1.length; j++){
+			for (var j = 0; j < arrDifferenze1.length; j++) {
 				var idArr = arrDifferenze1[j];
 				
-				if(idTab == idArr){
-					tRow1.addMessage("Registrazione <" + description1 + "> eliminata: <" + Banana.Converter.toLocaleDateFormat(data1) + ", " + description1 
-					+ ", " + accountDebit1 + ", " + accountCredit1 + ", " + Banana.Converter.toLocaleNumberFormat(amount1) + ", " + moneta1 + ", " 
-					+ cambio1 + ", " + vatCode1 + ", " + vatRate1 + ", " + vatPosted1 + ", " + cc1_1 + ", " + cc2_1 + ", " + cc3_1);	
+				if (idTab == idArr) {
+					tRow1.addMessage("Transaction <" + description1 + "> deleted in OTHER and not in CURRENT: <" + Banana.Converter.toLocaleDateFormat(data1) 
+					+ ", " + description1 + ", " + accountDebit1 + ", " + accountCredit1 + ", " + Banana.Converter.toLocaleNumberFormat(amount1) + ", " 
+					+ moneta1 + ", " + cambio1 + ", " + vatCode1 + ", " + vatRate1 + ", " + vatPosted1 + ", " + cc1_1 + ", " + cc2_1 + ", " + cc3_1);	
 				}
 			}
 		}
@@ -969,12 +977,12 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 	}
 	
 	//Added transactions
-	if(arrDifferenze2.length > 0){
-		var nameString = file.info("Base","FileName");
-		var nameArray = nameString.split('/');
-		var fileName = nameArray[nameArray.length - 1];
+	if (arrDifferenze2.length > 0) {
+		// var nameString = file.info("Base","FileName");
+		// var nameArray = nameString.split('/');
+		// var fileName = nameArray[nameArray.length - 1];
 		
-		for(i=0; i<tabTransactions2.rowCount; i++){
+		for (var i = 0; i < tabTransactions2.rowCount; i++) {
 			var tRow2 = tabTransactions2.row(i);
 			var idTab = tRow2.uniqueId;
 			data2 = tRow2.value('Date');
@@ -991,13 +999,19 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 			cc2_2 = tRow2.value('Cc2');
 			cc3_2 = tRow2.value('Cc3');
 			
-			for(j=0; j<arrDifferenze2.length; j++){
+			for (var j = 0; j < arrDifferenze2.length; j++) {
 				var idArr = arrDifferenze2[j];
 				
-				if(idTab == idArr){
-					tRow2.addMessage("Registrazione <" + description2 + "> aggiunta in <" + fileName + ">: <" + Banana.Converter.toLocaleDateFormat(data2) + ", " + description2 
-					+ ", " + accountDebit2 + ", " + accountCredit2 + ", " + Banana.Converter.toLocaleNumberFormat(amount2) + ", " + moneta2 + ", " 
-					+ cambio2 + ", " + vatCode2 + ", " + vatRate2 + ", " + vatPosted2 + ", " + cc1_2 + ", " + cc2_2 + ", " + cc3_2);	
+				if (idTab == idArr) {
+					
+					//Add message to the "current" file, specifying the row of the "other" file
+					var r = parseInt(tRow2.rowNr);
+					var rr = r+1;
+
+					Banana.document.addMessage("[Transactions: Row " + rr + "] Transaction <" + description2 + "> added in OTHER and not in CURRENT: <" 
+					+ Banana.Converter.toLocaleDateFormat(data2) + ", " + description2 + ", " + accountDebit2 + ", " + accountCredit2 + ", " 
+					+ Banana.Converter.toLocaleNumberFormat(amount2) + ", " + moneta2 + ", " + cambio2 + ", " + vatCode2 + ", " + vatRate2 + ", " 
+					+ vatPosted2 + ", " + cc1_2 + ", " + cc2_2 + ", " + cc3_2);
 				}
 			}
 		}
@@ -1010,60 +1024,162 @@ function compareTransactions(tabTransactions1, tabTransactions2, file){
 /**
 	Function that compares the two Budget tables finding all the differences
 */
-function compareBudget(tabBudget1, tabBudget2, file){
+function compareBudget(tabBudget1, tabBudget2, file) {
 
-	if(!tabBudget1 || !tabBudget2){
+	if (!tabBudget1 && !tabBudget2) {
 		return false;
 	}
+	else if (tabBudget1 && !tabBudget2) {
+		Banana.document.addMessage("Table Budget exists in CURRENT and not in OTHER");
+		flag = true;
+	}
+	else if (!tabBudget1 && tabBudget2) {
+		Banana.document.addMessage("Table Budget exists in OTHER and not in CURRENT");
+		flag = true;
+	}
+	else if (tabBudget1 && tabBudget2) {
+		var tRow1, tRow2 = "";
+		var dataVerifica = getDateOfVerification(tabBudget1, tabBudget2);
+		var uniqueId1, uniqueId2 ="";
+		var data1, data2 = "";
+		var dataEnd1, dataEnd2 = "";
+		var repeat1, repeat2 = ""; 
+		var description1, description2 = ""; 
+		var accountDebit1, accountDebit2 = "";
+		var accountCredit1, accountCredit2 = "";
+		var quantity1, quantity2 = "";
+		var unitReference1, unitReference2 = "";
+		var unitPrice1, unitPrice2 = "";
+		var formulaAmountBaseCurrency1, formulaAmountBaseCurrency2 = "";
+		var amount1, amount2 = "";
+		var amountTotal1, amountTotal2 = "";
+		var vatCode1, vatCode2 = "";
+		var vatRate1, vatRate2 = "";
+		var arrDifferenze1 = [];
+		var arrDifferenze2 = [];
+		var flag = false;
 
-	var tRow1, tRow2 = "";
-	var dataVerifica = getDataFinaleDiVerifica(tabBudget1, tabBudget2);
-	var uniqueId1, uniqueId2 ="";
-	var data1, data2 = "";
-	var dataEnd1, dataEnd2 = "";
-	var repeat1, repeat2 = ""; 
-	var description1, description2 = ""; 
-	var accountDebit1, accountDebit2 = "";
-	var accountCredit1, accountCredit2 = "";
-	var quantity1, quantity2 = "";
-	var unitReference1, unitReference2 = "";
-	var unitPrice1, unitPrice2 = "";
-	var formulaAmountBaseCurrency1, formulaAmountBaseCurrency2 = "";
-	var amount1, amount2 = "";
-	var amountTotal1, amountTotal2 = "";
-	var vatCode1, vatCode2 = "";
-	var vatRate1, vatRate2 = "";
-	var arrDifferenze1 = [];
-	var arrDifferenze2 = [];
-	var flag = false;
+		for (var i = 0; i < tabBudget2.rowCount; i++) {
+			tRow2 = tabBudget2.row(i);	
+			uniqueId2 = tRow2.uniqueId;
+			data2 = tRow2.value('Date');
+			dataEnd2 = tRow2.value('DateEnd');
+			repeat2 = tRow2.value('Repeat');
+			description2 = tRow2.value('Description');
+			accountDebit2 = tRow2.value('AccountDebit');
+			accountCredit2 = tRow2.value('AccountCredit');
+			quantity2 = tRow2.value('Quantity');
+			unitReference2 = tRow2.value('UnitReference');
+			unitPrice2 = tRow2.value('UnitPrice');
+			formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
+			amount2 = tRow2.value('Amount');
+			amountTotal2 = tRow2.value('AmountTotal');
+			vatCode2 = tRow2.value('VatCode');
+			vatRate2 = tRow2.value('VatRate');
+					
+			if (data2) {
+				for (var j = 0; j < tabBudget1.rowCount; j++) {
+					tRow1 = tabBudget1.row(j);	
+					uniqueId1 = tRow1.uniqueId;
+					data1 = tRow1.value('Date');
+					dataEnd1 = tRow1.value('DateEnd');
+					repeat1 = tRow1.value('Repeat');
+					description1 = tRow1.value('Description');
+					accountDebit1 = tRow1.value('AccountDebit');
+					accountCredit1 = tRow1.value('AccountCredit');
+					quantity1 = tRow1.value('Quantity');
+					unitReference1 = tRow1.value('UnitReference');
+					unitPrice1 = tRow1.value('UnitPrice');
+					formulaAmountBaseCurrency1 = tRow1.value('FormulaAmountBaseCurrency');
+					amount1 = tRow1.value('Amount');
+					amountTotal1 = tRow1.value('AmountTotal');
+					vatCode1 = tRow1.value('VatCode');
+					vatRate1 = tRow1.value('VatRate');
+					
+					if (data1) {
 
-	
-	for(i=0; i<tabBudget2.rowCount; i++){
+						//If uniqueIds are equal then begins the comparison
+						if (uniqueId1 == uniqueId2) {
+							
+							//Show differences if column values are different
+							if (data1 != data2) {
+								tRow1.addMessage("edited Date: CURRENT <" + Banana.Converter.toLocaleDateFormat(data1) 
+								+ ">, OTHER <" + Banana.Converter.toLocaleDateFormat(data2) + ">");
+								flag = true;
+							}
+							if (dataEnd1 != dataEnd2) {
+								tRow1.addMessage("edited Date End: CURRENT <" + Banana.Converter.toLocaleDateFormat(dataEnd1) 
+								+ ">, OTHER <" + Banana.Converter.toLocaleDateFormat(dataEnd2) + ">");
+								flag = true;
+							}
+							if (repeat1 != repeat2) {
+								tRow1.addMessage("edited Repeat: CURRENT <" + repeat1 + ">, OTHER <" + repeat2 + ">");
+								flag = true;
+							}
+							if (description1 != description2) {
+								tRow1.addMessage("edited Description: CURRENT <" + description1 + ">, OTHER <" + description2 + ">");
+								flag = true;
+							}
+							if (accountDebit1 != accountDebit2) {
+								tRow1.addMessage("edited Debit: CURRENT <" + accountDebit1 + ">, OTHER <" + accountDebit2 + ">");
+								flag = true;
+							}
+							if (accountCredit1 != accountCredit2) {
+								tRow1.addMessage("edited Credit: CURRENT <" + accountCredit1 + ">, OTHER <" + accountCredit2 + ">");
+								flag = true;
+							}
+							if (quantity1 != quantity2) {
+								tRow1.addMessage("edited Quantity: CURRENT <" + quantity1 + ">, OTHER <" + quantity2 + ">");
+								flag = true;
+							}
+							if (unitReference1 != unitReference2) {
+								tRow1.addMessage("edited UnitReference: CURRENT <" + unitReference1 + ">, OTHER <" + unitReference2 + ">");
+								flag = true;
+							}
+							if (unitPrice1 != unitPrice2) {
+								tRow1.addMessage("edited UnitPrice: CURRENT <" + unitPrice1 + ">, OTHER <" + unitPrice2 + ">");
+								flag = true;
+							}
+							if (formulaAmountBaseCurrency1 != formulaAmountBaseCurrency2) {
+								tRow1.addMessage("edited FormulaAmountBaseCurrency: CURRENT <" + formulaAmountBaseCurrency1 
+								+ ">, OTHER <" + formulaAmountBaseCurrency2 + ">");
+								flag = true;
+							}
+							if (amount1 != amount2) {
+								tRow1.addMessage("edited Amount: CURRENT <" + Banana.Converter.toLocaleNumberFormat(amount1) + ">, OTHER <" + Banana.Converter.toLocaleNumberFormat(amount2) + ">");
+								flag = true;
+							}
+							if (amountTotal1 != amountTotal2) {
+								tRow1.addMessage("edited AmountTotal: CURRENT <" + Banana.Converter.toLocaleNumberFormat(amountTotal1)
+								+ ">, OTHER <" + Banana.Converter.toLocaleNumberFormat(amountTotal2) + ">");
+								flag = true;
+							}
+							if (vatCode1 != vatCode2) {
+								tRow1.addMessage("edited VAT code: CURRENT <" + vatCode1 + ">, OTHER <" + vatCode2 + ">");
+								flag = true;
+							}
+							if (vatRate1 != vatRate2) {
+								tRow1.addMessage("edited %VAT: CURRENT <" + vatRate1 + ">, OTHER <" + vatRate2 + ">");
+								flag = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//Check if there are any added and/or deleted transactions
+		arrUniqueIdsFile1 = getUniqueIds(tabBudget1);
+		arrUniqueIdsFile2 = getUniqueIds(tabBudget2);
 		
-		tRow2 = tabBudget2.row(i);	
-		uniqueId2 = tRow2.uniqueId;
-		data2 = tRow2.value('Date');
-		dataEnd2 = tRow2.value('DateEnd');
-		repeat2 = tRow2.value('Repeat');
-		description2 = tRow2.value('Description');
-		accountDebit2 = tRow2.value('AccountDebit');
-		accountCredit2 = tRow2.value('AccountCredit');
-		quantity2 = tRow2.value('Quantity');
-		unitReference2 = tRow2.value('UnitReference');
-		unitPrice2 = tRow2.value('UnitPrice');
-		formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
-		amount2 = tRow2.value('Amount');
-		amountTotal2 = tRow2.value('AmountTotal');
-		vatCode2 = tRow2.value('VatCode');
-		vatRate2 = tRow2.value('VatRate');
-				
-		//if(data2 && data2 <= dataVerifica){
-		if(data2){
-	
-			for(j=0; j<tabBudget1.rowCount; j++){
-			
-				tRow1 = tabBudget1.row(j);	
-				uniqueId1 = tRow1.uniqueId;
+		arrDifferenze1 = diffArray(arrUniqueIdsFile2,arrUniqueIdsFile1); //Banana.console.log(arrDifferenze1);
+		arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2); //Banana.console.log(arrDifferenze2);
+		
+		//Deleted transactions
+		if (arrDifferenze1.length > 0) {
+			for (var i = 0; i < tabBudget1.rowCount; i++) {
+				var tRow1 = tabBudget1.row(i);
+				var idTab = tRow1.uniqueId;
 				data1 = tRow1.value('Date');
 				dataEnd1 = tRow1.value('DateEnd');
 				repeat1 = tRow1.value('Repeat');
@@ -1079,208 +1195,220 @@ function compareBudget(tabBudget1, tabBudget2, file){
 				vatCode1 = tRow1.value('VatCode');
 				vatRate1 = tRow1.value('VatRate');
 				
-				//if(data1 && data1 <= dataVerifica){
-				if(data1){
+				for (var j = 0; j < arrDifferenze1.length; j++) {
+					var idArr = arrDifferenze1[j];
+					
+					if (idTab == idArr) {
+						tRow1.addMessage("Row deleted in OTHER and not in CURRENT: <" 
+							+ Banana.Converter.toLocaleDateFormat(data1)
+							+ ", "
+							+ Banana.Converter.toLocaleDateFormat(dataEnd1)
+							+ ", "
+							+ repeat1
+							+ ", " 
+							+ description1 
+							+ ", " 
+							+ accountDebit1 
+							+ ", " 
+							+ accountCredit1
+							+ ", "
+							+ Banana.Converter.toLocaleNumberFormat(quantity1)
+							+ ", "
+							+ unitReference1
+							+ ", "
+							+ Banana.Converter.toLocaleNumberFormat(unitPrice1)
+							+ ", "
+							+ formulaAmountBaseCurrency1
+							+ ", " 
+							+ Banana.Converter.toLocaleNumberFormat(amount1)
+							+ ", " 
+							+ Banana.Converter.toLocaleNumberFormat(amountTotal1) 
+							+ ", " 
+							+ vatCode1 
+							+ ", " 
+							+ vatRate1
+						);
+					}
+				}
+			}
+			flag = true;
+		}
+		
+		//Added transactions
+		if (arrDifferenze2.length > 0) {
+			for (var i = 0; i < tabBudget2.rowCount; i++) {
+				var tRow2 = tabBudget2.row(i);
+				var idTab = tRow2.uniqueId;
+				data2 = tRow2.value('Date');
+				dataEnd2 = tRow2.value('DateEnd');
+				repeat2 = tRow2.value('Repeat');
+				description2 = tRow2.value('Description');
+				accountDebit2 = tRow2.value('AccountDebit');
+				accountCredit2 = tRow2.value('AccountCredit');
+				quantity2 = tRow2.value('Quantity');
+				unitReference2 = tRow2.value('UnitReference');
+				unitPrice2 = tRow2.value('UnitPrice');
+				formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
+				amount2 = tRow2.value('Amount');
+				amountTotal2 = tRow2.value('AmountTotal');
+				vatCode2 = tRow2.value('VatCode');
+				vatRate2 = tRow2.value('VatRate');
+				
+				for (var j = 0; j < arrDifferenze2.length; j++) {
+					var idArr = arrDifferenze2[j];
+					
+					if (idTab == idArr) {
 
-					//If uniqueIds are equal then begins the comparison
-					if(uniqueId1 == uniqueId2){
-						
-						//Show differences if column values are different
-						if(data1 != data2){
-							tRow1.addMessage("modificato Data: base <" + Banana.Converter.toLocaleDateFormat(data1) 
-							+ ">, nuovo <" + Banana.Converter.toLocaleDateFormat(data2) + ">");
-							flag = true;
-						}
-						if(dataEnd1 != dataEnd2){
-							tRow1.addMessage("modificato DataEnd: base <" + Banana.Converter.toLocaleDateFormat(dataEnd1) 
-							+ ">, nuovo <" + Banana.Converter.toLocaleDateFormat(dataEnd2) + ">");
-							flag = true;
-						}
-						if(repeat1 != repeat2){
-							tRow1.addMessage("modificato Repeat: base <" + repeat1 + ">, nuovo <" + repeat2 + ">");
-							flag = true;
-						}
-						if(description1 != description2){
-							tRow1.addMessage("modificato Descrizione: base <" + description1 + ">, nuovo <" + description2 + ">");
-							flag = true;
-						}
-						if(accountDebit1 != accountDebit2){
-							tRow1.addMessage("modificato Dare: base <" + accountDebit1 + ">, nuovo <" + accountDebit2 + ">");
-							flag = true;
-						}
-						if(accountCredit1 != accountCredit2){
-							tRow1.addMessage("modificato Avere: base <" + accountCredit1 + ">, nuovo <" + accountCredit2 + ">");
-							flag = true;
-						}
-						if(quantity1 != quantity2){
-							tRow1.addMessage("modificato Quantity: base <" + quantity1 + ">, nuovo <" + quantity2 + ">");
-							flag = true;
-						}
-						if(unitReference1 != unitReference2){
-							tRow1.addMessage("modificato UnitReference: base <" + unitReference1 + ">, nuovo <" + unitReference2 + ">");
-							flag = true;
-						}
-						if(unitPrice1 != unitPrice2){
-							tRow1.addMessage("modificato UnitPrice: base <" + unitPrice1 + ">, nuovo <" + unitPrice2 + ">");
-							flag = true;
-						}
-						if(formulaAmountBaseCurrency1 != formulaAmountBaseCurrency2){
-							tRow1.addMessage("modificato FormulaAmountBaseCurrency: base <" + formulaAmountBaseCurrency1 
-							+ ">, nuovo <" + formulaAmountBaseCurrency2 + ">");
-							flag = true;
-						}
-						if(amount1 != amount2){
-							tRow1.addMessage("modificato Importo: base <" + Banana.Converter.toLocaleNumberFormat(amount1) + ">, nuovo <" + Banana.Converter.toLocaleNumberFormat(amount2) + ">");
-							flag = true;
-						}
-						if(amountTotal1 != amountTotal2){
-							tRow1.addMessage("modificato AmountTotal: base <" + Banana.Converter.toLocaleNumberFormat(amountTotal1)
-							+ ">, nuovo <" + Banana.Converter.toLocaleNumberFormat(amountTotal2) + ">");
-							flag = true;
-						}
-						if(vatCode1 != vatCode2){
-							tRow1.addMessage("modificato Cod. IVA: base <" + vatCode1 + ">, nuovo <" + vatCode2 + ">");
-							flag = true;
-						}
-						if(vatRate1 != vatRate2){
-							tRow1.addMessage("modificato %IVA: base <" + vatRate1 + ">, nuovo <" + vatRate2 + ">");
-							flag = true;
-						}
+						//Add message into "current" file, specifying the row of the "other" file
+						var r = parseInt(tRow2.rowNr);
+						var rr = r+1;
+
+						Banana.document.addMessage("[Budget: Row " + rr + "] Row added in OTHER and not in CURRENT: <"
+							+ Banana.Converter.toLocaleDateFormat(data2)
+							+ ", "
+							+ Banana.Converter.toLocaleDateFormat(dataEnd2)
+							+ ", "
+							+ repeat2
+							+ ", " 
+							+ description2 
+							+ ", " 
+							+ accountDebit2 
+							+ ", " 
+							+ accountCredit2
+							+ ", "
+							+ Banana.Converter.toLocaleNumberFormat(quantity2)
+							+ ", "
+							+ unitReference2
+							+ ", "
+							+ Banana.Converter.toLocaleNumberFormat(unitPrice2)
+							+ ", "
+							+ formulaAmountBaseCurrency2
+							+ ", " 
+							+ Banana.Converter.toLocaleNumberFormat(amount2)
+							+ ", " 
+							+ Banana.Converter.toLocaleNumberFormat(amountTotal2) 
+							+ ", " 
+							+ vatCode2 
+							+ ", " 
+							+ vatRate2
+						);
+					}
+				}
+			}
+			flag = true;
+		}
+	}
+	return flag;
+}
+
+
+
+/**
+	Function that compares the two Documents tables finding all the differences
+*/
+function compareDocuments(table1, table2) {
+	
+	var flag = false;
+
+	if (!table1 && !table2) {
+		return false;
+	}
+	else if (table1 && !table2) {
+		Banana.document.addMessage("Table Documents exists in CURRENT and not in OTHER");
+		flag = true;
+	}
+	else if (!table1 && table2) {
+		Banana.document.addMessage("Table Documents exists in OTHER and not in CURRENT");
+		flag = true;
+	}
+	else if (table1 && table2) {
+		
+		var tRow1, tRow2 =""
+		var rowId_1, rowId_2 = "";
+		var description_1, description_2 = "";
+		var attachments_1, attachments_2 = "";
+		var flag = false;
+			
+		//comparare table: RowId, Description, sAttachments
+		for (i = 0; i < table2.rowCount; i++) {
+			tRow2 = table2.row(i);
+			rowId_2 = tRow2.value('RowId');
+			description_2 = tRow2.value('Description');
+			attachments_2 = tRow2.value('Attachments');
+				
+			for (j = 0; j < table1.rowCount; j++) {
+				tRow1 = table1.row(j);
+			
+				rowId_1 = tRow1.value('RowId');
+				description_1 = tRow1.value('Description');
+				attachments_1 = tRow1.value('Attachments');
+					
+				//If Id are equal then begins the comparison
+				if (rowId_1 == rowId_2) {					
+				
+					//Show differences if column values are different
+					if (description_1 != description_2) {
+						tRow1.addMessage("Id <" +  rowId_1 + "> edited <Description>: CURRENT <" + description_1 + ">, OTHER <" + description_2 + ">");
+						flag = true;
+					}
+					if (attachments_1 != attachments_2) {
+						tRow1.addMessage("Id <" +  rowId_1 + "> edited <Attachments>: CURRENT different from OTHER");
+						flag = true;
 					}
 				}
 			}
 		}
-	}
-
-	//Check if there are any added and/or deleted transactions
-	arrUniqueIdsFile1 = getUniqueIds(tabBudget1);
-	arrUniqueIdsFile2 = getUniqueIds(tabBudget2);
-	
-	arrDifferenze1 = diffArray(arrUniqueIdsFile2,arrUniqueIdsFile1); Banana.console.log(arrDifferenze1);
-	arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2); Banana.console.log(arrDifferenze2);
-	
-	//Deleted transactions
-	if(arrDifferenze1.length > 0){
-		for(i=0; i<tabBudget1.rowCount; i++){
-			var tRow1 = tabBudget1.row(i);
-			var idTab = tRow1.uniqueId;
-			data1 = tRow1.value('Date');
-			dataEnd1 = tRow1.value('DateEnd');
-			repeat1 = tRow1.value('Repeat');
-			description1 = tRow1.value('Description');
-			accountDebit1 = tRow1.value('AccountDebit');
-			accountCredit1 = tRow1.value('AccountCredit');
-			quantity1 = tRow1.value('Quantity');
-			unitReference1 = tRow1.value('UnitReference');
-			unitPrice1 = tRow1.value('UnitPrice');
-			formulaAmountBaseCurrency1 = tRow1.value('FormulaAmountBaseCurrency');
-			amount1 = tRow1.value('Amount');
-			amountTotal1 = tRow1.value('AmountTotal');
-			vatCode1 = tRow1.value('VatCode');
-			vatRate1 = tRow1.value('VatRate');
-			
-			for(j=0; j<arrDifferenze1.length; j++){
-				var idArr = arrDifferenze1[j];
+		
+		//Check if there are any added and/or deleted rows
+		arrUniqueIdsFile1 = getUniqueIds(table1);
+		arrUniqueIdsFile2 = getUniqueIds(table2);
+		
+		arrDifferenze1 = diffArray(arrUniqueIdsFile2,arrUniqueIdsFile1);
+ 		arrDifferenze2 = diffArray(arrUniqueIdsFile1,arrUniqueIdsFile2);
+		
+		//Deleted rows
+		if (arrDifferenze1.length > 0) {
+			for (var i = 0; i < table1.rowCount; i++) {
 				
-				if(idTab == idArr){
-					tRow1.addMessage("Riga eliminata: <" 
-						+ Banana.Converter.toLocaleDateFormat(data1)
-						+ ", "
-						+ Banana.Converter.toLocaleDateFormat(dataEnd1)
-						+ ", "
-						+ repeat1
-						+ ", " 
-						+ description1 
-						+ ", " 
-						+ accountDebit1 
-						+ ", " 
-						+ accountCredit1
-						+ ", "
-						+ Banana.Converter.toLocaleNumberFormat(quantity1)
-						+ ", "
-						+ unitReference1
-						+ ", "
-						+ Banana.Converter.toLocaleNumberFormat(unitPrice1)
-						+ ", "
-						+ formulaAmountBaseCurrency1
-						+ ", " 
-						+ Banana.Converter.toLocaleNumberFormat(amount1)
-						+ ", " 
-						+ Banana.Converter.toLocaleNumberFormat(amountTotal1) 
-						+ ", " 
-						+ vatCode1 
-						+ ", " 
-						+ vatRate1
-					);
+				var tRow1 = table1.row(i);
+				var idTab = tRow1.uniqueId;
+				rowId_1 = tRow1.value('RowId');
+				description_1 = tRow1.value('Description');
+				attachments_1 = tRow1.value('Attachments');
+				
+				for (var j = 0; j < arrDifferenze1.length; j++) {
+					if (idTab == arrDifferenze1[j]) {
+						tRow1.addMessage("<" + rowId_1 + ", " + description_1 + "> Deleted in OTHER and not in CURRENT");
+					}
 				}
 			}
+			flag = true;
 		}
-		flag = true;
-	}
-	
-	//Added transactions
-	var nameString = file.info("Base","FileName");
-	var nameArray = nameString.split('/');
-	var fileName = nameArray[nameArray.length - 1];
-
-	if(arrDifferenze2.length > 0){
-		for(i=0; i<tabBudget2.rowCount; i++){
-			var tRow2 = tabBudget2.row(i);
-			var idTab = tRow2.uniqueId;
-			data2 = tRow2.value('Date');
-			dataEnd2 = tRow2.value('DateEnd');
-			repeat2 = tRow2.value('Repeat');
-			description2 = tRow2.value('Description');
-			accountDebit2 = tRow2.value('AccountDebit');
-			accountCredit2 = tRow2.value('AccountCredit');
-			quantity2 = tRow2.value('Quantity');
-			unitReference2 = tRow2.value('UnitReference');
-			unitPrice2 = tRow2.value('UnitPrice');
-			formulaAmountBaseCurrency2 = tRow2.value('FormulaAmountBaseCurrency');
-			amount2 = tRow2.value('Amount');
-			amountTotal2 = tRow2.value('AmountTotal');
-			vatCode2 = tRow2.value('VatCode');
-			vatRate2 = tRow2.value('VatRate');
-			
-			for(j=0; j<arrDifferenze2.length; j++){
-				var idArr = arrDifferenze2[j];
+		
+		//Added rows
+		if (arrDifferenze2.length > 0) {
+			for (var i = 0; i < table2.rowCount; i++) {
+				var tRow2 = table2.row(i);
+				var idTab = tRow2.uniqueId;
+				rowId_2 = tRow2.value('RowId');
+				description_2 = tRow2.value('Description');
+				attachments_2 = tRow2.value('Attachments');
 				
-				if(idTab == idArr){
-					tRow2.addMessage("Riga aggiunta: <"
-						+ Banana.Converter.toLocaleDateFormat(data2)
-						+ ", "
-						+ Banana.Converter.toLocaleDateFormat(dataEnd2)
-						+ ", "
-						+ repeat2
-						+ ", " 
-						+ description2 
-						+ ", " 
-						+ accountDebit2 
-						+ ", " 
-						+ accountCredit2
-						+ ", "
-						+ Banana.Converter.toLocaleNumberFormat(quantity2)
-						+ ", "
-						+ unitReference2
-						+ ", "
-						+ Banana.Converter.toLocaleNumberFormat(unitPrice2)
-						+ ", "
-						+ formulaAmountBaseCurrency2
-						+ ", " 
-						+ Banana.Converter.toLocaleNumberFormat(amount2)
-						+ ", " 
-						+ Banana.Converter.toLocaleNumberFormat(amountTotal2) 
-						+ ", " 
-						+ vatCode2 
-						+ ", " 
-						+ vatRate2
-					);
+				for (var j = 0; j < arrDifferenze2.length; j++) {
+					if (idTab == arrDifferenze2[j]) {
+						//Add message to the "current" file, specifying the row of the "other" file
+						var r = parseInt(tRow2.rowNr);
+						var rr = r+1;
+
+						Banana.document.addMessage("[Documents: Row " + rr + "] <" + rowId_2 + ", " + description_2 + "> Added in OTHER and not in CURRENT");
+					}
 				}
 			}
+			flag = true;
 		}
-		flag = true;
 	}
-
 	return flag;
 }
+
+
 
