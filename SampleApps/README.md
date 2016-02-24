@@ -32,12 +32,11 @@ This app will show a report containing a detailed subdivision of the segments wi
 This app will show a report containing a detailed payment voucher for the Swiss Red Cross.
 
 1. Open the Banana document
-2. Run the Report Voucher app
-3. Insert all the required text into the dialog windows
-4. Save the report as PDF file
-5. Run Microsoft Word
-6. Open File > select the PDF created on step 4
-7. It is now possible to modify/complete all the missing informations
-
-
-
+2. Clic on menu File > File Properties > Accounting > Header left: Insert here the **Project name**
+3. Clic on menu File > File Properties > Accounting > Header right: Insert here the **Project number**
+4. Run the Report Voucher app
+5. Insert all the required text into the dialog windows
+6. Save the report as PDF file
+7. Run Microsoft Word
+8. Open File > select the PDF created on step 4
+9. It is now possible to modify/complete all the missing informations
