@@ -37,11 +37,15 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
 
     c. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
     
-    --screen add-in inizio---
+    
+    
+    
+    
    
 
 
 
 
 Open one or more banana documents
+
 Start the web server: Tools > Program options > check "Start Web Server" > click Ok
