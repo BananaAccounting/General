@@ -37,15 +37,23 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
 
     c. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
     
+    ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_add_in.png)
     
+    d. Clic on the "Update list" button to update the list with all the opened Banana documents
     
+    e. Select one file from the list
     
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_fileSelection.png)
     
+    f. Select one table from the list
+    
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_TableSelection.png)
+    
+    g. Clic on the "Click me!" button to generate the sheet
+    
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_accounts.png)
+    
+   Open one or more banana documents
    
-
-
-
-
-Open one or more banana documents
-
-Start the web server: Tools > Program options > check "Start Web Server" > click Ok
+   Start the web server: Tools > Program options > check "Start Web Server" > click Ok
+   
