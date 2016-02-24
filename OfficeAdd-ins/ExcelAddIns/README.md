@@ -31,31 +31,35 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
 
 5. Test and run the add-in.
 
-    a. On the Insert tab in Excel 2016, choose **My Add-ins**.
+    a. Open one or more banana documents
+   
+    b. Start the web server: Tools > Program options > check "Start Web Server" > click Ok
+    
+    c. On the Insert tab in Excel 2016, choose **My Add-ins**.
 
-    b. In the Office Add-ins dialog box, choose **Shared Folder**.
+    d. In the Office Add-ins dialog box, choose **Shared Folder**.
 
-    c. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
+    e. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
     
     ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_add_in.png)
     
-    d. Click on the "Update list" button to update the list with all the opened Banana documents
+    f. Click on the "Update list" button to update the list with all the opened Banana documents
     
-    e. Select one file from the list
+    g. Select one file from the list
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_fileSelection.png)
     
-    f. Select one table from the list
+    h. Select one table from the list
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_TableSelection.png)
     
-    g. Click on the "Click me!" button to generate the sheet
+    i. Click on the "Click me!" button to generate the sheet
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_accounts.png)
     
-    h. Add a new worksheet by clicking on +
+    j. Add a new worksheet by clicking on +
     
-    i. Select a different table from the list and click on "Click me!" button
+    k. Select a different table from the list and click on "Click me!" button
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_journal.png)
     
@@ -63,7 +67,5 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
    
    
    
-   Open one or more banana documents
-   
-   Start the web server: Tools > Program options > check "Start Web Server" > click Ok
+
    
