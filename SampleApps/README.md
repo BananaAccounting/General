@@ -33,9 +33,9 @@ This app will show a report containing a detailed payment voucher for the Swiss 
 
 1. Open the Banana document
 2. Clic on menu File > File Properties > Accounting and insert the **Project name** as ***Header left*** and the **Project number** as ***Header right***
-4. Run the Report Voucher app
-5. Insert all the required text into the dialog windows
-6. Save the report as PDF file
-7. Run Microsoft Word
-8. New blank document > Open File > select the PDF created on step 4
-9. It is now possible to modify/complete all the missing informations
+3. Run the Report Voucher app
+4. Insert all the required text into the dialog windows
+5. Save the report as PDF file
+6. Run Microsoft Word
+7. New blank document > Open File > select the PDF created on step 5
+8. It is now possible to modify/complete all the missing informations
