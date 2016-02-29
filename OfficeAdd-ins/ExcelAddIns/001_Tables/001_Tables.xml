@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+    <!--Created:7b366fe1-22fb-402e-8303-78afa6879c5c-->
     <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
-      <Id>7b366fe1-22fb-402e-8303-78afa6879c5c</Id>
+      <Id>314bb5dd-60b1-4952-8e8f-e2bdb6d8d835</Id>
       <Version>1.0.0.0</Version>
       <ProviderName>Banana.ch SA</ProviderName>
       <DefaultLocale>en-US</DefaultLocale>
@@ -12,7 +12,7 @@
       </Capabilities>
       <DefaultSettings>
         <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
-        <SourceLocation DefaultValue="https://github.com/BananaAccounting/General/tree/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
+        <SourceLocation DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
       </DefaultSettings>
       <Permissions>ReadWriteDocument</Permissions>
     </OfficeApp>
