@@ -12,7 +12,7 @@
       </Capabilities>
       <DefaultSettings>
         <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
-        <SourceLocation DefaultValue="http://htmlpreview.github.io/?https://github.com/BananaAccounting/General/blob/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
+        <SourceLocation DefaultValue="https://cdn.rawgit.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
       </DefaultSettings>
       <Permissions>ReadWriteDocument</Permissions>
     </OfficeApp>
