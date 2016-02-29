@@ -11,7 +11,8 @@
         <Capability Name="Workbook" />
       </Capabilities>
       <DefaultSettings>
-        <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/>
+        <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
+        <SourceLocation DefaultValue="https://github.com/BananaAccounting/General/tree/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
       </DefaultSettings>
       <Permissions>ReadWriteDocument</Permissions>
     </OfficeApp>
