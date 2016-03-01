@@ -59,7 +59,7 @@
         // 1. Create XDR object: 
         var xdr = new XDomainRequest();
 
-        xdr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xdr.onprogress = function() {};
 
         // 2. Open connection with server using GET method:
         xdr.open("GET", yourUrl);
