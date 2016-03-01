@@ -69,18 +69,7 @@
         return xdr.responseText;
 */
 
-        if (jQuery.browser.msie) {
-          if (window.XDomainRequest) {
-            var xdr = new XDomainRequest();
-            if (xdr) {
-              xdr.onload = function() { jQuery.parseJSON(xdr.responseText); }
-              xdr.onerror = function() { /* error handling here */ }
-              xdr.open('GET', yourUrl);
-              xdr.send();
-            }
-          }
-        }
-        else {
+
           jQuery.ajax({
             type: 'GET',
             url: yourUrl, 
