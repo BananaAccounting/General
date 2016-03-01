@@ -50,10 +50,10 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
-        //var Httpreq = new XMLHttpRequest();
-        //Httpreq.open("GET",yourUrl,false);
-        //Httpreq.send(null);
-        //return Httpreq.responseText;
+        var Httpreq = new XMLHttpRequest();
+        Httpreq.open("GET",yourUrl,false);
+        Httpreq.send(null);
+        return Httpreq.responseText;
 
 /*
         // 1. Create XDR object: 
@@ -68,21 +68,6 @@
         // 4. Return response text
         return xdr.responseText;
 */
-
-
-          jQuery.ajax({
-            type: 'GET',
-            url: yourUrl, 
-            dataType: "json",
-            success: function(data) { return data); }
-          });
-        }
-
-
-
-
-
-
 
     }
 
