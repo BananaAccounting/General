@@ -55,14 +55,9 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
     
-$.ajax({
-    type: "GET",
-    url: yourUrl,
-    dataType: "jsonp",
-}).success( function( data ) {
+$.getJSON(yourUrl + '&callback=?', function(data) {
     return data;
-});
-
+})
 
     }
 
