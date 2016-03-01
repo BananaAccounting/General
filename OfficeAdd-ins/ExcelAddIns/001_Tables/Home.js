@@ -55,7 +55,7 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
-        //var result = [];
+        var result = ["1","2"];
 
         $.ajax({
             url: yourUrl,
@@ -64,7 +64,7 @@
             dataType: 'json',
             crossDomain: true,
             success: function(response) {
-                var result = response;
+                result = JSON.stringify(response);
                 return result;
             }
             return result;
