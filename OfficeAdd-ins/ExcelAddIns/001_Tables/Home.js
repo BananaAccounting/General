@@ -55,7 +55,7 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
-
+/*
         // 1. Create XDR object: 
         var xdr = new XDomainRequest();
 
@@ -67,7 +67,7 @@
 
         // 4. Return response text
         return xdr.responseText;
-
+*/
 
         if (jQuery.browser.msie) {
           if (window.XDomainRequest) {
@@ -75,7 +75,7 @@
             if (xdr) {
               xdr.onload = function() { jQuery.parseJSON(xdr.responseText); }
               xdr.onerror = function() { /* error handling here */ }
-              xdr.open('GET', queryURL);
+              xdr.open('GET', yourUrl);
               xdr.send();
             }
           }
@@ -83,9 +83,9 @@
         else {
           jQuery.ajax({
             type: 'GET',
-            url: queryURL, 
+            url: yourUrl, 
             dataType: "json",
-            success: function(data, textStatus, jqXHR) { return data); }
+            success: function(data) { return data); }
           });
         }
 
