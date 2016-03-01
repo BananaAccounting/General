@@ -61,6 +61,7 @@
 
         // 2. Open connection with server using GET method:
         xdr.open("GET", yourUrl);
+        xdr.onprogress = function () { };
 
         // 3. Send string data to server:
         xdr.send();
