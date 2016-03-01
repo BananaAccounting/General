@@ -55,7 +55,7 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
-        var result = [];
+        //var result = [];
 
         $.ajax({
             url: yourUrl,
@@ -64,10 +64,12 @@
             dataType: 'json',
             crossDomain: true,
             success: function(response) {
-                result = response;
+                var result = response;
                 return result;
             }
-        }); 
+            return result;
+        });
+        return result; 
 
 
 
