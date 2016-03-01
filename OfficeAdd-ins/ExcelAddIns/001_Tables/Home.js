@@ -55,13 +55,16 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
-        var Httpreq = new XMLHttpRequest();
-        Httpreq.open("GET",yourUrl,true);
-        Httpreq.onload = function() {
-            console.log(Httpreq.responseText);
-        }
-        Httpreq.send(null);
-        return Httpreq.responseText;
+        $.ajax({
+            type: 'GET',
+            url: yourUrl,
+            processData: true,
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                return data;
+            }
+        });
     }
 
 
