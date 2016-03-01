@@ -59,15 +59,17 @@
         // 1. Create XDR object: 
         var xdr = new XDomainRequest(); 
 
-        // 2. Open connection with server using GET method:
-        xdr.open("get", yourUrl);
+        if (xdr) 
+        {
+            // 2. Open connection with server using GET method:
+            xdr.open("get", yourUrl);
 
-        // 3. Send string data to server:
-        xdr.send();
+            // 3. Send string data to server:
+            xdr.send(null);
 
-        // 4. Return response text
-        return xdr.responseText;
-
+            // 4. Return response text
+            return xdr.responseText;
+        }
 
     }
 
