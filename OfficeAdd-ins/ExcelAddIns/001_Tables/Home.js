@@ -55,22 +55,11 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
-        var result = ["1","2"];
+        
 
-        $.ajax({
-            url: yourUrl,
-            type: "GET",
-            processData : true,
-            dataType: 'json',
-            crossDomain: true,
-            success: function(response) {
-                result = JSON.stringify(response);
-                return result;
-            }
-            return result;
+        $.get(yourUrl).done(function (data) {
+           return data;
         });
-        return result; 
-
 
 
 
