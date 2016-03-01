@@ -54,28 +54,14 @@
         //Httpreq.open("GET",yourUrl,false);
         //Httpreq.send(null);
         //return Httpreq.responseText;
+    
+      var head = document.head;
+      var script = document.createElement("script");
 
-          var xhr = new XMLHttpRequest();
-          if ("withCredentials" in xhr) {
-            // XHR for Chrome/Firefox/Opera/Safari.
-            xhr.open('GET', yourUrl, true);
-          } else if (typeof XDomainRequest != "undefined") {
-            // XDomainRequest for IE.
-            xhr = new XDomainRequest();
-            xhr.open('GET', yourUrl);
-          } else {
-            // CORS not supported.
-            xhr = null;
-          }
-
-          // Response handlers.
-          xhr.onload = function() {
-            var text = xhr.responseText;
-            return xhr.responseText;
-          };
-
-          xhr.send();
-
+      script.setAttribute("src", yourUrl);
+      head.appendChild(script);
+      head.removeChild(script);
+      
     }
 
 
