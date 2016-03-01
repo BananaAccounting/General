@@ -50,10 +50,32 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
-        var Httpreq = new XMLHttpRequest();
-        Httpreq.open("GET",yourUrl,false);
-        Httpreq.send(null);
-        return Httpreq.responseText;
+        //var Httpreq = new XMLHttpRequest();
+        //Httpreq.open("GET",yourUrl,false);
+        //Httpreq.send(null);
+        //return Httpreq.responseText;
+
+          var xhr = new XMLHttpRequest();
+          if ("withCredentials" in xhr) {
+            // XHR for Chrome/Firefox/Opera/Safari.
+            xhr.open('GET', yourUrl, true);
+          } else if (typeof XDomainRequest != "undefined") {
+            // XDomainRequest for IE.
+            xhr = new XDomainRequest();
+            xhr.open('GET', yourUrl);
+          } else {
+            // CORS not supported.
+            xhr = null;
+          }
+
+          // Response handlers.
+          xhr.onload = function() {
+            var text = xhr.responseText;
+            return xhr.responseText;
+          };
+
+          xhr.send();
+
     }
 
 
