@@ -67,7 +67,7 @@
     }
 
     function jsonpCallback(data) {
-      document.getElementById("response").textContent = JSON.stringify(data);
+      return JSON.stringify(data);
     }
 
 
