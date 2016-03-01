@@ -56,16 +56,31 @@
         //return Httpreq.responseText;
 
         var result = [];
+
         $.ajax({
-            type: 'GET',
             url: yourUrl,
-            processData: true,
-            dataType: "json",
-            success: function (data) {
-                result = data;
+            method: "GET",
+            data: [],
+            dataType: 'json',
+            crossDomain: true,
+            accepts: "application/json",
+            contentType: "application/json",
+            beforeSend: function(client) {
+                client.setRequestHeader('Access-Control-Allow-Origin','http://localhost');
+            },
+            success: function(response) {
+                result = response;
             }
-        });
+        }); 
         return result;
+
+
+
+
+
+
+
+
     }
 
 
