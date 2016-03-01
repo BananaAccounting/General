@@ -50,10 +50,25 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
-        var Httpreq = new XMLHttpRequest();
-        Httpreq.open("GET",yourUrl,false);
-        Httpreq.send(null);
-        return Httpreq.responseText;
+        //var Httpreq = new XMLHttpRequest();
+        //Httpreq.open("GET",yourUrl,false);
+        //Httpreq.send(null);
+        //return Httpreq.responseText;
+
+
+        // 1. Create XDR object: 
+        var xdr = new XDomainRequest(); 
+
+        // 2. Open connection with server using GET method:
+        xdr.open("get", yourUrl);
+
+        // 3. Send string data to server:
+        xdr.send();
+
+        // 4. Return response text
+        return xdr.responseText;
+
+
     }
 
 
