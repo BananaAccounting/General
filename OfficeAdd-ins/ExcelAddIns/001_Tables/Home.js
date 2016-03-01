@@ -55,15 +55,17 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
 
+        var result = [];
         $.ajax({
             type: 'GET',
             url: yourUrl,
             processData: true,
             dataType: "json",
             success: function (data) {
-                return data;
+                result = data;
             }
         });
+        return result;
     }
 
 
