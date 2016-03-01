@@ -60,7 +60,7 @@
         $.ajax({
             url: yourUrl,
             method: "GET",
-            data: [],
+            data: {},
             dataType: 'json',
             crossDomain: true,
             accepts: "application/json",
