@@ -59,11 +59,10 @@
 
         $.ajax({
             url: yourUrl,
-            method: "GET",
+            type: "GET",
+            processData : true,
             dataType: 'json',
             crossDomain: true,
-            accepts: "application/json",
-            contentType: "application/json",
             success: function(response) {
                 result = response;
                 return result;
