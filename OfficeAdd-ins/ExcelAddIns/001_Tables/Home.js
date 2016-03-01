@@ -55,13 +55,12 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
     
-      var head = document.head;
+      
       var script = document.createElement("script");
 
       script.setAttribute("src", yourUrl);
-      head.appendChild(script);
-      head.removeChild(script);
-      
+      return script;
+
     }
 
 
