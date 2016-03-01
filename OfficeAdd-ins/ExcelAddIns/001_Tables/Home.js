@@ -54,11 +54,14 @@
         //Httpreq.open("GET",yourUrl,false);
         //Httpreq.send(null);
         //return Httpreq.responseText;
-    
-$.getJSON(yourUrl + '&callback=?', function(data) {
-    return data;
-})
 
+        var Httpreq = new XMLHttpRequest();
+        Httpreq.open("GET",yourUrl,true);
+        Httpreq.onload = function() {
+            console.log(Httpreq.responseText);
+        }
+        Httpreq.send(null);
+        return Httpreq.responseText;
     }
 
 
