@@ -59,20 +59,41 @@
         // 1. Create XDR object: 
         var xdr = new XDomainRequest();
 
-        //xdr.onprogress = function() {};
-
         // 2. Open connection with server using GET method:
         xdr.open("GET", yourUrl);
-
-        
-
-        //xdr.onprogress = function () { };
 
         // 3. Send string data to server:
         xdr.send();
 
         // 4. Return response text
-        return xdr;
+        return xdr.responseText;
+
+
+        if (jQuery.browser.msie) {
+          if (window.XDomainRequest) {
+            var xdr = new XDomainRequest();
+            if (xdr) {
+              xdr.onload = function() { jQuery.parseJSON(xdr.responseText); }
+              xdr.onerror = function() { /* error handling here */ }
+              xdr.open('GET', queryURL);
+              xdr.send();
+            }
+          }
+        }
+        else {
+          jQuery.ajax({
+            type: 'GET',
+            url: queryURL, 
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) { return data); }
+          });
+        }
+
+
+
+
+
+
 
     }
 
