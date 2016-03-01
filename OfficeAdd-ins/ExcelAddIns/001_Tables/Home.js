@@ -59,7 +59,6 @@
             type: 'GET',
             url: yourUrl,
             processData: true,
-            data: {},
             dataType: "json",
             success: function (data) {
                 return data;
