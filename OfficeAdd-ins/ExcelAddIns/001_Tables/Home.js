@@ -55,20 +55,18 @@
         //Httpreq.send(null);
         //return Httpreq.responseText;
     
+$.ajax({
+    type: "GET",
+    url: yourUrl,
+    dataType: "jsonp",
+}).success( function( data ) {
+    return data;
+});
 
-        var url = yourUrl+"?callback=jsonpCallback";
 
-      var head = document.head;
-      var script = document.createElement("script");
-
-      script.setAttribute("src", url);
-      head.appendChild(script);
-      head.removeChild(script);
     }
 
-    function jsonpCallback(data) {
-      return JSON.stringify(data);
-    }
+
 
 
 
