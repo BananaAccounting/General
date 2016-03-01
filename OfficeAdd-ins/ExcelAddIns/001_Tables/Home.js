@@ -62,7 +62,7 @@
         if (xdr) 
         {
             // 2. Open connection with server using GET method:
-            xdr.open("get", yourUrl);
+            xdr.open("GET", yourUrl);
 
             // 3. Send string data to server:
             xdr.send(null);
