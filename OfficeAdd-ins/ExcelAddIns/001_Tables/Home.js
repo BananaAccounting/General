@@ -58,13 +58,12 @@
 
         // 1. Create XDR object: 
         var xdr = new XDomainRequest();
-        xdr.contentType = "text/plain";
 
         // 2. Open connection with server using GET method:
         xdr.open("GET", yourUrl);
 
         // 3. Send string data to server:
-        xdr.send(null);
+        xdr.send();
 
         // 4. Return response text
         return xdr.responseText;
