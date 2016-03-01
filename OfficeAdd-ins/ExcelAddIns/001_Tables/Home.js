@@ -50,24 +50,10 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
-        //var Httpreq = new XMLHttpRequest();
-        //Httpreq.open("GET",yourUrl,false);
-        //Httpreq.send(null);
-        //return Httpreq.responseText;
-
-        
-
-        $.get(yourUrl).done(function (data) {
-           return data;
-        });
-
-
-
-
-
-
-
-
+        var Httpreq = new XMLHttpRequest();
+        Httpreq.open("GET",yourUrl,false);
+        Httpreq.send(null);
+        return Httpreq.responseText;
     }
 
 
