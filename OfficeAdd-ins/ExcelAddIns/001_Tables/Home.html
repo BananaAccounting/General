@@ -38,6 +38,27 @@
                 <hr />
 
 
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        var url =  "http://localhost:8081/v1/docs";
+        $.getJSON(url + "?callback=?", null, function(tweets) {
+            
+            var x = document.getElementById("ListBox");
+            var option = document.createElement("option");
+            
+            for(i in tweets)
+            {
+                option.text = tweets[i];
+                x.add(option);
+            }
+        });
+    });
+</script>
+
+
+
+
                 <h3>3) Select a table (*)</h3>
                 <select class="ms-List" id="select-service">
                     <option selected="selected">Info</option>
