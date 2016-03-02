@@ -33,7 +33,8 @@
     //Function that takes all the opened Banana documents and creates a list
     function getFileNamesList()
     {
-        var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
+        //var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
+        var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/prova.txt"));
         var len = jsonFilenameObj.length;
 
         for (var i = 0; i < len; i++)
@@ -53,7 +54,7 @@
         var Httpreq = new XMLHttpRequest();
         //Httpreq.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         Httpreq.open("GET",yourUrl,false);
-        Httpreq.setRequestHeader("Access-Control-Allow-Origin", "*");
+        //Httpreq.setRequestHeader("Access-Control-Allow-Origin", "*");
         Httpreq.send(null);
         return Httpreq.responseText;
 
