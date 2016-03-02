@@ -34,7 +34,8 @@
     function getFileNamesList()
     {
         //var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
-        var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/prova.json"));
+        //var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/prova.json"));
+        var jsonFilenameObj = JSON.parse(Get("https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/test.json"));
         var len = jsonFilenameObj.length;
 
         for (var i = 0; i < len; i++)
