@@ -38,32 +38,6 @@
                 <hr />
 
 
-<script>
-
-    var x = document.getElementById("ListBox");
-    var option = document.createElement("option");
-
-    var url = 'http://localhost:8081/v1/docs?callback=?';
-    $.ajax({
-       type: 'GET',
-        url: url,
-        async: false,
-        contentType: "application/json",
-        dataType: 'jsonp',
-        success: function(json) {
-            var j = JSON.parse(json);
-            for (var i = 0; i < j.length; i++) 
-            {
-                option.text = j[i];
-                x.add(option);
-            }
-        },
-    });
-</script>
-
-
-
-
                 <h3>3) Select a table (*)</h3>
                 <select class="ms-List" id="select-service">
                     <option selected="selected">Info</option>
