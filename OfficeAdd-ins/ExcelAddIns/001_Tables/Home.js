@@ -34,7 +34,7 @@
     function getFileNamesList()
     {
         //var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
-        var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/prova.txt"));
+        var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/prova.json"));
         var len = jsonFilenameObj.length;
 
         for (var i = 0; i < len; i++)
