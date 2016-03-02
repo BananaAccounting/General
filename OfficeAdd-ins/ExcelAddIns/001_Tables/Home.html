@@ -38,21 +38,26 @@
                 <hr />
 
 
-<script type="text/javascript">
+<script>
 
-    $(document).ready(function() {
-        var url =  "http://localhost:8081/v1/docs";
-        $.getJSON(url + "?callback=?", null, function(tweets) {
-            
-            var x = document.getElementById("ListBox");
-            var option = document.createElement("option");
-            
-            for(i in tweets)
+    var x = document.getElementById("ListBox");
+    var option = document.createElement("option");
+
+    var url = 'http://localhost:8081/v1/docs?callback=?';
+    $.ajax({
+       type: 'GET',
+        url: url,
+        async: false,
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function(json) {
+            var j = JSON.parse(json);
+            for (var i = 0; i < j.length; i++) 
             {
-                option.text = tweets[i];
+                option.text = j[i];
                 x.add(option);
             }
-        });
+        },
     });
 </script>
 
