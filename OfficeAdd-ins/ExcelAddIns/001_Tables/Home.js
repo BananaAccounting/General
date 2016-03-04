@@ -54,7 +54,7 @@
     {
         var Httpreq = new XMLHttpRequest();
         Httpreq.open("GET",yourUrl,false);
-        Httpreq.send(null);
+        Httpreq.send();
         return Httpreq.responseText;
 
 /*
