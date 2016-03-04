@@ -53,7 +53,6 @@
     function Get(yourUrl) 
     {
         var Httpreq = new XMLHttpRequest();
-        Httpreq.addHeader("Access-Control-Allow-Origin", "*");
         Httpreq.open("GET",yourUrl,false);
         Httpreq.send(null);
         return Httpreq.responseText;
