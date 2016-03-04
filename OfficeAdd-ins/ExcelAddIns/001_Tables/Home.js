@@ -53,10 +53,10 @@
     function Get(yourUrl) 
     {
         var Httpreq = new XMLHttpRequest();
-        //Httpreq.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
+        Httpreq.setHeader("Access-Control-Allow-Origin", "*");
         Httpreq.open("GET",yourUrl,false);
         Httpreq.send(null);
-        return Httpreq.responseText.addHeader("Access-Control-Allow-Origin", "https://github.com");
+        return Httpreq.responseText;
 
 /*
         // 1. Create XDR object: 
