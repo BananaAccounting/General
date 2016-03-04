@@ -58,4 +58,39 @@
             </div>
         </div>
     </body>
+
+<script>
+
+    function jsonp_request(url) { 
+     
+        var head = document.getElementsByTagName("head")[0]; 
+        var script = document.createElement("SCRIPT"); 
+     
+        script.type = "text/javascript"; 
+        script.src = url + "?cb=update"; 
+        head.appendChild(script); 
+    } 
+     
+    function update(data) { 
+     
+        var container = document.getElementsByTagName("div")[1]; 
+        var html = ""; 
+     
+        for(var i = 0; i<data.length; i++) { 
+            html += "<option>"+data[i]+"</option>";
+        } 
+        container.innerHTML += html; 
+    }
+     
+    window.onload = function() { 
+        for(var i = 1; i<5; i++) { 
+            jsonp_request("http://localhost:8081/v1/docs"); 
+        } 
+    }  
+
+
+
+</script>
+
+
 </html>
