@@ -55,7 +55,7 @@
         var Httpreq = new XMLHttpRequest();
         //Httpreq.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         Httpreq.open("GET",yourUrl,false);
-        Httpreq.setHeader("Access-Control-Allow-Origin", "*");
+        Httpreq.addHeader("Access-Control-Allow-Origin", "https://github.com");
         Httpreq.send(null);
         return Httpreq.responseText;
 
