@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>JavaScript Cross-Browser Cross-Domain XMLHttpRequest (XDomainRequest in IE) Example</title>
+  <title>Cross-Domain XMLHttpRequest (XDomainRequest in IE) Example</title>
 </head>
 <body>
 
@@ -11,6 +11,9 @@
 <script src="xhr.js"></script>
 </body>
 
+
+     <select class="ms-List" id="ListBox"></select>
+     
 <script>
 /**
  * Cross-Browser Cross-Domain XMLHttpRequest (XDomainRequest in IE)
@@ -43,7 +46,19 @@ AJAXRequest = function(url, callback, failCallback) {
  */
 callback = function(responseText) {
   // write your own handler here.
-  alert('result from http://localhost/ProvaCrossDomain/test.json\n' + responseText);
+  //alert('result from http://localhost/ProvaCrossDomain/test.json\n' + responseText);
+
+        var jsonFilenameObj = JSON.parse(responseText);
+        //var jsonFilenameObj = JSON.parse(Get("https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/test.json"));
+        var len = jsonFilenameObj.length;
+
+        for (var i = 0; i < len; i++)
+        {
+            var x = document.getElementById("ListBox");
+            var option = document.createElement("option");
+            option.text = jsonFilenameObj[i];
+            x.add(option);
+        }
 };
 
 /**
