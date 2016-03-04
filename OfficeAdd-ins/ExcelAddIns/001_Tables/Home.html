@@ -14,6 +14,39 @@
         <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.min.css">
         <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css">
 
+
+
+<script>
+
+    function jsonp_request(url) { 
+     
+        var head = document.getElementsByTagName("head")[0]; 
+        var script = document.createElement("SCRIPT"); 
+     
+        script.type = "text/javascript"; 
+        script.src = url + "?cb=update"; 
+        head.appendChild(script); 
+    } 
+     
+    function update(data) { 
+     
+        var container = document.getElementById("ListBox"); 
+        var html = ""; 
+     
+        for(var i = 0; i<data.length; i++) { 
+            html += "<option>"+data[i]+"</option>";
+        } 
+        container.innerHTML += html; 
+    }
+     
+    window.onload = function() { 
+        jsonp_request("http://localhost:8081/v1/docs"); 
+    }  
+
+
+
+</script>
+
     </head>
 
 
@@ -59,36 +92,7 @@
         </div>
     </body>
 
-<script>
 
-    function jsonp_request(url) { 
-     
-        var head = document.getElementsByTagName("head")[0]; 
-        var script = document.createElement("SCRIPT"); 
-     
-        script.type = "text/javascript"; 
-        script.src = url + "?cb=update"; 
-        head.appendChild(script); 
-    } 
-     
-    function update(data) { 
-     
-        var container = document.getElementsByTagName("div")[1]; 
-        var html = ""; 
-     
-        for(var i = 0; i<data.length; i++) { 
-            html += "<option>"+data[i]+"</option>";
-        } 
-        container.innerHTML += html; 
-    }
-     
-    window.onload = function() { 
-        jsonp_request("http://localhost:8081/v1/docs"); 
-    }  
-
-
-
-</script>
 
 
 </html>
