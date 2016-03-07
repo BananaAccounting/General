@@ -7,9 +7,9 @@
       <DefaultLocale>en-US</DefaultLocale>
       <DisplayName DefaultValue="001 - Banana Tables" />
       <Description DefaultValue="001 - Banana Tables" />
-      <Hosts>
-        <Host Name="Workbook" />
-      </Hosts>
+      <Capabilities>
+        <Capability Name="Workbook" />
+      </Capabilities>
       <DefaultSettings>
         <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
         <SourceLocation DefaultValue="https://rawgit.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/>
