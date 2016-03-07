@@ -7,6 +7,9 @@
       <DefaultLocale>en-US</DefaultLocale>
       <DisplayName DefaultValue="001 - Banana Tables" />
       <Description DefaultValue="001 - Banana Tables" />
+      <AppDomains>
+        <AppDomain>https://github.com</AppDomain>
+      </AppDomains>
       <Capabilities>
         <Capability Name="Workbook" />
       </Capabilities>
