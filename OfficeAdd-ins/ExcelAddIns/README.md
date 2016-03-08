@@ -63,9 +63,13 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_journal.png)
     
-   
-   
-   
-   
+
+
+### Resources
+[Build your first Excel add-in](https://msdn.microsoft.com/en-us/library/office/mt616491.aspx)
+
+[Excel add-ins programming overview](https://msdn.microsoft.com/en-us/library/office/mt616487.aspx)
+
+[Excel add-ins JavaScript API reference](https://msdn.microsoft.com/en-us/library/office/mt616490.aspx)
 
    
