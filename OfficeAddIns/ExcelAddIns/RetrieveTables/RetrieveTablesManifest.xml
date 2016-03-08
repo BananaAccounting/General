@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--Created:7b366fe1-22fb-402e-8303-78afa6879c5c-->
+    <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+      <Id>314bb5dd-60b1-4952-8e8f-e2bdb6d8d835</Id>
+      <Version>1.0.0.0</Version>
+      <ProviderName>Banana.ch SA</ProviderName>
+      <DefaultLocale>en-US</DefaultLocale>
+      <DisplayName DefaultValue="Retrieve Tables" />
+      <Description DefaultValue="Retrieve Tables" />
+      <Hosts>
+        <Host Name="Workbook" />
+      </Hosts>
+      <DefaultSettings>
+        <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
+        <!--<SourceLocation DefaultValue="https://rawgit.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/> -->
+        <SourceLocation DefaultValue="http://localhost:8081/v1/files/OfficeAddIns/ExcelAddIns/RetrieveTables/Home.html"/>
+      </DefaultSettings>
+      <Permissions>ReadWriteDocument</Permissions>
+    </OfficeApp>
