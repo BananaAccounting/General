@@ -11,7 +11,7 @@ For example the Excel Add-in let you:
 * Generate an Excel Chart.
 
 See how it look like the example Add-in 
-![Example of Excel Add-in] (https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_accounts.png)
+![Example of Excel Add-in] (https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_addIn_Example.png)
 
 
 
