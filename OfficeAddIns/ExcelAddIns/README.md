@@ -41,27 +41,27 @@ The simplest way to deploy and test your add-in is to copy the files to a networ
 
     e. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
     
-    ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_add_in.png)
+    ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_add_in.png)
     
     f. Click on the "Update list" button to update the list with all the opened Banana documents
     
     g. Select one file from the list
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_fileSelection.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_fileSelection.png)
     
     h. Select one table from the list
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_TableSelection.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_TableSelection.png)
     
     i. Click on the "Click me!" button to generate the sheet
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_accounts.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_accounts.png)
     
     j. Add a new worksheet by clicking on +
     
     k. Select a different table from the list and click on "Click me!" button
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/Images/001_Banana_journal.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_journal.png)
     
 
 
