@@ -75,6 +75,7 @@ For example:
 
     f. Select the **Show** in Menu check box, and then choose **OK**. A message appears to inform you that your settings will be applied the next time you start Office.
 
+
 ## Resources
 Some useful links:
 * [Build your first Excel add-in](https://msdn.microsoft.com/en-us/library/office/mt616491.aspx)
