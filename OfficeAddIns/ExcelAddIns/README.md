@@ -33,13 +33,15 @@ This task pane add-in shows how to extract some data from Banana documents by us
     
     h. Click on the "Update list" button to update the list with all the Accounts and descriptions.
     
+    i. Select an account.
+    
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn_account_selection.png)
     
-    i. Select a period from the list.
+    j. Select a period from the list.
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn_period_selection.png)
     
-    i. Click on the "Click me!" button to generate the sheet with the account card and a chart of the Balance.
+    k. Click on the "Click me!" button to generate the sheet with the account card and a chart of the Balance.
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_addIn_Example.png)
     
