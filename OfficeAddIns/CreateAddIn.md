@@ -18,12 +18,12 @@ For example:
 4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
 
 5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like
-	* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns for all the Excel Add-ins.
+	* **C:\xampp\htdocs\OfficeAddIns\ExcelAddIns** for all the Excel Add-ins.
 		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\FirstAddIn
 		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\SecondAddIn
 		* ...
  
-	* C:\xampp\htdocs\OfficeAddIns\WordAddIns for all the Word Add-ins.
+	* **C:\xampp\htdocs\OfficeAddIns\WordAddIns** for all the Word Add-ins.
 		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\FirstAddIn
 		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\SecondAddIn
 		* ...
