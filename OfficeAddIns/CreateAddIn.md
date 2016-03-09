@@ -17,7 +17,7 @@ For example:
 
 4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
 
-5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\... .
+5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\<Add_in_folder> .
 
 
 ## Setup the environment
