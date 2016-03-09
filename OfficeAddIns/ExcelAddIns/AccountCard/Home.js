@@ -232,7 +232,7 @@
 
         //Queue commands to set the properties and format the chart
         chart.setPosition("A"+(cnt+3), "G"+ (cnt+20));
-        chart.title.text = "Account Card chart";
+        chart.title.text = "Balance chart";
         chart.legend.position = "right"
         chart.legend.format.fill.setSolidColor("white");
         chart.dataLabels.format.font.size = 15;
