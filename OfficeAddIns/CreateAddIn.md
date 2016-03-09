@@ -58,19 +58,20 @@ For example:
 ```html
 <SourceLocation DefaultValue="http://localhost/OfficeAddIns/ExcelAddIns/AccountCard/Home.html"/>
 ```
+
 5.	Save the file.
 6.	Copy the Manifest to the network share from the step 1.
 7.	Add the share location that contains the manifest as a trusted app catalog in Excel.
 	
-	a. Launch Excel and open a blank spreadsheet.
+    a. Launch Excel and open a blank spreadsheet.
     
-    	b. Choose the **File** tab, and then choose **Options**.
+    b. Choose the **File** tab, and then choose **Options**.
 
-    	c. Choose **Trust Center**, and then choose the **Trust Center Settings** button.
+    c. Choose **Trust Center**, and then choose the **Trust Center Settings** button.
 
-    	d. Choose **Trusted Add-in Catalogs**.
+    d. Choose **Trusted Add-in Catalogs**.
 
-    	e. In the Catalog Url box, enter the **path to the network share you created in step 1**, and then choose **Add Catalog** (to see the path: right click on the shared folder -> Properties -> Sharing -> Network Path).
+    e. In the Catalog Url box, enter the **path to the network share you created in step 1**, and then choose **Add Catalog** (to see the path: right click on the shared folder -> Properties -> Sharing -> Network Path).
 
     	f. Select the **Show** in Menu check box, and then choose **OK**. A message appears to inform you that your settings will be applied the next time you start Office.
 
