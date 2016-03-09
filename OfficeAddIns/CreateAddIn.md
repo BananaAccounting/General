@@ -55,9 +55,9 @@ For example:
 3.	Save the files into the web server folder (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard).
 4.	Edit the **SourceLocation** element of the Manifest file (for example, AccountCardManifest.xml) so that it points to the web server location for the Home.html page
 
-```html
-<SourceLocation DefaultValue="http://localhost/OfficeAddIns/ExcelAddIns/AccountCard/Home.html"/>
-```
+	```html
+	<SourceLocation DefaultValue="http://localhost/OfficeAddIns/ExcelAddIns/AccountCard/Home.html"/>
+	```
 
 5.	Save the file.
 6.	Copy the Manifest to the network share from the step 1.
