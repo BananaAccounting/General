@@ -6,8 +6,6 @@ This task pane add-in shows how to extract some data from Banana documents by us
 
 
 ### Try it out
-The simplest way to deploy and test your add-in is to copy the files to a network share.
-
 
 1. Be sure to have accomplished all the settings as shown in the [guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md) 
 
