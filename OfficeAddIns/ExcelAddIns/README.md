@@ -1,4 +1,4 @@
-## Banana table generator Task Pane Add-in Sample for Excel 2016
+## Banana Retrieve Tables Task Pane Add-in Sample for Excel 2016
 
 Applies to: Excel 2016
 
@@ -9,59 +9,43 @@ This task pane add-in shows how to extract some data from Banana documents by us
 The simplest way to deploy and test your add-in is to copy the files to a network share.
 
 
-1. Create a folder on a network share (for example, \\\MyShare\001_Tables) and then copy the folder **001_Tables** (with all the files inside) to that folder.
+1. Be sure to have accomplished all the settings as shown in the [guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md) 
 
-2. Edit the **SourceLocation element** of the manifest file (001_Tables.xml) so that it points to the share location for the **Home.html** page from step 1.
-
-3. Copy the manifest (001_Tables.xml) to a network share (for example, \\\BananaManifests).
-
-4. Add the share location that contains the manifest as a trusted app catalog in Excel.
-
-	a. Launch Excel and open a blank spreadsheet.
-    
-    b. Choose the **File** tab, and then choose **Options**.
-
-    c. Choose **Trust Center**, and then choose the **Trust Center Settings** button.
-
-    d. Choose **Trusted Add-in Catalogs**.
-
-    e. In the Catalog Url box, enter the **path to the network share you created in step 3**, and then choose **Add Catalog**.
-
-    f. Select the Show in Menu check box, and then choose OK. A message appears to inform you that your settings will be applied the next time you start Office.
-
-5. Test and run the add-in.
-
-    a. Open one or more banana documents
+2. Open one or more Banana Accounting documents.
    
-    b. Start the web server: Tools > Program options > check "Start Web Server" > click Ok
+3. Start the integrated Banana web server: **Tools** -> **Program options** -> check **Start Web Server** -> click **Ok**.
+
+4. Test and run the add-in.
+
+    a. Open a new blank Excel 2016 document as **Administrator** (Right click on Excel launcher -> Run as Administrator -> Ok).
     
-    c. On the Insert tab in Excel 2016, choose **My Add-ins**.
+    b. On the Insert tab, choose **My Add-ins**.
 
     d. In the Office Add-ins dialog box, choose **Shared Folder**.
 
-    e. Choose **001 - Banana Tables** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
+    e. Choose **Account Card** and clic **Insert**. The add-in opens in a task pane as shown in this screenshot.
     
-    ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_add_in.png)
+    ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn.png)
     
     f. Click on the "Update list" button to update the list with all the opened Banana documents
     
     g. Select one file from the list
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_fileSelection.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn_file_selection.png)
     
-    h. Select one table from the list
+    h. Click on the "Update list" button to update the list with all the Accounts and descriptions.
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_TableSelection.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn_account_selection.png)
     
-    i. Click on the "Click me!" button to generate the sheet
+    i. Select a period from the list.
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_accounts.png)
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn_period_selection.png)
     
-    j. Add a new worksheet by clicking on +
+    i. Click on the "Click me!" button to generate the sheet with the account card and a chart of the Balance.
     
-    k. Select a different table from the list and click on "Click me!" button
+    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_addIn_Example.png)
     
-    ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_journal.png)
+    
     
 
 
