@@ -7,7 +7,7 @@ This task pane add-in shows how to extract some data from Banana documents by us
 
 ### Try it out
 
-1. Be sure to have accomplished all the settings as shown in the [guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md) 
+1. Be sure to have accomplished all the settings as shown in the [Create Office Add-ins guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md).
 
 2. Open one or more Banana Accounting documents.
    
