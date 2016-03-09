@@ -10,7 +10,7 @@ To run properly all the Banana Office Add-ins it is highly recommended to instal
 
 For example:
 
-1.	Download (XAMPP)[https://www.apachefriends.org/index.html] for windows.
+1.	Download [XAMPP](https://www.apachefriends.org/index.html) for windows.
 
 2.	Install XAMPP.
 
