@@ -1,9 +1,8 @@
 # Create Office Add-in
-The steps below walk you through all the setup of the environment needed to run Banana Office Add-ins.
+The steps below walk you through all the setup of the environment required to run Banana Office Add-ins.
 
 ## Prerequisite
 Applies to: Microsoft Office Excel 2016
-
 
 ## Install a local web server
 To run properly all the Banana Office Add-ins it is highly recommended to install a local web server and deploy all the add-ins files into it.
@@ -18,7 +17,7 @@ For example:
 
 4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
 
-5.	Create a folder named OfficeAddIns. Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard.
+5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\... .
 
 
 ## Setup the environment
@@ -36,7 +35,7 @@ For example:
     
 	f.	Click **Apply** and then **Ok**.
     
-2.	Download the files of the chosen add-in (for example for the AccountCard add-in, https://github.com/BananaAccounting/General/tree/master/OfficeAddIns/ExcelAddIns/AccountCard)
+2.	Download the files of the chosen add-in from the Banana Accounting Office Add-ins GitHub repository (for example for the AccountCard add-in, https://github.com/BananaAccounting/General/tree/master/OfficeAddIns/ExcelAddIns/AccountCard):
 	
 	* AccountCardManifest.xml
 	* Common.css
