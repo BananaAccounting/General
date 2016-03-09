@@ -45,8 +45,7 @@ This task pane add-in shows how to extract some data from Banana documents by us
     
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_addIn_Example.png)
     
-    
-    
+    l. It is possible to add new worksheets by clicking on +, select different Accounts and generate other cards.
 
 
 ### Resources
