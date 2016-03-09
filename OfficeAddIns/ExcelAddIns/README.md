@@ -1,4 +1,4 @@
-## Banana Retrieve Tables Task Pane Add-in Sample for Excel 2016
+## Banana Account Card Task Pane Add-in Sample for Excel 2016
 
 Applies to: Excel 2016
 
