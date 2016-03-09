@@ -16,11 +16,9 @@ For example:
 
 3.	After the installation, open the **XAMPP Control Panel** and activate **Apache web server** by checking the box and clicking Start.
 
-4.	Go to the folder where XAMPP is installed (normally C:\xampp\htdocs).
+4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
 
-5.	Create new Directories (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns).
-
-6.	Save the Excel Add-ins files into this folder (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard).
+5.	Create a folder named OfficeAddIns. Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard.
 
 
 ## Setup the environment
