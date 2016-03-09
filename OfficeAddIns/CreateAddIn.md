@@ -10,10 +10,15 @@ To run properly all the Banana Office Add-ins it is highly recommended to instal
 
 For example:
 1.	Download XAMPP for windows from this link https://www.apachefriends.org/index.html.
+
 2.	Install XAMPP.
+
 3.	After the installation, open the **XAMPP Control Panel** and activate **Apache web server** by checking the box and clicking Start.
+
 4.	Go to the folder where XAMPP is installed (normally C:\xampp\htdocs).
+
 5.	Create new Directories (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns).
+
 6.	Save the Excel Add-ins files into this folder (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard).
 
 
