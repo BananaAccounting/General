@@ -9,7 +9,8 @@ Applies to: Microsoft Office Excel 2016
 To run properly all the Banana Office Add-ins it is highly recommended to install a local web server and deploy all the add-ins files into it.
 
 For example:
-1.	Download XAMPP for windows from this link https://www.apachefriends.org/index.html.
+
+1.	Download (XAMPP)[https://www.apachefriends.org/index.html] for windows.
 
 2.	Install XAMPP.
 
