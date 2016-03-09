@@ -2,10 +2,10 @@
 
 In this project you will find examples on how to use Office functionalities to retrieve data from Banana Accounting. 
 For example the Excel Add-in let you:
-* Connect to the Banana integrated Web Server and retrieve the list of files open in Banana.
-* Select the file you want.
-* Retrieve the accounts list and description.
-* Select one of the account.
+* Connect to the Banana integrated Web Server and retrieve the list of opened files in Banana.
+* Select a file from the list.
+* Retrieve the accounts list and descriptions.
+* Select an account from the list.
 * Select the period.
 * Retrieve all the account card. 
 * Generate an Excel Chart.
