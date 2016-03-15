@@ -15,11 +15,11 @@ See how it look like the example Add-in
 
 
 
-## Create Office Add-ins
+## How to create Office Add-ins
 [This guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md) walk you through all the setup of the environment required to run Banana Office Add-ins.
 
 
-## Use Office Add-ins
+## How to use Office Add-ins
 [This guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/UseAddIn.md) walk you through all the steps to run the Banana Office Add-ins.
 
 
