@@ -10,7 +10,7 @@ Applies to: Excel 2016 and Word 2016
 
 4. Test and run the add-in.
 
-    a. Open a new blank Excel/Word 2016 document as **Administrator** (Right click on Excel launcher -> Run as Administrator -> Ok).
+    a. Open a new blank Excel/Word 2016 document as **Administrator** (Right click on Excel/Word launcher -> Run as Administrator -> Ok).
     
     b. On the Insert tab, choose **My Add-ins**.
 
