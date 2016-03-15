@@ -2,8 +2,6 @@
 
 This task pane add-in shows how to extract some data from Banana documents by using the JavaScript APIs in Excel 2016.
 
-### Try it out
-
 The add-in opens in a task pane as shown in this screenshot.
     
 ![Banana Add-in](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/AccountCard/Images/AccountCard_AddIn.png)
