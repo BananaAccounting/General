@@ -1,6 +1,6 @@
 ## Use Office Add-ins
 
-Applies to: Excel 2016 and Word 2016
+The steps below walk you through all the steps to use Banana Office Add-ins.
 
 1. Be sure to have accomplished all the settings as shown in the [Create Office Add-ins guide](https://github.com/BananaAccounting/General/blob/master/OfficeAddIns/CreateAddIn.md).
 
