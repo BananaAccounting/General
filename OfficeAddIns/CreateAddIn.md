@@ -2,7 +2,7 @@
 The steps below walk you through all the setup of the environment required to run Banana Office Add-ins.
 
 ## Prerequisite
-Applies to: Microsoft Office Excel 2016
+Applies to: Microsoft Office Excel 2016 and Microsoft Office Word 2016
 
 ## Install a local web server
 To run properly all the Banana Office Add-ins it is highly recommended to install a local web server and deploy all the add-ins files into it.
