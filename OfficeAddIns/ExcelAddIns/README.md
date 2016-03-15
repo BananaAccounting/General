@@ -48,11 +48,3 @@ This task pane add-in shows how to extract some data from Banana documents by us
     l. It is possible to add new worksheets by clicking on +, select different Accounts and generate other cards.
 
 
-### Resources
-[Build your first Excel add-in](https://msdn.microsoft.com/en-us/library/office/mt616491.aspx)
-
-[Excel add-ins programming overview](https://msdn.microsoft.com/en-us/library/office/mt616487.aspx)
-
-[Excel add-ins JavaScript API reference](https://msdn.microsoft.com/en-us/library/office/mt616490.aspx)
-
-   
