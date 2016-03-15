@@ -15,6 +15,6 @@ This task pane add-in shows how to extract some data from Banana documents by us
 
 * Select a period from the list.
 
-* Click on the "Click me!" button to generate the sheet with the account card.
+* Click on the "Click me!" button to generate the sheet with the account card as shown in this screenshot.
     
 	![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/WordAddIns/AccountCard/Images/word_account_card_example.png)
