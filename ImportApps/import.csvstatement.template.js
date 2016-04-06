@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.apps.import.csvstatemen.template
 // @api = 1.0
-// @pubdate = 2015-30-11
+// @pubdate = 2016-04-06
 // @publisher = Banana.ch SA
 // @description = Import CSV
 // @task = import.transactions
@@ -42,7 +42,10 @@ function exec(inData) {
 	// can define as much postProcessIntermediaryData function as needed
 	postProcessIntermediaryData(intermediaryData);
 
-	//5. convert to banana format 
+   //5. sort data
+   intermediaryData = sortData(intermediaryData, convertionParam);
+
+   //6. convert to banana format
 	//column that start with "_" are not converted
 	return convertToBananaFormat(intermediaryData);	
 }
@@ -66,8 +69,8 @@ function defineConversionParam() {
 
 
    /** SPECIFY THE COLUMN TO USE FOR SORTING
-   If empty the data are not sorted */
-   convertionParam.sortColum = "Date";
+   If sortColums is empty the data are not sorted */
+   convertionParam.sortColums = ["Date", "ExternalReference"];
    convertionParam.sortDescending = false;
 	/** END */
 
@@ -247,6 +250,27 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 	return intermediaryData;
 }
 
+// The purpose of this function is to sort the data
+function sortData(intermediaryData, convertionParam) {
+   if (convertionParam.sortColums.length) {
+      intermediaryData.sort(
+               function(row1, row2) {
+                  for (var i = 0; i < convertionParam.sortColums.length; i++) {
+                     var columnName = convertionParam.sortColums[i];
+                     if (row1[columnName] > row2[columnName])
+                        return 1;
+                     else if (row1[columnName] < row2[columnName])
+                        return -1;
+                  }
+                  return 0;
+               });
+
+      if (convertionParam.sortDescending)
+         intermediaryData.reverse();
+   }
+
+   return intermediaryData;
+}
 
 //The purpose of this function is to convert all the data into a format supported by Banana
 function convertToBananaFormat(intermediaryData) {
