@@ -36,7 +36,7 @@ function exec(inData) {
 	inData = preProcessInData(inData);
 
 	//3. intermediaryData is an array of objects where the property is the banana column name
-	var intermediaryData = convertCsvToIntermediaryData(inData, convertionParam);
+   var intermediaryData = convertToIntermediaryData(inData, convertionParam);
 
 	//4. translate categories and Description 
 	// can define as much postProcessIntermediaryData function as needed
@@ -59,8 +59,9 @@ function defineConversionParam() {
 	var convertionParam = {};
 
 	/** SPECIFY THE SEPARATOR AND THE TEXT DELIMITER USED IN THE CSV FILE */
-	convertionParam.separator = ';';
-	convertionParam.textDelim = '"';
+   convertionParam.format = "csv"; // available formats are "csv", "html"
+   convertionParam.separator = ';';
+   convertionParam.textDelim = '"';
 
 	/** SPECIFY AT WHICH ROW OF THE CSV FILE IS THE HEADER (COLUMN TITLES)
 	We suppose the data will always begin right away after the header line */
@@ -229,6 +230,15 @@ function postProcessIntermediaryData(intermediaryData) {
 /* DO NOT CHANGE THIS CODE */
 
 // Convert to an array of objects where each object property is the banana columnNameXml
+function convertToIntermediaryData(inData, convertionParam) {
+   if (convertionParam.format === "html") {
+      return convertHtmlToIntermediaryData(inData, convertionParam);
+   } else {
+      return convertCsvToIntermediaryData(inData, convertionParam);
+   }
+}
+
+// Convert to an array of objects where each object property is the banana columnNameXml
 function convertCsvToIntermediaryData(inData, convertionParam) {
 
 	var form = [];
@@ -253,6 +263,62 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 
 	//Return the converted CSV data into the Banana document table
 	return intermediaryData;
+}
+
+// Convert to an array of objects where each object property is the banana columnNameXml
+function convertHtmlToIntermediaryData(inData, convertionParam) {
+
+   var form = [];
+   var intermediaryData = [];
+
+   //Read the HTML file and create an array with the data
+   var htmlFile = [];
+   var htmlRows = inData.match(/<tr[^>]*>.*?<\/tr>/gi);
+   for (var rowNr = 0; rowNr < htmlRows.length; rowNr++ ) {
+      var htmlRow = [];
+      var htmlFields = htmlRows[rowNr].match(/<t(h|d)[^>]*>.*?<\/t(h|d)>/gi);
+      for (var fieldNr = 0; fieldNr < htmlFields.length; fieldNr++ ) {
+         var htmlFieldRe =  />(.*)</g.exec(htmlFields[fieldNr]);
+         htmlRow.push(htmlFieldRe.length > 1 ? htmlFieldRe[1] : "");
+      }
+      htmlFile.push(htmlRow);
+   }
+
+   //Variables used to save the columns titles and the rows values
+   var columns = getHeaderData(htmlFile, convertionParam.headerLineStart); //array
+   var rows = getRowData(htmlFile, convertionParam.dataLineStart); //array of array
+
+   //Convert header names
+   for (var i = 0; i < columns.length; i++) {
+      var convertedHeader = columns[i];
+      convertedHeader = convertedHeader.toLowerCase();
+      convertedHeader = convertedHeader.replace(" ", "_");
+      var indexOfHeader = columns.indexOf(convertedHeader);
+      if (indexOfHeader >= 0 && indexOfHeader < i) { // Header alreay exist
+         //Avoid headers with same name adding an incremental index
+         var newIndex = 2;
+         while (columns.indexOf(convertedHeader + newIndex.toString()) !== -1 && newIndex < 99)
+            newIndex++;
+         convertedHeader = convertedHeader + newIndex.toString()
+      }
+      columns[i] = convertedHeader;
+   }
+
+   Banana.console.log(JSON.stringify(columns, null, "   "));
+
+   //Load the form with data taken from the array. Create objects
+   loadForm(form, columns, rows);
+
+   //Create the new CSV file with converted data
+   var convertedRow;
+   //For each row of the form, we call the rowConverter() function and we save the converted data
+   for (var i = 0; i < form.length; i++) {
+      convertedRow = convertionParam.rowConverter(form[i]);
+      intermediaryData.push(convertedRow);
+   }
+
+   //Return the converted CSV data into the Banana document table
+   return intermediaryData;
 }
 
 // The purpose of this function is to sort the data
