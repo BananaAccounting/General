@@ -1,4 +1,4 @@
-// Copyright [2015] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.apps.import.csvstatemen.template
+// @id = ch.banana.apps.import.csvstatement.template
 // @api = 1.0
 // @pubdate = 2016-04-06
 // @publisher = Banana.ch SA
