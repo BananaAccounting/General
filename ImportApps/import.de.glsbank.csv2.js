@@ -28,6 +28,7 @@
 //
 // Import CSV Umsatzexport file from german GLS Bank.
 // This version use as base the template file which is included through the @includejs parameter
+// this file is mainly used to test the basic functionalites of the template file
 
 
 //The purpose of this function is to let the users define:
