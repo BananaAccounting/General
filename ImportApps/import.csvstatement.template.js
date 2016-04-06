@@ -203,17 +203,22 @@ function postProcessIntermediaryData(intermediaryData) {
 	for (var i = 0; i < intermediaryData.length; i++) {
 		var convertedData = intermediaryData[i];
 
-		//We delete everything between parentheses
-		var cleanContraAccount = convertedData["ContraAccount"].replace(/\(.*/,'').trim();
-
 		//Convert
-		convertedData["ContraAccount"] = categories[cleanContraAccount];
-		convertedData["Account"] = accounts[convertedData["Account"]];
+      if (convertedData["ContraAccount"]) {
+         var cleanContraAccount = convertedData["ContraAccount"].replace(/\(.*/,'').trim(); //We delete everything between parentheses
+         if (categories.indexOf(cleanContraAccount) > -1)
+            convertedData["ContraAccount"] = categories[cleanContraAccount];
+      }
+
+      if (convertedData["Account"]) {
+         if (accounts.indexOf(convertedData["Account"]) > -1)
+            convertedData["Account"] = accounts[convertedData["Account"]];
+      }
 
 		if (convertedData["_Description2"]) {
 			convertedData["Description"] = convertedData["_Description2"] + ", " + convertedData["Description"];
 		}
-	}
+   }
 }
 
 
@@ -252,7 +257,7 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 
 // The purpose of this function is to sort the data
 function sortData(intermediaryData, convertionParam) {
-   if (convertionParam.sortColums.length) {
+   if (convertionParam.sortColums && convertionParam.sortColums.length) {
       intermediaryData.sort(
                function(row1, row2) {
                   for (var i = 0; i < convertionParam.sortColums.length; i++) {
@@ -294,11 +299,8 @@ function convertToBananaFormat(intermediaryData) {
 //The purpose of this function is to load all the data (titles of the columns and rows) and create a list of objects.
 //Each object represents a row of the csv file
 function loadForm(form, columns, rows) {
-	var obj = new Object;
-
 	for(var j = 0; j < rows.length; j++){
 		var obj = {};
-
 		for(var i = 0; i < columns.length; i++){
 			obj[columns[i]] = rows[j][i];
 		}
@@ -317,9 +319,19 @@ function getHeaderData(csvFile, startLineNumber) {
 
 		headerData[i] = headerData[i].trim();
 
-		if (!headerData[i]) {
-			headerData[i] = i;
-		}
+      if (!headerData[i]) {
+         headerData[i] = i;
+      }
+
+      //Avoid duplicate headers
+      var headerPos = headerData.indexOf(headerData[i]);
+      if (headerPos >= 0 && headerPos < i) { // Header already exist
+         var postfixIndex = 2;
+         while (headerData.indexOf(headerData[i] + postfixIndex.toString()) !== -1 && postfixIndex <= 99)
+            postfixIndex++; // Append an incremental index
+         headerData[i] = headerData[i] + postfixIndex.toString()
+      }
+
 	}
 	return headerData;
 }
