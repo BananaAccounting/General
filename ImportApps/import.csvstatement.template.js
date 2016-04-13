@@ -356,7 +356,7 @@ function convertToBananaFormat(intermediaryData) {
 		
 	}
 	//Function call Banana.Converter.objectArrayToCsv() to create a CSV with new data just converted
-	convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
+   var convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
 
 	return convertedCsv;
 }
