@@ -1,4 +1,4 @@
-' Copyright (C) 2015 Banana.ch SA
+' Copyright (C) 2015-2016 Banana.ch SA
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
@@ -17,7 +17,11 @@
 ' See the License for the specific language governing permissions and
 ' limitations under the License.
 '
-' File is available onn
+' History
+' 2015-11-28 Separated url from query
+' 2016-04-25 Added BCellAmount
+'
+
 Option Explicit
 'Save lastQuery for debug purposes
 Const MAXLASTQUERY = 10
@@ -30,7 +34,7 @@ Dim lastRequestNumber As Integer
 Dim errorCount As Integer
 'Return the version date
 Public Function BFunctionsVersion() As String
-BFunctionsVersion = "2015-11-28"
+BFunctionsVersion = "2015-04-26"
 End Function
 Public Function BAccountDescription(fileName As String, account As String, Optional column As String = "") As String
 Application.Volatile
@@ -96,9 +100,10 @@ Public Function BBudgetTotal(fileName As String, account As String, Optional per
 Application.Volatile
 BBudgetTotal = Val(BBalanceGet(fileName, account, "budget", "total", period))
 End Function
-'Receive start end end data and convert to a Banana period
-Public Function BCreatePeriod(startDate As Date, endDate As Date) As String
-BCreatePeriod = Format(startDate, "yyyy-mm-dd") & "/" & Format(endDate, "yyyy-mm-dd")
+'Get a value from a cell as a double
+Public Function BCellAmount(fileName As String, table As String, rowColumn As String, column As String) As Double
+Application.Volatile
+BCellAmount = Val(BCellValue(fileName, table, rowColumn, column))
 End Function
 'Get a value from a cell
 Public Function BCellValue(fileName As String, table As String, rowColumn As String, column As String) As String
@@ -106,6 +111,10 @@ Application.Volatile
 Dim myUrl As String
 myUrl = "table/" & table & "/row/" & rowColumn & "/column/" & column
 BCellValue = BHttpQuery(fileName, myUrl)
+End Function
+'Receive start end end data and convert to a Banana period
+Public Function BCreatePeriod(startDate As Date, endDate As Date) As String
+BCreatePeriod = Format(startDate, "yyyy-mm-dd") & "/" & Format(endDate, "yyyy-mm-dd")
 End Function
 'Convert from Iso date to Excel date format
 Public Function BDate(dateIso As String) As Date
@@ -394,8 +403,7 @@ End Function
 
 
 
-'history
-'2015-11-28  Start adding support for mac
-'            Separated url from query
-			 
+             
+
+
 
