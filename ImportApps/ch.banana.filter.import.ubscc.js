@@ -148,8 +148,9 @@ function postProcessIntermediaryData(intermediaryData) {
    *   it will be replaced by the account number given */
    //Accounts conversion
    var accounts = {
-      "4000 1470 7378" : "1020",
-      "4000 1470 7379" : "1021"
+      "__default__" : "1020",
+
+      "4000 1470 7378" : "1020"
       //...
    }
 
@@ -159,10 +160,10 @@ function postProcessIntermediaryData(intermediaryData) {
 
    //Categories conversion
    var categories = {
-      "__other__" : "",
+      "__default__" : "4200",
 
       "Cure veterinaie": "",
-      "Distributore di benzina" : "",
+      "Distributore di benzina" : "6200",
       "Do it yourself / Centri bricola": "",
       "Pedaggi stradali, Pedaggi per ponti" : "",
       "Negozio d abbigliamento" : "",
@@ -183,14 +184,16 @@ function postProcessIntermediaryData(intermediaryData) {
          var cleanContraAccount = convertedData["ContraAccount"].trim();
          if (categories[cleanContraAccount])
             convertedData["ContraAccount"] = categories[cleanContraAccount];
-         else if (categories["__other__"] > -1)
-            convertedData["ContraAccount"] = categories["__other__"];
+         else if (categories["__default__"] > -1)
+            convertedData["ContraAccount"] = categories["__default__"];
       }
 
       if (convertedData["Account"]) {
          var cleanAccount = convertedData["Account"].trim();
          if (accounts[cleanAccount])
             convertedData["Account"] = accounts[cleanAccount];
+         else if (accounts["__default__"] > -1)
+            convertedData["Account"] = accounts["__default__"];
       }
 
    }
