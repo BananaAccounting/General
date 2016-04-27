@@ -148,7 +148,7 @@ function postProcessIntermediaryData(intermediaryData) {
    *   it will be replaced by the account number given */
    //Accounts conversion
    var accounts = {
-      "__default__" : "1020",
+      "__default__" : "",
 
       "4000 1470 7378" : "1020"
       //...
@@ -160,18 +160,18 @@ function postProcessIntermediaryData(intermediaryData) {
 
    //Categories conversion
    var categories = {
-      "__default__" : "4200",
+      "__default__" : "",
 
-      "Cure veterinaie": "",
+      "Cure veterinaie": "4200",
       "Distributore di benzina" : "6200",
-      "Do it yourself / Centri bricola": "",
-      "Pedaggi stradali, Pedaggi per ponti" : "",
-      "Negozio d abbigliamento" : "",
-      "Negozio di calzature" : "",
-      "Negozio di dischi e CD" : "",
-      "Negozio di genere alimentari" : "",
-      "Negozio per la vendita al dettaglio" : "",
-      "Telegrammi" : ""
+      "Do it yourself / Centri bricola": "4200",
+      "Pedaggi stradali, Pedaggi per ponti" : "4200",
+      "Negozio d abbigliamento" : "4200",
+      "Negozio di calzature" : "4200",
+      "Negozio di dischi e CD" : "4200",
+      "Negozio di genere alimentari" : "4200",
+      "Negozio per la vendita al dettaglio" : "4200",
+      "Telegrammi" : "4200"
       //...
    }
 
