@@ -20,7 +20,7 @@
 ' History
 ' 2015-11-28 Separated url from query
 ' 2016-04-25 Added BCellAmount
-'
+' 2016-04-28 Solved rounding to zero
 
 Option Explicit
 'Save lastQuery for debug purposes
@@ -50,13 +50,13 @@ Public Function BAmount(fileName As String, account As String, Optional period A
 ' Need file name, account (or groups) and and optional period
 ' Amount depend on the BClass indicated in the accounting plan
 Application.Volatile
-BAmount = Val(BBalanceGet(fileName, account, "balance", "amount", period))
+BAmount = BBalanceGet(fileName, account, "balance", "amount", period)
 End Function
 Public Function BBalance(fileName As String, account As String, Optional period As String = "") As Double
 ' Retrieve the Amount for Balance
 ' Need file name, account (or groups) and and optional period
 Application.Volatile
-BBalance = Val(BBalanceGet(fileName, account, "balance", "balance", period))
+BBalance = BBalanceGet(fileName, account, "balance", "balance", period)
 End Function
 ' Retrieve the Balance by passing also the valueName
 ' Need file name, account (or groups) and and optional period
@@ -75,11 +75,11 @@ Public Function BBudgetAmount(fileName As String, account As String, Optional pe
 ' Need file name, account (or groups) and and optional period
 ' Amount depend on the BClass indicated in the accounting plan
 Application.Volatile
-BBudgetAmount = Val(BBalanceGet(fileName, account, "budget", "amount", period))
+BBudgetAmount = BBalanceGet(fileName, account, "budget", "amount", period)
 End Function
 Public Function BBudgetBalance(fileName As String, account As String, Optional period As String = "") As Double
 Application.Volatile
-BBudgetBalance = Val(BBalanceGet(fileName, account, "budget", "balance", period))
+BBudgetBalance = BBalanceGet(fileName, account, "budget", "balance", period)
 End Function
 Public Function BBudgetInterest(fileName As String, account As String, interestRate As String, Optional period As String = "")
 Application.Volatile
@@ -94,11 +94,11 @@ BBudgetInterest = Val(BQuery(fileName, myUrl))
 End Function
 Public Function BBudgetOpening(fileName As String, account As String, Optional period As String = "") As Double
 Application.Volatile
-BBudgetOpening = Val(BBalanceGet(fileName, account, "budget", "opening", period))
+BBudgetOpening = BBalanceGet(fileName, account, "budget", "opening", period)
 End Function
 Public Function BBudgetTotal(fileName As String, account As String, Optional period As String = "") As Double
 Application.Volatile
-BBudgetTotal = Val(BBalanceGet(fileName, account, "budget", "total", period))
+BBudgetTotal = BBalanceGet(fileName, account, "budget", "total", period)
 End Function
 'Get a value from a cell as a double
 Public Function BCellAmount(fileName As String, table As String, rowColumn As String, column As String) As Double
@@ -171,7 +171,7 @@ End Function
 'Return opening for CurrentBalance
 Public Function BOpening(fileName As String, account As String, Optional period As String = "") As Double
 Application.Volatile
-BOpening = Val(BBalanceGet(fileName, account, "balance", "opening", period))
+BOpening = BBalanceGet(fileName, account, "balance", "opening", period)
 End Function
 Public Function BStartPeriod(fileName As String, Optional period As String = "") As Date
 Dim dateIso As String
@@ -182,11 +182,11 @@ If Len(dateIso) = 10 Then
 End Function
 Public Function BTotal(fileName As String, account As String, Optional period As String = "") As Double
 Application.Volatile
-BTotal = Val(BBalanceGet(fileName, account, "balance", "total", period))
+BTotal = BBalanceGet(fileName, account, "balance", "total", period)
 End Function
 Public Function BVatBalance(fileName As String, vatCode As String, vatValue As String, Optional period As String = "") As Double
 Application.Volatile
-BVatBalance = Val(BBalanceGet(fileName, vatCode, "vatbalance", vatValue, period))
+BVatBalance = BBalanceGet(fileName, vatCode, "vatbalance", vatValue, period)
 End Function
 Public Function BVatDescription(fileName As String, vatCode As String, Optional column As String = "") As String
 Application.Volatile
@@ -227,16 +227,15 @@ lastRequestNumber = requestNumber
 If Len(fileName) = 0 Then
     Exit Function
 End If
-Dim oHttp As Object
-Err.Number = 0
-On Error Resume Next
 'for MAC remove comment
 'Set oHttp = CreateObject("WinHttp.WinHttpRequest.5.1")
-If Err.Number > 0 Then
-    BHttpQuery = BHttpQuery_Mac(fileName, url, query)
+#If Mac Then
+    MsgBox "Banana Sync does not work on Excel for MAC"
+    'BHttpQuery = BHttpQuery_Mac(fileName, url, query)
     Exit Function
-End If
-BHttpQuery = BHttpQueryWindows(fileName, url, query)
+#Else
+    BHttpQuery = BHttpQueryWindows(fileName, url, query)
+#End If
 End Function
 'Windows We call the Banana Accounting web server using WinHttpRequest
 Private Function BHttpQueryWindows(fileName As String, url As String, query As String) As String
@@ -256,7 +255,7 @@ Dim oHttp As Object
 Dim BananaHostName As String
 'retrieve optiona hostName
 On Error Resume Next
-BananaHostName = Range("BananaHostName").Value
+BananaHostName = Range("BananaHostName").value
 If Len(BananaHostName) = 0 Then
     BananaHostName = "localhost:8081"
 End If
@@ -314,13 +313,13 @@ Dim myUrl As String
 Dim BananaHostName As String
 'retrieve optiona hostName
 On Error Resume Next
-BananaHostName = Range("BananaHostName").Value
+BananaHostName = Range("BananaHostName").value
 If Len(BananaHostName) = 0 Then
     BananaHostName = "localhost:8081"
 End If
 Dim src As Worksheet
 Set src = ThisWorkbook.Sheets("Start")
-src.Range("$A$50").Value = ""
+src.Range("$A$50").value = ""
 myUrl = "http://" & BananaHostName & "/v1/doc/" & fileName & "/" & url & "?" & query
 ' save last query for debug purpose
 Dim qt As QueryTable
@@ -339,7 +338,7 @@ End With
 On Error Resume Next
 qt.Refresh
 If Err.Number = 0 Then
-    BHttpQuery_Mac = src.Range("$A$50").Value
+    BHttpQuery_Mac = src.Range("$A$50").value
 End If
 End Function
 
@@ -401,9 +400,6 @@ On Error Resume Next
     End If
 End Function
 
-
-
-             
 
 
 
