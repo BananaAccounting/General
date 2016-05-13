@@ -23,10 +23,9 @@ If you want to develop an app that converts a proprietary file to a Banana compa
 
 Then you have two options: 
 
-1. Add the file as a normal BananaApp, see [Documentation Manage Apps] (https://doc8.banana.ch/en/node/7709).  
-   You can use debugging see https://doc8.banana.ch/en/node/4735 
-
-2. Add the file as an import filter https://doc8.banana.ch/en/node/4160
+1. Add the file as a normal BananaApp, see [Documentation Manage Apps](https://doc8.banana.ch/en/node/7709).  
+   [With this you can olso use debugging](https://doc8.banana.ch/en/node/4735). 
+2. [Add the file as an import filter](https://doc8.banana.ch/en/node/4160).
 
 Once you are done you can eventually install the App as an import App https://doc8.banana.ch/en/node/4731
 
