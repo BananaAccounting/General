@@ -20,10 +20,15 @@ The user can define:
 If you want to develop an app that converts a proprietary file to a Banana compatible import file: 
 * Create a copy the import.csvstatement.template.js 
 * Change the id and the description
-* Add the file as a normal BananaApp, see [Documentation Manage Apps] (https://doc8.banana.ch/en/node/7709)
-* Change the file and test with your data
-* For debugging see https://doc8.banana.ch/en/node/4735
-* Once you are done you can eventually install the App as an import App https://doc8.banana.ch/en/node/4731
+
+Then you have two options: 
+
+1. Add the file as a normal BananaApp, see [Documentation Manage Apps] (https://doc8.banana.ch/en/node/7709).  
+   You can use debugging see https://doc8.banana.ch/en/node/4735 
+
+2. Add the file as an import filter https://doc8.banana.ch/en/node/4160
+
+Once you are done you can eventually install the App as an import App https://doc8.banana.ch/en/node/4731
 
 #Contribute your ImportApp
 We welcome people that develop and contribute back the developlments, that may be useful for other (for example proprietary e-bank statements).  
