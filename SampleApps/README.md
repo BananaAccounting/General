@@ -39,3 +39,11 @@ This app will show a report containing a detailed payment voucher for the Swiss 
 6. Run Microsoft Word
 7. New blank document > Open File > select the PDF created on step 5
 8. It is now possible to modify/complete all the missing informations
+
+##vattransactionslist.js
+
+This app will show a report containing a list of transcactions that have vat code. 
+
+##vattransactionslist_multicurrency.js
+
+This app will show a report containing a list of transcactions that have vat code and the vat amounts converted in transaction's currency. 
