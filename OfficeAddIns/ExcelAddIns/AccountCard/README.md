@@ -35,4 +35,4 @@ The add-in opens in a task pane as shown in this screenshot.
   
 * It is possible to add new worksheets by clicking on +, select different Accounts and generate other cards.
 
-
+If a notification error message is displayed, just click on the button to reload the files's list. The message then is cleared and the add-ins is still usable.
