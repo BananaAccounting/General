@@ -33,3 +33,4 @@ The add-in opens in a task pane as shown in this screenshot.
     ![Update file list](https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/RetrieveTables/Images/001_Banana_journal.png)
 
 
+If a notification error message is displayed, just click on the button to reload the files's list. The message then is cleared and the add-ins is still usable.
