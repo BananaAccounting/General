@@ -33,6 +33,13 @@
     //Function that takes all the opened Banana documents and creates a list
     function getFileNamesList()
     {
+        
+        //Hide the notification message
+        app.clearNotification();
+
+        //Empty the list to avoid duplicates
+        $('#ListBox').empty();
+
         var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
         //var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/test.json"));
         //var jsonFilenameObj = JSON.parse(Get("https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/test.json"));

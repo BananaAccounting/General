@@ -27,6 +27,12 @@
                 $('#notification-message-body').text(text);
                 $('#notification-message').slideDown('fast');
             };
+
+            // Hide the notification message
+            app.clearNotification = function (header, text) {
+               $('#notification-message').hide();
+            };
+
         };
 
         return app;

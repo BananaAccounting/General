@@ -11,8 +11,6 @@
         <Host Name="Workbook" />
       </Hosts>
       <DefaultSettings>
-        <!-- <SourceLocation DefaultValue="http://localhost/officeAddIns/ExcelAddIns/001_Tables/Home.html"/> -->
-        <!--<SourceLocation DefaultValue="https://rawgit.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/Home.html"/> -->
         <SourceLocation DefaultValue="http://localhost:8081/v1/files/OfficeAddIns/ExcelAddIns/RetrieveTables/Home.html"/>
       </DefaultSettings>
       <Permissions>ReadWriteDocument</Permissions>

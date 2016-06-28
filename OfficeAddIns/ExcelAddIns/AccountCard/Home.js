@@ -34,6 +34,12 @@
     //Function that fills the listbox with all the opened Banana documents names
     function getFileNamesList()
     {
+        //Hide the notification message
+        app.clearNotification();
+
+        //Empty the list to avoid duplicates
+        $('#ListBox').empty();
+
         //Get the content of the url
         var jsonFilenamesObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
         var len = jsonFilenamesObj.length;
@@ -68,6 +74,9 @@
     //Function that fills the listbox with all the accounts of the selected Banana document
     function getAccountsList() 
     {
+        //Each time we call getAccountsList() function we empty the list to avoid having duplicates
+        $('#ListAccounts').empty();
+
         //Get the file name selected from the listbox
         var bananaFileName = $("#ListBox").val();
 

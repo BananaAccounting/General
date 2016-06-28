@@ -17,7 +17,13 @@
 
     //Function that takes all the opened Banana documents and creates a list
     function GetFileNamesList()
-    {    
+    {
+        //Hide the notification message
+        app.clearNotification();
+
+        //Empty the list to avoid duplicates
+        $('#ListBox').empty();
+
         var fileNames = [];
         var jsonObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
         var fileNames = jsonObj;
@@ -47,6 +53,9 @@
     //Function that creates a list with all the accounts and descriptions
     function getAccountsList(bananaFileName) 
     {
+        //Each time we call getAccountsList() function we empty the list to avoid having duplicates
+        $('#ListAccounts').empty();
+
         //File Name
         var bananaFileName = $("#ListBox").val();
 
