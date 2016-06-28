@@ -4,46 +4,26 @@ The steps below walk you through all the setup of the environment required to ru
 ## Prerequisite
 Applies to: Microsoft Office Excel 2016 and Microsoft Office Word 2016
 
-## Install a local web server
-To run properly all the Banana Office Add-ins it is highly recommended to install a local web server and deploy all the add-ins files into it.
-
-For example:
-
-1.	Download [XAMPP](https://www.apachefriends.org/index.html) for windows.
-
-2.	Install XAMPP.
-
-3.	After the installation, open the **XAMPP Control Panel** and activate **Apache web server** by checking the box and clicking Start.
-
-4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
-
-5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like
-	* **C:\xampp\htdocs\OfficeAddIns\ExcelAddIns** for all the Excel Add-ins.
-		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\FirstAddIn
-		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\SecondAddIn
-		* ...
- 
-	* **C:\xampp\htdocs\OfficeAddIns\WordAddIns** for all the Word Add-ins.
-		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\FirstAddIn
-		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\SecondAddIn
-		* ...
-
 ## Setup the environment
-1.	Create a folder for the Manifests on a network share.
+The simplest way to create a correct and working environment is the following:
 
-	a	Create a folder wherever you want (for example, C:\Desktop\BananaManifests).
+1. Create a folder on your local drive (for example, C:\ExcelAddIns\AccountCard).
+
+2.	Create a folder for the Manifests on a network share.
+
+	a)	Create a folder on your local drive (for example, C:\Manifests).
 	
-    b.	Right click on the folder, select **properties**.
+    b)	Right click on the folder, select **properties**.
     
-	c.	Click on **Sharing** tab.
+	c)	Click on **Sharing** tab.
     
-	d.	Click on **Advanced Sharing...**
+	d)	Click on **Advanced Sharing...**
     
-	e.	Check the **Share this folder** box.
+	e)	Check the **Share this folder** box.
+  	
+	f)	Click **Apply** and then **Ok**.
     
-	f.	Click **Apply** and then **Ok**.
-    
-2.	Download the files of the chosen add-in from the Banana Accounting Office Add-ins GitHub repository (for example for the AccountCard add-in, https://github.com/BananaAccounting/General/tree/master/OfficeAddIns/ExcelAddIns/AccountCard):
+3.	Download the files of the chosen add-in from the Banana Accounting Office Add-ins GitHub repository (for example, https://github.com/BananaAccounting/General/tree/master/OfficeAddIns/ExcelAddIns/AccountCard):
 	
 	* AccountCardManifest.xml
 	* Common.css
@@ -52,28 +32,36 @@ For example:
 	* Notification.js
 
 
-3.	Save the files into the web server folder (for example, C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\AccountCard).
-4.	Edit the **SourceLocation** element of the Manifest file (for example, AccountCardManifest.xml) so that it points to the web server location for the Home.html page
+4.	Save all the files into the folder from the step 1.
+5.	Edit the XML manifest file (for example, AccountCardManifest.xml):
+
+	a)	Edit the **SourceLocation** tag so that it points to the Home.html file:
 
 	```html
-	<SourceLocation DefaultValue="http://localhost/OfficeAddIns/ExcelAddIns/AccountCard/Home.html"/>
+	<SourceLocation DefaultValue="C:\ExcelAddins\AccountCard\Home.html"/>
 	```
 
-5.	Save the file.
-6.	Copy the Manifest to the network share from the step 1.
-7.	Add the share location that contains the manifest as a trusted app catalog in Excel.
+	b)	Generate a GUID using an online generator of your choice. Then, replace the value in the **Id** tag:
+
+	```html
+	<Id>a64caf30-6b3a-4328-881f-c99623505d23</Id>
+	```
+
+6.	Save the file. 
+7.	Copy the Manifest to the network share from the step 2.
+8.	Add the share location that contains the manifest as a trusted app catalog in Excel.
 	
-    a. Launch Excel and open a blank spreadsheet.
+    a)	Launch Excel and open a blank spreadsheet.
     
-    b. Choose the **File** tab, and then choose **Options**.
+    b)	Choose the **File** tab, and then choose **Options**.
 
-    c. Choose **Trust Center**, and then choose the **Trust Center Settings** button.
+    c)	Choose **Trust Center**, and then choose the **Trust Center Settings** button.
 
-    d. Choose **Trusted Add-in Catalogs**.
+    d)	Choose **Trusted Add-in Catalogs**.
 
-    e. In the Catalog Url box, enter the **path to the network share you created in step 1**, and then choose **Add Catalog** (to see the path: right click on the shared folder -> Properties -> Sharing -> Network Path).
+    e)	In the Catalog Url box, enter the **path to the network share you created in step 2**, and then choose **Add Catalog** (to see the path: right click on the shared folder -> Properties -> Sharing -> Network Path).
 
-    f. Select the **Show** in Menu check box, and then choose **OK**. A message appears to inform you that your settings will be applied the next time you start Office.
+    f.	Select the **Show** in Menu check box, and then choose **OK**. A message appears to inform you that your settings will be applied the next time you start Office.
 
 
 ## Resources
