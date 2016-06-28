@@ -7,7 +7,7 @@ Applies to: Microsoft Office Excel 2016 and Microsoft Office Word 2016
 ## Setup the environment
 The simplest way to create a correct and working environment is the following:
 
-1. Create a folder on your local drive (for example, C:\ExcelAddIns\AccountCard).
+1. Create a folder on your local drive (for example, C:\AccountCard).
 
 2.	Create a folder for the Manifests on a network share.
 
@@ -38,7 +38,7 @@ The simplest way to create a correct and working environment is the following:
 	a)	Edit the **SourceLocation** tag so that it points to the Home.html file:
 
 	```html
-	<SourceLocation DefaultValue="C:\ExcelAddins\AccountCard\Home.html"/>
+	<SourceLocation DefaultValue="C:\AccountCard\Home.html"/>
 	```
 
 	b)	Generate a GUID using an online generator of your choice. Then, replace the value in the **Id** tag:
