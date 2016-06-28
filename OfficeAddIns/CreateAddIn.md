@@ -48,7 +48,7 @@ The simplest way to create a correct and working environment is the following:
 	```
 
 6.	Save the file. 
-7.	Copy the Manifest to the network share from the step 2.
+7.	Copy the XML manifest file to the network share from the step 2.
 8.	Add the share location that contains the manifest as a trusted app catalog in Excel.
 	
     a)	Launch Excel and open a blank spreadsheet.
