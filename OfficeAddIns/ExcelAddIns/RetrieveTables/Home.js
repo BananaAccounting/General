@@ -23,6 +23,11 @@
             app.initialize();
             $('#update-list').click(getFileNamesList);
             $('#load-data-and-create-chart').click(generateTables);
+
+            //Initially we disable some of the elements (buttons and lists)
+            document.getElementById('ListBox').disabled = true;
+            document.getElementById('select-service').disabled = true;
+            document.getElementById('load-data-and-create-chart').disabled = true;   
         });
     };
 
@@ -41,16 +46,24 @@
         $('#ListBox').empty();
 
         var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
-        //var jsonFilenameObj = JSON.parse(Get("http://localhost/ProvaCrossDomain/test.json"));
-        //var jsonFilenameObj = JSON.parse(Get("https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAdd-ins/ExcelAddIns/001_Tables/test.json"));
         var len = jsonFilenameObj.length;
 
-        for (var i = 0; i < len; i++)
+        //If Banana web server is running and there is one or more accounting file retrieved into the list:
+        if (len > 0) 
         {
-            var x = document.getElementById("ListBox");
-            var option = document.createElement("option");
-            option.text = jsonFilenameObj[i];
-            x.add(option);
+            //Add to the list all the files
+            for (var i = 0; i < len; i++)
+            {
+                var x = document.getElementById("ListBox");
+                var option = document.createElement("option");
+                option.text = jsonFilenameObj[i];
+                x.add(option);
+            }
+
+            //Enable the elements
+            document.getElementById('ListBox').disabled = false;
+            document.getElementById('select-service').disabled = false;
+            document.getElementById('load-data-and-create-chart').disabled = false;
         }
     }
 
@@ -63,21 +76,6 @@
         Httpreq.open("GET",yourUrl,false);
         Httpreq.send();
         return Httpreq.responseText;
-
-/*
-        // 1. Create XDR object: 
-        var xdr = new XDomainRequest();
-
-        // 2. Open connection with server using GET method:
-        xdr.open("GET", yourUrl);
-
-        // 3. Send string data to server:
-        xdr.send();
-
-        // 4. Return response text
-        return xdr.responseText;
-*/
-
     }
 
 
@@ -99,27 +97,17 @@
             
             return ctx.sync().then(function () 
             {
-                //if (activeSheet.tables.count === 0)
-                //{
-                    switch ($("#select-service").val()) 
-                    {
-                        case "Info":
-                            return generateInfoTable(ctx, activeSheet, bananaFileName);
-                        case "Accounts":
-                            return generateAccountsTable(ctx, activeSheet, bananaFileName);
-                        case "Journal":
-                            return generateJournalTable(ctx, activeSheet, bananaFileName);
-                    }
-                //}
-                //else 
-                //{
-                //    app.showNotification("Error", "Remove any existing tables before adding a new one");
-                //}
+                switch ($("#select-service").val()) 
+                {
+                    case "Info":
+                        return generateInfoTable(ctx, activeSheet, bananaFileName);
+                    case "Accounts":
+                        return generateAccountsTable(ctx, activeSheet, bananaFileName);
+                    case "Journal":
+                        return generateJournalTable(ctx, activeSheet, bananaFileName);
+                }
+
             })
-            //.then(function () {
-            //    app.showNotification("Success");
-            //    console.log("Success!");
-            //});
         }).catch(function (error) {
             app.showNotification("Error", "Something went wrong: " + error);
             console.log("Error: " + error);
@@ -290,34 +278,7 @@
         var jsonJournalObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName +"/journal?format=json"));
         var len = jsonJournalObj.length;
 
-/*
-        var arrJRowOrigin = [];
-
-        //Create array of JRowOrigin values
-        for (var i = 0; i < len; i++) {
-            if (jsonJournalObj[i].JRowOrigin) {
-                arrJRowOrigin.push(jsonJournalObj[i].JRowOrigin);
-            }
-        }
-
-        //Remove duplicates
-        for (var i = 0; i < arrJRowOrigin.length; i++) {
-            for (var x = i+1; x < arrJRowOrigin.length; x++) {
-                if (arrJRowOrigin[x] === arrJRowOrigin[i]) {
-                    arrJRowOrigin.splice(x,1);
-                    --x;
-                }
-            }
-        }
-
-        var arrLen = arrJRowOrigin.length;
-*/
-
-
-
-
-
-        ////Run the batched commands
+        //Run the batched commands
         return ctx.sync().then(function () 
         {
 
@@ -341,30 +302,21 @@
             //Use this counter to print on the right cell
             var cnt = 1;
 
-            //for (var j = 0; j < arrLen; j++)
-            //{
-                //Insert the data of the table 
-                for (var i = 0; i < len; i++)
-                {
-                    //if (jsonJournalObj[i].JRowOrigin === arrLen[j])
-                    //{}
-                    
-                    //if (jsonJournalObj[i].JAccountClass == 3 || jsonJournalObj[i].JAccountClass == 4)
-                    //{
-                        cnt++;
-                        activeSheet.getRange("A" + cnt).values = jsonJournalObj[i].Date;
-                        activeSheet.getRange("B" + cnt).values = jsonJournalObj[i].Description;
-                        activeSheet.getRange("C" + cnt).values = jsonJournalObj[i].JAccount;
-                        activeSheet.getRange("D" + cnt).values = jsonJournalObj[i].JAccountClass;
-                        activeSheet.getRange("E" + cnt).values = jsonJournalObj[i].JAmount;
-                        activeSheet.getRange("F" + cnt).values = jsonJournalObj[i].JCC1;
-                        activeSheet.getRange("G" + cnt).values = jsonJournalObj[i].JCC2;
-                        activeSheet.getRange("H" + cnt).values = jsonJournalObj[i].JCC3;
-                        activeSheet.getRange("I" + cnt).values = jsonJournalObj[i].JSegment1;
-                        activeSheet.getRange("J" + cnt).values = jsonJournalObj[i].JRowOrigin;
-                    //}
-                }
-            //}
+            //Insert the data of the table 
+            for (var i = 0; i < len; i++)
+            {
+                cnt++;
+                activeSheet.getRange("A" + cnt).values = jsonJournalObj[i].Date;
+                activeSheet.getRange("B" + cnt).values = jsonJournalObj[i].Description;
+                activeSheet.getRange("C" + cnt).values = jsonJournalObj[i].JAccount;
+                activeSheet.getRange("D" + cnt).values = jsonJournalObj[i].JAccountClass;
+                activeSheet.getRange("E" + cnt).values = jsonJournalObj[i].JAmount;
+                activeSheet.getRange("F" + cnt).values = jsonJournalObj[i].JCC1;
+                activeSheet.getRange("G" + cnt).values = jsonJournalObj[i].JCC2;
+                activeSheet.getRange("H" + cnt).values = jsonJournalObj[i].JCC3;
+                activeSheet.getRange("I" + cnt).values = jsonJournalObj[i].JSegment1;
+                activeSheet.getRange("J" + cnt).values = jsonJournalObj[i].JRowOrigin;
+            }
 
         }).then(ctx.sync);
     }

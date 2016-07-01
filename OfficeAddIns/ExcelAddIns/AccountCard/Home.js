@@ -23,6 +23,14 @@
             $('#update-list').click(getFileNamesList);
             $('#accounts-list').click(getAccountsList);
             $('#load-data-and-create-file').click(generateTables);
+
+            //Initially we disable some of the elements (buttons and lists)
+            document.getElementById('ListBox').disabled = true;
+            document.getElementById('accounts-list').disabled = true;
+            document.getElementById('ListAccounts').disabled = true;
+            document.getElementById('ListPeriod').disabled = true;
+            document.getElementById('load-data-and-create-file').disabled = true;   
+
         });
     };
 
@@ -44,13 +52,25 @@
         var jsonFilenamesObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
         var len = jsonFilenamesObj.length;
 
-        //Add the content to the listbox
-        for (var i = 0; i < len; i++)
+
+        //If Banana web server is running and there is one or more accounting file retrieved into the list:
+        if (len > 0) 
         {
-            var x = document.getElementById("ListBox");
-            var option = document.createElement("option");
-            option.text = jsonFilenamesObj[i];
-            x.add(option);
+            //Add the content to the listbox
+            for (var i = 0; i < len; i++)
+            {
+                var x = document.getElementById("ListBox");
+                var option = document.createElement("option");
+                option.text = jsonFilenamesObj[i];
+                x.add(option);
+            }
+
+            //Enable the elements
+            document.getElementById('ListBox').disabled = false;
+            document.getElementById('accounts-list').disabled = false;
+            document.getElementById('ListAccounts').disabled = false;
+            document.getElementById('ListPeriod').disabled = false;
+            document.getElementById('load-data-and-create-file').disabled = false; 
         }
     }
 

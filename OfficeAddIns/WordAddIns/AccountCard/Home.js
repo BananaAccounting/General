@@ -10,6 +10,13 @@
             $('#update-list').click(GetFileNamesList);
             $('#accounts-list').click(getAccountsList);
             $('#load-data-and-create-file').click(generateAccountCard);
+
+            //Initially we disable some of the elements (buttons and lists)
+            document.getElementById('ListBox').disabled = true;
+            document.getElementById('accounts-list').disabled = true;
+            document.getElementById('ListAccounts').disabled = true;
+            document.getElementById('ListPeriod').disabled = true;
+            document.getElementById('load-data-and-create-file').disabled = true;
         });
     };
 
@@ -27,13 +34,25 @@
         var fileNames = [];
         var jsonObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
         var fileNames = jsonObj;
+        var len = fileNames.length;
 
-        for (var i = 0; i < fileNames.length; i++)
+        //If Banana web server is running and there is one or more accounting file retrieved into the list:
+        if (len > 0) 
         {
-            var x = document.getElementById("ListBox");
-            var option = document.createElement("option");
-            option.text = fileNames[i];
-            x.add(option);
+            for (var i = 0; i < len; i++)
+            {
+                var x = document.getElementById("ListBox");
+                var option = document.createElement("option");
+                option.text = fileNames[i];
+                x.add(option);
+            }
+            
+            //Enable the elements
+            document.getElementById('ListBox').disabled = false;
+            document.getElementById('accounts-list').disabled = false;
+            document.getElementById('ListAccounts').disabled = false;
+            document.getElementById('ListPeriod').disabled = false;
+            document.getElementById('load-data-and-create-file').disabled = false;  
         }
     }
 
@@ -53,9 +72,6 @@
     //Function that creates a list with all the accounts and descriptions
     function getAccountsList(bananaFileName) 
     {
-        //Each time we call getAccountsList() function we empty the list to avoid having duplicates
-        $('#ListAccounts').empty();
-
         //File Name
         var bananaFileName = $("#ListBox").val();
 
