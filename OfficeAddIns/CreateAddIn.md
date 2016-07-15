@@ -4,7 +4,7 @@ The steps below walk you through all the setup of the environment required to ru
 ## Prerequisite
 Applies to: Microsoft Office Excel 2016 and Microsoft Office Word 2016
 
-## Setup the environment
+## Setup the environment - Local Drive
 The simplest way to create a correct and working environment is the following:
 
 1. Create a folder on your local drive (for example, C:\AccountCard).
@@ -62,6 +62,33 @@ The simplest way to create a correct and working environment is the following:
     e)	In the Catalog Url box, enter the **path to the network share you created in step 2**, and then choose **Add Catalog** (to see the path: right click on the shared folder -> Properties -> Sharing -> Network Path).
 
     f.	Select the **Show** in Menu check box, and then choose **OK**. A message appears to inform you that your settings will be applied the next time you start Office.
+
+
+
+## Setup the environment - Web Server
+Instead of using a folder on the local drive it is possible to install a local web server and deploy all the add-ins files into it.
+In this case just replace the **step 1.** of the **Setup the environment - Local Drive** procedure with the following:
+
+1.	Download a web server (for example, [XAMPP](https://www.apachefriends.org/index.html) for windows).
+
+2.	Install XAMPP.
+
+3.	After the installation, open the **XAMPP Control Panel** and activate **Apache web server** by checking the box and clicking Start.
+
+4.	Go to the folder where XAMPP is installed (usually **C:\xampp\htdocs**).
+
+5.	Basically this is the folder where to put all the files, but it is recommended to create other folder and subfolder in order to separate each add-in. In our case, the final structure should be something like
+	* **C:\xampp\htdocs\OfficeAddIns\ExcelAddIns** for all the Excel Add-ins.
+		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\FirstAddIn
+		* C:\xampp\htdocs\OfficeAddIns\ExcelAddIns\SecondAddIn
+		* ...
+ 
+	* **C:\xampp\htdocs\OfficeAddIns\WordAddIns** for all the Word Add-ins.
+		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\FirstAddIn
+		* C:\xampp\htdocs\OfficeAddIns\WordAddIns\SecondAddIn
+		* ...
+
+
 
 
 ## Resources
