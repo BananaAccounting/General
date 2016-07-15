@@ -470,7 +470,7 @@ Function isProcessRunningWindows(process As String) As Boolean
     Set objList = GetObject("winmgmts:") _
         .ExecQuery("select * from win32_process where name='" & process & "'")
 
-    If objList.Count > 0 Then
+    If objList.count > 0 Then
         isProcessRunningWindows = True
     Else
         isProcessRunningWindows = False
@@ -490,10 +490,36 @@ End Function
 Private Function BHttpQueryMac(fileName As String, url As String, query As String) As String
 
     BHttpQueryMac = ""
+
+    ' we do not want to repeat the same error
+    If (lastRequestNumber = requestNumber And errorCount > MAXERROR) Then
+        Exit Function
+    End If
+    lastRequestNumber = requestNumber
+    If Len(fileName) = 0 Then
+        Exit Function
+    End If
+
     Dim myUrl As String
     Dim oHttp As String
 
-    myUrl = "http://localhost:8081" & "/v1/doc/" & fileName & "/" & url & "?" & query
+    Dim BananaHostName As String
+    'retrieve optiona hostName
+    On Error Resume Next
+    BananaHostName = Range("BananaHostName").value
+    If Len(BananaHostName) = 0 Then
+        BananaHostName = "localhost:8081"
+    End If
+
+    myUrl = "http://" & BananaHostName & "/v1/doc/" & fileName & "/" & url & "?" & query
+
+    ' save last query for debug purpose
+    Dim i As Integer
+    For i = 0 To (MAXLASTQUERY - 1)
+        lastQuery(i) = lastQuery(i + 1)
+    Next i
+    lastQuery(MAXLASTQUERY) = myUrl
+
     oHttp = HTTPGet(myUrl, query)
 
     If Len(oHttp) > 0 Then
@@ -544,4 +570,6 @@ Function HTTPGet(sUrl As String, sQuery As String) As String
     HTTPGet = sResult
 
 End Function
+
+
 
