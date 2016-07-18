@@ -27,7 +27,8 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 
 [Tutorial2.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
  
+## Tutorial javascript codes
+[tutorial1.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial1.js) contains all the javascript codes used for the [Tutorial1.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true).
 
-
-
+[tutorial2.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial2.js) contains all the javascript codes used for the [Tutorial2.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true).
 
