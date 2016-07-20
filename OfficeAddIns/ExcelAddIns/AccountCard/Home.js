@@ -49,7 +49,7 @@
         $('#ListBox').empty();
 
         //Get the content of the url
-        var jsonFilenamesObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
+        var jsonFilenamesObj = JSON.parse(Get("docs"));
         var len = jsonFilenamesObj.length;
 
 
@@ -81,8 +81,9 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
+        var bananaLocalhost = "http://localhost:8081/v1/";
         var Httpreq = new XMLHttpRequest();
-        Httpreq.open("GET",yourUrl,false);
+        Httpreq.open("GET",bananaLocalhost + yourUrl,false);
         Httpreq.send(null);
         return Httpreq.responseText;
     }
@@ -101,7 +102,7 @@
         var bananaFileName = $("#ListBox").val();
 
         //Get the content of the url
-        var jsonAccountsObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName +"/accounts"));
+        var jsonAccountsObj = JSON.parse(Get("doc/" + bananaFileName +"/accounts"));
         var len = jsonAccountsObj.length;
 
         //Add the content to the listbox
@@ -186,23 +187,23 @@
             else if (period === "S2") {period = "S2";}
 
             //Function call to get the url content 
-            var accountCardObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName + "/accountcard/" + res[0] + "?period=" + period + "&format=json"));
+            var accountCardObj = JSON.parse(Get("doc/" + bananaFileName + "/accountcard/" + res[0] + "?period=" + period + "&format=json"));
         }
         else if (period === "All") 
         {
             //Function call to get the url content 
-            var accountCardObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName + "/accountcard/" + res[0] + "?format=json"));
+            var accountCardObj = JSON.parse(Get("doc/" + bananaFileName + "/accountcard/" + res[0] + "?format=json"));
         }
         else if (period === "YTD")
         {
             //Get the opening date
-            var jsonOpeningDateObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/OpeningDate");
+            var jsonOpeningDateObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/OpeningDate");
 
             //Get the present date
             var date = formatDate(new Date());
 
             //Function call to get the url content 
-            var accountCardObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName + "/accountcard/" + res[0] + "?period=" + jsonOpeningDateObj + "/" + date + "&format=json"));
+            var accountCardObj = JSON.parse(Get("doc/" + bananaFileName + "/accountcard/" + res[0] + "?period=" + jsonOpeningDateObj + "/" + date + "&format=json"));
         }
         
         var len = accountCardObj.length;

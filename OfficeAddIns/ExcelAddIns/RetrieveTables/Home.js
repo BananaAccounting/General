@@ -45,7 +45,7 @@
         //Empty the list to avoid duplicates
         $('#ListBox').empty();
 
-        var jsonFilenameObj = JSON.parse(Get("http://localhost:8081/v1/docs"));
+        var jsonFilenameObj = JSON.parse(Get("docs"));
         var len = jsonFilenameObj.length;
 
         //If Banana web server is running and there is one or more accounting file retrieved into the list:
@@ -72,8 +72,9 @@
     //Function that take the content from an url
     function Get(yourUrl) 
     {
+        var bananaLocalhost = "http://localhost:8081/v1/";
         var Httpreq = new XMLHttpRequest();
-        Httpreq.open("GET",yourUrl,false);
+        Httpreq.open("GET",bananaLocalhost + yourUrl,false);
         Httpreq.send();
         return Httpreq.responseText;
     }
@@ -140,12 +141,12 @@
             activeSheet.getRange("C1").values = bananaFileName;
 
             //DateLastSaved
-            var jsonDateLastSavedObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/Base/DateLastSaved");
+            var jsonDateLastSavedObj = Get("doc/" + bananaFileName + "/info/Base/DateLastSaved");
             activeSheet.getRange("B2").values = "Date last saved";
             activeSheet.getRange("C2").values = jsonDateLastSavedObj;
 
             //Language
-            var jsonLanguageObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/Base/Language");
+            var jsonLanguageObj = Get("doc/" + bananaFileName + "/info/Base/Language");
             activeSheet.getRange("B3").values = "Language";
             activeSheet.getRange("C3").values = jsonLanguageObj;
 
@@ -156,25 +157,25 @@
             activeSheet.getRange("A5").format.font.bold = true;
     
             //HeaderLeft
-            var jsonHeaderLeftObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/Base/HeaderLeft");
+            var jsonHeaderLeftObj = Get("doc/" + bananaFileName + "/info/Base/HeaderLeft");
             activeSheet.getRange("B5").values = 'HeaderLeft';
             activeSheet.getRange("C5").values = jsonHeaderLeftObj;
            
             //HeaderRight
-            var jsonHeaderRightObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/Base/HeaderRight");
+            var jsonHeaderRightObj = Get("doc/" + bananaFileName + "/info/Base/HeaderRight");
             activeSheet.getRange("B6").values = 'HeaderRight';
             activeSheet.getRange("C6").values = jsonHeaderRightObj;         
 
             //Dates
-            var jsonOpeningDateObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/OpeningDate"); 
-            var jsonClosureDateObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/ClosureDate");
+            var jsonOpeningDateObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/OpeningDate"); 
+            var jsonClosureDateObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/ClosureDate");
             activeSheet.getRange("B7").values = 'Opening date';
             activeSheet.getRange("B8").values = 'Closure date';
             activeSheet.getRange("C7").values = jsonOpeningDateObj;
             activeSheet.getRange("C8").values = jsonClosureDateObj;
 
             //Currency
-            var jsonCurrencyObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/BasicCurrency");
+            var jsonCurrencyObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/BasicCurrency");
             activeSheet.getRange("B9").values = 'Basic currency';
             activeSheet.getRange("C9").values = jsonCurrencyObj;
 
@@ -184,17 +185,17 @@
             */
             activeSheet.getRange("A11").values = "Address";
             activeSheet.getRange("A11").format.font.bold = true;
-            var jsonCompanyObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Company");
-            var jsonNameObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Name");
-            var jsonFamilyNameObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/FamilyName");
-            var jsonAddress1Obj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Address1");
-            var jsonZipObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Zip");
-            var jsonCityObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/City");
-            var jsonStateObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/State");
-            var jsonCountryObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Country");
-            var jsonWebObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Web");
-            var jsonEmailObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Email");
-            var jsonPhoneObj = Get("http://localhost:8081/v1/doc/" + bananaFileName + "/info/AccountingDataBase/Phone");
+            var jsonCompanyObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Company");
+            var jsonNameObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Name");
+            var jsonFamilyNameObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/FamilyName");
+            var jsonAddress1Obj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Address1");
+            var jsonZipObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Zip");
+            var jsonCityObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/City");
+            var jsonStateObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/State");
+            var jsonCountryObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Country");
+            var jsonWebObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Web");
+            var jsonEmailObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Email");
+            var jsonPhoneObj = Get("doc/" + bananaFileName + "/info/AccountingDataBase/Phone");
             activeSheet.getRange("B11").values = 'Company';
             activeSheet.getRange("C11").values = jsonCompanyObj;
             activeSheet.getRange("B12").values = 'Name';
@@ -228,7 +229,7 @@
 
         activeSheet.name = $("#select-service").val();
 
-        var jsonAccountsObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName +"/table/Accounts?format=json"));
+        var jsonAccountsObj = JSON.parse(Get("doc/" + bananaFileName +"/table/Accounts?format=json"));
         var len = jsonAccountsObj.length;
 
         //Run the batched commands
@@ -275,7 +276,7 @@
 
         activeSheet.name = $("#select-service").val();
 
-        var jsonJournalObj = JSON.parse(Get("http://localhost:8081/v1/doc/" + bananaFileName +"/journal?format=json"));
+        var jsonJournalObj = JSON.parse(Get("doc/" + bananaFileName +"/journal?format=json"));
         var len = jsonJournalObj.length;
 
         //Run the batched commands
