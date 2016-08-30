@@ -42,11 +42,13 @@ Dim errorCount As Integer
 
 
 
-'Function used in execShell() function (only for mac osx)
-Private Declare Function popen Lib "libc.dylib" (ByVal command As String, ByVal mode As String) As Long
-Private Declare Function pclose Lib "libc.dylib" (ByVal file As Long) As Long
-Private Declare Function fread Lib "libc.dylib" (ByVal outStr As String, ByVal size As Long, ByVal items As Long, ByVal stream As Long) As Long
-Private Declare Function feof Lib "libc.dylib" (ByVal file As Long) As Long
+#If Mac Then
+    'Function used in execShell() function (only for mac osx)
+    Private Declare Function popen Lib "libc.dylib" (ByVal command As String, ByVal mode As String) As Long
+    Private Declare Function pclose Lib "libc.dylib" (ByVal file As Long) As Long
+    Private Declare Function fread Lib "libc.dylib" (ByVal outStr As String, ByVal size As Long, ByVal items As Long, ByVal stream As Long) As Long
+    Private Declare Function feof Lib "libc.dylib" (ByVal file As Long) As Long
+#End If
 
 
 
