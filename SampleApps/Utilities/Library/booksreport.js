@@ -21,8 +21,8 @@ function exec(string) {
     parametri.soloUnaRiga = false;
     
     //Controllo che esista la tabella contatti
-    var items = Banana.document.table("Items");
-    if (items === "undefined") {
+    var itemsTable = Banana.document.table("Items");
+    if (itemsTable === "undefined") {
         return;
     }
     
@@ -35,8 +35,7 @@ function exec(string) {
     
 
     //Righe indirizzi
-    var adressesRows;
-    itemsRows = items.findRows(function (row) { return (!row.isEmpty) });
+    itemsRows = itemsTable.findRows(function (row) { return (!row.isEmpty) });
 
 	
     itemsRows = itemsRows.sort(function (a, b) { return sortByCategory(a, b) });
@@ -93,7 +92,9 @@ function exec(string) {
 		AddText(currentRow, "Section", cell, "");
 		AddText(currentRow, "Location", cell, "");
 		AddDate(currentRow, "DateEntry", cell, "");
-
+		/* Eventually ask user if he wants to print other columns */
+		
+			
         text = currentRow.value("RowId");
         cellReport = rowReport.addCell(text, "");
 		
@@ -116,6 +117,7 @@ function AddText(currentRow, column, report, style, first)
 	//Banana.console.log(column);
 	var text = currentRow.value(column);
 	if (text && text.length > 0) {
+		// if first don't add separator
 		if (first) {
 			report.addText(text, style);
 		}
