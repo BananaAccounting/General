@@ -7,7 +7,7 @@
 // @description = Book Report
 // @task = app.command
 // @doctype = 400.140.*
-// @docproperties = 
+// @docproperties = library
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
