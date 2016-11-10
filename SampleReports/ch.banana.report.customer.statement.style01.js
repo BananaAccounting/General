@@ -12,42 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.report.reminder.style01.js
+// @id = ch.banana.report.customer.statement.style01.js
 // @api = 1.0
-// @pubdate = 2016-05-06
+// @pubdate = 2016-10-06
 // @publisher = Banana.ch SA
-// @description = Payment reminder
-// @description.it = Richiamo di pagamento 
-// @description.de = Zahlungserinnerung
-// @description.fr = Rappel de paiement 
-// @description.en = Payment reminder
-// @task = report.reminder
+// @description = Customer Statement
+// @description.it = Estratto cliente 
+// @description.de = Kundenauszug
+// @description.fr = Customer statement
+// @description.en = Customer statement
+// @task = report.customer.statement
 
 var rowNumber = 0;
 var repTableObj = "";
 var pageNr = 1;
 
 /*Update script's parameters*/
-function changeSettings(composition) {
+function settingsDialog() {
+   var param = initParam();
+   var savedParam = Banana.document.scriptReadSettings();
+   if (savedParam.length > 0) {
+      param = JSON.parse(savedParam);
+   }   
+   var lang = Banana.document.locale;
+   if (lang.length>2)
+      lang = lang.substr(0,2);
+   var texts = setTexts(lang);
 
-  var param = initParam();
-  var savedParam = Banana.document.scriptReadSettings();
-  if (savedParam.length > 0) {
-    param = JSON.parse(savedParam);
-  }   
-  param = verifyParam(param);
-  var lang = Banana.document.locale;
-  if (lang.length>2) {
-    lang = lang.substr(0,2);
-  }
-  var texts = setTexts(lang);
-  
-  param.print_header = Banana.Ui.getInt('Settings', texts.param_print_header, param.print_header);
-  if (param.print_header === undefined)
-    return;
-  
-  var paramToString = JSON.stringify(param);
-  var value = Banana.document.scriptSaveSettings(paramToString);
+   param.print_header = Banana.Ui.getInt('Settings', texts.param_print_header, param.print_header);
+   if (param.print_header === undefined)
+      return;
+
+   var paramToString = JSON.stringify(param);
+   var value = Banana.document.scriptSaveSettings(paramToString);
 }
 
 function initParam() {
@@ -81,39 +78,39 @@ function verifyParam(param) {
    return param;
 }
 
-function printReminder(jsonReminder, repDocObj, repStyleObj) {
+function printDocument(jsonStatement, repDocObj, repStyleObj) {
   var param = initParam();
   var savedParam = Banana.document.scriptReadSettings();
   if (savedParam.length > 0) {
     param = JSON.parse(savedParam);
+    param = verifyParam(param);
   }
-  if (!verifyParam(param)) {
-  }
-  printReminderBase(jsonReminder, repDocObj, repStyleObj, param);
+  printInvoiceStatement(jsonStatement, repDocObj, repStyleObj, param);
 }
 
-function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
-
-  // jsonReminder can be a json string or a js object
-  var reminderObj = null;
-  if (typeof(jsonReminder) === 'object') {
-    reminderObj = jsonReminder;
-  } else if (typeof(jsonReminder) === 'string') {
-    reminderObj = JSON.parse(jsonReminder);
+function printInvoiceStatement(jsonStatement, repDocObj, repStyleObj, param) {
+  
+  //jsonStatement can be a json string or a js object
+  var statementObj = null;
+  if (typeof(jsonStatement) === 'object') {
+    statementObj = jsonStatement;
+  } else if (typeof(jsonStatement) === 'string') {
+    statementObj = JSON.parse(jsonStatement)
   }
 
-  // Reminder texts which need translation
+  // Statement texts which need translation
   var langDoc = '';
-  if (reminderObj.customer_info.lang )
-    langDoc = reminderObj.customer_info.lang;
+  if (statementObj.customer_info.lang )
+    langDoc = statementObj.customer_info.lang;
   if (langDoc.length <= 0)
-    langDoc = reminderObj.document_info.locale;
+    langDoc = statementObj.document_info.locale;
   var texts = setTexts(langDoc);
 
-  // Reminder document
+  // Document
   var reportObj = Banana.Report;
+  
   if (!repDocObj) {
-    repDocObj = reportObj.newReport(texts.invoice + ": " + reminderObj.document_info.number);
+    repDocObj = reportObj.newReport(texts.invoice + ": " + statementObj.document_info.number);
   } else {
     var pageBreak = repDocObj.addPageBreak();
     pageBreak.addClass("pageReset");
@@ -124,29 +121,28 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
     1. HEADER
   ***********/
   if (param.print_header) {
-    //repDocObj.addImage("documents:logo", "logoStyle");
 
     var tab = repDocObj.addTable("header_table");
     var col1 = tab.addColumn("col1");
     
-    var tableRow = tab.addRow();
+    tableRow = tab.addRow();
     var business_name = '';
-    if (reminderObj.supplier_info.business_name) {
-      business_name = reminderObj.supplier_info.business_name;
+    if (statementObj.supplier_info.business_name) {
+      business_name = statementObj.supplier_info.business_name;
     }
     if (business_name.length<=0) {
-      if (reminderObj.supplier_info.first_name) {
-        business_name = reminderObj.supplier_info.first_name + " ";
+      if (statementObj.supplier_info.first_name) {
+        business_name = statementObj.supplier_info.first_name + " ";
       }
-      if (reminderObj.supplier_info.last_name) {
-        business_name += reminderObj.supplier_info.last_name;
+      if (statementObj.supplier_info.last_name) {
+        business_name += statementObj.supplier_info.last_name;
       }
     }
     tableRow.addCell(business_name.toUpperCase(), "logo left bold");
     
     tableRow = tab.addRow();
     var cell = tableRow.addCell("");
-    var supplierLines = getInvoiceSupplier(reminderObj.supplier_info).split('\n');
+    var supplierLines = getInvoiceSupplier(statementObj.supplier_info).split('\n');
     for (var i=0; i < supplierLines.length; i++) {
       cell.addParagraph(supplierLines[i], "headerAddress");
     }
@@ -154,7 +150,7 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
 
 
   /**********************
-    3. ADDRESSES
+    3. DETAILS & ADDRESS
   **********************/
   var addressTable = repDocObj.addTable("address_table");
   var addressCol1 = addressTable.addColumn("addressCol1");
@@ -163,24 +159,24 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
   tableRow = addressTable.addRow();
   
   var cell3 = tableRow.addCell("", "", 1);
-  cell3.addParagraph(texts.date + ": " + Banana.Converter.toLocaleDateFormat(reminderObj.document_info.date));  
-  cell3.addParagraph(texts.customer + ": " + reminderObj.customer_info.number);
+  cell3.addParagraph(texts.date + ": " + Banana.Converter.toLocaleDateFormat(statementObj.document_info.date));  
+  cell3.addParagraph(texts.customer + ": " + statementObj.customer_info.number);
   cell3.addParagraph(texts.page + ": " + pageNr);
 
   var cell5 = tableRow.addCell("","",1); 
-  var addressLines = getReminderAddress(reminderObj.customer_info).split('\n');
+  var addressLines = getInvoiceAddress(statementObj.customer_info).split('\n');
   for (var i=0; i < addressLines.length; i++) {
     cell5.addParagraph(addressLines[i], "");
   }
-
+  
 
  /***************
     4. TABLE ITEMS
   ***************/
   var titleTable = repDocObj.addTable("title_table");
   tableRow = titleTable.addRow();
-  tableRow.addCell(texts.reminder, "bold title", 1);
-
+  tableRow.addCell(texts.statement, "bold title", 1);
+  
 
  /***************
     4. TABLE ITEMS
@@ -193,8 +189,11 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
   var repTableCol5 = repTableObj.addColumn("repTableCol5");
   var repTableCol6 = repTableObj.addColumn("repTableCol6");
   var repTableCol7 = repTableObj.addColumn("repTableCol7");
+  var repTableCol8 = repTableObj.addColumn("repTableCol8");
+  var repTableCol9 = repTableObj.addColumn("repTableCol9");
+  var repTableCol10 = repTableObj.addColumn("repTableCol10");
 
-  rowNumber = checkFileLength(reminderObj, repDocObj, param, texts, rowNumber);
+  rowNumber = checkFileLength(statementObj, repDocObj, param, texts, rowNumber);
   var dd = repTableObj.getHeader().addRow();
   dd.addCell(texts.invoice_no, "items_table_header center", 1);
   dd.addCell(texts.invoice_date, "items_table_header center", 1);
@@ -202,13 +201,17 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
   dd.addCell(texts.invoice_credit, "items_table_header center", 1);
   dd.addCell(texts.invoice_balance, "items_table_header center", 1);
   dd.addCell(texts.invoice_currency, "items_table_header center", 1);
-  dd.addCell(texts.invoice_status, "items_table_header center", 1);
+  dd.addCell(texts.invoice_payment_date, "items_table_header center", 1);
+  dd.addCell(texts.invoice_due_date, "items_table_header center", 1);
+  dd.addCell(texts.invoice_due_days, "items_table_header center", 1);
+  dd.addCell(texts.invoice_last_reminder, "items_table_header center", 1);
+
 
   //ITEMS
   var countRows = 0;
-  for (var i = 0; i < reminderObj.items.length; i++) 
-  {
-    var item = reminderObj.items[i];
+  for (var i = 0; i < statementObj.items.length; i++) 
+  { 
+    var item = statementObj.items[i];
 
     var classRow = "item_row";
     if (item.item_type && item.item_type.indexOf("total") === 0) {
@@ -217,10 +220,10 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
 
 
     var classTotal = "";
-    if (i == reminderObj.items.length-1) {
+    if (i == statementObj.items.length-1) {
       classTotal = " bold total";
 
-      rowNumber = checkFileLength(reminderObj, repDocObj, param, texts, rowNumber);
+      rowNumber = checkFileLength(statementObj, repDocObj, param, texts, rowNumber);
       tableRow = repTableObj.addRow();
       tableRow.addCell("", "", 1);
       tableRow.addCell("", "border-left", 1);
@@ -229,32 +232,44 @@ function printReminderBase(jsonReminder, repDocObj, repStyleObj, param) {
       tableRow.addCell("", "border-left", 1);
       tableRow.addCell("", "border-left", 1);
       tableRow.addCell("", "border-left", 1);
+      tableRow.addCell("", "border-left", 1);
+      tableRow.addCell("", "border-left", 1);
+      tableRow.addCell("", "border-left", 1);
     }
 
-    rowNumber = checkFileLength(reminderObj, repDocObj, param, texts, rowNumber);
+    rowNumber = checkFileLength(statementObj, repDocObj, param, texts, rowNumber);
     tableRow = repTableObj.addRow(classRow);
-
-    tableRow.addCell(item.number, "center padding-left padding-right" + classTotal, 1);
+    
+    tableRow.addCell(item.number, "padding-left padding-right" + classTotal, 1);
     tableRow.addCell(Banana.Converter.toLocaleDateFormat(item.date), "padding-left padding-right border-left" + classTotal, 1);
-    tableRow.addCell(getFormattedAmount(reminderObj, item.debit), "padding-left padding-right border-left amount" + classTotal, 1);
-    tableRow.addCell(getFormattedAmount(reminderObj, item.credit), "padding-left padding-right border-left amount" + classTotal, 1);
-    tableRow.addCell(getFormattedAmount(reminderObj, item.balance), "padding-left padding-right border-left amount" + classTotal, 1);
-    tableRow.addCell(item.currency, "center padding-left padding-right border-left" + classTotal, 1);
-    tableRow.addCell(item.status, "center padding-left padding-right border-left" + classTotal, 1);
+    tableRow.addCell(getFormattedAmount(statementObj, item.debit), "padding-left padding-right border-left amount" + classTotal, 1);
+    tableRow.addCell(getFormattedAmount(statementObj, item.credit), "padding-left padding-right border-left amount" + classTotal, 1);
+    tableRow.addCell(getFormattedAmount(statementObj, item.balance), "padding-left padding-right border-left amount" + classTotal, 1);
+    tableRow.addCell(item.currency, "padding-left padding-right border-left center" + classTotal, 1);
+    tableRow.addCell(Banana.Converter.toLocaleDateFormat(item.payment_date), "padding-left padding-right border-left" + classTotal, 1);
+    tableRow.addCell(Banana.Converter.toLocaleDateFormat(item.due_date), "padding-left padding-right border-left" + classTotal, 1);
+    tableRow.addCell(item.due_days, "padding-left padding-right border-left center" + classTotal, 1);
+
+    var lastReminderDate = Banana.Converter.toLocaleDateFormat(item.last_reminder_date);
+    if (lastReminderDate.length > 0) {
+        lastReminderDate = lastReminderDate + " (" + item.last_reminder + ".)";
+    }
+    tableRow.addCell(lastReminderDate, "padding-left padding-right border-left" + classTotal, 1);
+  
   }
 
-  //Set reminder style
-	setReminderStyle(reportObj, repStyleObj, param);
-
-}
-
-function getFormattedAmount(reminder, value) {
-
-    return Banana.Converter.toLocaleNumberFormat(value, reminder.document_info.decimals_amounts, true);
+  //Set invoice style
+  setInvoiceStyle(reportObj, repStyleObj, param);
 }
 
 
-function getReminderAddress(invoiceAddress) {
+function getFormattedAmount(statement, value) {
+
+    return Banana.Converter.toLocaleNumberFormat(value, statement.document_info.decimals_amounts, true);
+}
+
+
+function getInvoiceAddress(invoiceAddress) {
   var address = "";
   if (invoiceAddress.courtesy) {
       address = invoiceAddress.courtesy + "\n";
@@ -320,25 +335,31 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (invoiceSupplier.phone) {
     supplierAddress = supplierAddress + "Tel: " + invoiceSupplier.phone + " - ";
   }
+  if (invoiceSupplier.fax) {
+    supplierAddress = supplierAddress + "Fax: " + invoiceSupplier.fax + " - ";
+  }
   if (invoiceSupplier.email) {
-    supplierAddress = supplierAddress + "Email: " + invoiceSupplier.email + " - ";
+    supplierAddress = supplierAddress + invoiceSupplier.email + " - ";
   }
   if (invoiceSupplier.web) {
-    supplierAddress = supplierAddress + "Web: " + invoiceSupplier.web;
+    supplierAddress = supplierAddress + invoiceSupplier.web;
+  }
+  if (invoiceSupplier.vat_number) {
+	supplierAddress = supplierAddress + "\n" + invoiceSupplier.vat_number;
   }
  return supplierAddress;
 }
 
 
-function checkFileLength(reminderObj, repDocObj, param, texts, rowNumber)
+function checkFileLength(statementObj, repDocObj, param, texts, rowNumber)
 {
   if (rowNumber >= 37) 
   {
     repDocObj.addPageBreak();
     pageNr++;
 
-    printStatementDetails(reminderObj, repDocObj, param, texts, rowNumber);
-    printItemsHeader(reminderObj, repDocObj, param, texts, rowNumber);
+    printStatementDetails(statementObj, repDocObj, param, texts, rowNumber);
+    printItemsHeader(statementObj, repDocObj, param, texts, rowNumber);
 
     return 0;
   }
@@ -348,19 +369,20 @@ function checkFileLength(reminderObj, repDocObj, param, texts, rowNumber)
 }
 
 
-function printStatementDetails(reminderObj, repDocObj, param, texts, rowNumber) {
+function printStatementDetails(statementObj, repDocObj, param, texts, rowNumber) {
   var addressTable = repDocObj.addTable("address_table_row0");
   var addressCol1 = addressTable.addColumn("addressCol1R0");
+  var addressCol2 = addressTable.addColumn("addressCol2R0")
 
   tableRow = addressTable.addRow();
   var cell1 = tableRow.addCell("", "", 1);
-  cell1.addParagraph(texts.date + ": " + Banana.Converter.toLocaleDateFormat(reminderObj.document_info.date), "");  
-  cell1.addParagraph(texts.customer + ": " + reminderObj.customer_info.number, "");
-  cell1.addParagraph(texts.page + ": " + pageNr, "");
+  cell1.addParagraph(texts.date + ": " + Banana.Converter.toLocaleDateFormat(statementObj.document_info.date), "");  
+  cell1.addParagraph(texts.customer + ": " + statementObj.customer_info.number);
+  cell1.addParagraph(texts.page + ": " + pageNr);
 }
 
 
-function printItemsHeader(reminderObj, repDocObj, param, texts, rowNumber) {
+function printItemsHeader(statementObj, repDocObj, param, texts, rowNumber) {
   repTableObj = repDocObj.addTable("doc_table_row0");
   var repTableCol1 = repTableObj.addColumn("repTableCol1");
   var repTableCol2 = repTableObj.addColumn("repTableCol2");
@@ -369,6 +391,9 @@ function printItemsHeader(reminderObj, repDocObj, param, texts, rowNumber) {
   var repTableCol5 = repTableObj.addColumn("repTableCol5");
   var repTableCol6 = repTableObj.addColumn("repTableCol6");
   var repTableCol7 = repTableObj.addColumn("repTableCol7");
+  var repTableCol8 = repTableObj.addColumn("repTableCol8");
+  var repTableCol9 = repTableObj.addColumn("repTableCol9");
+  var repTableCol10 = repTableObj.addColumn("repTableCol10");
 
   var dd = repTableObj.getHeader().addRow();
   dd.addCell(texts.invoice_no, "items_table_header center", 1);
@@ -377,14 +402,17 @@ function printItemsHeader(reminderObj, repDocObj, param, texts, rowNumber) {
   dd.addCell(texts.invoice_credit, "items_table_header center", 1);
   dd.addCell(texts.invoice_balance, "items_table_header center", 1);
   dd.addCell(texts.invoice_currency, "items_table_header center", 1);
-  dd.addCell(texts.invoice_status, "items_table_header center", 1);
+  dd.addCell(texts.invoice_payment_date, "items_table_header center", 1);
+  dd.addCell(texts.invoice_due_date, "items_table_header center", 1);
+  dd.addCell(texts.invoice_due_days, "items_table_header center", 1);
+  dd.addCell(texts.invoice_last_reminder, "items_table_header center", 1);
 }
 
 
 //====================================================================//
 // STYLES
 //====================================================================//
-function setReminderStyle(reportObj, repStyleObj, param) {
+function setInvoiceStyle(reportObj, repStyleObj, param) {
     
     if (!repStyleObj) {
         repStyleObj = reportObj.newStyleSheet();
@@ -396,7 +424,7 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     }
 
     if (!param.color_1) {
-        param.color_1 = "#ed1c24";
+        param.color_1 = "#005392";
     }
 
     if (!param.color_2) {
@@ -418,83 +446,58 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     //====================================================================//
     // GENERAL
     //====================================================================//
-
-    //Set page layout
-    var pageStyle = repStyleObj.addStyle("@page");
-    pageStyle.setAttribute("margin", "0mm 0mm 0mm 0mm");
-
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
     repStyleObj.addStyle("body", "font-size: 12pt; font-family:" + param.font_family);
-    repStyleObj.addStyle(".headerAddress", "font-size:11pt;text-align:right;");
+    repStyleObj.addStyle(".logo", "font-size: 24pt; color:" + param.color_1);
+    repStyleObj.addStyle(".headerAddress", "font-size:9pt");
     repStyleObj.addStyle(".amount", "text-align:right");
     repStyleObj.addStyle(".subtotal_cell", "font-weight:bold;");
     repStyleObj.addStyle(".center", "text-align:center");
     repStyleObj.addStyle(".left", "text-align:left");
     repStyleObj.addStyle(".bold", "font-weight: bold");
-    repStyleObj.addStyle(".title", "font-size:18pt;");
-    repStyleObj.addStyle(".items_table_header", "font-weight:bold; background-color:" + param.color_2);
+    repStyleObj.addStyle(".title", "font-size:18pt; color:" + param.color_1);
+    repStyleObj.addStyle(".items_table_header", "font-weight:bold; background-color:" + param.color_1 +"; color:" + param.color_3);
     repStyleObj.addStyle(".items_table_header td", "padding-top:5px; padding-bottom:5px");
-    repStyleObj.addStyle(".total", "font-size:14pt; ");
+    repStyleObj.addStyle(".total", "color: " + param.color_1);
     repStyleObj.addStyle(".evenRowsBackgroundColor", "background-color:" + param.color_2);    
-    repStyleObj.addStyle(".border-bottom", "border-bottom:2px solid " + param.color_2);
-    repStyleObj.addStyle(".border-top", "border-top:2px solid " + param.color_2);
-    repStyleObj.addStyle(".border-left", "border-left:thin solid " + param.color_2);
+    repStyleObj.addStyle(".border-bottom", "border-bottom:2px solid " + param.color_1);
+    repStyleObj.addStyle(".border-top", "border-top:2px solid " + param.color_1);
+    repStyleObj.addStyle(".border-left", "border-left:thin solid " + param.color_1);
     repStyleObj.addStyle(".padding-right", "padding-right:3px");
     repStyleObj.addStyle(".padding-left", "padding-left:3px");
     repStyleObj.addStyle(".padding-bottom", "padding-bottom:5px");
     repStyleObj.addStyle(".addressCol1","width:43%");
     repStyleObj.addStyle(".addressCol2","width:43%");
-    repStyleObj.addStyle(".addressCol1R0","width:100%");
+    repStyleObj.addStyle(".addressCol1R0","width:%");
+    repStyleObj.addStyle(".addressCol2R0","width:%");
 
-    repStyleObj.addStyle(".repTableCol1","width:10%");
-    repStyleObj.addStyle(".repTableCol2","width:11%");
-    repStyleObj.addStyle(".repTableCol3","width:12%");
-    repStyleObj.addStyle(".repTableCol4","width:12%");
-    repStyleObj.addStyle(".repTableCol5","width:12%");
-    repStyleObj.addStyle(".repTableCol6","width:7%");
-    repStyleObj.addStyle(".repTableCol7","width:10%");
+    repStyleObj.addStyle(".repTableCol1","width:10%"); //10
+    repStyleObj.addStyle(".repTableCol2","width:11%"); //11
+    repStyleObj.addStyle(".repTableCol3","width:12%"); //12
+    repStyleObj.addStyle(".repTableCol4","width:12%"); //12
+    repStyleObj.addStyle(".repTableCol5","width:12%"); //12
+    repStyleObj.addStyle(".repTableCol6","width:10%");   //-
+    repStyleObj.addStyle(".repTableCol7","width:11%"); //11
+    repStyleObj.addStyle(".repTableCol8","width:11%"); //11
+    repStyleObj.addStyle(".repTableCol9","width:7%");   //-
+    repStyleObj.addStyle(".repTableCol10","width:15%");//15
 
-    repStyleObj.addStyle(".summary_filename", "padding-top:10mm;padding-left:10mm;font-size:8pt;");
-    repStyleObj.addStyle(".summary_title", "padding-top:20mm; padding-left:10mm; font-size: 16pt; ");
-    repStyleObj.addStyle(".summary_title2", "padding-left:10mm; font-size: 11pt; ");
-    repStyleObj.addStyle(".summary_table_header", "font-weight:bold; background-color:" + param.color_2);
-    repStyleObj.addStyle(".summary_table_header td", "padding-top:2mm; padding-bottom:2mm;font-size:12pt;");
-    repStyleObj.addStyle(".summary_table_customer", "font-weight:bold; font-size:12pt; padding-top:2mm;padding-bottom:2mm;");
-    repStyleObj.addStyle(".summary_table_details td.detail_row", "");
-    repStyleObj.addStyle(".summary_table_details td.date", "padding-left:5mm;padding-right:10mm;");
-    repStyleObj.addStyle(".summary_table_details td.number", "padding-right:10mm");
-    repStyleObj.addStyle(".summary_table_details td.currency", "padding-right:10mm");
-    repStyleObj.addStyle(".summary_table_details td", "font-size:12pt;");
-    repStyleObj.addStyle(".summary_table_details tr.total td.amount", "border-top:1px solid black;padding-bottom:5px;font-weight:bold");
-    repStyleObj.addStyle(".summary_table_grandtotal td", "font-weight:bold");
-    repStyleObj.addStyle(".summary_table_grandtotal td.amount", "border-top:1px solid black; border-bottom:1px double black;");
-    repStyleObj.addStyle(".summary_table td.status", "padding-left:20px;");
-
-
-    //====================================================================//
-    // LOGO
-    //====================================================================//
-    var logoStyle = repStyleObj.addStyle(".logoStyle");
-    logoStyle.setAttribute("position", "absolute");
-    logoStyle.setAttribute("margin-top", "5mm");
-    logoStyle.setAttribute("margin-left", "16mm");
-    logoStyle.setAttribute("width", "120px");
 
     //====================================================================//
     // TABLES
     //====================================================================//
     var headerStyle = repStyleObj.addStyle(".header_table");
     headerStyle.setAttribute("position", "absolute");
-    headerStyle.setAttribute("margin-top", "7mm"); 
-    headerStyle.setAttribute("margin-left", "20mm");
-    headerStyle.setAttribute("margin-right", "16mm");
-    headerStyle.setAttribute("width", "100%");
+    headerStyle.setAttribute("margin-top", "10mm"); //106
+    headerStyle.setAttribute("margin-left", "20mm"); //20
+    headerStyle.setAttribute("margin-right", "4mm");
+    //headerStyle.setAttribute("width", "100%");
     //repStyleObj.addStyle("table.header_table td", "border: thin solid black");
 
 
     var infoStyle = repStyleObj.addStyle(".title_table");
     infoStyle.setAttribute("position", "absolute");
-    infoStyle.setAttribute("margin-top", "90mm");
+    infoStyle.setAttribute("margin-top", "95mm");
     infoStyle.setAttribute("margin-left", "22mm");
     infoStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.info_table td", "border: thin solid black");
@@ -520,8 +523,8 @@ function setReminderStyle(reportObj, repStyleObj, param) {
 
 
     var itemsStyle = repStyleObj.addStyle(".doc_table");
-    itemsStyle.setAttribute("margin-top", "105mm"); //106
-    itemsStyle.setAttribute("margin-left", "23mm"); //20
+    itemsStyle.setAttribute("margin-top", "120mm"); //106
+    itemsStyle.setAttribute("margin-left", "26mm"); //20
     itemsStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.doc_table td", "border: thin solid #6959CD;");
     itemsStyle.setAttribute("width", "100%");
@@ -533,75 +536,85 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     itemsStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.doc_table td", "border: thin solid #282828; padding: 3px;");
     itemsStyle.setAttribute("width", "100%");
-	
-    var summaryStyle = repStyleObj.addStyle(".summary_table");
-    summaryStyle.setAttribute("position", "relative");
-    summaryStyle.setAttribute("margin-top", "10mm");
-    summaryStyle.setAttribute("margin-left", "10mm");
-    summaryStyle.setAttribute("margin-right", "10mm");
-    summaryStyle.setAttribute("margin-bottom", "10mm");
-    summaryStyle.setAttribute("width", "100%");
-    //repStyleObj.addStyle("table.summary_table td", "border: thin solid black");
 
 }
+
 
 function setTexts(language) {
   var texts = {};
   if (language == 'it')
   {
-  texts.customer = 'No Cliente';
-  texts.date = 'Data';
-  texts.page = 'Pagina';
-  texts.invoice_no = 'No fattura';
-  texts.invoice_date = 'Data';
-  texts.invoice_debit = 'Importo';
-  texts.invoice_credit = 'Pagamenti';
-  texts.invoice_balance = 'Saldo';
-  texts.invoice_currency = 'Divisa';
-  texts.invoice_status = 'Situazione';
-  texts.reminder = 'Richiamo di pagamento';
+    texts.customer = 'No Cliente';
+    texts.date = 'Data';
+    texts.invoice_balance = 'Saldo';
+    texts.invoice_credit = 'Avere';
+    texts.invoice_currency = 'Divisa';
+    texts.invoice_date = 'Data';
+    texts.invoice_debit = 'Dare';
+    texts.invoice_due_date = 'Data scad.';
+    texts.invoice_due_days = 'Giorni scad.';
+    texts.invoice_last_reminder = 'Richiamo';
+    texts.invoice_no = 'No. fattura';
+    texts.invoice_payment_date = 'Data pag.';
+    texts.page = 'Pagina';
+    texts.total = 'Totale';
+    texts.statement = 'Estratto conto';
+    texts.param_print_header = 'Includi intestazione pagina (1=true, 0=false)';
   }
   else if (language == 'de')
   {
-  texts.customer = 'Kunde-Nr';
-  texts.date = 'Datum';
-  texts.page = 'Seite';
-  texts.invoice_no = 'Rechnung-Nr';
-  texts.invoice_date = 'Datum';
-  texts.invoice_debit = 'Soll';
-  texts.invoice_credit = 'Haben';
-  texts.invoice_balance = 'Saldo';
-  texts.invoice_currency = 'Währung';
-  texts.invoice_status = 'Status';
-  texts.reminder = 'Zahlungserinnerung';
+    texts.customer = 'Kunde-Nr';
+    texts.date = 'Datum';
+    texts.invoice_balance = 'Saldo';
+    texts.invoice_credit = 'Haben';
+    texts.invoice_currency = 'Währung';
+    texts.invoice_date = 'Datum';
+    texts.invoice_debit = 'Soll';
+    texts.invoice_due_date = 'Due date';
+    texts.invoice_due_days = 'Due days';
+    texts.invoice_last_reminder = 'Paym. Reminder';
+    texts.invoice_no = 'Rechnung-Nr.';
+    texts.invoice_payment_date = 'Data pag.';
+    texts.page = 'Seite';
+    texts.statement = 'Kontoauszug';
+    texts.param_print_header = 'Seitenüberschrift einschliessen (1=true, 0=false)';
   }
   else if (language == 'fr')
   {
-  texts.customer = 'No Client';
-  texts.date = 'Date';
-  texts.page = 'Page';
-  texts.invoice_no = 'No facture';
-  texts.invoice_date = 'Date';
-  texts.invoice_debit = 'Débit';
-  texts.invoice_credit = 'Crédit';
-  texts.invoice_balance = 'Solde';
-  texts.invoice_currency = 'Devise';
-  texts.invoice_status = 'Situation';
-  texts.reminder = 'Rappel de paiement';
+    texts.customer = 'No Client';
+    texts.date = 'Date';
+    texts.invoice_balance = 'Solde';
+    texts.invoice_credit = 'Crédit';
+    texts.invoice_currency = 'Devise';
+    texts.invoice_date = 'Date';
+    texts.invoice_debit = 'Débit';
+    texts.invoice_due_date = 'Due date';
+    texts.invoice_due_days = 'Due days';
+    texts.invoice_last_reminder = 'Paym. Reminder';
+    texts.invoice_no = 'No. facture';
+    texts.invoice_payment_date = 'Data pag.';
+    texts.page = 'Page';
+    texts.statement = 'Extrait client';
+    texts.param_print_header = 'Inclure en-tête de page (1=true, 0=false)';
   }
   else
   {
-  texts.customer = 'Customer No';
-  texts.date = 'Date';
-  texts.page = 'Page';
-  texts.invoice_no = 'Invoice Nr';
-  texts.invoice_date = 'Date';
-  texts.invoice_debit = 'Debit';
-  texts.invoice_credit = 'Credit';
-  texts.invoice_balance = 'Balance';
-  texts.invoice_currency = 'Currency';
-  texts.invoice_status = 'Status';
-  texts.reminder = 'Payment reminder';
+    texts.customer = 'Customer No';
+    texts.date = 'Date';
+    texts.invoice_balance = 'Balance';
+    texts.invoice_credit = 'Credit';
+    texts.invoice_currency = 'Currency';
+    texts.invoice_date = 'Date';
+    texts.invoice_debit = 'Debit';
+    texts.invoice_due_date = 'Due date';
+    texts.invoice_due_days = 'Due days';
+    texts.invoice_last_reminder = 'Paym. Reminder';
+    texts.invoice_no = 'Invoice Nr.';
+    texts.invoice_payment_date = 'Data pag.';
+    texts.page = 'Page';
+    texts.total = 'Total';
+    texts.statement = 'Customer statement';
+    texts.param_print_header = 'Include page header (1=true, 0=false)';
   }
   return texts;
 }

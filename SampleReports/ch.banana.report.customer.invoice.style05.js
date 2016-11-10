@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.report.invoice.style06.js
+// @id = ch.banana.report.customer.invoice.style05.js
 // @api = 1.0
-// @pubdate = 2016-05-06
+// @pubdate = 2016-10-06
 // @publisher = Banana.ch SA
-// @description = Style 6: logo, address on the right, 1 color
-// @description.it = Stile 6: logo, indirizzo sulla destra, 1 colore
-// @description.de = Stil 6: Logo, Adresse rechts ausgedruckt, 1 Farbe
-// @description.fr = Style 6: logo, adresse à droite, 1 couleur
-// @description.en = Style 6: logo, address on the right, 1 color
-// @task = report.invoice
+// @description = Style 5: logo, address on the right, 1 colo
+// @description.it = Stile 5: logo, indirizzo sulla destra, 1 colore
+// @description.de = Stil 5: Logo, Adresse rechts ausgedruckt, 1 Farbe
+// @description.fr = Style 5: logo, adresse à droite, 1 couleur
+// @description.en = Style 5: logo, address on the right, 1 color
+// @task = report.customer.invoice
 
 var rowNumber = 0;
-var repTableObj = "";
 var pageNr = 1;
-var max_items_per_page = 26;
-var max_items_per_page_with_isr = 13;
+var repTableObj = "";
+var max_items_per_page = 31;
+var max_items_per_page_with_isr = 18;
 
 /*Update script's parameters*/
-function changeSettings(composition) {
+function settingsDialog() {
    var param = initParam();
    var savedParam = Banana.document.scriptReadSettings();
    if (savedParam.length > 0) {
@@ -50,7 +50,7 @@ function changeSettings(composition) {
    if (param.print_isr === undefined)
       return;
 
-   if (param.print_isr === 1) {
+  if (param.print_isr === 1) {
       param.isr_bank_name = Banana.Ui.getText('Settings', texts.param_isr_bank_name, param.isr_bank_name);
       if (param.isr_bank_name === undefined)
          return;
@@ -68,12 +68,12 @@ function changeSettings(composition) {
          return;
    }
 
-   param.payment_details_row_1 = Banana.Ui.getText('Settings', texts.param_payment_details_row_1, param.payment_details_row_1);
-   if (param.payment_details_row_1 === undefined)
+   param.personal_text_1 = Banana.Ui.getText('Settings', texts.param_personal_text_1, param.personal_text_1);
+   if (param.personal_text_1 === undefined)
       return;
 
-   param.payment_details_row_2 = Banana.Ui.getText('Settings', texts.param_payment_details_row_2, param.payment_details_row_2);
-   if (param.payment_details_row_2 === undefined)
+   param.personal_text_2 = Banana.Ui.getText('Settings', texts.param_personal_text_2, param.personal_text_2);
+   if (param.personal_text_2 === undefined)
       return;
 
    param.color_1 = Banana.Ui.getText('Settings', texts.param_color_1, param.color_1);
@@ -97,8 +97,8 @@ function initParam() {
    param.isr_account = '';
    param.isr_id = '';
    param.isr_on_new_page = false;
-   param.payment_details_row_1='';
-   param.payment_details_row_2='';
+   param.personal_text_1='';
+   param.personal_text_2='';
    param.font_family = '';
    param.color_1 = '';
    param.color_2 = '';
@@ -123,10 +123,10 @@ function verifyParam(param) {
      param.isr_id = '';
    if (!param.isr_on_new_page)
      param.isr_on_new_page = false;
-   if (!param.payment_details_row_1)
-     param.payment_details_row_1='';
-   if (!param.payment_details_row_2)
-     param.payment_details_row_2='';
+   if (!param.personal_text_1)
+     param.personal_text_1='';
+   if (!param.personal_text_2)
+     param.personal_text_2='';
    if (!param.font_family)
      param.font_family = '';
    if (!param.color_1)
@@ -153,20 +153,18 @@ function pvrInvoiceNumber(jsonInvoice) {
 }
 
 
-function printInvoice(jsonInvoice, repDocObj, repStyleObj) {
+function printDocument(jsonInvoice, repDocObj, repStyleObj) {
   var param = initParam();
   var savedParam = Banana.document.scriptReadSettings();
   if (savedParam.length > 0) {
     param = JSON.parse(savedParam);
+    param = verifyParam(param);
   }
-  if (!verifyParam(param)) {
-  }   
-  printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param);
+  printInvoice(jsonInvoice, repDocObj, repStyleObj, param);
 }
 
-function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
-  
-  //jsonInvoice can be a json string or a js object
+function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
+  // jsonInvoice can be a json string or a js object
   var invoiceObj = null;
   if (typeof(jsonInvoice) === 'object') {
     invoiceObj = jsonInvoice;
@@ -186,8 +184,8 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
   var reportObj = Banana.Report;
 	
   if (!repDocObj) {
-    repDocObj = reportObj.newReport(texts.invoice + ": " + invoiceObj.document_info.number);
-  } else {
+		repDocObj = reportObj.newReport(getTitle(invoiceObj, texts) + " " + invoiceObj.document_info.number);
+	} else {
     var pageBreak = repDocObj.addPageBreak();
     pageBreak.addClass("pageReset");
   }
@@ -195,41 +193,33 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
 
   /***********
     1. HEADER
-  ***********/
-
+	***********/
   var tab = repDocObj.addTable("header_table");
   var col1 = tab.addColumn("col1");
   var col2 = tab.addColumn("col2");
   
+  tableRow = tab.addRow();
+
   if (param.print_header) {
     repDocObj.addImage("documents:logo", "logoStyle");
+
+    var cell1 = tableRow.addCell("", "");
+    var cell2 = tableRow.addCell("", "amount");
+    var supplierLines = getInvoiceSupplier(invoiceObj.supplier_info).split('\n');
+    for (var i=0; i < supplierLines.length; i++) {
+      cell2.addParagraph(supplierLines[i], "", 1);
+    }
+    cell2.addParagraph(getTitle(invoiceObj, texts), "bold");
   }
-
-  tableRow = tab.addRow();
-  var cell = tableRow.addCell("", "border-left", 1);
-  cell.addParagraph(texts.from, "bold");
-
-  var supplierLines = getInvoiceSupplier(invoiceObj.supplier_info).split('\n');
-  for (var i=0; i < supplierLines.length; i++) {
-    cell.addParagraph(supplierLines[i], "", 1);
+  else {
+    var cell1 = tableRow.addCell("", "");
+    var cell2 = tableRow.addCell("", "");
+    cell2.addParagraph(" ");
+    cell2.addParagraph(" ");
+    cell2.addParagraph(" ");
+    cell2.addParagraph(" ");
+    cell2.addParagraph(getTitle(invoiceObj, texts), "bold amount");
   }
-
-  var cell2 = tableRow.addCell("","border-left",1); 
-  cell2.addParagraph(texts.to, "bold");
-
-  var addressLines = getInvoiceAddress(invoiceObj.customer_info).split('\n');
-  for (var i=0; i < addressLines.length; i++) {
-    cell2.addParagraph(addressLines[i], "");
-  }
-
-
-  /**********************
-    2. TITLE
-  **********************/
-  var titleTable = repDocObj.addTable("title_table");
-  var titleCol1 = titleTable.addColumn("titleCol1");
-  tableRow = titleTable.addRow();
-  tableRow.addCell(texts.invoice.toUpperCase() + ": ", "title", 4).addText(invoiceObj.document_info.number, "colorText");
 
 
 
@@ -237,22 +227,49 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
     2. INVOICE TEXTS INFO
   **********************/
   var infoTable = repDocObj.addTable("info_table");
-  var infoCol1 = infoTable.addColumn("infoCol1");
-  var infoCol2 = infoTable.addColumn("infoCol2");
-  var infoCol3 = infoTable.addColumn("infoCol3");
-  var infoCol4 = infoTable.addColumn("infoCol4");
-  var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
+  var col1 = infoTable.addColumn("infoCol1");
+  var col2 = infoTable.addColumn("infoCol2");
+  var col3 = infoTable.addColumn("infoCol3");
 
   tableRow = infoTable.addRow();
-  tableRow.addCell(texts.date + ": ", "", 1).addText(invoiceDate, "colorText");
-  tableRow.addCell(texts.customer + ": ", "", 1).addText(invoiceObj.customer_info.number, "colorText");
-  tableRow.addCell(texts.total + ": ", "", 1).addText(invoiceObj.document_info.currency + " " + toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_to_pay), "colorText");
-  tableRow.addCell(texts.page + ": ", "amount", 1).addText(pageNr, "colorText");
+  tableRow.addCell(" ", "", 3);
+
+  tableRow = infoTable.addRow();
+  var cell1 = tableRow.addCell("","",1);
+  var cell2 = tableRow.addCell("", "bold", 1);
+  var cell3 = tableRow.addCell("", "", 1);
+
+  var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
+  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(texts.date + ":", "");
+  cell1.addParagraph(texts.customer + ":", "");
+  //Payment Terms
+  var payment_terms_label = texts.payment_terms_label;
+  var payment_terms = '';
+  if (invoiceObj.billing_info.payment_term) {
+    payment_terms = invoiceObj.billing_info.payment_term;
+  }
+  else if (invoiceObj.payment_info.due_date) {
+	payment_terms_label = texts.payment_due_date_label
+    payment_terms = Banana.Converter.toLocaleDateFormat(invoiceObj.payment_info.due_date);
+  }
+  cell1.addParagraph(payment_terms_label + ":", "");
+  cell1.addParagraph(texts.page + ":", "");
+
+  cell2.addParagraph(invoiceObj.document_info.number, "");
+  cell2.addParagraph(invoiceDate, "");
+  cell2.addParagraph(invoiceObj.customer_info.number, "");
+  cell2.addParagraph(payment_terms, "");
+  cell2.addParagraph(pageNr, "");
+
+  var addressLines = getInvoiceAddress(invoiceObj.customer_info).split('\n');
+  for (var i=0; i < addressLines.length; i++) {
+    cell3.addParagraph(addressLines[i]);
+  }
 
 
-
- /***************
-    5. TABLE ITEMS
+  /***************
+    3. TABLE ITEMS
   ***************/
   repTableObj = repDocObj.addTable("doc_table");
   var repTableCol1 = repTableObj.addColumn("repTableCol1");
@@ -262,18 +279,17 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
 
   rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
   var dd = repTableObj.getHeader().addRow();
-  dd.addCell(texts.description, "bold border-left padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.qty, "bold border-left padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.unit_price, "bold border-left amount padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "bold border-left border-right amount padding-top padding-bottom", 1);
-  
+  dd.addCell(texts.description, "doc_table_header", 1);
+  dd.addCell(texts.qty, "doc_table_header", 1);
+  dd.addCell(texts.unit_price, "doc_table_header amount", 1);
+  dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "doc_table_header amount", 1);
+
 
   //ITEMS
-  var countRows = 0;
   for (var i = 0; i < invoiceObj.items.length; i++)
   {
     var item = invoiceObj.items[i];
-  
+
     var className = "item_cell";
     if (item.item_type && item.item_type.indexOf("total") === 0) {
       className = "subtotal_cell";
@@ -281,60 +297,54 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
     if (item.item_type && item.item_type.indexOf("note") === 0) {
       className = "note_cell";
     }
-
-	var classNameEvenRow = "";
-    if (i % 2 == 0) {
-	  classNameEvenRow = "evenRowsBackgroundColor";
-    }
 	
-	rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+    rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
     tableRow = repTableObj.addRow();
 
-    var descriptionCell = tableRow.addCell("", classNameEvenRow + " border-left " + className, 1);
+    var descriptionCell = tableRow.addCell("", "padding-left padding-right thin-border-top " + className, 1);
     descriptionCell.addParagraph(item.description);
     descriptionCell.addParagraph(item.description2);
 	if (className == "note_cell") {
-      tableRow.addCell("", classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell("", classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell("", classNameEvenRow + " amount border-left border-right " + className, 1);
+	  tableRow.addCell("", "padding-left padding-right thin-border-top " + className, 3);
 	}
 	else if (className == "subtotal_cell") {
-      tableRow.addCell("", classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell("", classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, item.total_amount_vat_exclusive), classNameEvenRow + " amount border-left border-right " + className, 1);
+      tableRow.addCell("", "amount padding-left padding-right thin-border-top " + className, 2);
+      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, item.total_amount_vat_exclusive), "amount padding-left padding-right thin-border-top " + className, 1);
 	}
 	else {
-      tableRow.addCell(Banana.Converter.toLocaleNumberFormat(item.quantity), classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell(Banana.Converter.toLocaleNumberFormat(item.unit_price.calculated_amount_vat_exclusive), classNameEvenRow + " amount border-left border-right " + className, 1);
-      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, item.total_amount_vat_exclusive), classNameEvenRow + " amount border-left border-right " + className, 1);
+      tableRow.addCell(Banana.Converter.toLocaleNumberFormat(item.quantity), "amount padding-left padding-right thin-border-top " + className, 1);
+      tableRow.addCell(Banana.Converter.toLocaleNumberFormat(item.unit_price.calculated_amount_vat_exclusive), "amount padding-left padding-right thin-border-top " + className, 1);
+      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, item.total_amount_vat_exclusive), "amount padding-left padding-right thin-border-top " + className, 1);
 	}
   }
 
+  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
   tableRow = repTableObj.addRow();
-  tableRow.addCell("", "", 1);
-  tableRow.addCell("", "", 1);
-  tableRow.addCell("", "border-left border-right", 1);
-  tableRow.addCell("", "border-left border-right", 1);
+  tableRow.addCell("", "border-bottom", 4);
+
+  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+  tableRow = repTableObj.addRow();
+  tableRow.addCell("", "", 4);
+
 
   //TOTAL NET
   if (invoiceObj.billing_info.total_vat_rates.length > 0)
   {
     rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-    tableRow = repTableObj.addRow();
-    tableRow.addCell(" ", "", 1)
-    tableRow.addCell(" ", "", 1)
-    tableRow.addCell(texts.totalnet, "border-left border-right", 1);
-    tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_amount_vat_exclusive), "border-left border-right amount", 1);
+    tableRow = repTableObj.addRow();   
+    tableRow.addCell(" ", "padding-left padding-right", 1)
+    tableRow.addCell(texts.totalnet, "padding-left padding-right", 1);
+    tableRow.addCell(" ", "padding-left padding-right", 1)
+    tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_amount_vat_exclusive), "amount padding-left padding-right", 1);
 
     for (var i = 0; i < invoiceObj.billing_info.total_vat_rates.length; i++) 
     {
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
       tableRow = repTableObj.addRow();
-      tableRow.addCell("", "", 1);
-      tableRow.addCell("", "", 1);
-      tableRow.addCell(texts.vat + " " + invoiceObj.billing_info.total_vat_rates[i].vat_rate + "%" 
-        + " (" + toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_vat_rates[i].total_amount_vat_exclusive) + ")", "border-left border-right", 1);
-      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_vat_rates[i].total_vat_amount), "amount vat_amount border-left border-right", 1);
+      tableRow.addCell("", "padding-left padding-right", 1);
+      tableRow.addCell(texts.vat + " " + invoiceObj.billing_info.total_vat_rates[i].vat_rate + "%", "padding-left padding-right", 1);
+      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_vat_rates[i].total_amount_vat_exclusive), "amount padding-left padding-right", 1);
+      tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_vat_rates[i].total_vat_amount), "amount padding-left padding-right", 1);
     }
   }
 
@@ -344,68 +354,40 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
   {
     rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
     tableRow = repTableObj.addRow();
-    tableRow.addCell(" ", "", 1);
-    tableRow.addCell(" ", "", 1);
-    tableRow.addCell(texts.rounding, "border-left border-right", 1);
-    tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_rounding_difference), "amount border-left border-right", 1);
+    tableRow.addCell(" ", "padding-left padding-right", 1);
+    tableRow.addCell(texts.rounding, "padding-left padding-right", 1);
+    tableRow.addCell(" ", "padding-left padding-right", 1)
+    tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_rounding_difference), "amount padding-left padding-right", 1);
   }
-
-
-  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-  tableRow = repTableObj.addRow();
-  tableRow.addCell("", "", 1);
-  tableRow.addCell("", "", 1);
-  tableRow.addCell("", "border-left border-right", 1);
-  tableRow.addCell("", "border-left border-right", 1);
-
-
-  //FINAL TOTAL
-  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-  tableRow = repTableObj.addRow();
-  tableRow.addCell("", "", 1);
-  tableRow.addCell(" ", "", 1);
-  tableRow.addCell(texts.total.toUpperCase() + " " + invoiceObj.document_info.currency, "bold border-left border-right", 1);
-  tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_to_pay), "bold amount border-left border-right colorText", 1);
 
   rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
   tableRow = repTableObj.addRow();
   tableRow.addCell("", "", 4);
 
 
+  //FINAL TOTAL
+  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+  tableRow = repTableObj.addRow();
+  tableRow.addCell("", "", 1)
+  tableRow.addCell(texts.total.toUpperCase() + " " + invoiceObj.document_info.currency, "total_cell", 1);
+  tableRow.addCell(" ", "total_cell", 1);
+  tableRow.addCell(toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_to_pay), "total_cell amount", 1);
 
-  //NOTES
+  rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+  tableRow = repTableObj.addRow();
+  tableRow.addCell("", "", 4);
+
+
+  //Notes
   for (var i = 0; i < invoiceObj.note.length; i++) 
   {
     if (invoiceObj.note[i].description) {
-      tableRow = repTableObj.addRow();
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-      tableRow.addCell(invoiceObj.note[i].description,"",4);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(invoiceObj.note[i].description, "", 4);
     }
   }
 
-  //Param payment details
-  if (param.payment_details_row_1 || param.payment_details_row_2) {
-      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-      tableRow = repTableObj.addRow();
-      tableRow.addCell("", "", 4);
-	  
-      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-      tableRow = repTableObj.addRow();
-      tableRow.addCell(param.payment_details_row_1, "", 4);
-
-      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-      tableRow = repTableObj.addRow();
-      tableRow.addCell(param.payment_details_row_2, "", 4);
-
-  }
-  
-  //Payment Terms
-  if (invoiceObj.billing_info.payment_term) {
-      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
-      tableRow = repTableObj.addRow();
-      tableRow.addCell(invoiceObj.billing_info.payment_term, "", 4);
-  }
-  
   //Greetings
   if (invoiceObj.document_info.greetings) {
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
@@ -413,6 +395,22 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
       tableRow.addCell(invoiceObj.document_info.greetings, "", 4);
   }
 
+  //Params personal_text_1/personal_text_2
+  if (param.personal_text_1 || param.personal_text_2) {
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell("", "", 4);
+
+  
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(param.personal_text_1, "", 4);
+
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(param.personal_text_2, "", 4);
+  }
+  
   // Pvr
   if (param.print_isr && invoiceObj.document_info.currency == "CHF") {
     
@@ -435,7 +433,7 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
     //pvr NOT (if possible) on new page
     else 
     {
-       //pvr on the page 1, after the items table
+      //pvr on the page 1, after the items table
       if (rowNumber <= max_items_per_page_with_isr && pageNr == 1) 
       {
         print_isr(invoiceObj, repDocObj, repStyleObj, param);
@@ -456,16 +454,20 @@ function printInvoiceBase(jsonInvoice, repDocObj, repStyleObj, param) {
       }
     }
   }
-   
+	 
+
   //Set invoice style
   setInvoiceStyle(reportObj, repStyleObj, param);
-
 }
+
+
+
 
 function toInvoiceAmountFormat(invoice, value) {
 
     return Banana.Converter.toLocaleNumberFormat(value, invoice.document_info.decimals_amounts, true);
 }
+
 
 function getInvoiceAddress(invoiceAddress) {
 
@@ -474,7 +476,7 @@ function getInvoiceAddress(invoiceAddress) {
   if (invoiceAddress.courtesy) {
       address = invoiceAddress.courtesy + "\n";
   }
-
+  
   if (invoiceAddress.first_name || invoiceAddress.last_name) {
     if (invoiceAddress.first_name) {
       address = address + invoiceAddress.first_name + " ";
@@ -483,7 +485,7 @@ function getInvoiceAddress(invoiceAddress) {
       address = address + invoiceAddress.last_name;
     }
     address = address + "\n";
-	}
+  }
 
   if (invoiceAddress.business_name) {
     address = address + invoiceAddress.business_name + "\n";
@@ -517,7 +519,6 @@ function getInvoiceAddress(invoiceAddress) {
 }
 
 
-
 function getInvoiceSupplier(invoiceSupplier) {
   
   var supplierAddress = "";
@@ -525,7 +526,7 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (invoiceSupplier.business_name) {
     supplierAddress = invoiceSupplier.business_name + "\n";
   }
-
+  
   if (supplierAddress.length<=0)
   {
     if (invoiceSupplier.first_name) {
@@ -538,27 +539,19 @@ function getInvoiceSupplier(invoiceSupplier) {
   }
 
   if (invoiceSupplier.address1) {
-    supplierAddress = supplierAddress + invoiceSupplier.address1 + "\n";
+    supplierAddress = supplierAddress + invoiceSupplier.address1 + " ";
   }
   
   if (invoiceSupplier.address2) {
-    supplierAddress = supplierAddress + invoiceSupplier.address2 + "";
+    supplierAddress = supplierAddress + invoiceSupplier.address2 + " ";
   }
 
-  if (invoiceSupplier.address1 || invoiceSupplier.address2) {
-    supplierAddress = supplierAddress + "\n";
-  }
-  
   if (invoiceSupplier.postal_code) {
     supplierAddress = supplierAddress + invoiceSupplier.postal_code + " ";
   }
   
   if (invoiceSupplier.city) {
     supplierAddress = supplierAddress + invoiceSupplier.city + "\n";
-  }
-  
-  if (invoiceSupplier.email) {
-    supplierAddress = supplierAddress + "Email: " + invoiceSupplier.email + "\n";
   }
   
   if (invoiceSupplier.phone) {
@@ -569,15 +562,19 @@ function getInvoiceSupplier(invoiceSupplier) {
     supplierAddress = supplierAddress + "Fax: " + invoiceSupplier.fax + "\n";
   }
   
+  if (invoiceSupplier.email) {
+    supplierAddress = supplierAddress + invoiceSupplier.email + "\n";
+  }
+  
   if (invoiceSupplier.web) {
-    supplierAddress = supplierAddress + "Web: " + invoiceSupplier.web + "\n";
+    supplierAddress = supplierAddress + invoiceSupplier.web + "\n";
   }
  
   if (invoiceSupplier.vat_number) {
     supplierAddress = supplierAddress + invoiceSupplier.vat_number;
   }
 
- return supplierAddress;
+  return supplierAddress;
 }
 
 
@@ -592,7 +589,7 @@ function print_isr(jsonInvoice, report, repStyleObj, param) {
 
    print_isrBankInfo(jsonInvoice, pvrForm, repStyleObj);
    print_isrSupplierInfo(jsonInvoice, pvrForm, repStyleObj);
-   print_isrAccount(jsonInvoice, pvrForm, repStyleObj, param);
+   printisr_account(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrAmount(jsonInvoice, pvrForm, repStyleObj);
    print_isrCustomerInfo(jsonInvoice, pvrForm, repStyleObj);
    print_isrReference(jsonInvoice, pvrForm, repStyleObj, param);
@@ -600,7 +597,6 @@ function print_isr(jsonInvoice, report, repStyleObj, param) {
 
    setPvrStyle(report, repStyleObj);
 }
-
 
 
 //The purpose of this function is to print the billing info informations in the correct position
@@ -620,8 +616,8 @@ function print_isrBankInfo(jsonInvoice, report, repStyleObj) {
    for (var i = 0; i < str.length; i++) {
       billingInfo_PAY.addParagraph(str[i].trim());
    }
-
 }
+
 
 //The purpose of this function is to print the supplier informations in the correct position
 function print_isrSupplierInfo(jsonInvoice, report, repStyleObj) {
@@ -639,11 +635,11 @@ function print_isrSupplierInfo(jsonInvoice, report, repStyleObj) {
    supplierInfo_PAY.addParagraph(jsonInvoice["supplier_info"]["business_name"]);
    supplierInfo_PAY.addParagraph(jsonInvoice["supplier_info"]["address1"]);
    supplierInfo_PAY.addParagraph(jsonInvoice["supplier_info"]["postal_code"] + " " + jsonInvoice["supplier_info"]["city"]);
-
 }
 
+
 //The purpose of this function is to print the account number in the correct position
-function print_isrAccount(jsonInvoice, report, repStyleObj, param) {
+function printisr_account(jsonInvoice, report, repStyleObj, param) {
 
    //Receipt
    var accountNumber_REC = report.addSection("accountNumber_REC");
@@ -653,7 +649,6 @@ function print_isrAccount(jsonInvoice, report, repStyleObj, param) {
    var accountNumber_PAY = report.addSection("accountNumber_PAY");
    accountNumber_PAY.addParagraph(param.isr_account);
 }
-
 
 
 //The purpose of this function is to print the total amount of the invoice in the correct position
@@ -675,8 +670,8 @@ function print_isrAmount(jsonInvoice, report, repStyleObj) {
 
    var totalInvoiceCts_PAY = report.addSection("totalInvoiceCts_PAY");
    totalInvoiceCts_PAY.addParagraph(res[1]);
-
 }
+
 
 //The purpose of this function is to print the customer address in the correct position
 function print_isrCustomerInfo(jsonInvoice, report, repStyleObj) {
@@ -694,9 +689,8 @@ function print_isrCustomerInfo(jsonInvoice, report, repStyleObj) {
    for (var i = 0; i < addressLines.length; i++) {
       customerAddress_PAY.addParagraph(addressLines[i]);
    }
-
-
 }
+
 
 //The purpose of this function is to print the reference number in the correct position
 function print_isrReference(jsonInvoice, report, repStyleObj, param) {
@@ -714,7 +708,6 @@ function print_isrReference(jsonInvoice, report, repStyleObj, param) {
    var referenceNumber_PAY = report.addSection("referenceNumber_PAY");
    referenceNumber_PAY.addParagraph(pvrReference);
 }
-
 
 
 //The purpose of this function is to print the full PVR code in the correct position
@@ -736,7 +729,6 @@ function print_isrCode(jsonInvoice, report, repStyleObj, param) {
    var pvrFullCode_PAY = report.addSection("pvrFullCode_PAY");
    pvrFullCode_PAY.addParagraph(pvrFullCode);
 }
-
 
 
 //The purpose of this function is return a complete address
@@ -765,6 +757,13 @@ function getAddressLines(jsonAddress, fullAddress) {
    return address;
 }
 
+function getTitle(invoiceObj, texts) {
+  var documentTitle = texts.invoice;
+  if (invoiceObj.document_info.title) {  
+    documentTitle = invoiceObj.document_info.title;
+  }
+  return documentTitle;
+}
 
 function checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber)
 {
@@ -784,25 +783,45 @@ function checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber)
 }
 
 
-
-
-
 function printInvoiceDetails(invoiceObj, repDocObj, param, texts, rowNumber) {
   //
   // INVOICE DETAILS
   //
   var infoTable = repDocObj.addTable("info_table_row0");
-  var infoCol1 = infoTable.addColumn("infoCol1");
-  var infoCol2 = infoTable.addColumn("infoCol2");
-  var infoCol3 = infoTable.addColumn("infoCol3");
-  var infoCol4 = infoTable.addColumn("infoCol4");
-  var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
+  var col1 = infoTable.addColumn("infoCol1");
+  var col2 = infoTable.addColumn("infoCol2");
+  var col3 = infoTable.addColumn("infoCol3");
 
   tableRow = infoTable.addRow();
-  tableRow.addCell(texts.date + ": ", "", 1).addText(invoiceDate, "colorText");
-  tableRow.addCell(texts.customer + ": ", "", 1).addText(invoiceObj.customer_info.number, "colorText");
-  tableRow.addCell(texts.total + ": ", "", 1).addText(invoiceObj.document_info.currency + " " + toInvoiceAmountFormat(invoiceObj, invoiceObj.billing_info.total_to_pay), "colorText");
-  tableRow.addCell(texts.page + ": ", "amount", 1).addText(pageNr, "colorText");
+  tableRow.addCell(" ", "", 3);
+
+  tableRow = infoTable.addRow();
+  var cell1 = tableRow.addCell("", "amount", 1);
+  var cell2 = tableRow.addCell("", "amount bold", 1);
+  var cell3 = tableRow.addCell("", "", 1);
+  
+  var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
+  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(texts.date + ":", "");
+  cell1.addParagraph(texts.customer + ":", "");
+  //Payment Terms
+  var payment_terms_label = texts.payment_terms_label;
+  var payment_terms = '';
+  if (invoiceObj.billing_info.payment_term) {
+    payment_terms = invoiceObj.billing_info.payment_term;
+  }
+  else if (invoiceObj.payment_info.due_date) {
+	payment_terms_label = texts.payment_due_date_label
+    payment_terms = Banana.Converter.toLocaleDateFormat(invoiceObj.payment_info.due_date);
+  }
+  cell1.addParagraph(payment_terms_label + ":", "");
+  cell1.addParagraph(texts.page + ":", "");
+
+  cell2.addParagraph(invoiceObj.document_info.number, "");
+  cell2.addParagraph(invoiceDate, "");
+  cell2.addParagraph(invoiceObj.customer_info.number, "");
+  cell2.addParagraph(payment_terms, "");
+  cell2.addParagraph(pageNr, "");
 }
 
 function printItemsHeader(invoiceObj, repDocObj, param, texts, rowNumber) {
@@ -816,12 +835,11 @@ function printItemsHeader(invoiceObj, repDocObj, param, texts, rowNumber) {
   var repTableCol4 = repTableObj.addColumn("repTableCol4");
   
   var dd = repTableObj.getHeader().addRow();
-  dd.addCell(texts.description, "bold border-left padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.qty, "bold border-left padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.unit_price, "bold border-left amount padding-top padding-bottom border-right", 1);
-  dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "bold border-left border-right amount padding-top padding-bottom", 1);
+  dd.addCell(texts.description, "doc_table_header", 1);
+  dd.addCell(texts.qty, "doc_table_header", 1);
+  dd.addCell(texts.unit_price, "doc_table_header amount", 1);
+  dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "doc_table_header amount", 1);
 }
-
 //====================================================================//
 // PVRCODE
 //====================================================================//
@@ -1095,8 +1113,8 @@ function setPvrStyle(reportObj, repStyleObj) {
 // STYLES
 //====================================================================//
 function setInvoiceStyle(reportObj, repStyleObj, param) {
-	
-	if (!repStyleObj) {
+
+    if (!repStyleObj) {
         repStyleObj = reportObj.newStyleSheet();
     }
 
@@ -1106,11 +1124,11 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     }
 
     if (!param.color_1) {
-        param.color_1 = "#FFFACD";
+        param.color_1 = "#337ab7";
     }
 
     if (!param.color_2) {
-        param.color_2 = "#333333";
+        param.color_2 = "#ffffff";
     }
 
     if (!param.color_3) {
@@ -1118,45 +1136,39 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     }
     
     if (!param.color_4) {
-        param.color_4 = "";
+        param.color_4 = "#dddddd";
     }
 
     if (!param.color_5) {
-        param.color_5 = "";
+        param.color_5 = "#eeeeee";
     }
-
 
     //====================================================================//
     // GENERAL
     //====================================================================//
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
-    repStyleObj.addStyle("body", "font-size: 12pt; font-family:" + param.font_family);
+    repStyleObj.addStyle("body", "font-size: 11pt; font-family:" + param.font_family);
     repStyleObj.addStyle(".amount", "text-align:right");
-    repStyleObj.addStyle(".subtotal_cell", "font-weight:bold;");
     repStyleObj.addStyle(".bold", "font-weight: bold");
-    repStyleObj.addStyle(".left", "text-align:left");
-    repStyleObj.addStyle(".center", "text-align:center");
-    repStyleObj.addStyle(".evenRowsBackgroundColor", "background-color:" + param.color_1 + ";color:" + param.color_2);
-    repStyleObj.addStyle(".colorText", "color:" + param.color_3);
-    repStyleObj.addStyle(".title", "font-size: 18pt;padding-left:10px;");
-
-    repStyleObj.addStyle(".col1","width:49%");
-    repStyleObj.addStyle(".col2","width:50%");
-
-    repStyleObj.addStyle(".repTableCol1","width:40%");
-    repStyleObj.addStyle(".repTableCol2","width:12%");
-    repStyleObj.addStyle(".repTableCol3","width:26%");
-    repStyleObj.addStyle(".repTableCol4","width:22%");
-
-    repStyleObj.addStyle(".border-left", "border-left:1px solid black; padding-left:10px");
-    repStyleObj.addStyle(".border-right", "border-right:1px solid black; padding-right:10px");
-    repStyleObj.addStyle(".border-top", "border-top:1px solid black");
-    repStyleObj.addStyle(".border-bottom", "border-bottom:1px solid black");
-
-    repStyleObj.addStyle(".padding-top", "padding-top:5px");
+    repStyleObj.addStyle(".doc_table_header", "font-weight:bold; background-color:" + param.color_1 + "; color:" + param.color_2);
+    repStyleObj.addStyle(".doc_table_header td", "padding:5px;");
+    repStyleObj.addStyle(".total_cell", "font-weight:bold; background-color:" + param.color_1 + "; color: " + param.color_2 + "; padding:5px");
+    repStyleObj.addStyle(".subtotal_cell", "font-weight:bold; background-color:" + param.color_4 + "; color: " + param.color_3 + "; padding:5px");
+    repStyleObj.addStyle(".col1","width:50%");
+    repStyleObj.addStyle(".col2","width:49%");
+    repStyleObj.addStyle(".infoCol1","width:15%");
+    repStyleObj.addStyle(".infoCol2","width:30%");
+    repStyleObj.addStyle(".infoCol3","width:54%");
+    repStyleObj.addStyle(".border-bottom", "border-bottom:2px solid " + param.color_3);
+    repStyleObj.addStyle(".thin-border-top", "border-top:thin solid " + param.color_1);
     repStyleObj.addStyle(".padding-right", "padding-right:5px");
-    repStyleObj.addStyle(".padding-bottom", "padding-bottom:5px");
     repStyleObj.addStyle(".padding-left", "padding-left:5px");
+
+    repStyleObj.addStyle(".repTableCol1","width:45%");
+    repStyleObj.addStyle(".repTableCol2","width:15%");
+    repStyleObj.addStyle(".repTableCol3","width:20%");
+    repStyleObj.addStyle(".repTableCol4","width:20%");
+
 
     //====================================================================//
     // LOGO
@@ -1167,36 +1179,25 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     logoStyle.setAttribute("margin-left", "20mm"); 
     logoStyle.setAttribute("width", "120px"); 
 
+
     //====================================================================//
     // TABLES
     //====================================================================//
     var headerStyle = repStyleObj.addStyle(".header_table");
     headerStyle.setAttribute("position", "absolute");
-    headerStyle.setAttribute("margin-top", "50mm"); //106
+    headerStyle.setAttribute("margin-top", "10mm"); //106
     headerStyle.setAttribute("margin-left", "22mm"); //20
     headerStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.header_table td", "border: thin solid black");
     headerStyle.setAttribute("width", "100%");
 
 
-    var titleStyle = repStyleObj.addStyle(".title_table");
-    titleStyle.setAttribute("position", "absolute");
-    titleStyle.setAttribute("margin-top", "100mm");
-    titleStyle.setAttribute("margin-left", "18mm");
-    titleStyle.setAttribute("margin-right", "10mm");
-    //repStyleObj.addStyle("table.title_table td", "border: thin solid black");
-    titleStyle.setAttribute("width", "100%");
-
-
-    
     var infoStyle = repStyleObj.addStyle(".info_table");
     infoStyle.setAttribute("position", "absolute");
-    infoStyle.setAttribute("margin-top", "120mm");
+    infoStyle.setAttribute("margin-top", "45mm");
     infoStyle.setAttribute("margin-left", "22mm");
     infoStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.info_table td", "border: thin solid black");
-    infoStyle.setAttribute("width", "100%");
-
 
     var infoStyle = repStyleObj.addStyle(".info_table_row0");
     infoStyle.setAttribute("position", "absolute");
@@ -1206,10 +1207,10 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     //repStyleObj.addStyle("table.info_table td", "border: thin solid black");
     infoStyle.setAttribute("width", "100%");
 
-    
+
 
     var itemsStyle = repStyleObj.addStyle(".doc_table");
-    itemsStyle.setAttribute("margin-top", "130mm"); //106
+    itemsStyle.setAttribute("margin-top", "110mm"); //106
     itemsStyle.setAttribute("margin-left", "23mm"); //20
     itemsStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.doc_table td", "border: thin solid black; padding: 3px;");
@@ -1217,7 +1218,7 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
 
 
     var itemsStyle = repStyleObj.addStyle(".doc_table_row0");
-    itemsStyle.setAttribute("margin-top", "35mm"); //106
+    itemsStyle.setAttribute("margin-top", "50mm"); //106
     itemsStyle.setAttribute("margin-left", "23mm"); //20
     itemsStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.doc_table td", "border: thin solid black; padding: 3px;");
@@ -1246,13 +1247,10 @@ function setInvoiceTexts(language) {
     texts.vat_number = 'Partita IVA: ';
     texts.bill_to = 'Indirizzo fatturazione';
     texts.shipping_to = 'Indirizzo spedizione';
-    texts.payment_terms = 'Termini di pagamento';
-    texts.payment = '30 giorni netto';
     texts.from = 'DA:';
     texts.to = 'A:';
 	texts.param_color_1 = 'Colore 1';
 	texts.param_color_2 = 'Colore 2';
-	texts.param_font_family = 'Tipo carattere';
     texts.param_print_header = 'Includi intestazione pagina (1=si, 0=no)';
     texts.param_print_isr = 'Stampa PVR (1=si, 0=no)';
     texts.param_isr_bank_name = 'Bank name';
@@ -1260,10 +1258,12 @@ function setInvoiceTexts(language) {
     texts.param_isr_account = 'Conto PVR';
     texts.param_isr_id = 'Numero di adesione PVR';
 	texts.param_isr_on_new_page = 'Stampa polizza di versamento su pagina separata (1=si, 0=no)';
-	texts.param_payment_details_row_1 = 'Dettagli di pagamento (riga 1)';
-	texts.param_payment_details_row_2 = 'Dettagli di pagamento (riga 2)';
- 	//texts.param_max_items_per_page = 'Numero di linee su ogni fattura';
- }
+	texts.param_personal_text_1 = 'Testo libero (riga 1)';
+	texts.param_personal_text_2 = 'Testo libero (riga 2)';
+    texts.payment_due_date_label = 'Scadenza';
+    texts.payment_terms_label = 'Pagamento';
+	//texts.param_max_items_per_page = 'Numero di linee su ogni fattura';
+  }
   else if (language == 'de')
   {
     texts.customer = 'Kunde-Nr';
@@ -1281,13 +1281,11 @@ function setInvoiceTexts(language) {
     texts.vat_number = 'Mehrwertsteuernummer: ';
     texts.bill_to = 'Rechnungsadresse';
     texts.shipping_to = 'Lieferadresse';
-    texts.payment_terms = 'Zahlungsbedingungen';
-    texts.payment = '30 Tage netto';
     texts.from = 'VON:';
     texts.to = 'ZU:';
 	texts.param_color_1 = 'Farbe 1';
 	texts.param_color_2 = 'Farbe 2';
-	texts.param_font_family = 'Typ Schriftzeichen';
+	texts.param_font_family = 'Tipo carattere';
     texts.param_print_header = 'Seitenüberschrift einschliessen (1=ja, 0=nein)';
     texts.param_print_isr = 'ESR ausdrucken (1=ja, 0=nein)';
     texts.param_isr_bank_name = 'Bank name';
@@ -1295,8 +1293,10 @@ function setInvoiceTexts(language) {
     texts.param_isr_account = 'ESR-Konto';
     texts.param_isr_id = 'ESR-Teilnehmernummer';
 	texts.param_isr_on_new_page = 'ESR auf ein separates Blatt drucken (1=ja, 0=nein)';
-	texts.param_payment_details_row_1 = 'Zahlungsdetails (Zeile 1)';
-	texts.param_payment_details_row_2 = 'Zahlungsdetails (Zeile 2)';
+	texts.param_personal_text_1 = 'Freier Text (Zeile 1)';
+	texts.param_personal_text_2 = 'Freier Text (Zeile 2)';
+    texts.payment_due_date_label = 'Fälligkeitsdatum';
+    texts.payment_terms_label = 'Zahlungsbedingungen';
 	//texts.param_max_items_per_page = 'Anzahl der Zeilen auf jeder Rechnung';
   }
   else if (language == 'fr')
@@ -1316,22 +1316,22 @@ function setInvoiceTexts(language) {
     texts.vat_number = 'Numéro de TVA: ';
     texts.bill_to = 'Adresse de facturation';
     texts.shipping_to = 'Adresse de livraison';
-    texts.payment_terms = 'Conditions de paiement';
-    texts.payment = 'Nets 30 jours';
     texts.from = 'DE:';
     texts.to = 'À:';
 	texts.param_color_1 = 'Couleur 1';
 	texts.param_color_2 = 'Couleur 2';
-    texts.param_font_family = 'Type caractère';
-	texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
+	texts.param_font_family = 'Typ Schriftzeichen';
+    texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
     texts.param_print_isr = 'Imprimer BVR (1=oui, 0=non)';
     texts.param_isr_bank_name = 'Bank name';
     texts.param_isr_bank_address = 'Bank address';
     texts.param_isr_account = 'Compte BVR';
     texts.param_isr_id = 'Numéro d’adhérent BVR';
 	texts.param_isr_on_new_page = 'Imprimer le bulletin sur une page séparée (1=oui, 0=non)';
-	texts.param_payment_details_row_1 = 'coordonnées de paiement (ligne 1)';
-	texts.param_payment_details_row_2 = 'coordonnées de paiement (ligne 2)';
+	texts.param_personal_text_1 = 'Texte libre (ligne 1)';
+	texts.param_personal_text_2 = 'Texte libre (ligne 2)';
+    texts.payment_due_date_label = 'Echéance';
+    texts.payment_terms_label = 'Paiement';
 	//texts.param_max_items_per_page = 'Nombre d’éléments sur chaque facture';
   }
   else
@@ -1351,8 +1351,6 @@ function setInvoiceTexts(language) {
     texts.vat_number = 'VAT Number: ';
     texts.bill_to = 'Billing address';
     texts.shipping_to = 'Shipping address';
-    texts.payment_terms = 'Payment terms';
-    texts.payment = '30 days net';
     texts.from = 'FROM:';
     texts.to = 'TO:';
 	texts.param_color_1 = 'Color 1';
@@ -1365,10 +1363,11 @@ function setInvoiceTexts(language) {
     texts.param_isr_account = 'Account ISR';
     texts.param_isr_id = 'ISR subscriber number';
 	texts.param_isr_on_new_page = 'Print ISR on a new page (1=yes, 0=no)';
-	texts.param_payment_details_row_1 = 'payment details (row 1)';
-	texts.param_payment_details_row_2 = 'payment details (row 2)';
+	texts.param_personal_text_1 = 'Personal text (row 1)';
+	texts.param_personal_text_2 = 'Personal text (row 2)';
+    texts.payment_due_date_label = 'Due date';
+    texts.payment_terms_label = 'Payment';
 	//texts.param_max_items_per_page = 'Number of items on each page';
   }
   return texts;
 }
-
