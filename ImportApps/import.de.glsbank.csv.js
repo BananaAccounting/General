@@ -84,6 +84,13 @@ function defineConversionParam() {
 		convertedRow["_VWZ5"] = inputRow["VWZ5"];
 		convertedRow["_VWZ6"] = inputRow["VWZ6"];
 		convertedRow["_VWZ7"] = inputRow["VWZ7"];
+		convertedRow["_VWZ8"] = inputRow["VWZ8"];
+		convertedRow["_VWZ9"] = inputRow["VWZ9"];
+		convertedRow["_VWZ10"] = inputRow["VWZ10"];
+		convertedRow["_VWZ11"] = inputRow["VWZ11"];
+		convertedRow["_VWZ12"] = inputRow["VWZ12"];
+		convertedRow["_VWZ13"] = inputRow["VWZ13"];
+		convertedRow["_VWZ14"] = inputRow["VWZ14"];
 		convertedRow["_Empfänger"] = inputRow["Auftraggeber/Empfänger"];
 		convertedRow["_Buchungstext"] = inputRow["Buchungstext"];
 		convertedRow["Income"] = inputRow["Betrag"];
@@ -118,7 +125,7 @@ function postProcessIntermediaryData(intermediaryData) {
 		var convertedData = intermediaryData[i];
 
 		// Convert amount to internal Banana format.
-		convertedData["Income"] = Banana.Converter.toInternalAmountFormat(convertedData["Income"]);
+		convertedData["Income"] = Banana.Converter.toInternalNumberFormat(convertedData["Income"]);
 
 		// If Empfänger is emtpy it is the "GLS Bank" itself.
 		if (!convertedData["_Empfänger"].length) {
@@ -128,29 +135,28 @@ function postProcessIntermediaryData(intermediaryData) {
 		// Build Descripton from relevant "Verwendungszweck" fields (VWZ1 to VWZ7).
 		convertedData["Description"] = '';
 
-		// Use VWZ1 to VWZ4 only if it is not filled with BIC/IBAN etc. information
-		// by Online Banking or HBCI transactions.
-		if (convertedData["_VWZ1"].search('^BIC:') == -1 && convertedData["_VWZ2"].search('^IBAN:') == -1) {
-			convertedData["Description"] = convertedData["_VWZ1"] + convertedData["_VWZ2"] + convertedData["_VWZ3"] + convertedData["_VWZ4"];
-		}
+		// Put all VWZ fields into one string. Add Tabs as field separator needed
+		// to identify field borders in later processing.
+		convertedData["Description"] = convertedData["_VWZ1"] + "\t" + convertedData["_VWZ2"] + "\t" + convertedData["_VWZ3"] + "\t" + convertedData["_VWZ4"] + "\t" + convertedData["_VWZ5"] + "\t" + convertedData["_VWZ6"] + "\t" + convertedData["_VWZ7"] + "\t" + convertedData["_VWZ8"] + "\t" + convertedData["_VWZ9"] + "\t" + convertedData["_VWZ10"] + "\t" + convertedData["_VWZ11"] + "\t" + convertedData["_VWZ12"] + "\t" + convertedData["_VWZ13"] + "\t" + convertedData["_VWZ14"];
 
-		// More VWZ fields
-		convertedData["Description"] = convertedData["Description"] + convertedData["_VWZ5"] + convertedData["_VWZ6"] + convertedData["_VWZ7"];
+		// Remove BIC/IBAN etc. information originating from Online Banking or HBCI transactions.
+		convertedData["Description"] = convertedData["Description"].replace(/^BIC:.+IBAN:.+Datum:[\.\s\d]+Zeit:[:\s\d]+\t/, '');
+		convertedData["Description"] = convertedData["Description"].replace(/(KD|UFT)[\s\d]+TAN[\s\d]+\t/g, '');
+		convertedData["Description"] = convertedData["Description"].replace(/(KD|UFT)[\s\d]+\t/g, '');
+
+		// Remove Tabs and multiple spaces.
+		convertedData["Description"] = convertedData["Description"].replace(/\t/g, '');
+		convertedData["Description"] = convertedData["Description"].replace(/\s{2,}/g, ' ');
 
 		// Add type and name of debitor/creditor, depending on debit or credit.
 		if (convertedData["Income"] < 0) {
-			convertedData["Description"] = convertedData["Description"] + " (" + convertedData["_Buchungstext"] + " an " + convertedData["_Empfänger"] + ")";
+			convertedData["Notes"] = convertedData["_Buchungstext"] + " an " + convertedData["_Empfänger"];
 		}
 		else if (convertedData["Income"] > 0) {
-			convertedData["Description"] = convertedData["Description"] + " (" + convertedData["_Buchungstext"] + " von " + convertedData["_Empfänger"] + ")";
+			convertedData["Notes"] = convertedData["_Buchungstext"] + " von " + convertedData["_Empfänger"];
 		}
 	}
 }
-
-
-
-
-
 
 /* DO NOT CHANGE THIS CODE */
 
