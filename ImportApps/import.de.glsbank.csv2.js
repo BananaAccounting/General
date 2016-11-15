@@ -97,7 +97,7 @@ var postProcessIntermediaryData = function(intermediaryData) {
       var convertedData = intermediaryData[i];
 
       // Convert amount to internal Banana format.
-      convertedData["Income"] = Banana.Converter.toInternalAmountFormat(convertedData["Income"]);
+      convertedData["Income"] = Banana.Converter.toInternalNumberFormat(convertedData["Income"]);
 
       // If Empfänger is emtpy it is the "GLS Bank" itself.
       if (!convertedData["_Empfänger"].length) {
