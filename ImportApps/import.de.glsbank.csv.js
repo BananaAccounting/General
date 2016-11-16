@@ -16,7 +16,7 @@
 // @api = 1.0
 // @pubdate = 2015-30-11
 // @publisher = fuerstnet GmbH
-// @description = GLS Bank
+// @description = GLS Bank (*.csv)
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
 // @docproperties = 
