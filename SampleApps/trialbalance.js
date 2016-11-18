@@ -34,28 +34,27 @@ function exec(string) {
 	if (!Banana.document) {
 		return;
 	}
+	
+	var dateform = getPeriodSettings();
 
-	printReport();
+	if (dateform) {
+		printReport(dateform.selectionStartDate, dateform.selectionEndDate);
+	}
 }
 
 
-
 //Function that creates and prints the report
-function printReport() {
+function printReport(startDate, endDate) {
 
 	var report = Banana.Report.newReport("Swiss Red Cross - Trial Balance");
-	var startDate = Banana.Converter.toDate(Banana.document.info("AccountingDataBase","OpeningDate"));
-	var year = startDate.getFullYear();
 
 	report.addParagraph("Trial Balance", "heading1");
-	report.addParagraph(" ", "");
-	report.addParagraph(" ", "");
 
 	//Create the table that will be printed on the report
 	var table = report.addTable("table");
 
 	tableRow = table.addRow();
-	tableRow.addCell("Trial Balance at 31.12." + year, "alignRight bold", 4);
+	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 4);
 
 	//Add column titles to the table report
 	tableRow = table.addRow();
@@ -76,9 +75,10 @@ function printReport() {
 			tableRow = table.addRow();
 			tableRow.addCell(tRow.value("Account"), "alignCenter", 1);
 			tableRow.addCell(tRow.value("Description"), "", 1);
-			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(tRow.value("Balance")), "alignRight", 1);
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
 			tableRow.addCell("", "", 1);
-			sumTotAssets = Banana.SDecimal.add(sumTotAssets, tRow.value("Balance"));
+			sumTotAssets = Banana.SDecimal.add(sumTotAssets, bal);
 		}
 	}	
 
@@ -97,8 +97,9 @@ function printReport() {
 			tableRow.addCell(tRow.value("Account"), "alignCenter", 1);
 			tableRow.addCell(tRow.value("Description"), "", 1);
 			tableRow.addCell("", "", 1);
-			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(Banana.SDecimal.invert(tRow.value("Balance"))), "alignRight", 1);
-			sumTotLiabilities = Banana.SDecimal.add(sumTotLiabilities, tRow.value("Balance"));
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
+			sumTotLiabilities = Banana.SDecimal.add(sumTotLiabilities, bal);
 		}
 	}
 
@@ -108,9 +109,9 @@ function printReport() {
 	for (var i = 0; i < accountsTab.rowCount; i++) {
 		var tRow = accountsTab.row(i);
 		if (!tRow.value("BClass") && tRow.value("Gr") === "2") {
-			res = tRow.value("Balance");
 			resDesc = tRow.value("Description");
 		}
+		res = calcBalance("BClass=1|2", "", startDate, endDate);
 	}
 	sumTotLiabilities = Banana.SDecimal.add(sumTotLiabilities, res);
 
@@ -118,7 +119,7 @@ function printReport() {
 	tableRow.addCell("", "", 1);
 	tableRow.addCell(resDesc, "", 1);
 	tableRow.addCell("", "", 1);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(Banana.SDecimal.invert(res)), "alignRight", 1);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(res), "alignRight", 1);
 
 	//Totals
 	tableRow = table.addRow();
@@ -127,7 +128,7 @@ function printReport() {
 	tableRow = table.addRow();
 	tableRow.addCell("", "", 2);
 	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotAssets), "alignRight bold underline", 1);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(Banana.SDecimal.invert(sumTotLiabilities)), "alignRight bold underline", 1);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotLiabilities), "alignRight bold underline", 1);
 
 	//Add a footer to the report
 	addFooter(report);
@@ -136,6 +137,24 @@ function printReport() {
 	var stylesheet = createStyleSheet();
 	Banana.Report.preview(report, stylesheet);
 }
+
+
+
+
+//Function that calculates the balance for the given account, bclass and period
+function calcBalance(account, bClass, startDate, endDate) {
+	var currentBal = Banana.document.currentBalance(account, startDate, endDate);
+	if (bClass === "1") {
+		return currentBal.balance;
+	}
+	else if (bClass === "2") {
+		return Banana.SDecimal.invert(currentBal.balance);
+	}
+	else if (!bClass) {
+		return currentBal.balance;
+	}
+}
+
 
 
 
@@ -148,19 +167,73 @@ function addFooter(report) {
 
 
 
+//The main purpose of this function is to allow the user to enter the accounting period desired and saving it for the next time the script is run.
+//Every time the user runs of the script he has the possibility to change the date of the accounting period.
+function getPeriodSettings() {
+	
+	//The formeters of the period that we need
+	var scriptform = {
+	   "selectionStartDate": "",
+	   "selectionEndDate": "",
+	   "selectionChecked": "false"
+	};
+
+	//Read script settings
+	var data = Banana.document.scriptReadSettings();
+	
+	//Check if there are previously saved settings and read them
+	if (data.length > 0) {
+		try {
+			var readSettings = JSON.parse(data);
+			
+			//We check if "readSettings" is not null, then we fill the formeters with the values just read
+			if (readSettings) {
+				scriptform = readSettings;
+			}
+		} catch (e){}
+	}
+	
+	//We take the accounting "starting date" and "ending date" from the document. These will be used as default dates
+	var docStartDate = Banana.document.startPeriod();
+	var docEndDate = Banana.document.endPeriod();	
+	
+	//A dialog window is opened asking the user to insert the desired period. By default is the accounting period
+	var selectedDates = Banana.Ui.getPeriod("Period", docStartDate, docEndDate, 
+		scriptform.selectionStartDate, scriptform.selectionEndDate, scriptform.selectionChecked);
+		
+	//We take the values entered by the user and save them as "new default" values.
+	//This because the next time the script will be executed, the dialog window will contains the new values.
+	if (selectedDates) {
+		scriptform["selectionStartDate"] = selectedDates.startDate;
+		scriptform["selectionEndDate"] = selectedDates.endDate;
+		scriptform["selectionChecked"] = selectedDates.hasSelection;
+
+		//Save script settings
+		var formToString = JSON.stringify(scriptform);
+		var value = Banana.document.scriptSaveSettings(formToString);		
+    } else {
+		//User clicked cancel
+		return;
+	}
+	return scriptform;
+}
+
+
+
 //Function that creates styles for the report
 function createStyleSheet() {
 	var stylesheet = Banana.Report.newStyleSheet();
 
     var pageStyle = stylesheet.addStyle("@page");
-    pageStyle.setAttribute("margin", "20mm 15mm 20mm 25mm");
+    pageStyle.setAttribute("margin", "15mm 15mm 10mm 25mm");
 
     stylesheet.addStyle("body", "font-family : Arial");
 
 	style = stylesheet.addStyle(".footer");
-	style.setAttribute("text-align", "right");
+	style.setAttribute("text-align", "center");
 	style.setAttribute("font-size", "8px");
 	style.setAttribute("font-family", "Courier New");
+	//style.setAttribute("border-top", "thin solid black");
 
 	style = stylesheet.addStyle(".heading1");
 	style.setAttribute("font-size", "16px");
