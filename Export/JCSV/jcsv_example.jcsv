@@ -1,0 +1,11 @@
+{"jcsv" : {"version" : "1.0", "encoding":"UTF-8"}}
+{"table":"Accounts"}
+{"columns":["Section","Group","Account","Description","Boolean","BClass","Gr","Opening","Balance"]}
+["","","1000","Cash on hand",true,"1","10",100,1290.3]
+["","","1020","Bank account",false,"1","10",0,10]
+["","","2000","Suppliers or Creditors",false,"2","20",-50,-50]
+["","28","","Equity",false,"","2",-250,-1450.3]
+{"table":"Transactions"}
+{"columns":["Date","Time","Doc","Description","AccountDebit","AccountCredit","Amount"]}
+["2018-01-03","10:18:21.000","1","Cash to Bank","1020","1000",10]
+["2018-02-02","23:55:00.000","2","Sales","1000","3400",1200.3]
