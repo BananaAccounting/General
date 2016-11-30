@@ -1,4 +1,4 @@
-﻿// @id = ch.banana.script.transactionsinvoice.formemberfee
+﻿// @id = ch.banana.script.invoices.frommemberfee
 // @version = 1.0
 // @pubdate = 2016-11-29
 // @publisher = Banana.ch SA
