@@ -1,0 +1,42 @@
+// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
+// 
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//
+// @id = ch.banana.test.journal.suppliers
+// @publisher = Banana.ch SA
+// @description = Test for journal suppliers
+// @doctype = *.*
+// @task = export.file
+// @exportfilename = journal_suppliers_<Date>
+// @exportfiletype = csv
+// @inputdatasource = none
+// @timeout = -1
+// @encoding = Windows-1252
+
+/**
+* Export journal with suppliers info (invoice due date, payment date, open balance) to csv file
+*/
+function exec(inData) {
+
+    //creates document
+    if (Banana.document) {
+        //load data
+        var journalSuppliers = Banana.document.journalSuppliers();
+
+        if (journalSuppliers) {
+            return journalSuppliers.toTsv();
+        }
+    }
+    return "@Cancel";
+}
