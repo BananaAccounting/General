@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="RouteConvetrkr">
+	<metadata>
+		<name>Test file Banana.ch SA ....</name>
+	</metadata>
+	<trk>
+		<name>Banana's Route</name>
+		<trkseg>
+			<trkpt lon="" lat="">
+				<ele></ele>
+				<name></name>
+			</trkpt>
+			<trkpt lon="8.954799" lat="46.013289">
+				<ele>273</ele>
+				<name>Lugano, Via Trevano, Banana.ch SA</name>
+			</trkpt>
+			<trkpt lon="8.95531" lat="46.015086">
+				<ele>273</ele>
+				<name>Lugano, Piazza Molino Nuovo</name>
+			</trkpt>
+			<trkpt lon="8.956324" lat="46.014469">
+				<ele>273</ele>
+				<name>Lugano, Via Zurigo</name>
+			</trkpt>
+			<trkpt lon="8.955657" lat="46.011418">
+				<ele>273</ele>
+				<name>Lugano, Via Zurigo</name>
+			</trkpt>
+			<trkpt lon="8.954829" lat="46.011540">
+				<ele>273</ele>
+				<name>Lugano, Via Giuseppe Bagutti</name>
+			</trkpt>
+			<trkpt lon="8.954884" lat="46.012488">
+				<ele>273</ele>
+				<name>Lugano, Via Giovanni Ferri</name>
+			</trkpt>
+			<trkpt lon="8.954799" lat="46.013289">
+				<ele>273</ele>
+				<name>Lugano, Via Trevano, Banana.ch SA</name>
+			</trkpt>
+		</trkseg>
+	</trk>
+</gpx>

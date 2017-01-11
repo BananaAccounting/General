@@ -1,0 +1,21 @@
+/* text that is not within {} or [] is ignored */
+{"jcsv" : {"version" : "1.0", "encoding":"UTF-8"}}
+{"table":"GPX"}
+{"column-names":["pt", "lon", "lat", "ele", "name"]}
+{"column-datatypes" :["string", "number", "number", "number", "string"]}
+["1","8.954799","46.013289","273", "Lugano, Via Trevano, Banana.ch SA"]
+["2","8.95531","46.015086","273", "Lugano, Piazza Molino Nuovo"]
+["3","8.956324","46.014469","273", "Lugano, Via Zurigo"]
+["4","8.955657","46.011418","273", "Lugano, Via Zurigo"]
+["5","8.954829","46.011540","273", "Lugano, Via Giuseppe Bagutti"]
+["6","8.954884","46.012488","273", "Lugano, Via Giovanni Ferri"]
+["7","8.954799","46.013289","273", "Lugano, Via Trevano, Banana.ch SA"]
+
+
+
+
+
+
+
+
+
