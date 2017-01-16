@@ -18,7 +18,9 @@ There are three types of files:
 
 ### How to run the examples
 1) Use the GPX.ac2 file or create a new accounting file and drag & drop the .jcsv file into it.
+
 2) Add the desired App and run it.
+
 3) The .gpx file is generated on the same directory of the .ac2 file.
 
 ## From .gpx file to .jcsv file
