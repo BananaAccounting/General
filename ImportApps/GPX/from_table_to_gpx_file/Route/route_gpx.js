@@ -68,11 +68,13 @@ function add_rte(xml) {
 		var lat = tRow.value("Lat");
 		var ele = tRow.value("Ele");
 		var name = tRow.value("Name");
-	
-		xml += '\n' + '\t' + '\t' + '<rtept lon="'+ lon + '" lat="' + lat + '">';
-		xml += '\n' + '\t' + '\t' + '\t' + '<ele>' + ele + '</ele>';
-		xml += '\n' + '\t' + '\t' + '\t' + '<name>' + name + '</name>';
-		xml	+= '\n' + '\t' + '\t' + '</rtept>';
+
+		if (lon && lat) {
+			xml += '\n' + '\t' + '\t' + '<rtept lon="'+ lon + '" lat="' + lat + '">';
+			xml += '\n' + '\t' + '\t' + '\t' + '<ele>' + ele + '</ele>';
+			xml += '\n' + '\t' + '\t' + '\t' + '<name>' + name + '</name>';
+			xml	+= '\n' + '\t' + '\t' + '</rtept>';
+		}
 	}
 
 	xml += '\n' + '\t' + '</rte>';

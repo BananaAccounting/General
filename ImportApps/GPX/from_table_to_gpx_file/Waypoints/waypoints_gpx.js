@@ -64,13 +64,15 @@ function add_wpt(xml) {
 		var ele = tRow.value("Ele");
 		var name = tRow.value("Name");
 	
-		xml += '\n' + '\t' + '<wpt lon="'+ lon + '" lat="' + lat + '">';
-		
-		if (ele) {
-			xml += '\n' + '\t' + '\t' + '<ele>' + ele + '</ele>';
+		if (lon && lat) {
+			xml += '\n' + '\t' + '<wpt lon="'+ lon + '" lat="' + lat + '">';
+			
+			if (ele) {
+				xml += '\n' + '\t' + '\t' + '<ele>' + ele + '</ele>';
+			}
+			xml += '\n' + '\t' + '\t' + '<name>' + name + '</name>';
+			xml	+= '\n' + '\t' + '</wpt>';
 		}
-		xml += '\n' + '\t' + '\t' + '<name>' + name + '</name>';
-		xml	+= '\n' + '\t' + '</wpt>';
 	}
 
 	return xml;

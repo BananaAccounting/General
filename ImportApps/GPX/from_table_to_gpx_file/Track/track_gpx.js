@@ -69,11 +69,13 @@ function add_trk(xml) {
 		var lat = tRow.value("Lat");
 		var ele = tRow.value("Ele");
 		var name = tRow.value("Name");
-	
-		xml += '\n' + '\t' + '\t' + '\t' + '<trkpt lon="'+ lon + '" lat="' + lat + '">';
-		xml += '\n' + '\t' + '\t' + '\t' + '\t' + '<ele>' + ele + '</ele>';
-		xml += '\n' + '\t' + '\t' + '\t' + '\t' + '<name>' + name + '</name>';
-		xml	+= '\n' + '\t' + '\t' + '\t' + '</trkpt>';
+
+		if (lon && lat) {
+			xml += '\n' + '\t' + '\t' + '\t' + '<trkpt lon="'+ lon + '" lat="' + lat + '">';
+			xml += '\n' + '\t' + '\t' + '\t' + '\t' + '<ele>' + ele + '</ele>';
+			xml += '\n' + '\t' + '\t' + '\t' + '\t' + '<name>' + name + '</name>';
+			xml	+= '\n' + '\t' + '\t' + '\t' + '</trkpt>';
+		}
 	}
 
 	xml += '\n' + '\t' + '\t' + '</trkseg>';

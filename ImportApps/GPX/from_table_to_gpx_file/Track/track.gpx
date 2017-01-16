@@ -6,10 +6,6 @@
 	<trk>
 		<name>Banana's Route</name>
 		<trkseg>
-			<trkpt lon="" lat="">
-				<ele></ele>
-				<name></name>
-			</trkpt>
 			<trkpt lon="8.954799" lat="46.013289">
 				<ele>273</ele>
 				<name>Lugano, Via Trevano, Banana.ch SA</name>
