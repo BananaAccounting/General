@@ -24,7 +24,7 @@ There are three types of files:
 3) The .gpx file is generated on the same directory of the .ac2 file.
 
 ## From .gpx file to .jcsv file
-The idea is to strart from a .gpx file, retrieve all the needed data and then create a .jcsv file. At the end it is possible to import this .jcsv file into Banana to create a table.
+The idea is to start from a .gpx file, retrieve all the needed data and then create a .jcsv file. At the end it is possible to import this .jcsv file into Banana to create a table.
 
 ## Resources
 * GPX: 
