@@ -21,8 +21,8 @@ There are three types of files:
 
 2) Add the desired App and run it
 * [Route GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/route_gpx.js)
-* [Track GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/track_gpx.js)
-* [Waypoints GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/waypoints_gpx.js)
+* [Track GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Track/track_gpx.js)
+* [Waypoints GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Waypoints/waypoints_gpx.js)
 
 3) The .gpx file is generated on the same directory of the .ac2 file.
 
