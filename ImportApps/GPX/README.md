@@ -1,9 +1,9 @@
 # GPX import apps
 
-With the new file format [JCSV](https://doc8.banana.ch/en/node/8400) developed by Banana Software it is possible to add any kind of data as tables in a Banana.
+With the new file format [JCSV](https://doc8.banana.ch/en/node/8400) developed by Banana Software it is possible to add any kind of data as tables in a Banana accounting file.
 
 ## From table to .gpx file
-Starting from a table in Banana document the apps retrieve the data, create and then export **.gpx** files ([GPS Exchange Format](https://en.wikipedia.org/wiki/GPS_Exchange_Format)).
+Starting from a table in Banana document the apps retrieves the data, creates and then exports **.gpx** files ([GPS Exchange Format](https://en.wikipedia.org/wiki/GPS_Exchange_Format)).
 
 Using the appropriate BananaApp it is possible to retrieve the desired .gpx file.
 
@@ -19,7 +19,10 @@ There are three types of files:
 ### How to run the examples
 1) Use the GPX.ac2 file or create a new accounting file and drag & drop the .jcsv file into it.
 
-2) Add the desired App and run it.
+2) Add the desired App and run it
+* [Route GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/route_gpx.js)
+* [Track GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/track_gpx.js)
+* [Waypoints GPX app](https://raw.githubusercontent.com/BananaAccounting/General/master/ImportApps/GPX/from_table_to_gpx_file/Route/waypoints_gpx.js)
 
 3) The .gpx file is generated on the same directory of the .ac2 file.
 
