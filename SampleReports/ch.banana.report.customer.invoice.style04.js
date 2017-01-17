@@ -114,7 +114,7 @@ function initParam() {
 
 function verifyParam(param) {
    if (!param.print_header)
-     param.print_header = true;
+     param.print_header = false;
    if (!param.print_isr)
      param.print_isr = false;
    if (!param.isr_bank_name)

@@ -61,7 +61,7 @@ function initParam() {
 
 function verifyParam(param) {
    if (!param.print_header)
-     param.print_header = true;
+     param.print_header = false;
    if (!param.font_family)
      param.font_family = '';
    if (!param.font_color_1)
