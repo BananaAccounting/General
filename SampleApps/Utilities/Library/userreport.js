@@ -7,7 +7,7 @@
 // @description = User Report
 // @task = app.command
 // @doctype = 400.140.*
-// @docproperties = library
+// @docproperties = 
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1

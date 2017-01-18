@@ -7,7 +7,7 @@
 // @description = Book Report
 // @task = app.command
 // @doctype = 400.140.*
-// @docproperties = library
+// @docproperties = 
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
@@ -16,9 +16,7 @@ function exec(string) {
 
     //Parameters
     var parametri = {};
-    parametri.reportHeader = "Elenco completo: " + Banana.document.info("Base", "HeaderLeft");
-    parametri.soloDirittoVoto = false;
-    parametri.soloUnaRiga = false;
+    parametri.reportHeader = Banana.document.info("Base", "HeaderLeft");
     
     //Check if the table Items exists
     var itemsTable = Banana.document.table("Items");
