@@ -603,19 +603,30 @@ function addHeader(report) {
     var col2 = tab.addColumn("headerCol2");
 
 
-    var image = Banana.document.table('Documents').findRowByValue('RowId', 'logo').value('Attachments');
+    // If there is an image we add it to the report, otherwise no image is added
+    try {
+        var image = Banana.document.table('Documents').findRowByValue('RowId', 'logo').value('Attachments');
+    } catch(e) {}
+
     if (image) {
         tableRow = tab.addRow();
         tableRow.addCell("", "", 1).addImage("documents:logo", "img center");
+        var businessCell = tableRow.addCell("", "", 1);
     } else {
         tableRow = tab.addRow();
-        tableRow.addCell("", "", 1);
+        var businessCell = tableRow.addCell("", "", 2);
     }
 
-    var businessCell = tableRow.addCell("", "", 1);
-    businessCell.addParagraph(company, "bigLogo timeNewRoman center");
-    businessCell.addParagraph(address1 + ", " + zip + " - " + city, "center");
-    businessCell.addParagraph("Tel: " + phone + ", Email: " + email, "center");
+    // address
+    if (company) {
+        businessCell.addParagraph(company, "bigLogo timeNewRoman center");
+    }
+    if (address1 && zip && city) {
+        businessCell.addParagraph(address1 + ", " + zip + " - " + city, "center");
+    }
+    if (phone && email) {
+        businessCell.addParagraph("Tel: " + phone + ", Email: " + email, "center");
+    }
 
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
