@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+	<qresource>
+		<file>booksreport.js</file>
+		<file>userreport.js</file>
+	</qresource>
+</RCC>
