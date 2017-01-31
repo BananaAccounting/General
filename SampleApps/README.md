@@ -41,6 +41,12 @@ This app will show a report containing a detailed payment voucher for the Swiss 
 7. New blank document > Open File > select the PDF created on step 5
 8. It is now possible to modify/complete all the missing informations
 
+
+##trialbalance.js
+
+This app prints a report containing the balance sheet and the profit/loss statement.
+
+
 ##segments.js
 
 This app will show a report containing a detailed subdivision of the segments with balances.
