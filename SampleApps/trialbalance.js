@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.app.trialbalance
 // @api = 1.0
-// @pubdate = 2016-11-04
+// @pubdate = 2017-01-23
 // @publisher = Banana.ch SA
 // @description = Trial Balance
 // @task = app.command
@@ -49,12 +49,112 @@ function printReport(startDate, endDate) {
 	var report = Banana.Report.newReport("Swiss Red Cross - Trial Balance");
 
 	report.addParagraph("Trial Balance", "heading1");
+	report.addParagraph(" ", "");
+	report.addParagraph(" ", "");
 
+	/* 1. Print the balance sheet */
+	printBalanceSheet(startDate, endDate, report);
+
+	report.addPageBreak();
+
+	/* 2. Print the profit & loss statement */
+	printProfitLossStatement(startDate, endDate, report);
+
+
+	//Add a footer to the report
+	addFooter(report);
+
+	//Print the report
+	var stylesheet = createStyleSheet();
+	Banana.Report.preview(report, stylesheet);
+}
+
+
+
+
+
+//Function that prints the balance sheet
+function printProfitLossStatement(startDate, endDate, report) {
+	
 	//Create the table that will be printed on the report
 	var table = report.addTable("table");
 
 	tableRow = table.addRow();
-	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 4);
+	tableRow.addCell("PROFIT & LOSS STATEMENT", "bold", 2);
+	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 2);
+
+	//Add column titles to the table report
+	tableRow = table.addRow();
+	tableRow.addCell("", " bold borderBottom");
+	tableRow.addCell("", " bold borderBottom");
+	tableRow.addCell("Debit", "alignCenter bold borderBottom");
+	tableRow.addCell("Credit", "alignCenter bold borderBottom");
+
+	//Get the Accounts table
+	var accountsTab = Banana.document.table("Accounts");
+
+	//Income - Bclass 4
+	var sumTotIncome = 0;
+	for (var i = 0; i < accountsTab.rowCount; i++) {	
+		var tRow = accountsTab.row(i);
+
+		if (tRow.value("Account") && tRow.value("BClass") == "4") {
+			tableRow = table.addRow();
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
+			tableRow.addCell(tRow.value("Description"), "", 1);
+			tableRow.addCell("", "", 1);
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
+			sumTotIncome = Banana.SDecimal.add(sumTotIncome, bal);
+		}
+	}
+	
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 4);
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 4);
+
+	//Expenses - Bclass 3
+	var sumTotExpenses = 0;
+	for (var i = 0; i < accountsTab.rowCount; i++) {	
+		var tRow = accountsTab.row(i);
+
+		if (tRow.value("Account") && tRow.value("BClass") == "3") {
+			tableRow = table.addRow();
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
+			tableRow.addCell(tRow.value("Description"), "", 1);
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
+			tableRow.addCell("", "", 1);
+			sumTotExpenses = Banana.SDecimal.add(sumTotExpenses, bal);
+		}
+	}
+
+	//Totals
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 4);
+	
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 2);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotExpenses), "alignRight bold underline", 1);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotIncome), "alignRight bold underline", 1);
+
+}
+
+
+
+
+
+
+//Function that prints the balance sheet
+function printBalanceSheet(startDate, endDate, report) {
+	
+	//Create the table that will be printed on the report
+	var table = report.addTable("table");
+
+	tableRow = table.addRow();
+	tableRow.addCell("BALANCE SHEET", "bold", 2);
+	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 2);
 
 	//Add column titles to the table report
 	tableRow = table.addRow();
@@ -73,7 +173,7 @@ function printReport(startDate, endDate) {
 
 		if (tRow.value("Account") && tRow.value("BClass") == "1") {
 			tableRow = table.addRow();
-			tableRow.addCell(tRow.value("Account"), "alignCenter", 1);
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
 			tableRow.addCell(tRow.value("Description"), "", 1);
 			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
 			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
@@ -94,7 +194,7 @@ function printReport(startDate, endDate) {
 
 		if (tRow.value("Account") && tRow.value("BClass") == "2") {
 			tableRow = table.addRow();
-			tableRow.addCell(tRow.value("Account"), "alignCenter", 1);
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
 			tableRow.addCell(tRow.value("Description"), "", 1);
 			tableRow.addCell("", "", 1);
 			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
@@ -130,13 +230,11 @@ function printReport(startDate, endDate) {
 	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotAssets), "alignRight bold underline", 1);
 	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotLiabilities), "alignRight bold underline", 1);
 
-	//Add a footer to the report
-	addFooter(report);
-
-	//Print the report
-	var stylesheet = createStyleSheet();
-	Banana.Report.preview(report, stylesheet);
 }
+
+
+
+
 
 
 
@@ -150,6 +248,12 @@ function calcBalance(account, bClass, startDate, endDate) {
 	else if (bClass === "2") {
 		return Banana.SDecimal.invert(currentBal.balance);
 	}
+	else if (bClass === "3") {
+		return currentBal.total;
+	}
+	else if (bClass === "4") {
+		return Banana.SDecimal.invert(currentBal.total);
+	}
 	else if (!bClass) {
 		return currentBal.balance;
 	}
@@ -160,9 +264,11 @@ function calcBalance(account, bClass, startDate, endDate) {
 
 //Function that adds a Footer to the report
 function addFooter(report) {
-   report.getFooter().addClass("footer");
-   var versionLine = report.getFooter().addText("Page ", "description");
-   report.getFooter().addFieldPageNr();
+	var date = new Date();
+	var d = Banana.Converter.toLocaleDateFormat(date);
+	report.getFooter().addClass("footer");
+	var versionLine = report.getFooter().addText(d + " - Trial balance - Page ", "description");
+	report.getFooter().addFieldPageNr();
 }
 
 
