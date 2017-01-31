@@ -1,9 +1,9 @@
-' Copyright (C) 2015-2016 Banana.ch SA
+' Copyright (C) 2015-2017 Banana.ch SA
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
 ' You may obtain a copy of the License at
-'' Copyright (C) 2015 Banana.ch SA
+'' Copyright (C) 2015-2018 Banana.ch SA
 '
 ' Licensed under the Apache License, Version 2.0 (the "License");
 ' you may not use this file except in compliance with the License.
@@ -17,16 +17,12 @@
 ' See the License for the specific language governing permissions and
 ' limitations under the License.
 '
-' History
-' 2015-11-28 Separated url from query
-' 2016-04-25 Added BCellAmount
-' 2016-04-28 Solved rounding to zero
-' 2016-07-01 Added Mac OS X compatibility
-' 2016-07-13 Added Banana Running check (Windows only)
+' History version 2
+' 2017-02-01 First release with B Function with File and without file
 
 
 
-Option Explicit
+'Option Explicit On
 
 'Save lastQuery for debug purposes
 Const MAXLASTQUERY = 10
@@ -40,10 +36,8 @@ Dim lastRequestNumber As Integer
 Dim errorCount As Integer
 
 
-
-
 #If Mac Then
-    'Function used in execShell() function (only for mac osx)
+    'Function used in execShellMac() function (only for mac osx)
     Private Declare Function popen Lib "libc.dylib" (ByVal command As String, ByVal mode As String) As Long
     Private Declare Function pclose Lib "libc.dylib" (ByVal file As Long) As Long
     Private Declare Function fread Lib "libc.dylib" (ByVal outStr As String, ByVal size As Long, ByVal items As Long, ByVal stream As Long) As Long
@@ -51,78 +45,111 @@ Dim errorCount As Integer
 #End If
 
 
-
-
-
-
-
+Function BGetFile(Optional num As Integer = 0) As String
+Dim cellName As String
+    If num = 0 Then
+        cellName = "File0"
+    ElseIf num = 1 Then
+        cellName = "File1"
+    ElseIf num = 2 Then
+        cellName = "File2"
+    ElseIf num = 3 Then
+        cellName = "File3"
+    End If
+    BGetFile = Range(cellName).Value
+End Function
 ' Return the version date
 Public Function BFunctionsVersion() As String
-    BFunctionsVersion = "2016-07-13"
+    BFunctionsVersion = "2017-02-01"
+End Function
+
+' Retrieve the account description
+Public Function BAccountDescription(account As String, Optional column As String = "") As String
+    BAccountDescription = BAccountDescriptionF(BGetFile(), account, column)
 End Function
 
 
+
 ' Retrieve the account description
-Public Function BAccountDescription(fileName As String, account As String, Optional column As String = "") As String
+Public Function BAccountDescriptionF(fileName As String, account As String, Optional column As String = "") As String
     Application.Volatile
     Dim myUrl As String
     myUrl = "accountdescription/" & account
     If Len(column) > 0 Then
         myUrl = myUrl & "/" & column
-        End If
-    BAccountDescription = BHttpQuery(fileName, myUrl)
+    End If
+    BAccountDescriptionF = BHttpQuery(fileName, myUrl)
 End Function
 
 
 ' Retrieve the Amount for Balance
 ' Need file name, account (or groups) and and optional period
 ' Amount depend on the BClass indicated in the accounting plan
-Public Function BAmount(fileName As String, account As String, Optional period As String = "") As Double
-    Application.Volatile
-    BAmount = BBalanceGet(fileName, account, "balance", "amount", period)
+Public Function BAmount(account As String, Optional period As String = "") As Double
+    BAmount = BAmountF(BGetFile(), account, period)
+End Function
+Public Function BAmountF(fileName As String, account As String, Optional period As String = "") As Double
+    BAmountF = BBalanceGetF(fileName, account, "balance", "amount", period)
 End Function
 
 
 ' Retrieve the Amount for Balance
 ' Need file name, account (or groups) and and optional period
-Public Function BBalance(fileName As String, account As String, Optional period As String = "") As Double
-    Application.Volatile
-    BBalance = BBalanceGet(fileName, account, "balance", "balance", period)
+Public Function BBalance(account As String, Optional period As String = "") As Double
+    BBalance = BBalanceF(BGetFile(), account, period)
+End Function
+
+Public Function BBalanceF(fileName As String, account As String, Optional period As String = "") As Double
+    BBalanceF = BBalanceGetF(fileName, account, "balance", "balance", period)
 End Function
 
 
 ' Retrieve the Balance by passing also the valueName
 ' Need file name, account (or groups) and and optional period
-Public Function BBalanceGet(fileName As String, account As String, cmd As String, valueName As String, Optional period As String = "") As Double
+Public Function BBalanceGet(account As String, cmd As String, valueName As String, Optional period As String = "") As Double
+    BBalanceGet = BBalanceGetF(BGetFile(), account, cmd, valueName, period)
+End Function
+Public Function BBalanceGetF(fileName As String, account As String, cmd As String, valueName As String, Optional period As String = "") As Double
     Application.Volatile
     Dim myUrl As String
     Dim myQuery As String
     myUrl = cmd & "/" & account & "/" & valueName
     If Len(period) > 0 Then
         myQuery = "period=" & period
-        End If
-    BBalanceGet = Val(BQuery(fileName, myUrl, myQuery))
+    End If
+    BBalanceGetF = Val(BQuery(fileName, myUrl, myQuery))
 End Function
 
 
 ' Retrieve the Amount for Balance
 ' Need file name, account (or groups) and and optional period
 ' Amount depend on the BClass indicated in the accounting plan
-Public Function BBudgetAmount(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BBudgetAmount(account As String, Optional period As String = "") As Double
+    BBudgetAmount = BBudgetAmountF(Range("File0").Value, account, period)
+End Function
+
+Public Function BBudgetAmountF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BBudgetAmount = BBalanceGet(fileName, account, "budget", "amount", period)
+    BBudgetAmountF = BBalanceGetF(fileName, account, "budget", "amount", period)
 End Function
 
 
 ' Retrieve the Budget balance
-Public Function BBudgetBalance(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BBudgetBalance(account As String, Optional period As String = "") As Double
+    BBudgetBalance = BBudgetBalanceF(Range("File0").Value, account, period)
+End Function
+
+Public Function BBudgetBalanceF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BBudgetBalance = BBalanceGet(fileName, account, "budget", "balance", period)
+    BBudgetBalanceF = BBalanceGetF(fileName, account, "budget", "balance", period)
 End Function
 
 
 ' Retrieve the Budget interest
-Public Function BBudgetInterest(fileName As String, account As String, interestRate As String, Optional period As String = "")
+Public Function BBudgetInterest(account As String, interestRate As String, Optional period As String = "")
+    BBudgetInterest = BBudgetInterestF(BGetFile(), account, interestRate, period)
+End Function
+Public Function BBudgetInterestF(fileName As String, account As String, interestRate As String, Optional period As String = "")
     Application.Volatile
     Dim myUrl As String
     Dim myQuery As String
@@ -130,38 +157,51 @@ Public Function BBudgetInterest(fileName As String, account As String, interestR
     myQuery = "rate=" & interestRate
     If Len(period) > 0 Then
         myQuery = myQuery & "&period=" & period
-        End If
-    BBudgetInterest = Val(BQuery(fileName, myUrl))
+    End If
+    BBudgetInterestF = Val(BQuery(fileName, myUrl, myQuery))
 End Function
 
 
 ' Retrieve the Budget opening amount
-Public Function BBudgetOpening(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BBudgetOpening(account As String, Optional period As String = "") As Double
+    BBudgetOpening = BBudgetOpeningF(Range("File0").Value, account)
+End Function
+Public Function BBudgetOpeningF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BBudgetOpening = BBalanceGet(fileName, account, "budget", "opening", period)
+    BBudgetOpeningF = BBalanceGetF(fileName, account, "budget", "opening", period)
 End Function
 
 
 ' Retrieve the Budget total amount
-Public Function BBudgetTotal(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BBudgetTotal(account As String, Optional period As String = "") As Double
+    BBudgetTotal = BBudgetTotalF(Range("File0").Value, account, period)
+End Function
+
+Public Function BBudgetTotalF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BBudgetTotal = BBalanceGet(fileName, account, "budget", "total", period)
+    BBudgetTotalF = BBalanceGetF(fileName, account, "budget", "total", period)
 End Function
 
 
 'Get a value from a cell as a double
-Public Function BCellAmount(fileName As String, table As String, rowColumn As String, column As String) As Double
+Public Function BCellAmount(table As String, rowColumn As String, column As String) As Double
+    BCellAmount = Val(BCellValueF(Range("File0").Value, table, rowColumn, column))
+End Function
+Public Function BCellAmountF(fileName As String, table As String, rowColumn As String, column As String) As Double
     Application.Volatile
-    BCellAmount = Val(BCellValue(fileName, table, rowColumn, column))
+    BCellAmountF = Val(BCellValueF(fileName, table, rowColumn, column))
 End Function
 
 
 'Get a value from a cell
-Public Function BCellValue(fileName As String, table As String, rowColumn As String, column As String) As String
+Public Function BCellValue(table As String, rowColumn As String, column As String) As String
+    BCellValue = BCellValueF(Range("File0").Value, table, rowColumn, column)
+End Function
+Public Function BCellValueF(fileName As String, table As String, rowColumn As String, column As String) As String
     Application.Volatile
     Dim myUrl As String
     myUrl = "table/" & table & "/row/" & rowColumn & "/column/" & column
-    BCellValue = BHttpQuery(fileName, myUrl)
+    BCellValueF = BHttpQuery(fileName, myUrl)
 End Function
 
 
@@ -180,11 +220,15 @@ End Function
 
 
 ' Retrieve the end period date
-Public Function BEndPeriod(fileName As String, Optional period As String = "") As Date
+Public Function BEndPeriod(Optional period As String = "") As Date
+    BEndPeriod = BEndPeriodF(Range("File0").Value, period)
+End Function
+
+Public Function BEndPeriodF(fileName As String, Optional period As String = "") As Date
     Dim dateIso As String
     dateIso = BHttpQuery(fileName, "endperiod", "period=" & period)
     If Len(dateIso) = 10 Then
-        BEndPeriod = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
+        BEndPeriodF = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
     End If
 End Function
 
@@ -214,7 +258,11 @@ End Function
 
 
 ' Retrieve the interest
-Public Function BInterest(fileName As String, account As String, interestRate As String, Optional period As String = "")
+Public Function BInterest(account As String, interestRate As String, Optional period As String = "")
+    BInterest = BInterestF(Range("File0").Value, account, interestRate, period)
+End Function
+
+Public Function BInterestF(fileName As String, account As String, interestRate As String, Optional period As String = "")
     Application.Volatile
     Dim myUrl As String
     Dim myQuery As String
@@ -222,17 +270,21 @@ Public Function BInterest(fileName As String, account As String, interestRate As
     myQuery = "rate=" & interestRate
     If Not IsEmpty(period) Then
         myQuery = myQuery & "&period=" & period
-        End If
-    BInterest = Val(BQuery(fileName, myUrl, myQuery))
+    End If
+    BInterestF = Val(BQuery(fileName, myUrl, myQuery))
 End Function
 
 
 ' Retrieve the info file
-Public Function BInfo(fileName As String, sectionXml As String, idXml As String) As String
+Public Function BInfo(sectionXml As String, idXml As String) As String
+    BInfo = BInfoF(Range("File0").Value, sectionXml, idXml)
+End Function
+
+Public Function BInfoF(fileName As String, sectionXml As String, idXml As String) As String
     Application.Volatile
     Dim myUrl As String
     myUrl = "info/" & sectionXml & "/" & idXml
-    BInfo = BHttpQuery(fileName, myUrl)
+    BInfoF = BHttpQuery(fileName, myUrl)
 End Function
 
 
@@ -245,45 +297,65 @@ End Function
 
 
 'Return opening for CurrentBalance
-    Public Function BOpening(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BOpening(account As String, Optional period As String = "") As Double
+    BOpening = BOpeningF(Range("File0").Value, account, period)
+End Function
+
+Public Function BOpeningF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BOpening = BBalanceGet(fileName, account, "balance", "opening", period)
+    BOpeningF = BBalanceGetF(fileName, account, "balance", "opening", period)
 End Function
 
 
 ' Retrieve the start period date
-Public Function BStartPeriod(fileName As String, Optional period As String = "") As Date
+Public Function BStartPeriod(Optional period As String = "") As Double
+    BStartPeriod = BStartPeriodF(Range("File0").Value, period)
+End Function
+
+Public Function BStartPeriodF(fileName As String, Optional period As String = "") As Date
     Dim dateIso As String
     dateIso = BHttpQuery(fileName, "startperiod", "period=" & period)
     If Len(dateIso) = 10 Then
-        BStartPeriod = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
-        End If
+        BStartPeriodF = DateSerial(Left(dateIso, 4), Mid(dateIso, 6, 2), Right(dateIso, 2))
+    End If
 End Function
 
 
 ' Retrieve the total amount
-Public Function BTotal(fileName As String, account As String, Optional period As String = "") As Double
+Public Function BTotal(account As String, Optional period As String = "") As Double
+    BTotal = BTotalF(Range("File0").Value, account, period)
+End Function
+
+Public Function BTotalF(fileName As String, account As String, Optional period As String = "") As Double
     Application.Volatile
-    BTotal = BBalanceGet(fileName, account, "balance", "total", period)
+    BTotalF = BBalanceGetF(fileName, account, "balance", "total", period)
 End Function
 
 
 ' Retrieve the VAT balance amount
-Public Function BVatBalance(fileName As String, vatCode As String, vatValue As String, Optional period As String = "") As Double
+Public Function BVatBalance(vatCode As String, vatValue As String, Optional period As String = "") As Double
+    BVatBalance = BVatBalanceF(Range("File0").Value, vatCode, vatValue, period)
+End Function
+
+Public Function BVatBalanceF(fileName As String, vatCode As String, vatValue As String, Optional period As String = "") As Double
     Application.Volatile
-    BVatBalance = BBalanceGet(fileName, vatCode, "vatbalance", vatValue, period)
+    BVatBalanceF = BBalanceGetF(fileName, vatCode, "vatbalance", vatValue, period)
 End Function
 
 
 ' Retrieve the VAT description
 Public Function BVatDescription(fileName As String, vatCode As String, Optional column As String = "") As String
+    BVatDescription = BVatDescriptionF(Range("File0").Value, column)
+End Function
+
+Public Function BVatDescriptionF(fileName As String, vatCode As String, Optional column As String = "") As String
     Application.Volatile
     Dim myUrl As String
     myUrl = "vatdescription/" & vatCode
     If Len(column) > 0 Then
         myUrl = myUrl & "/" & column
-        End If
-    BVatDescription = BHttpQuery(fileName, myUrl)
+    End If
+    BVatDescriptionF = BHttpQuery(fileName, myUrl)
 End Function
 
 
@@ -300,14 +372,14 @@ Public Sub RecalculateAll()
     'We check if the Banana process is running.
     'If so, it means that there is an opened Banana Accounting file and we can proceede.
     'Otherwise we stop the script's execution to avoid making queries.
-    
+
     If Not BananaIsRunning() Then
         MsgBox "Warning: Banana is not running."
         Application.CalculateFullRebuild
         Exit Sub
     End If
-    
-    #If Mac Then
+
+#If Mac Then
         ' check on mac
         
             'First do some change to the spreadsheet
@@ -320,19 +392,19 @@ Public Sub RecalculateAll()
             ActiveWorkbook.Names("someChanges").Delete
             'Now recalculate all
             Application.CalculateFullRebuild
-    #Else
-            'First do some change to the spreadsheet
-            'We create a named range and delete it
-            requestNumber = requestNumber + 1
-            errorCount = 0
-            On Error Resume Next
+#Else
+    'First do some change to the spreadsheet
+    'We create a named range and delete it
+    requestNumber = requestNumber + 1
+    errorCount = 0
+    On Error Resume Next
+    ActiveWorkbook.Names("someChanges").Delete
+    ActiveWorkbook.Names.Add Name:="someChanges", RefersTo:="=XEX1048575"
             ActiveWorkbook.Names("someChanges").Delete
-            ActiveWorkbook.Names.Add Name:="someChanges", RefersTo:="=XEX1048575"
-            ActiveWorkbook.Names("someChanges").Delete
-            
-            'Now recalculate all
-            Application.CalculateFullRebuild
-    #End If
+
+    'Now recalculate all
+    Application.CalculateFullRebuild
+#End If
 
 End Sub
 
@@ -352,7 +424,7 @@ End Sub
 Private Function BHttpQuery(fileName As String, url As String, Optional query As String = "") As String
 
     BHttpQuery = ""
-    
+
     ' we do not want to repeat the same error
     If (lastRequestNumber = requestNumber And errorCount > MAXERROR) Then
         Exit Function
@@ -362,18 +434,19 @@ Private Function BHttpQuery(fileName As String, url As String, Optional query As
     If Len(fileName) = 0 Then
         Exit Function
     End If
-    
+
     ' Check if we are on MAC OS X operating system
-    #If Mac Then
+#If Mac Then
         BHttpQuery = BHttpQueryMac(fileName, url, query)
-    #Else
-        ' We are on Windows operating system
-        BHttpQuery = BHttpQueryWindows(fileName, url, query) '
-    #End If
+#Else
+    ' We are on Windows operating system
+    BHttpQuery = BHttpQueryWindows(fileName, url, query) '
+#End If
 
 End Function
 
-
+#If Mac Then
+#Else
 '============================================================================================================================================
 ' WINDOWS
 '============================================================================================================================================
@@ -396,7 +469,7 @@ Private Function BHttpQueryWindows(fileName As String, url As String, query As S
     Dim BananaHostName As String
     'retrieve optiona hostName
     On Error Resume Next
-    BananaHostName = Range("BananaHostName").value
+    BananaHostName = Range("BananaHostName").Value
     If Len(BananaHostName) = 0 Then
         BananaHostName = "localhost:8081"
     End If
@@ -427,8 +500,8 @@ Private Function BHttpQueryWindows(fileName As String, url As String, query As S
                 BHttpQueryWindows = ""
             End If
         Else
-        errorCount = errorCount + 1
-        '
+            errorCount = errorCount + 1
+            '
         End If
     Else
         errorCount = errorCount + 1
@@ -453,11 +526,11 @@ Private Function BananaIsRunningWindows() As Boolean
     'Banana 8 process
     Dim banana80 As String
     banana80 = "Banana80.EXE"
-    
+
     'Banana Experimental 8 process
     Dim bananaExpm80 As String
     bananaExpm80 = "BananaExpm80.EXE"
-    
+
     'Check if any Banana 8 process is running
     If (isProcessRunningWindows(bananaExpm80) Or isProcessRunningWindows(banana80)) Then
         BananaIsRunningWindows = True
@@ -472,7 +545,7 @@ Function isProcessRunningWindows(process As String) As Boolean
     Set objList = GetObject("winmgmts:") _
         .ExecQuery("select * from win32_process where name='" & process & "'")
 
-    If objList.count > 0 Then
+    If objList.Count > 0 Then
         isProcessRunningWindows = True
     Else
         isProcessRunningWindows = False
@@ -480,15 +553,16 @@ Function isProcessRunningWindows(process As String) As Boolean
 End Function
 
 
+#End If
 
 
-
+#If Mac Then
 
 '============================================================================================================================================
 ' MAC OS X
 '============================================================================================================================================
 
-' MAC OS X - We call the Banana Accounting web server using execShell function to call curl
+' MAC OS X - We call the Banana Accounting web server using execShellMac function to call curl
 Private Function BHttpQueryMac(fileName As String, url As String, query As String) As String
 
     BHttpQueryMac = ""
@@ -508,7 +582,7 @@ Private Function BHttpQueryMac(fileName As String, url As String, query As Strin
     Dim BananaHostName As String
     'retrieve optiona hostName
     On Error Resume Next
-    BananaHostName = Range("BananaHostName").value
+    BananaHostName = Range("BananaHostName").Value
     If Len(BananaHostName) = 0 Then
         BananaHostName = "localhost:8081"
     End If
@@ -522,7 +596,7 @@ Private Function BHttpQueryMac(fileName As String, url As String, query As Strin
     Next i
     lastQuery(MAXLASTQUERY) = myUrl
 
-    oHttp = HTTPGet(myUrl, query)
+    oHttp = HTTPGetMac(myUrl, query)
 
     If Len(oHttp) > 0 Then
         BHttpQueryMac = oHttp
@@ -533,8 +607,8 @@ End Function
 
 ' execShell() function courtesy of Robert Knight via StackOverflow
 ' http://stackoverflow.com/questions/6136798/vba-shell-function-in-office-2011-for-mac
-Function execShell(command As String, Optional ByRef exitCode As Long) As String
-   
+Function execShellMac(command As String, Optional ByRef exitCode As Long) As String
+
     Dim file As Long
     file = popen(command, "r")
 
@@ -549,7 +623,7 @@ Function execShell(command As String, Optional ByRef exitCode As Long) As String
         read = fread(chunk, 1, Len(chunk) - 1, file)
         If read > 0 Then
             chunk = Left$(chunk, read)
-            execShell = execShell & chunk
+            execShellMac = execShellMac & chunk
         End If
     Wend
 
@@ -558,20 +632,26 @@ Function execShell(command As String, Optional ByRef exitCode As Long) As String
 End Function
 
 
-Function HTTPGet(sUrl As String, sQuery As String) As String
+Function HTTPGetMac(sUrl As String, sQuery As String) As String
 
     Dim sCmd As String
     Dim sResult As String
     Dim lExitCode As Long
 
     sCmd = "curl --get -d """ & sQuery & """" & " " & sUrl
-    sResult = execShell(sCmd, lExitCode)
+    sResult = execShellMac(sCmd, lExitCode)
 
     ' ToDo check lExitCode
 
-    HTTPGet = sResult
+    HTTPGetMac = sResult
 
 End Function
+
+#End If
+
+
+
+
 
 
 
