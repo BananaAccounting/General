@@ -1,10 +1,10 @@
 // Test script using Banana.Report
 //
-// @id = ch.banana.app.utilties.userreport
+// @id = ch.banana.app.utilties.librarycontactsreport
 // @api = 1.0
 // @pubdate = 2016-09-21
 // @publisher = Banana.ch SA
-// @description = User Report
+// @description = Library Contacts Report
 // @task = app.command
 // @doctype = 400.140.*
 // @docproperties = 
@@ -13,6 +13,15 @@
 // @timeout = -1
 
 
+
+
+/*
+    SUMMARY
+    =======
+    This app creates a report with a list of the contacts, depending of the choices made:
+    all the contacts, selected contacts only, contacts with expired books.
+
+*/
 
 
 
@@ -33,8 +42,11 @@ function exec(string) {
     if (!contactsTable) { return; }
     if (!loansTable) { return; }
 
+    //Get the language of the document and the right translations
+    var traduzioni = setLanguage();
+
     //Opens a dialog window asking the user what to print
-    var cardsToPrint = Banana.Ui.getItem("Schede prestiti", "Selezionare...", ["Tutti gli utenti","Scelta utenti", "Utenti con libri scaduti"], 0, false);
+    var cardsToPrint = Banana.Ui.getItem(traduzioni.schedePrestiti, traduzioni.selezione, [traduzioni.selezionetipoTutti,traduzioni.selezionetipoSceltaUtente, traduzioni.selezionetipoUtentiLibriScaduti], 0, false);
     
     //By default we do not print the expired books. Expired books are printed only if the user wants it
     var printExpired = false;
@@ -43,17 +55,17 @@ function exec(string) {
     //If the user makes a choice, so he didn't click 'Cancel'...
     if (cardsToPrint) {
 
-        if (cardsToPrint === "Tutti gli utenti") { //All the users
+        if (cardsToPrint === traduzioni.selezionetipoTutti) { //All the users
             var users = getIDs(contactsTable);
         } 
-        else if (cardsToPrint === "Scelta utenti") { //Selected users only
-            var users = Banana.Ui.getText("Stampa schede", "Inserire id utente/i (es. U-0001,U-0002)", "U-0001,U-0002,U-0003");
+        else if (cardsToPrint === traduzioni.selezionetipoSceltaUtente) { //Selected users only
+            var users = Banana.Ui.getText(traduzioni.stampaSchede, traduzioni.inserire);
             
             if (users) {
                 users = users.split(",");
             }
         } 
-        else if (cardsToPrint === "Utenti con libri scaduti") { //Users with expired books
+        else if (cardsToPrint === traduzioni.selezionetipoUtentiLibriScaduti) { //Users with expired books
             var users = getExpiredIDs(loansTable);
             printExpired = true;
         }
@@ -62,13 +74,13 @@ function exec(string) {
         //Check if there are users, then print the cards
         if (users) {
 
-            var printOptions = Banana.Ui.getItem("Stampa schede utenti", "Selezionare...", ["Scheda con fine pagina", "Scheda senza fine pagina", "Lista prestiti"], 0, false);
+            var printOptions = Banana.Ui.getItem(traduzioni.stampaSchedeUtenti, traduzioni.selezione, [traduzioni.conFinePagina, traduzioni.senzaFinePagina, traduzioni.listaPrestiti], 0, false);
 
-            if (printOptions === "Lista prestiti") { //Print the full list
-                printLoansList(users, contactsTable, loansTable, printExpired, printOptions);
+            if (printOptions === traduzioni.listaPrestiti) { //Print the full list
+                printLoansList(users, contactsTable, loansTable, printExpired, printOptions, traduzioni);
             }
             else { //Print the user cards (all users or only the selected)
-                printUserCard(users, contactsTable, loansTable, printExpired, printOptions);
+                printUserCard(users, contactsTable, loansTable, printExpired, printOptions, traduzioni);
             }
         } 
         else {
@@ -85,11 +97,11 @@ function exec(string) {
 
 
 /* Function that prints a list of all the users with the books list */
-function printLoansList(users, contactsTable, loansTable, printExpired, printOptions) {
+function printLoansList(users, contactsTable, loansTable, printExpired, printOptions, traduzioni) {
 
     param.orientamentoPagina = "orizzontale";
     
-    var report = Banana.Report.newReport("Schede utenti");
+    var report = Banana.Report.newReport(traduzioni.schedePrestiti);
     var today = new Date();
 
     //Print the header
@@ -122,18 +134,18 @@ function printLoansList(users, contactsTable, loansTable, printExpired, printOpt
 
                     tableRow = internalTable.addRow();
                     //tableRow.addCell("Utente: ", "border-left border-top border-bottom headerTable italic", 1);
-                    tableRow.addCell("Id", "border-left border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Nome", "border-top headerTable bold", 1);
-                    tableRow.addCell("Cognome", "border-top headerTable bold", 1);
-                    tableRow.addCell("Telefono", "border-top headerTable bold", 1);
-                    tableRow.addCell("Email", "border-top headerTable bold", 1);
-                    tableRow.addCell("Libri: ", "border-left border-top border-bottom headerTable italic", 1);
-                    tableRow.addCell("Data", " border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Id", "border-left border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Descrizione", "border-left border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Data scadenza", "border-left border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Note", "border-left border-top border-bottom headerTable bold", 1);
-                    tableRow.addCell("Data restituzione", "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.idPersona, "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.nome, "border-top headerTable bold", 1);
+                    tableRow.addCell(traduzioni.cognome, "border-top headerTable bold", 1);
+                    tableRow.addCell(traduzioni.telefono, "border-top headerTable bold", 1);
+                    tableRow.addCell(traduzioni.email, "border-top headerTable bold", 1);
+                    tableRow.addCell(traduzioni.libri + ": ", "border-left border-top border-bottom headerTable italic", 1);
+                    tableRow.addCell(traduzioni.data, " border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.idLibro, "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.descrizioneLibro, "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.datascadenzaLibro, "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.note, "border-left border-top border-bottom headerTable bold", 1);
+                    tableRow.addCell(traduzioni.datarestituzioneLibro, "border-left border-top border-bottom headerTable bold", 1);
 
                     tableRow = internalTable.addRow();
                     //tableRow.addCell("", "border-left", 1);
@@ -283,29 +295,29 @@ function printLoansList(users, contactsTable, loansTable, printExpired, printOpt
 
 
 /* Functin that prints the user card */
-function printUserCard(users, contactsTable, loansTable, printExpired, printOptions) {
+function printUserCard(users, contactsTable, loansTable, printExpired, printOptions, traduzioni) {
 
     param.orientamentoPagina = "verticale";
-    var report = Banana.Report.newReport("Scheda utente");
+    var report = Banana.Report.newReport(traduzioni.schedeUtenti);
 
-    if (printOptions === "Scheda con fine pagina") {
+    if (printOptions === traduzioni.conFinePagina) {
         for (var i = 0; i < users.length; i++) {
 
             //Print the header
             addHeader(report);
 
             //Print the user informations
-            printAddress(users[i].trim(), contactsTable, report);
+            printAddress(users[i].trim(), contactsTable, report, traduzioni);
 
             //Print the books list
-            printBooksList(users[i].trim(), contactsTable, loansTable, printExpired, report);
+            printBooksList(users[i].trim(), contactsTable, loansTable, printExpired, report, traduzioni);
             
             if (i < users.length-1) {
                 report.addPageBreak();
             }
         }
     }
-    else if (printOptions === "Scheda senza fine pagina") {
+    else if (printOptions === traduzioni.senzaFinePagina) {
 
         //Print the header
         addHeader(report);
@@ -313,34 +325,12 @@ function printUserCard(users, contactsTable, loansTable, printExpired, printOpti
         for (var i = 0; i < users.length; i++) {
 
             //Print the user informations
-            printAddress(users[i].trim(), contactsTable, report);
+            printAddress(users[i].trim(), contactsTable, report, traduzioni);
 
             //Print the books list
-            printBooksList(users[i].trim(), contactsTable, loansTable, printExpired, report);
+            printBooksList(users[i].trim(), contactsTable, loansTable, printExpired, report, traduzioni);
         }
     }
-
-    // for (var i = 0; i < users.length; i++) {
-        
-    //     //Print the header
-    //     addHeader(report);
-
-    //     //Print the user informations
-    //     printAddress(users[i].trim(), contactsTable, report);
-
-    //     //Print the books list
-    //     printBooksList(users[i].trim(), contactsTable, loansTable, printExpired, report);
-        
-    //     if (printOptions === "Scheda con fine pagina") {
-    //         if (i < users.length-1) {
-    //             report.addPageBreak();
-    //         }
-    //     }
-    // }
-
-
-
-
 
     //Print the footer
     addFooter(report);
@@ -354,7 +344,7 @@ function printUserCard(users, contactsTable, loansTable, printExpired, printOpti
 
 
 /* Function that prints all the books list for the given user */
-function printBooksList(user, contactsTable, loansTable, printExpired, report) {
+function printBooksList(user, contactsTable, loansTable, printExpired, report, traduzioni) {
 
     report.addParagraph(Banana.document.info("Loans","TableHeader") + ":", "");
     report.addParagraph(" ", "");
@@ -368,10 +358,10 @@ function printBooksList(user, contactsTable, loansTable, printExpired, report) {
     //Add the header to the table
     var tableHeader = booksTable.getHeader();
     tableRow = tableHeader.addRow();
-    tableRow.addCell("Data", "border-left border-top bold headerTable", 1);
-    tableRow.addCell("Descrizione libro", "border-left border-top bold headerTable", 1);
-    tableRow.addCell("Scadenza", "border-left border-top bold headerTable", 1);
-    tableRow.addCell("Note", "border-left border-top border-right bold headerTable", 1);    
+    tableRow.addCell(traduzioni.data, "border-left border-top bold headerTable", 1);
+    tableRow.addCell(traduzioni.descrizioneLibro, "border-left border-top bold headerTable", 1);
+    tableRow.addCell(traduzioni.datascadenzaLibro, "border-left border-top bold headerTable", 1);
+    tableRow.addCell(traduzioni.note, "border-left border-top border-right bold headerTable", 1);    
 
     //We print all the books list
     if (!printExpired) {
@@ -398,7 +388,7 @@ function printBooksList(user, contactsTable, loansTable, printExpired, report) {
                     notesCell.addParagraph(notes, "");
 
                     if (today > expirationDate) {
-                        notesCell.addParagraph("SCADUTO", "warning bold", 1);
+                        notesCell.addParagraph(traduzioni.scaduto, "warning bold", 1);
                     }
 
                     booksCnt++;
@@ -444,7 +434,7 @@ function printBooksList(user, contactsTable, loansTable, printExpired, report) {
                     notesCell.addParagraph(notes, "");
 
                     if (today > expirationDate) {
-                        notesCell.addParagraph("SCADUTO", "warning bold", 1);
+                        notesCell.addParagraph(traduzioni.scaduto, "warning bold", 1);
                     }
 
                 }
@@ -459,7 +449,7 @@ function printBooksList(user, contactsTable, loansTable, printExpired, report) {
 
 
 /* Function that prints the user information */
-function printAddress(user, contactsTable, report) {
+function printAddress(user, contactsTable, report, traduzioni) {
 
     report.addParagraph(Banana.document.info("Contacts","TableHeader") + ":", "");
     report.addParagraph(" ", "");
@@ -475,16 +465,16 @@ function printAddress(user, contactsTable, report) {
             if (user === tRow.value("RowId")) {
 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Id", "italic", 1);
+                tableRow.addCell(traduzioni.idPersona, "italic", 1);
                 tableRow.addCell(tRow.value("RowId"), "", 1);
 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Nome e Cognome", "italic", 1);
+                tableRow.addCell(traduzioni.nomeCognome, "italic", 1);
                 tableRow.addCell(tRow.value("FirstName") + " " + tRow.value("FamilyName"), "", 1);
                 
                 tableRow = infoTable.addRow();
                 var addressCell1 = tableRow.addCell();
-                addressCell1.addParagraph("Indirizzo", "italic", 1);
+                addressCell1.addParagraph(traduzioni.indirizzo, "italic", 1);
                 addressCell1.addParagraph(" ", "", 1);
 
                 var addressCell2 = tableRow.addCell();
@@ -492,23 +482,23 @@ function printAddress(user, contactsTable, report) {
                 addressCell2.addParagraph(tRow.value("PostalCode") + " " + tRow.value("Locality"), "", 1);
                 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Telefono", "italic", 1);
+                tableRow.addCell(traduzioni.telefono, "italic", 1);
                 tableRow.addCell(tRow.value("PhoneHome"), "", 1);
                 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Cellulare", "italic", 1);
+                tableRow.addCell(traduzioni.cellulare, "italic", 1);
                 tableRow.addCell(tRow.value("PhoneMobile"), "", 1);
                 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Email", "italic", 1);
+                tableRow.addCell(traduzioni.email, "italic", 1);
                 tableRow.addCell(tRow.value("EmailHome"), "", 1);
                 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Membro dal", "italic", 1);
+                tableRow.addCell(traduzioni.membroDal, "italic", 1);
                 tableRow.addCell(Banana.Converter.toLocaleDateFormat(tRow.value("MemberDateBegin")), "", 1);
                 
                 tableRow = infoTable.addRow();
-                tableRow.addCell("Fine membro", "italic", 1);
+                tableRow.addCell(traduzioni.fineMembro, "italic", 1);
                 tableRow.addCell(Banana.Converter.toLocaleDateFormat(tRow.value("MemberDate")), "", 1);
             }
         }
@@ -533,7 +523,7 @@ function getExpiredIDs(table) {
             var dateExpiration   = tRow.value("DateExpiration");
             var expirationDate = Banana.Converter.toDate(dateExpiration);
     
-            if (today > expirationDate) {
+            if (today > expirationDate && !tRow.value("DateReturn")) {
                 IDsList.push(id);
             }
         }
@@ -728,219 +718,173 @@ function createStyleSheet() {
 
 
 
+/* Function that get the language of the document and uses the right translations */
+function setLanguage() {
 
+    var lan = Banana.document.info("Base","Language");
+    var traduzioni = {};
 
+    if (lan === "ita") {
+        traduzioni["schedePrestiti"] = "Schede prestiti";
+        traduzioni["selezione"] = "Selezionare...";
+        traduzioni["selezionetipoTutti"] = "Tutti i contatti";
+        traduzioni["selezionetipoSceltaUtente"] = "Scelta contatti";
+        traduzioni["selezionetipoUtentiLibriScaduti"] = "Contatti con libri scaduti";
 
+        traduzioni["stampaSchede"] = "Stampa schede";
+        traduzioni["inserire"] = "Inserire id contatti (es. U-001,U-002)";
 
+        traduzioni["stampaSchedeUtenti"] = "Stampa schede contatti";
+        traduzioni["conFinePagina"] = "Scheda con fine pagina";
+        traduzioni["senzaFinePagina"] = "Scheda senza fine pagina";
+        traduzioni["listaPrestiti"] = "Lista prestiti";
 
+        traduzioni["schedeUtenti"] = "Schede contatti";
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+        traduzioni["idPersona"] = "Id";
+        traduzioni["nome"] = "Nome";
+        traduzioni["cognome"] = "Cognome";
+        traduzioni["telefono"] = "Telefono";
+        traduzioni["email"] = "Email";
+        traduzioni["libri"] = "Libri";
+        traduzioni["data"]= "Data";
+        traduzioni["idLibro"] = "Id";
+        traduzioni["descrizioneLibro"] = "Descrizione libro";
+        traduzioni["datascadenzaLibro"] = "Data scadenza";
+        traduzioni["note"] = "Note";
+        traduzioni["datarestituzioneLibro"] = "Data restituzione";
 
-// /* Function that prints a list of all the users with the books list */
-// function printLoansList(users, contactsTable, loansTable, printExpired, printOptions) {
+        traduzioni["scaduto"] = "SCADUTO";
+        
+        traduzioni["nomeCognome"] = "Nome e Cognome";
+        traduzioni["indirizzo"] = "Indirizzo";
+        traduzioni["cap"] = "CAP";
+        traduzioni["localita"] = "Località";
+        traduzioni["cellulare"] = "Cellulare";
+        traduzioni["membroDal"] = "Membro dal";
+        traduzioni["fineMembro"] = "Fine membro";
+    }
+    else if (lan === "fra") {
+        traduzioni["schedePrestiti"] = "Cartes de prêts";
+        traduzioni["selezione"] = "Select";
+        traduzioni["selezionetipoTutti"] = "Tous les contacts";
+        traduzioni["selezionetipoSceltaUtente"] = "Choisissez contacts";
+        traduzioni["selezionetipoUtentiLibriScaduti"] = "Contacts avec des livres expirées";
 
-//     param.orientamentoPagina = "orizzontale";
-    
-//     var report = Banana.Report.newReport("Schede utenti");
-//     var today = new Date();
+        traduzioni["stampaSchede"] = "Imprimer des cartes";
+        traduzioni["inserire"] = "Insert id de contacts (par exemple, U-001, U-002)";
 
-//     //Print the header
-//     addHeader(report);
+        traduzioni["stampaSchedeUtenti"] = "Imprimer contacts cartes";
+        traduzioni["conFinePagina"] = "Carte à la fin de la page";
+        traduzioni["senzaFinePagina"] = "Carte sans fin de page";
+        traduzioni["listaPrestiti"] = "Liste de prêts";
 
-//     report.addParagraph(Banana.document.info("Loans","TableHeader") + ":", "");
-//     report.addParagraph(" ", "");
+        traduzioni["schedeUtenti"] = "Cartes de Contacts";
 
-//     //Create a table
-//     var internalTable = report.addTable("internalTable");
-    
-//     for (var j = 0; j < users.length; j++) {
-//         var booksCnt = 0;
-//         var currentUser = users[j].trim();
+        traduzioni["idPersona"] = "Id";
+        traduzioni["nome"] = "Nom";
+        traduzioni["cognome"] = "Nom";
+        traduzioni["telefono"] = "Téléphone";
+        traduzioni["email"] = "Courriel";
+        traduzioni["libri"] = "Livres";
+        traduzioni["données"] = "Date";
+        traduzioni["idLibro"] = "Id";
+        traduzioni["descrizioneLibro"] = "Book description";
+        traduzioni["datascadenzaLibro"] = "Date d’Expiration";
+        traduzioni["note"] = "Notes";
+        traduzioni["datarestituzioneLibro"] = "Date de retour";
 
-//         //tableRow = internalTable.addRow();
-//         //var intListCell = tableRow.addCell("", "border-top border-left border-right", 1);
+        traduzioni["scaduto"] = "Expirée";
 
-//         /*
-//             DATI UTENTE
-//         */
-//         for (var i = 0; i < contactsTable.rowCount; i++) {
-//             var tRow = contactsTable.row(i);
+        traduzioni["nomeCognome"] = "Nom et prénom";
+        traduzioni["indirizzo"] = "Adresse";
+        traduzioni["PAC"] = "Zip";
+        traduzioni["localita"] = "Localité";
+        traduzioni["cellulare"] = "Mobile";
+        traduzioni["membroDal"] = "Membre de";
+        traduzioni["fineMembro"] = "Fin des membres";
+    }
+    else if (lan === "deu") {
+        traduzioni ["schedePrestiti"] = "Kredite Karten";
+        traduzioni ["selezione"] = "Select";
+        traduzioni ["selezionetipoTutti"] = "Alle Kontakte";
+        traduzioni ["selezionetipoSceltaUtente"] = "Wählen Sie Kontakte";
+        traduzioni ["selezionetipoUtentiLibriScaduti"] = "Kontakte mit abgelaufenen Bücher";
 
-//             if (!tRow.isEmpty) {
+        traduzioni ["stampaSchede"] = "Drucken Sie Karten";
+        traduzioni ["inserire"] = "Insert Kontakte-Id (z.B. U-001, U-002)";
 
-//                 if (currentUser === tRow.value("RowId")) {
-//                     var id = tRow.value("RowId");
-//                     var firstName = tRow.value("FirstName");
-//                     var familyName = tRow.value("FamilyName");
-//                     var phone = tRow.value("PhoneHome");
-//                     var email = tRow.value("EmailHome");
+        traduzioni ["stampaSchedeUtenti"] = "Print Kontakte Karten";
+        traduzioni ["conFinePagina"] = "Karte mit Ende Seite";
+        traduzioni ["senzaFinePagina"] = "Karte ohne Ende Seite";
+        traduzioni ["listaPrestiti"] = "Darlehen Liste";
 
-//                     // intListCell.addText(id + "; " ,"");
-//                     // intListCell.addText(firstName + " " + familyName + "; ","");
-//                     // intListCell.addText(phone  + "; ", "");
-//                     // intListCell.addText(email + ";", "");
+        traduzioni ["schedeUtenti"] = "Kontakte-Karten";
 
+        traduzioni ["idPersona"] = "Id";
+        traduzioni ["nome"] = "Name";
+        traduzioni ["cognome"] = "Nachname";
+        traduzioni ["telefono"] = "Telefon";
+        traduzioni ["email"] = "Email";
+        traduzioni ["libri"] = "Bücher";
+        traduzioni ["data"] = "Datum";
+        traduzioni ["idLibro"] = "Id";
+        traduzioni ["descrizioneLibro"] = "Buch Beschreibung";
+        traduzioni ["datascadenzaLibro"] = "Expiration Date";
+        traduzioni ["note"] = "Notizen";
+        traduzioni ["datarestituzioneLibro"] = "Rückgabedatum";
 
-//                     tableRow = internalTable.addRow();
-//                     tableRow.addCell("Utente: ", "border-left border-top border-right border-bottom headerTable italic", 1);
-//                     tableRow.addCell("Id", "border-left border-right border-top headerTable bold", 1);
-//                     tableRow.addCell("Nome", "border-left border-right border-top headerTable bold", 1);
-//                     tableRow.addCell("Cognome", "border-left border-right border-top headerTable bold", 1);
-//                     tableRow.addCell("Telefono", "border-left border-right border-top headerTable bold", 1);
-//                     tableRow.addCell("Email", "border-left border-right border-top headerTable bold", 1);
+        traduzioni ["scaduto"] = "EXPIRED";
 
-//                     tableRow = internalTable.addRow();
-//                     tableRow.addCell("", "", 1);
-//                     tableRow.addCell(id, " border-right border-top", 1);
-//                     tableRow.addCell(firstName, "border-left border-right border-top", 1);
-//                     tableRow.addCell(familyName, "border-left border-right border-top", 1);
-//                     tableRow.addCell(phone, "border-left border-right border-top", 1);
-//                     tableRow.addCell(email, "border-left border-right border-top", 1);
-//                 }
-//             }
-//         }
+        traduzioni ["nomeCognome"] = "Name und Vorname";
+        traduzioni ["indirizzo"] = "Adresse";
+        traduzioni ["cap"] = "Zip";
+        traduzioni ["localita"] = "Ort";
+        traduzioni ["cellulare"] = "Mobile";
+        traduzioni ["membroDal"] = "Mitglied von";
+        traduzioni ["fineMembro"] = "End-Mitglied";
+    }
+    else {
+        traduzioni["schedePrestiti"] = "Loans cards";
+        traduzioni["selezione"] = "Select";
+        traduzioni["selezionetipoTutti"] = "All contacts";
+        traduzioni["selezionetipoSceltaUtente"] = "Choose contacts";
+        traduzioni["selezionetipoUtentiLibriScaduti"] = "Contacts with expired books";
 
-//         tableRow = internalTable.addRow();
-//         tableRow.addCell("Libri: ", "border-left border-top border-right border-bottom headerTable italic", 1);
-//         tableRow.addCell("Data", " border-top border-right border-bottom headerTable bold", 1);
-//         tableRow.addCell("Id", "border-left border-top border-right border-bottom headerTable bold", 1);
-//         tableRow.addCell("Descrizione", "border-left border-top border-right border-bottom headerTable bold", 1);
-//         tableRow.addCell("Data scadenza", "border-left border-top border-right border-bottom headerTable bold", 1);
-//         tableRow.addCell("Note", "border-left border-top border-right border-bottom headerTable bold", 1);
-//         tableRow.addCell("Data ritorno", "border-left border-top border-right border-bottom headerTable bold", 1);
+        traduzioni["stampaSchede"] = "Print cards";
+        traduzioni["inserire"] = "Insert contacts id (e.g. U-001,U-002)";
 
-//         /*
-//             LISTA LIBRI
-//         */
-//         for (var i = 0; i < loansTable.rowCount; i++) {
-//             var tRow = loansTable.row(i);
-            
-//             if (currentUser === tRow.value("ContactsId")) {
+        traduzioni["stampaSchedeUtenti"] = "Print contacts cards";
+        traduzioni["conFinePagina"] = "Card with end of page";
+        traduzioni["senzaFinePagina"] = "Card without end of page";
+        traduzioni["listaPrestiti"] = "Loans list";
 
-//                 var date             = tRow.value("Date");
-//                 var itemsId          = tRow.value("ItemsId");
-//                 var itemsDescription = tRow.value("ItemsDescription");
-//                 var dateExpiration   = tRow.value("DateExpiration");
-//                 var notes            = tRow.value("Notes");
-//                 var expirationDate = Banana.Converter.toDate(dateExpiration);
-//                 var dateReturn = tRow.value("DateReturn");
+        traduzioni["schedeUtenti"] = "Contacts cards";
 
+        traduzioni["idPersona"] = "Id";
+        traduzioni["nome"] = "Name";
+        traduzioni["cognome"] = "Surname";
+        traduzioni["telefono"] = "Telephon";
+        traduzioni["email"] = "Email";
+        traduzioni["libri"] = "Books";
+        traduzioni["data"]= "Date";
+        traduzioni["idLibro"] = "Id";
+        traduzioni["descrizioneLibro"] = "Book description";
+        traduzioni["datascadenzaLibro"] = "Expiration date";
+        traduzioni["note"] = "Notes";
+        traduzioni["datarestituzioneLibro"] = "Return date";
 
-//                 //Not yet expired
-//                 if (today < expirationDate) { //!printExpired && today < expirationDate
-                    
-//                     // tableRow = internalTable.addRow();
-//                     // var intListCell = tableRow.addCell("", "border-left border-right", 1);
-
-//                     // intListCell.addText(" - ", "");
-//                     // intListCell.addText(Banana.Converter.toLocaleDateFormat(date) + "; ", "");
-//                     // intListCell.addText(itemsDescription  + "; ", "");
-//                     // intListCell.addText(notes, "");
-
-//                     tableRow = internalTable.addRow();
-//                     tableRow.addCell("", "", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(date), " border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsId, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsDescription, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(dateExpiration), "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(notes, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(dateReturn, "border-left border-right border-top border-bottom", 1);
-
-//                     booksCnt++;
-
-//                 }
-
-//                 //Expired
-//                 if (printExpired && today > expirationDate && !dateReturn) {
-
-//                     // tableRow = internalTable.addRow();
-//                     // var intListCell = tableRow.addCell("", "border-left border-right", 1);
-
-//                     // intListCell.addText(" - ", "");
-//                     // intListCell.addText(Banana.Converter.toLocaleDateFormat(date) + "; ", "");
-//                     // intListCell.addText(itemsDescription  + "; ", "");
-//                     // intListCell.addText(notes  + "; ", "");
-//                     // intListCell.addText("SCADUTO (" + Banana.Converter.toLocaleDateFormat(dateExpiration) + ")", "warning bold");
-
-//                     tableRow = internalTable.addRow();
-//                     tableRow.addCell("", "", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(date), " border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsId, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsDescription, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(dateExpiration), "border-left border-right warning bold border-top border-bottom", 1);
-//                     tableRow.addCell(notes, "border-left border-right warning bold border-top border-bottom", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(dateReturn), "border-left border-right border-top border-bottom", 1);
-
-//                     booksCnt++;
-//                 }
-
-//                 //Already returned
-//                 if (dateReturn && today > expirationDate) {
-
-//                     // tableRow = internalTable.addRow();
-//                     // var intListCell = tableRow.addCell("", "border-left border-right", 1);
-
-//                     // intListCell.addText(" - ", "");
-//                     // intListCell.addText(Banana.Converter.toLocaleDateFormat(date) + "; ", "");
-//                     // intListCell.addText(itemsDescription  + "; ", "");
-//                     // intListCell.addText(notes, "");
-//                     // intListCell.addText("RITORNATO (" + Banana.Converter.toLocaleDateFormat(dateReturn) + ")", "warningOK bold");
-
-//                     tableRow = internalTable.addRow();
-//                     tableRow.addCell("", "", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(date), " border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsId, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(itemsDescription, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(dateExpiration), "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(notes, "border-left border-right border-top border-bottom", 1);
-//                     tableRow.addCell(Banana.Converter.toLocaleDateFormat(dateReturn), "border-left border-right warningOK bold border-top border-bottom", 1);
-
-//                     booksCnt++;
-//                 }
-//             }
-//         }
-
-//         //If the table is empty (the user has not books on the list) we print an empty line
-//         if (booksCnt == 0) {
-//             // tableRow = internalTable.addRow();
-//             // var intListCell = tableRow.addCell("", "border-bottom border-left border-right ", 1);
-//             // intListCell.addText("","");
-
-//             tableRow = internalTable.addRow();
-//             tableRow.addCell("", "", 1);
-//             tableRow.addCell("-", " border-top border-right border-bottom center", 1);
-//             tableRow.addCell("-", "border-left border-top border-right border-bottom center", 1);
-//             tableRow.addCell("-", "border-left border-top border-right border-bottom center", 1);
-//             tableRow.addCell("-", "border-left border-top border-right border-bottom center", 1);
-//             tableRow.addCell("-", "border-left border-top border-right border-bottom center", 1);
-//             tableRow.addCell("-", "border-left border-top border-right border-bottom center", 1);
-//         }
-
-//         tableRow = internalTable.addRow();
-//         tableRow.addCell("", "", 1);
-//         tableRow.addCell("", "border-top", 1);
-//         tableRow.addCell("", "border-top", 1);
-//         tableRow.addCell("", "border-top", 1);
-//         tableRow.addCell("", "border-top", 1);
-//         tableRow.addCell("", "border-top", 1);
-//         tableRow.addCell("", "border-top", 1);
-    
-//         tableRow = internalTable.addRow();
-//         tableRow.addCell(" ", "", 1);
-//         tableRow.addCell(" ", "", 1);
-//         tableRow.addCell(" ", "", 1);
-//         tableRow.addCell(" ", "", 1);
-//         tableRow.addCell(" ", "", 1);
-//     }
-
-//     //Print the footer
-//     addFooter(report);
-
-//     //Add a style and print the report
-//     var stylesheet = createStyleSheet();
-//     Banana.Report.preview(report, stylesheet);
-
-// }
-
+        traduzioni["scaduto"] = "EXPIRED";
+        
+        traduzioni["nomeCognome"] = "Name and Surname";
+        traduzioni["indirizzo"] = "Address";
+        traduzioni["cap"] = "Zip";
+        traduzioni["localita"] = "Locality";
+        traduzioni["cellulare"] = "Mobile";
+        traduzioni["membroDal"] = "Member from";
+        traduzioni["fineMembro"] = "End member";
+    }
+    return traduzioni;
+}
 
 

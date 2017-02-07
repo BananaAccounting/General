@@ -1,10 +1,10 @@
 // Test script using Banana.Report
 //
-// @id = ch.banana.app.utilties.booksreport
+// @id = ch.banana.app.utilties.librarybooksreport
 // @api = 1.0
 // @pubdate = 2016-09-21
 // @publisher = Banana.ch SA
-// @description = Book Report
+// @description = Library Books Report
 // @task = app.command
 // @doctype = 400.140.*
 // @docproperties = 
@@ -12,11 +12,23 @@
 // @inputdatasource = none
 // @timeout = -1
 
+
+
+/*
+    SUMMARY
+    =======
+    This app creates a list of all the books that are in the banana file.
+    The list is sorted by the genres and then by the title of the book.
+
+*/
+
+
 function exec(string) {
 
     //Parameters
     var parametri = {};
     parametri.reportHeader = Banana.document.info("Base", "HeaderLeft");
+    //parametri.colore;
     
     //Check if the table Items exists
     var itemsTable = Banana.document.table("Items");
@@ -27,7 +39,7 @@ function exec(string) {
     
     //Get all the rows of the Items table and sort them
     itemsRows = itemsTable.findRows(function (row) { return (!row.isEmpty) });
-    itemsRows = itemsRows.sort(function (a, b) { return sortByCategory(a, b) });
+    itemsRows = itemsRows.sort(function (a, b) { return sortByGenres(a, b) });
 
 
     //************ BEGIN REPORT ************//
@@ -40,27 +52,33 @@ function exec(string) {
     var tableReport = report.addTable("tableReport");
     
     /* 
-        Header tabella 
-    */
-    var tableHeader = tableReport.getHeader();
-    var tableHeaderRow = tableHeader.addRow("");
-
-    tableHeaderRow.addCell(Banana.document.info("Items","TableHeader"), "headerTable bold center");
-    tableHeaderRow.addCell("Location", "headerTable bold center");
-   
-
-    /* 
         Dati tabella 
     */
+    var genres = "";
     for (var i = 0; i < itemsRows.length; i++) {
         var currentRow = itemsRows[i];
+        var rowReport;
 
         //Check if the given columns of the current row are not empty
         if (!columnsEmpty(currentRow, ["Title", "Author", "Publisher", "Category"])) {
-            
-            var rowReport = tableReport.addRow();
 
-            var cell = rowReport.addCell("", "");
+            if (!currentRow.value("Genres")) {
+                rowReport = tableReport.addRow();
+                var genresCell = rowReport.addCell("", "bold italic borderBottom", 2);
+                genresCell.addParagraph(" ", "");    
+                genresCell.addParagraph("-", "");  
+            }
+
+            if (currentRow.value("Genres") !== genres) {
+                genres = currentRow.value("Genres");
+                rowReport = tableReport.addRow();
+                var genresCell = rowReport.addCell("", "bold italic borderBottom", 2);
+                genresCell.addParagraph(" ", "");    
+                genresCell.addParagraph(genres.toUpperCase() + ":", "");
+            }
+
+            rowReport = tableReport.addRow();
+            var cell = rowReport.addCell("", "");            
 
     		AddText(currentRow, "Title", cell, "bold", true);
     		AddText(currentRow, "Author", cell, "");
@@ -83,11 +101,6 @@ function exec(string) {
     			
             text = currentRow.value("RowId");
             cellReport = rowReport.addCell(text, "");
-    		
-            /*text = Banana.Converter.toLocaleDateFormat(currentRow.value("DateOfBirth"));
-            cellReport = rowReport.addCell();
-            cellReport.addParagraph(text);
-            */
         }
     }
 
@@ -99,6 +112,11 @@ function exec(string) {
     var stylesheet = createStyleSheet();
     Banana.Report.preview(report, stylesheet);
 }
+
+
+
+
+
 
 
 
@@ -148,6 +166,20 @@ function AddDate(currentRow, column, report, style, first) {
 }
 
 
+
+
+function sortByGenres(a, b) {
+    //var texta = a.value("Genres") + "$" + a.value("Author") + "$" + a.value("Title");
+    //var textb = b.value("Genres") + "$" + b.value("Author") + "$" + b.value("Title");
+    var texta = a.value("Genres") + "$" + a.value("Title");
+    var textb = b.value("Genres") + "$" + b.value("Title");
+
+    if (texta > textb)
+        return 1;
+    else if (texta == textb)
+        return 0;
+    return -1;
+}
 
 
 
@@ -223,6 +255,11 @@ function addHeader(report) {
     if (phone && email) {
         businessCell.addParagraph("Tel: " + phone + ", Email: " + email, "center");
     }
+
+    tableRow = tab.addRow();
+    tableRow.addCell("","", 2);
+    tableRow = tab.addRow();
+    tableRow.addCell("","", 2);
 }
 
 
@@ -231,8 +268,8 @@ function addHeader(report) {
 /* Function that prints the footer */
 function addFooter(report) {
     var footer = report.getFooter();
-    footer.addText(Banana.Converter.toLocaleDateFormat(new Date()) + "                                                               ");
-    footer.addText("Banana Library" + "                                                               ").setUrlLink("http://www.banana.ch");
+    footer.addText(Banana.Converter.toLocaleDateFormat(new Date()) + "                                                              ");
+    footer.addText("Banana Library" + "                                                              ").setUrlLink("http://www.banana.ch");
     footer.addFieldPageNr();
 } 
 
@@ -244,9 +281,9 @@ function createStyleSheet() {
     var stylesheet = Banana.Report.newStyleSheet();
     var pageStyle = stylesheet.addStyle("@page");
     
-    pageStyle.setAttribute("margin", "15mm 20mm 10mm 20mm");
+    pageStyle.setAttribute("margin", "15mm 5mm 10mm 20mm");
 
-    stylesheet.addStyle("body", "font-family:Helvetica; font-size:10pt");
+    stylesheet.addStyle("body", "font-family:Helvetica; font-size:9pt");
     stylesheet.addStyle(".italic", "font-style:italic;");
     stylesheet.addStyle(".center", "text-align:center");
     stylesheet.addStyle(".bold", "font-weight:bold");
@@ -256,6 +293,11 @@ function createStyleSheet() {
     stylesheet.addStyle(".bigLogo", "font-size: 35");
     stylesheet.addStyle(".img", "heigth:50%;width:50%;padding-bottom:20pt");
     stylesheet.addStyle(".padding-top", "padding-top:20pt");
+
+    stylesheet.addStyle(".borderLeft", "border-left:thin solid black");
+    stylesheet.addStyle(".borderRight", "border-right:thin solid black");
+    stylesheet.addStyle(".borderTop", "border-top:thin solid black");
+    stylesheet.addStyle(".borderBottom", "border-bottom:thin solid black");
 
 
     var titleStyle = stylesheet.addStyle(".title");
@@ -272,7 +314,7 @@ function createStyleSheet() {
 
     var tableStyle = stylesheet.addStyle(".tableReport");
     tableStyle.setAttribute("width", "100%");
-    stylesheet.addStyle("table.tableReport td", "border: thin solid black;");
+    //stylesheet.addStyle("table.tableReport td", "border: thin solid black;");
 
     return stylesheet;
 }
