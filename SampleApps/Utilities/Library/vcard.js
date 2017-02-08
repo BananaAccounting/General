@@ -127,9 +127,9 @@ function createvCard(contactsTable, contacts) {
 						vCard += "\nADR;TYPE=HOME:;;"+adrHome+";"+locHome+";;"+posHome+";";
 					}
 					
-					vCard += "\nLABEL;TYPE=HOME:"+adrHome+"\n"+locHome+"\,"+posHome+"\n";
+					vCard += "\nLABEL;TYPE=HOME:"+adrHome+"\n"+locHome+"\,"+posHome;
 					vCard += "\nREV:"+timestamp;
-					vCard += "\nEND:VCARD";
+					vCard += "\nEND:VCARD\n";
 		        }
 	    	}
 	    }
