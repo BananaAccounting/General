@@ -19,7 +19,8 @@
 // @description = Customer Statement
 // @description.it = Estratto cliente 
 // @description.de = Kundenauszug
-// @description.fr = Customer statement
+// @description.fr = Extrait de compte client
+// @description.nl = Rekeninguittreksel klant
 // @description.en = Customer statement
 // @task = report.customer.statement
 
@@ -581,7 +582,7 @@ function setTexts(language) {
   }
   else if (language == 'fr')
   {
-    texts.customer = 'No Client';
+    texts.customer = 'No. client';
     texts.date = 'Date';
     texts.invoice_balance = 'Solde';
     texts.invoice_credit = 'Crédit';
@@ -596,6 +597,25 @@ function setTexts(language) {
     texts.page = 'Page';
     texts.statement = 'Extrait client';
     texts.param_print_header = 'Inclure en-tête de page (1=true, 0=false)';
+  }
+  else if (language == 'nl')
+  {
+    texts.customer = 'Klantennummer';
+    texts.date = 'Datum';
+    texts.invoice_balance = 'Saldo';
+    texts.invoice_credit = 'Credit';
+    texts.invoice_currency = 'Valuta';
+    texts.invoice_date = 'Datum';
+    texts.invoice_debit = 'Debit';
+    texts.invoice_due_date = 'Vervaldatum';
+    texts.invoice_due_days = 'Dagen te laat';
+    texts.invoice_last_reminder = 'Betalingsherinnering';
+    texts.invoice_no = 'Factuurnummer';
+    texts.invoice_payment_date = 'Bet.datum';
+    texts.page = 'Pagina';
+    texts.total = 'Totaal';
+    texts.statement = 'Rekeninguittreksel klant';
+    texts.param_print_header = 'Pagina-koptekst opnemen (1=true, 0=false)';
   }
   else
   {

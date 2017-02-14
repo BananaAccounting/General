@@ -20,6 +20,7 @@
 // @description.it = Style International
 // @description.de = Style International
 // @description.fr = Style International
+// @description.nl = Style International
 // @description.en = Style International
 // @task = report.customer.invoice
 
@@ -1078,6 +1079,35 @@ function setInvoiceTexts(language) {
     texts.payment_due_date_label = '截止日期';
     texts.payment_terms_label = '付款';
     //texts.param_max_items_per_page = '每页上的项目数';
+  }
+  else if (language == 'nl')
+  {
+    texts.customer = 'Klantennummer';
+    texts.date = 'Datum';
+    texts.description = 'Beschrijving';
+    texts.invoice = 'Factuur';
+    texts.page = 'Pagina';
+    texts.rounding = 'Afronding';
+    texts.total = 'Totaal';
+    texts.totalnet = 'Totaal netto';
+    texts.vat = 'BTW';
+    texts.qty = 'Hoeveelheid';
+    texts.unit_ref = 'Eenheid';
+    texts.unit_price = 'Eenheidsprijs';
+    texts.vat_number = 'BTW-nummer: ';
+    texts.bill_to = 'Factuuradres';
+    texts.shipping_to = 'Leveringsadres';
+    texts.from = 'VAN';
+    texts.to = 'TOT';
+	texts.param_color_1 = 'Kleur 1';
+	texts.param_color_2 = 'Kleur 2';
+	texts.param_font_family = 'Lettertype';
+    texts.param_print_header = 'Pagina-koptekst opnemen (1=ja, 0=nee)';
+	texts.param_personal_text_1 = 'Persoonlijke tekst (rij 1)';
+	texts.param_personal_text_2 = 'Persoonlijke tekst (rij 2)';
+    texts.payment_due_date_label = 'Vervaldatum';
+    texts.payment_terms_label = 'Betaling';
+	//texts.param_max_items_per_page = 'Aantal artikelen op iedere pagina';
   }
   else
   {

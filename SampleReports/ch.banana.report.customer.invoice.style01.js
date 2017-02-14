@@ -14,12 +14,13 @@
 //
 // @id = ch.banana.report.customer.invoice.style01.js
 // @api = 1.0
-// @pubdate = 2017-01-09
+// @pubdate = 2017-02-09
 // @publisher = Banana.ch SA
 // @description = Style 1: address on the right, 2 colors
 // @description.it = Stile 1: indirizzo sulla destra, 2 colori
 // @description.de = Stil 1: Adresse rechts ausgedruckt, 2 Farben
 // @description.fr = Style 1: adresse à droite, 2 couleurs
+// @description.nl = Stijl 1: adres rechts, 2 kleuren
 // @description.en = Style 1: address on the right, 2 colors
 // @task = report.customer.invoice
 
@@ -63,6 +64,18 @@ function settingsDialog() {
       param.isr_id = Banana.Ui.getText('Settings', texts.param_isr_id, param.isr_id);
       if (param.isr_id === undefined)
          return;
+      param.isr_position_scaleX = Banana.Ui.getText('Settings', texts.param_isr_position_scaleX, param.isr_position_scaleX);
+      if (param.isr_position_scaleX === undefined)
+         return;
+      param.isr_position_scaleY = Banana.Ui.getText('Settings', texts.param_isr_position_scaleY, param.isr_position_scaleY);
+      if (param.isr_position_scaleY === undefined)
+         return;
+      param.isr_position_dX = Banana.Ui.getText('Settings', texts.param_isr_position_dX, param.isr_position_dX);
+      if (param.isr_position_dX === undefined)
+         return;
+      param.isr_position_dY = Banana.Ui.getText('Settings', texts.param_isr_position_dY, param.isr_position_dY);
+      if (param.isr_position_dY === undefined)
+         return;
       param.isr_on_new_page = Banana.Ui.getInt('Settings', texts.param_isr_on_new_page, param.isr_on_new_page);
       if (param.isr_on_new_page === undefined)
          return;
@@ -96,6 +109,10 @@ function initParam() {
    param.isr_bank_address = '';
    param.isr_account = '';
    param.isr_id = '';
+   param.isr_position_scaleX = '1.0';
+   param.isr_position_scaleY = '1.0';
+   param.isr_position_dX = '0';
+   param.isr_position_dY = '0';
    param.isr_on_new_page = false;
    param.personal_text_1='';
    param.personal_text_2='';
@@ -121,6 +138,14 @@ function verifyParam(param) {
      param.isr_account = '';
    if (!param.isr_id)
      param.isr_id = '';
+   if (!param.isr_position_scaleX)
+     param.isr_position_scaleX = '1.0';
+   if (!param.isr_position_scaleY)
+     param.isr_position_scaleY = '1.0';
+   if (!param.isr_position_dX)
+     param.isr_position_dX = '0';
+   if (!param.isr_position_dY)
+     param.isr_position_dY = '0';
    if (!param.isr_on_new_page)
      param.isr_on_new_page = false;
    if (!param.personal_text_1)
@@ -584,11 +609,10 @@ function print_isr(jsonInvoice, report, repStyleObj, param) {
    print_isrSupplierInfo(jsonInvoice, pvrForm, repStyleObj);
    print_isrAccount(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrAmount(jsonInvoice, pvrForm, repStyleObj);
-   print_isrCustomerInfo(jsonInvoice, pvrForm, repStyleObj);
-   print_isrReference(jsonInvoice, pvrForm, repStyleObj, param);
+   print_isrCustomerInfo(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrCode(jsonInvoice, pvrForm, repStyleObj, param);
 
-   setPvrStyle(report, repStyleObj);
+   setPvrStyle(report, repStyleObj, param);
 }
 
 //The purpose of this function is to print the billing info informations in the correct position
@@ -662,12 +686,21 @@ function print_isrAmount(jsonInvoice, report, repStyleObj) {
 }
 
 //The purpose of this function is to print the customer address in the correct position
-function print_isrCustomerInfo(jsonInvoice, report, repStyleObj) {
+function print_isrCustomerInfo(jsonInvoice, report, repStyleObj, param) {
 
    var addressLines = getAddressLines(jsonInvoice["customer_info"], false);
+   var pvrReference = pvrReferenceString(param.isr_id, jsonInvoice["customer_info"]["number"], pvrInvoiceNumber(jsonInvoice));
+   pvrReference = pvrReference.substr(0,2) + " " +
+   pvrReference.substr(2,5) + " " +
+   pvrReference.substr(7,5) + " " +
+   pvrReference.substr(12,5) + " " +
+   pvrReference.substr(17,5) + " " +
+   pvrReference.substr(22,5) + " " +
+   pvrReference.substr(27,5);
 
    //Receipt
    var customerAddress_REC = report.addSection("customerAddress_REC");
+   customerAddress_REC.addParagraph(pvrReference, "pvr_reference");
    for (var i = 0; i < addressLines.length; i++) {
       customerAddress_REC.addParagraph(addressLines[i]);
    }
@@ -677,23 +710,11 @@ function print_isrCustomerInfo(jsonInvoice, report, repStyleObj) {
    for (var i = 0; i < addressLines.length; i++) {
       customerAddress_PAY.addParagraph(addressLines[i]);
    }
-}
 
-//The purpose of this function is to print the reference number in the correct position
-function print_isrReference(jsonInvoice, report, repStyleObj, param) {
-
-  var pvrReference = pvrReferenceString(param.isr_id, jsonInvoice["customer_info"]["number"], pvrInvoiceNumber(jsonInvoice));
-
-  pvrReference = pvrReference.substr(0,2) + " " +
-  pvrReference.substr(2,5) + " " +
-  pvrReference.substr(7,5) + " " +
-  pvrReference.substr(12,5) + " " +
-  pvrReference.substr(17,5) + " " +
-  pvrReference.substr(22,5) + " " +
-  pvrReference.substr(27,5);
-
+   //Reference number
    var referenceNumber_PAY = report.addSection("referenceNumber_PAY");
    referenceNumber_PAY.addParagraph(pvrReference);
+   
 }
 
 //The purpose of this function is to print the full PVR code in the correct position
@@ -706,6 +727,9 @@ function print_isrCode(jsonInvoice, report, repStyleObj, param) {
    if (pvrReference.indexOf("@error")>=0) {
        Banana.document.addMessage( pvrReference + " " + jsonInvoice["customer_info"]["number"], "error");
    }
+
+   if (amount == '')
+     amount = '0.00';
 
    var pvrFullCode = pvrCodeString(amount, pvrReference, param.isr_account);
    if (pvrFullCode.indexOf("@error")>=0) {
@@ -965,7 +989,7 @@ function modulo10(string) {
    return modulo10Table[module10Report][10];
 }
 
-function setPvrStyle(reportObj, repStyleObj) {
+function setPvrStyle(reportObj, repStyleObj, param) {
 
    	if (!repStyleObj)
 		repStyleObj = reportObj.newStyleSheet();
@@ -973,6 +997,8 @@ function setPvrStyle(reportObj, repStyleObj) {
 	//Overwrite default page margin of 20mm
    var style = repStyleObj.addStyle("@page");
    style.setAttribute("margin", "0mm");
+   //isr text position style.setAttribute('transform', 'matrix(1.0, 0.0, 0.0, 1.0, -5mm, -9mm)');
+   style.setAttribute("transform", "matrix(" + param.isr_position_scaleX + ", 0.0, 0.0, " + param.isr_position_scaleY + "," + param.isr_position_dX + "," + param.isr_position_dY + ")");
 
    //PVR form position
    style = repStyleObj.addStyle(".pvr_Form");
@@ -1008,18 +1034,18 @@ function setPvrStyle(reportObj, repStyleObj) {
    style = repStyleObj.addStyle(".accountNumber_REC");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "30mm");
-   style.setAttribute("top", "41mm"); //42
+   style.setAttribute("top", "42mm");
 
    style = repStyleObj.addStyle(".accountNumber_PAY");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "90mm");
-   style.setAttribute("top", "41mm"); //42
+   style.setAttribute("top", "42mm");
    
    //printPvrAmount 
    style = repStyleObj.addStyle(".totalInvoiceFr_REC");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "4mm");
-   style.setAttribute("top", "50mm"); //51
+   style.setAttribute("top", "51mm");
    style.setAttribute("width", "37mm");
    style.setAttribute("font-size", "11px");
    style.setAttribute("text-align", "right");
@@ -1027,13 +1053,13 @@ function setPvrStyle(reportObj, repStyleObj) {
    style = repStyleObj.addStyle(".totalInvoiceCts_REC");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "50mm");
-   style.setAttribute("top", "50mm"); //51
+   style.setAttribute("top", "51mm");
    style.setAttribute("font-size", "11px");
 
    style = repStyleObj.addStyle(".totalInvoiceFr_PAY");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "65mm");
-   style.setAttribute("top", "50mm"); //51
+   style.setAttribute("top", "51mm");
    style.setAttribute("width", "37mm");
    style.setAttribute("font-size", "11px");
    style.setAttribute("text-align", "right");
@@ -1041,7 +1067,7 @@ function setPvrStyle(reportObj, repStyleObj) {
    style = repStyleObj.addStyle(".totalInvoiceCts_PAY");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "111mm");
-   style.setAttribute("top", "50mm"); //51
+   style.setAttribute("top", "51mm");
    style.setAttribute("font-size", "11px");
    
    //printPvrCustomerInfo
@@ -1061,20 +1087,24 @@ function setPvrStyle(reportObj, repStyleObj) {
    style = repStyleObj.addStyle(".referenceNumber_PAY");
    style.setAttribute("position", "absolute");
    style.setAttribute("text-align", "center");
-   style.setAttribute("left", "122mm"); //124
-   style.setAttribute("top", "34.1mm"); //34.5
+   style.setAttribute("left", "122mm");
+   style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
-   style.setAttribute("font-size", "12pt");
-   style.setAttribute("font-family", "OCR-B 10 BT");
+   style.setAttribute("font-size", "10pt");
+   style.setAttribute("font-family", "OCRB");
    
    //printPvrCode
    style = repStyleObj.addStyle(".pvrFullCode_PAY");
    style.setAttribute("position", "absolute");
-   style.setAttribute("right", "8mm");
+   style.setAttribute("right", "6mm");
    style.setAttribute("text-align", "right");
-   style.setAttribute("top", "90mm"); //85  // 20th row * (25.4mm / 6)
-   style.setAttribute("font-size", "12pt");
-   style.setAttribute("font-family", "OCR-B 10 BT");
+   style.setAttribute("top", "85mm");// 20th row * (25.4mm / 6)
+   style.setAttribute("font-size", "10pt");
+   style.setAttribute("font-family", "OCRB");
+   
+   //receiptPvrReference
+   style = repStyleObj.addStyle(".pvr_reference");
+   style.setAttribute("font-size", "8px");
 
 }
 
@@ -1230,10 +1260,14 @@ function setInvoiceTexts(language) {
 	texts.param_font_family = 'Tipo carattere';
     texts.param_print_header = 'Includi intestazione pagina (1=si, 0=no)';
     texts.param_print_isr = 'Stampa PVR (1=si, 0=no)';
-    texts.param_isr_bank_name = 'Bank name';
-    texts.param_isr_bank_address = 'Bank address';
-    texts.param_isr_account = 'Conto PVR';
-    texts.param_isr_id = 'Numero di adesione PVR';
+    texts.param_isr_bank_name = 'Nome banca (solo con conto bancario, con conto postale lasciare vuoto)';
+    texts.param_isr_bank_address = 'Indirizzo banca (solo con conto bancario, con conto postale lasciare vuoto)';
+    texts.param_isr_account = 'Conto PVR (numero di cliente PVR)';
+    texts.param_isr_id = 'Numero di adesione PVR (solo con conto bancario, con conto postale lasciare vuoto)';
+    texts.param_isr_position_scaleX = 'Scala orizzontale caratteri (default 1.0)';
+    texts.param_isr_position_scaleY = 'Scala verticale caratteri (default 1.0)';
+    texts.param_isr_position_dX = 'PVR X-Position mm (default 0)';
+    texts.param_isr_position_dY = 'PVR Y-Position mm (default 0)';
 	texts.param_isr_on_new_page = 'Stampa polizza di versamento su pagina separata (1=si, 0=no)';
 	texts.param_personal_text_1 = 'Testo libero (riga 1)';
 	texts.param_personal_text_2 = 'Testo libero (riga 2)';
@@ -1265,10 +1299,14 @@ function setInvoiceTexts(language) {
 	texts.param_font_family = 'Typ Schriftzeichen';
     texts.param_print_header = 'Seitenüberschrift einschliessen (1=ja, 0=nein)';
     texts.param_print_isr = 'ESR ausdrucken (1=ja, 0=nein)';
-    texts.param_isr_bank_name = 'Bank name';
-    texts.param_isr_bank_address = 'Bank address';
-    texts.param_isr_account = 'ESR-Konto';
-    texts.param_isr_id = 'ESR-Teilnehmernummer';
+    texts.param_isr_bank_name = 'Name der Bank (nur Bankkonto, mit Postkonto leer lassen)';
+    texts.param_isr_bank_address = 'Bankadresse (nur Bankkonto, mit Postkonto leer lassen)';
+    texts.param_isr_account = 'ESR-Konto (ESR-Kundennummer)';
+    texts.param_isr_id = 'ESR-Teilnehmernummer (nur Bankkonto, mit Postkonto leer lassen)';
+    texts.param_isr_position_scaleX = 'Horizontale Zeichenskalierung (default 1.0)';
+    texts.param_isr_position_scaleY = 'Vertikale Zeichenskalierung (default 1.0)';
+    texts.param_isr_position_dX = 'ESR X-Position mm (default 0)';
+    texts.param_isr_position_dY = 'ESR Y-Position mm (default 0)';
 	texts.param_isr_on_new_page = 'ESR auf ein separates Blatt drucken (1=ja, 0=nein)';
 	texts.param_personal_text_1 = 'Freier Text (Zeile 1)';
 	texts.param_personal_text_2 = 'Freier Text (Zeile 2)';
@@ -1297,19 +1335,62 @@ function setInvoiceTexts(language) {
     texts.to = 'À';
 	texts.param_color_1 = 'Couleur 1';
 	texts.param_color_2 = 'Couleur 2';
-	texts.param_font_family = 'Type caractère';
+	texts.param_font_family = 'Police de caractère';
     texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
     texts.param_print_isr = 'Imprimer BVR (1=oui, 0=non)';
-    texts.param_isr_bank_name = 'Bank name';
-    texts.param_isr_bank_address = 'Bank address';
-    texts.param_isr_account = 'Compte BVR';
-    texts.param_isr_id = 'Numéro d’adhérent BVR';
+    texts.param_isr_bank_name = 'Compte bancaire (seulement avec compte bancaire, avec compte postal laisser vide)';
+    texts.param_isr_bank_address = 'Adresse de la banque (seulement avec compte bancaire, avec compte postal laisser vide)';
+    texts.param_isr_account = 'Compte BVR (numéro de client BVR)';
+    texts.param_isr_id = 'Numéro d’adhérent BVR (seulement avec compte bancaire, avec compte postal laisser vide)';
+    texts.param_isr_position_scaleX = 'Décalage horizontal caractère (default 1.0)';
+    texts.param_isr_position_scaleY = 'Décalage vertical caractère (default 1.0)';
+    texts.param_isr_position_dX = 'BVR X-Position mm (default 0)';
+    texts.param_isr_position_dY = 'BVR Y-Position mm (default 0)';
 	texts.param_isr_on_new_page = 'Imprimer le bulletin sur une page séparée (1=oui, 0=non)';
 	texts.param_personal_text_1 = 'Texte libre (ligne 1)';
 	texts.param_personal_text_2 = 'Texte libre (ligne 2)';
     texts.payment_due_date_label = 'Echéance';
     texts.payment_terms_label = 'Paiement';
 	//texts.param_max_items_per_page = 'Nombre d’éléments sur chaque facture';
+  }
+  else if (language == 'nl')
+  {
+    texts.customer = 'Klantennummer';
+    texts.date = 'Datum';
+    texts.description = 'Beschrijving';
+    texts.invoice = 'Factuur';
+    texts.page = 'Pagina';
+    texts.rounding = 'Afronding';
+    texts.total = 'Totaal';
+    texts.totalnet = 'Totaal netto';
+    texts.vat = 'BTW';
+    texts.qty = 'Hoeveelheid';
+    texts.unit_ref = 'Eenheid';
+    texts.unit_price = 'Eenheidsprijs';
+    texts.vat_number = 'BTW-nummer: ';
+    texts.bill_to = 'Factuuradres';
+    texts.shipping_to = 'Leveringsadres';
+    texts.from = 'VAN';
+    texts.to = 'TOT';
+	texts.param_color_1 = 'Kleur 1';
+	texts.param_color_2 = 'Kleur 2';
+	texts.param_font_family = 'Lettertype';
+    texts.param_print_header = 'Pagina-koptekst opnemen (1=ja, 0=nee)';
+    texts.param_print_isr = 'Print ISR (1=yes, 0=no)';
+    texts.param_isr_bank_name = 'Bank name (only with bank account, with postal account leave blank)';
+    texts.param_isr_bank_address = 'Bank address (only with bank account, with postal account leave blank)';
+    texts.param_isr_account = 'ISR Account (ISR customer number)';
+    texts.param_isr_id = 'ISR subscriber number (only with bank account, with postal account leave blank)';
+    texts.param_isr_position_scaleX = 'Character Horizontal Scaling (default 1.0)';
+    texts.param_isr_position_scaleY = 'Character Vertical Scaling (default 1.0)';
+    texts.param_isr_position_dX = 'ISR X-Position mm (default 0)';
+    texts.param_isr_position_dY = 'ISR Y-Position mm (default 0)';
+	texts.param_isr_on_new_page = 'Print ISR on a new page (1=yes, 0=no)';
+	texts.param_personal_text_1 = 'Persoonlijke tekst (rij 1)';
+	texts.param_personal_text_2 = 'Persoonlijke tekst (rij 2)';
+    texts.payment_due_date_label = 'Vervaldatum';
+    texts.payment_terms_label = 'Betaling';
+	//texts.param_max_items_per_page = 'Aantal artikelen op iedere pagina';
   }
   else
   {
@@ -1335,10 +1416,14 @@ function setInvoiceTexts(language) {
 	texts.param_font_family = 'Font type';
     texts.param_print_header = 'Include page header (1=yes, 0=no)';
     texts.param_print_isr = 'Print ISR (1=yes, 0=no)';
-    texts.param_isr_bank_name = 'Bank name';
-    texts.param_isr_bank_address = 'Bank address';
-    texts.param_isr_account = 'Account ISR';
-    texts.param_isr_id = 'ISR subscriber number';
+    texts.param_isr_bank_name = 'Bank name (only with bank account, with postal account leave blank)';
+    texts.param_isr_bank_address = 'Bank address (only with bank account, with postal account leave blank)';
+    texts.param_isr_account = 'ISR Account (ISR customer number)';
+    texts.param_isr_id = 'ISR subscriber number (only with bank account, with postal account leave blank)';
+    texts.param_isr_position_scaleX = 'Character Horizontal Scaling (default 1.0)';
+    texts.param_isr_position_scaleY = 'Character Vertical Scaling (default 1.0)';
+    texts.param_isr_position_dX = 'ISR X-Position mm (default 0)';
+    texts.param_isr_position_dY = 'ISR Y-Position mm (default 0)';
 	texts.param_isr_on_new_page = 'Print ISR on a new page (1=yes, 0=no)';
 	texts.param_personal_text_1 = 'Personal text (row 1)';
 	texts.param_personal_text_2 = 'Personal text (row 2)';

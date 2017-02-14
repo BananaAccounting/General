@@ -20,6 +20,7 @@
 // @description.it = Richiamo di pagamento 
 // @description.de = Zahlungserinnerung
 // @description.fr = Rappel de paiement 
+// @description.nl = Betalingsherinnering
 // @description.en = Payment reminder
 // @task = report.customer.reminder
 
@@ -597,6 +598,20 @@ function setTexts(language) {
   texts.invoice_currency = 'Devise';
   texts.invoice_status = 'Situation';
   texts.reminder = 'Rappel de paiement';
+  }
+  else if (language == 'nl')
+  {
+  texts.customer = 'Klantennummer';
+  texts.date = 'Datum';
+  texts.page = 'Pagina';
+  texts.invoice_no = 'Factuurnummer';
+  texts.invoice_date = 'Datum';
+  texts.invoice_debit = 'Debit';
+  texts.invoice_credit = 'Credit';
+  texts.invoice_balance = 'Saldo';
+  texts.invoice_currency = 'Valuta';
+  texts.invoice_status = 'Status';
+  texts.reminder = 'Betalingsherinnering';
   }
   else
   {
