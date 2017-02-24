@@ -26,6 +26,12 @@
 
 
 
+/*
+	SUMMARY
+	=======
+	The app prints the table Accounts and at the end the blockchain
+*/
+
 
 var param = {
 	"fontSize" : "7",
