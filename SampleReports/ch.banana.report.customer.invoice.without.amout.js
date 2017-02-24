@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.report.customer.letter.association.js
+// @id = ch.banana.report.customer.invoice.without.amount.js
 // @api = 1.0
 // @pubdate = 2017-02-24
 // @publisher = Banana.ch SA
-// @description = Letter with fees for members (with isr without amount)
-// @description.it = Lettera tassa sociale per i membri (con pvr senza importo)
+// @description = Swiss invoice with ISR without amount
+// @description.it = Fattura svizzera con PVR senza importo
 // @task = report.customer.invoice
 
 /*Update script's parameters*/
