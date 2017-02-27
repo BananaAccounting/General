@@ -422,7 +422,7 @@ function print_isr(jsonInvoice, report, repStyleObj, param) {
    print_isrBankInfo(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrSupplierInfo(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrAccount(jsonInvoice, pvrForm, repStyleObj, param);
-   print_isrAmount(jsonInvoice, pvrForm, repStyleObj);
+   print_isrAmount(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrCustomerInfo(jsonInvoice, pvrForm, repStyleObj, param);
    print_isrCode(jsonInvoice, pvrForm, repStyleObj, param);
 
@@ -442,7 +442,11 @@ function print_isrAccount(jsonInvoice, report, repStyleObj, param) {
 }
 
 //The purpose of this function is to print the total amount of the invoice in the correct position
-function print_isrAmount(jsonInvoice, report, repStyleObj) {
+function print_isrAmount(jsonInvoice, report, repStyleObj, param) {
+
+   if (param.isr_type == '04') {
+     return;
+   }
 
    var str = jsonInvoice["billing_info"]["total_to_pay"];
    var res = str.split('.');
@@ -577,6 +581,9 @@ function pvrCodeString(amount, pvrReference, ccpAccount, pvrType) {
       while (pvrAmount.length < 10) {
         pvrAmount = '0' + pvrAmount;
       }
+   }
+   else if (pvrType == '04') {
+     amount = '';
    }
 
    // The ccp account have to be 8 digit lenght, prepend the second part with zeros
