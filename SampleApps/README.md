@@ -5,6 +5,9 @@
 
 This app will show the daily balance for a specified account and month   
 
+##calcinterest.js
+This app calculate the interst debit and credit for the account and with the tax rate you specify. 
+
 ##comparestwoaccountingfiles.js
 
 This app will show the differences between two accounting files. It is very useful when at some point it is needed to compare data of two files.
