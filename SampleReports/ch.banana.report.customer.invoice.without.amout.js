@@ -583,7 +583,7 @@ function pvrCodeString(amount, pvrReference, ccpAccount, pvrType) {
       }
    }
    else if (pvrType == '04') {
-     amount = '';
+     pvrAmount = '';
    }
 
    // The ccp account have to be 8 digit lenght, prepend the second part with zeros
