@@ -16,7 +16,7 @@
 // @api = 1.0
 // @pubdate = 2017-02-20
 // @publisher = Banana.ch SA
-// @description = Trial Balance and blockchain (default period)
+// @description = Trial Balance and blockchain
 // @task = app.command
 // @doctype = *;*
 // @docproperties =
@@ -48,10 +48,27 @@ function exec(string) {
 		return;
 	}
 	
-	var dateform = getPeriodSettings();
+	var openingDate = Banana.document.info("AccountingDataBase","OpeningDate");
+	var year = Banana.Converter.toDate(openingDate).getFullYear();
 
-	if (dateform) {
-		printReport(dateform.selectionStartDate, dateform.selectionEndDate);
+	var selectedperiod = Banana.Ui.getItem("Periode", "",
+		["Tertial 1:   1.1."+year+"-30.4."+year,
+		"Tertial 2:   1.5."+year+"-31.8."+year,
+		"Tertial 3:   1.9."+year+"-31.12."+year], 0, false);
+	if (selectedperiod) {
+		if (selectedperiod == "Tertial 1:   1.1."+year+"-30.4."+year) {
+			var selectionStartDate = year + "-01-01";
+			var selectionEndDate = year + "-04-30";
+		}
+		else if (selectedperiod == "Tertial 2:   1.5."+year+"-31.8."+year) {
+			var selectionStartDate = year + "-05-01";
+			var selectionEndDate = year + "-08-31";
+		}
+		else if ("Tertial 3:   1.9."+year+"-31.12."+year) {
+			var selectionStartDate = year + "-09-01";
+			var selectionEndDate = year + "-12-31";
+		}
+		printReport(selectionStartDate, selectionEndDate);
 	}
 }
 
@@ -80,7 +97,7 @@ function printAccountsTable(startDate, endDate, report) {
 	if (tColumnNames.indexOf("Kostenstelle") > -1 && tColumnNames.indexOf("Zuordnung") >-1) {
 		flag = true;
 	}
-	
+
 	//Create the table that will be printed on the report
 	var table = report.addTable("table");
 
@@ -100,10 +117,12 @@ function printAccountsTable(startDate, endDate, report) {
     tableRow = tableHeader.addRow();
 	tableRow.addCell("Konto", " bold borderBottom"); //account
 	tableRow.addCell("Kontobezeichnung", " bold borderBottom"); //description
+	
 	if (flag) {
 		tableRow.addCell("KST", " bold borderBottom");
 		tableRow.addCell("ZUO", " bold borderBottom");
 	}
+	
 	tableRow.addCell("MwStCode", " bold borderBottom"); //vatnumber
 	tableRow.addCell("Bewegungen", "alignCenter bold borderBottom"); //movements
 	tableRow.addCell("Soll", "alignCenter bold borderBottom"); //debit
@@ -116,13 +135,13 @@ function printAccountsTable(startDate, endDate, report) {
 	for (var i = 0; i < accountsTab.rowCount; i++) {	
 		var tRow = accountsTab.row(i);
 
+		//GROUP
 		tableRow = table.addRow();
-		var diff = Banana.SDecimal.subtract(tRow.value("Debit"), tRow.value("Credit"));
-
 		if ((tRow.value("Description") && !tRow.value("Group") && !tRow.value("Account")) 
 			|| tRow.value("Group") 
 			|| tRow.value("Kostenstelle") && tRow.value("Zuordnung")) 
 		{
+
 			var currentBal = Banana.document.currentBalance("Gr="+tRow.value("Group"), startDate, endDate);
 			var debit = currentBal.debit;
 			var credit = currentBal.credit;
@@ -135,7 +154,7 @@ function printAccountsTable(startDate, endDate, report) {
 			if (flag) {
 				tableRow.addCell(tRow.value("Kostenstelle"), " bold", 1);
 				tableRow.addCell(tRow.value("Zuordnung"), " bold", 1);
-			}			
+			}	
 			tableRow.addCell(tRow.value("VatNumber"), " bold", 1);
 			if (diff != 0) {
 				tableRow.addCell(diff, "alignRight bold", 1);
@@ -147,6 +166,8 @@ function printAccountsTable(startDate, endDate, report) {
 			tableRow.addCell(opening, "alignRight bold", 1);
 			tableRow.addCell(balance, "alignRight bold", 1);
 		}
+
+		//ACCOUNTS
 		else 
 		{
 			var currentBal = Banana.document.currentBalance(tRow.value("Account"), startDate, endDate);
@@ -257,58 +278,6 @@ function addFooter(report) {
 	report.getFooter().addFieldPageNr();
 }
 
-
-
-//The main purpose of this function is to allow the user to enter the accounting period desired and saving it for the next time the script is run.
-//Every time the user runs of the script he has the possibility to change the date of the accounting period.
-function getPeriodSettings() {
-	
-	//The formeters of the period that we need
-	var scriptform = {
-	   "selectionStartDate": "",
-	   "selectionEndDate": "",
-	   "selectionChecked": "false"
-	};
-
-	//Read script settings
-	var data = Banana.document.scriptReadSettings();
-	
-	//Check if there are previously saved settings and read them
-	if (data.length > 0) {
-		try {
-			var readSettings = JSON.parse(data);
-			
-			//We check if "readSettings" is not null, then we fill the formeters with the values just read
-			if (readSettings) {
-				scriptform = readSettings;
-			}
-		} catch (e){}
-	}
-	
-	//We take the accounting "starting date" and "ending date" from the document. These will be used as default dates
-	var docStartDate = Banana.document.startPeriod();
-	var docEndDate = Banana.document.endPeriod();	
-	
-	//A dialog window is opened asking the user to insert the desired period. By default is the accounting period
-	var selectedDates = Banana.Ui.getPeriod("Period", docStartDate, docEndDate, 
-		scriptform.selectionStartDate, scriptform.selectionEndDate, scriptform.selectionChecked);
-		
-	//We take the values entered by the user and save them as "new default" values.
-	//This because the next time the script will be executed, the dialog window will contains the new values.
-	if (selectedDates) {
-		scriptform["selectionStartDate"] = selectedDates.startDate;
-		scriptform["selectionEndDate"] = selectedDates.endDate;
-		scriptform["selectionChecked"] = selectedDates.hasSelection;
-
-		//Save script settings
-		var formToString = JSON.stringify(scriptform);
-		var value = Banana.document.scriptSaveSettings(formToString);		
-    } else {
-		//User clicked cancel
-		return;
-	}
-	return scriptform;
-}
 
 
 
