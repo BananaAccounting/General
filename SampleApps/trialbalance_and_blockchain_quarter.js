@@ -115,20 +115,20 @@ function printAccountsTable(startDate, endDate, report) {
 	//Add column titles to the table report
 	var tableHeader = table.getHeader();
     tableRow = tableHeader.addRow();
-	tableRow.addCell("Konto", " bold borderBottom"); //account
-	tableRow.addCell("Kontobezeichnung", " bold borderBottom"); //description
+	tableRow.addCell("Konto", " bold tableHeader"); //account
+	tableRow.addCell("Kontobezeichnung", " bold tableHeader"); //description
 	
 	if (flag) {
-		tableRow.addCell("KST", " bold borderBottom");
-		tableRow.addCell("ZUO", " bold borderBottom");
+		tableRow.addCell("KST", " bold tableHeader");
+		tableRow.addCell("ZUO", " bold tableHeader");
 	}
 	
-	tableRow.addCell("MwStCode", " bold borderBottom"); //vatnumber
-	tableRow.addCell("Bewegungen", "alignCenter bold borderBottom"); //movements
-	tableRow.addCell("Soll", "alignCenter bold borderBottom"); //debit
-	tableRow.addCell("Haben", "alignCenter bold borderBottom"); //credit
-	tableRow.addCell("Eröffnung", "alignCenter bold borderBottom"); //opening
-	tableRow.addCell("Saldo", "alignCenter bold borderBottom"); //balance
+	tableRow.addCell("MwStCode", " bold tableHeader"); //vatnumber
+	tableRow.addCell("Bewegungen", "alignCenter bold tableHeader"); //movements
+	tableRow.addCell("Soll", "alignCenter bold tableHeader"); //debit
+	tableRow.addCell("Haben", "alignCenter bold tableHeader"); //credit
+	tableRow.addCell("Eröffnung", "alignCenter bold tableHeader"); //opening
+	tableRow.addCell("Saldo", "alignCenter bold tableHeader"); //balance
 
 
 	//Get the Accounts table
@@ -156,15 +156,41 @@ function printAccountsTable(startDate, endDate, report) {
 				tableRow.addCell(tRow.value("Zuordnung"), " bold", 1);
 			}	
 			tableRow.addCell(tRow.value("VatNumber"), " bold", 1);
+			
 			if (diff != 0) {
-				tableRow.addCell(diff, "alignRight bold", 1);
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(diff), "alignRight bold", 1);
 			} else {
-				tableRow.addCell("", "alignRight bold", 1);
+				tableRow.addCell(" ", "alignRight bold", 1);
 			}
-			tableRow.addCell(debit, "alignRight bold", 1);
-			tableRow.addCell(credit, "alignRight bold", 1);
-			tableRow.addCell(opening, "alignRight bold", 1);
-			tableRow.addCell(balance, "alignRight bold", 1);
+			
+			if (debit) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(debit), "alignRight bold", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+			
+			if (credit) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(credit), "alignRight bold", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+			
+			if (opening) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(opening), "alignRight bold", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+
+			if (balance) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(balance), "alignRight bold", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+
+
+			
+			
+			
 		}
 
 		//ACCOUNTS
@@ -185,14 +211,35 @@ function printAccountsTable(startDate, endDate, report) {
 			}
 			tableRow.addCell(tRow.value("VatNumber"), "", 1);
 			if (diff != 0) {
-				tableRow.addCell(diff, "alignRight", 1);
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(diff), "alignRight", 1);
 			} else {
 				tableRow.addCell("", "alignRight", 1);
 			}
-			tableRow.addCell(debit, "alignRight", 1);
-			tableRow.addCell(credit, "alignRight", 1);
-			tableRow.addCell(opening, "alignRight", 1);
-			tableRow.addCell(balance, "alignRight", 1);
+
+			if (debit) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(debit), "alignRight", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+			
+			if (credit) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(credit), "alignRight", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+			
+			if (opening) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(opening), "alignRight", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+
+			if (balance) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(balance), "alignRight", 1);
+			} else {
+				tableRow.addCell(" ", "", 1);
+			}
+
 		}
 	}
 
@@ -257,7 +304,7 @@ function addHeader(startDate, endDate, report) {
     tableRow.addCell(" ", "", 2);
 
     tableRow = tab.addRow();
-    tableRow.addCell("Konten-Bericht", "heading2", 2);
+    tableRow.addCell("Konten-Bericht", "heading", 2);
 
     tableRow = tab.addRow();
     tableRow.addCell("Periode: " + Banana.Converter.toLocaleDateFormat(startDate) + " - " + Banana.Converter.toLocaleDateFormat(endDate), "", 2);
@@ -289,26 +336,16 @@ function createStyleSheet() {
     pageStyle.setAttribute("margin", "10mm 10mm 10mm 10mm");
 
     stylesheet.addStyle("body", "font-family : " + param.fontFamily +"; font-size:" + param.fontSize + "px");
-
-	style = stylesheet.addStyle(".footer");
-	style.setAttribute("text-align", "center");
-	style.setAttribute("font-size", param.fontSize + "px");
-	style.setAttribute("font-family", "Courier New");
-	//style.setAttribute("border-top", "thin solid black");
-
-	style = stylesheet.addStyle(".heading1");
-	style.setAttribute("font-size", param.fontSizeTitles+"px");
-	style.setAttribute("font-weight", "bold");
-
-	style = stylesheet.addStyle(".heading2");
-	style.setAttribute("font-size", param.fontSizeTitles+"px");
-	style.setAttribute("font-weight", "bold");
-
-	style = stylesheet.addStyle("table");
-	style.setAttribute("width", "100%");
-	style.setAttribute("font-size", param.fontSize+"px");
+	stylesheet.addStyle("header", "width:100%");
+	stylesheet.addStyle(".footer", "text-align:center; font-size:"+param.fontSize+"px; font-family:Courier New");
+	stylesheet.addStyle(".bold", "font-weight:bold");
+	stylesheet.addStyle(".alignRight", "text-align:right");
+	stylesheet.addStyle(".alignCenter", "text-align:center");
+	stylesheet.addStyle(".heading", "font-size:"+param.fontSizeTitles+"px; font-weight:bold");
+	stylesheet.addStyle(".tableHeader", "background-color:#E0EFF6; text-align:center; font-weight:bold;");
+	stylesheet.addStyle("table", "width:100%; font-size:"+param.fontSize+"px");
 	stylesheet.addStyle("table.table td", "padding-left:3px; padding-right:3px; padding-top:2px; padding-bottom:2px");
-	//stylesheet.addStyle("table.table td", "border: thin solid black;");
+	stylesheet.addStyle("table.table td", "border: thin solid black;");
 
 	// stylesheet.addStyle(".col1", "width:10%");
 	// stylesheet.addStyle(".col2", "width:%");
@@ -322,24 +359,6 @@ function createStyleSheet() {
 	// stylesheet.addStyle(".col10", "width:%");
 
 
-	var headerStyle = stylesheet.addStyle("header");
-    headerStyle.setAttribute("width", "100%");
-
-	style = stylesheet.addStyle(".borderBottom"); 
-	style.setAttribute("border-bottom","thin solid black");
-
-	style = stylesheet.addStyle(".bold");
-	style.setAttribute("font-weight", "bold");
-
-	style = stylesheet.addStyle(".alignRight");
-	style.setAttribute("text-align", "right");
-
-	style = stylesheet.addStyle(".alignCenter");
-	style.setAttribute("text-align", "center");
-
-	style = stylesheet.addStyle(".underline");
-	style.setAttribute("text-decoration", "underline");
-	//style.setAttribute("border-bottom", "1px double black");
 
 	return stylesheet;
 }
