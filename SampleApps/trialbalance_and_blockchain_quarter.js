@@ -91,26 +91,27 @@ function printReport(startDate, endDate) {
 
 function printAccountsTable(startDate, endDate, report) {
 
+	//Get the columns names and set all to lower case
 	var accountsTab = Banana.document.table("Accounts");
 	var tColumnNames = accountsTab.columnNames;
-	var flag = false;
-	if (tColumnNames.indexOf("Kostenstelle") > -1 && tColumnNames.indexOf("Zuordnung") >-1) {
-		flag = true;
+	for (var i = 0; i < tColumnNames.length; i++ ) {
+		tColumnNames[i] = tColumnNames[i].toLowerCase();
+	}
+
+	//Check if "kostenstelle" and "zuordnung" columns exists
+	var kostenstelleColumn = false;
+	var zuordnungColumn = false;
+
+	if (tColumnNames.indexOf("kostenstelle") > -1 || tColumnNames.indexOf("kostenstellen") > -1) {
+		kostenstelleColumn = true;
+	}
+
+	if (tColumnNames.indexOf("zuordnung") > -1) {
+		zuordnungColumn = true;
 	}
 
 	//Create the table that will be printed on the report
 	var table = report.addTable("table");
-
-	// var col1 = table.addColumn("col1");
-	// var col2 = table.addColumn("col2");
-	// var col3 = table.addColumn("col3");
-	// var col4 = table.addColumn("col4");
-	// var col5 = table.addColumn("col5");
-	// var col6 = table.addColumn("col6");
-	// var col7 = table.addColumn("col7");
-	// var col8 = table.addColumn("col8");
-	// var col9 = table.addColumn("col9");
-	// var col10 = table.addColumn("col10");
 
 	//Add column titles to the table report
 	var tableHeader = table.getHeader();
@@ -118,8 +119,10 @@ function printAccountsTable(startDate, endDate, report) {
 	tableRow.addCell("Konto", " bold tableHeader"); //account
 	tableRow.addCell("Kontobezeichnung", " bold tableHeader"); //description
 	
-	if (flag) {
+	if (kostenstelleColumn) {
 		tableRow.addCell("KST", " bold tableHeader");
+	}
+	if (zuordnungColumn) {
 		tableRow.addCell("ZUO", " bold tableHeader");
 	}
 	
@@ -135,111 +138,83 @@ function printAccountsTable(startDate, endDate, report) {
 	for (var i = 0; i < accountsTab.rowCount; i++) {	
 		var tRow = accountsTab.row(i);
 
-		//GROUP
-		tableRow = table.addRow();
-		if ((tRow.value("Description") && !tRow.value("Group") && !tRow.value("Account")) 
-			|| tRow.value("Group") 
-			|| tRow.value("Kostenstelle") && tRow.value("Zuordnung")) 
-		{
-
+		//CurrentBalance values
+		if (tRow.value("Group")) { //If group
 			var currentBal = Banana.document.currentBalance("Gr="+tRow.value("Group"), startDate, endDate);
-			var debit = currentBal.debit;
-			var credit = currentBal.credit;
-			var opening = currentBal.opening;
-			var balance = currentBal.balance;
-			var diff = Banana.SDecimal.subtract(debit, credit);
-
-			tableRow.addCell(tRow.value("Account"), " bold", 1);
-			tableRow.addCell(tRow.value("Description"), " bold", 1);
-			if (flag) {
-				tableRow.addCell(tRow.value("Kostenstelle"), " bold", 1);
-				tableRow.addCell(tRow.value("Zuordnung"), " bold", 1);
-			}	
-			tableRow.addCell(tRow.value("VatNumber"), " bold", 1);
-			
-			if (diff != 0) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(diff), "alignRight bold", 1);
-			} else {
-				tableRow.addCell(" ", "alignRight bold", 1);
-			}
-			
-			if (debit) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(debit), "alignRight bold", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-			
-			if (credit) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(credit), "alignRight bold", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-			
-			if (opening) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(opening), "alignRight bold", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-
-			if (balance) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(balance), "alignRight bold", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-
-
-			
-			
-			
+		}
+		else { //If account
+			var currentBal = Banana.document.currentBalance(tRow.value("Account"), startDate, endDate);
 		}
 
-		//ACCOUNTS
-		else 
-		{
-			var currentBal = Banana.document.currentBalance(tRow.value("Account"), startDate, endDate);
-			var debit = currentBal.debit;
-			var credit = currentBal.credit;
-			var opening = currentBal.opening;
-			var balance = currentBal.balance;
-			var diff = Banana.SDecimal.subtract(debit, credit);
+		var debit = currentBal.debit;
+		var credit = currentBal.credit;
+		var opening = currentBal.opening;
+		var balance = currentBal.balance;
+		var diff = Banana.SDecimal.subtract(debit, credit);
 
-			tableRow.addCell(tRow.value("Account"), "", 1);
-			tableRow.addCell(tRow.value("Description"), "", 1);
-			if (flag) {
-				tableRow.addCell(tRow.value("Kostenstelle"), "", 1);
-				tableRow.addCell(tRow.value("Zuordnung"), "", 1);
-			}
-			tableRow.addCell(tRow.value("VatNumber"), "", 1);
-			if (diff != 0) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(diff), "alignRight", 1);
-			} else {
-				tableRow.addCell("", "alignRight", 1);
-			}
 
-			if (debit) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(debit), "alignRight", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-			
-			if (credit) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(credit), "alignRight", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
-			
-			if (opening) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(opening), "alignRight", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
 
-			if (balance) {
-				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(balance), "alignRight", 1);
-			} else {
-				tableRow.addCell(" ", "", 1);
-			}
+		//Style
+		var styleRow = "";
+		var styleRowNumber = "alignRight";
+		
+		//Set bold style the rows that:
+		// - have only a description (titles)
+		// - have a group (totals)
+		// - have a Kostenstelle/Zuordnung value
+		if ((tRow.value("Description") && !tRow.value("Group") && !tRow.value("Account")) 
+			|| tRow.value("Group") 
+			|| tRow.value("Kostenstelle") 
+			|| tRow.value("Zuordnung")
+		){
+			styleRow = "bold";
+		 	styleRowNumber = "alignRight bold";
+		}
 
+
+
+		//Add a row to the table and write into it
+		tableRow = table.addRow();
+		tableRow.addCell(tRow.value("Account"), styleRow, 1);
+		tableRow.addCell(tRow.value("Description"), styleRow, 1);
+		
+		if (kostenstelleColumn) {
+			tableRow.addCell(tRow.value("Kostenstelle"), styleRow, 1);
+		}
+		if (zuordnungColumn) {
+			tableRow.addCell(tRow.value("Zuordnung"), styleRow, 1);
+		}
+
+		tableRow.addCell(tRow.value("VatNumber"), styleRow, 1);
+		
+		if (diff != 0) {
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(diff), styleRowNumber, 1);
+		} else {
+			tableRow.addCell("", "", 1);
+		}
+
+		if (debit) {
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(debit), styleRowNumber, 1);
+		} else {
+			tableRow.addCell(" ", "", 1);
+		}
+		
+		if (credit) {
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(credit), styleRowNumber, 1);
+		} else {
+			tableRow.addCell(" ", "", 1);
+		}
+		
+		if (opening) {
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(opening), styleRowNumber, 1);
+		} else {
+			tableRow.addCell(" ", "", 1);
+		}
+
+		if (balance) {
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(balance), styleRowNumber, 1);
+		} else {
+			tableRow.addCell(" ", "", 1);
 		}
 	}
 
@@ -346,19 +321,6 @@ function createStyleSheet() {
 	stylesheet.addStyle("table", "width:100%; font-size:"+param.fontSize+"px");
 	stylesheet.addStyle("table.table td", "padding-left:3px; padding-right:3px; padding-top:2px; padding-bottom:2px");
 	stylesheet.addStyle("table.table td", "border: thin solid black;");
-
-	// stylesheet.addStyle(".col1", "width:10%");
-	// stylesheet.addStyle(".col2", "width:%");
-	// stylesheet.addStyle(".col3", "width:%");
-	// stylesheet.addStyle(".col4", "width:%");
-	// stylesheet.addStyle(".col5", "width:%");
-	// stylesheet.addStyle(".col6", "width:%");
-	// stylesheet.addStyle(".col7", "width:%");
-	// stylesheet.addStyle(".col8", "width:%");
-	// stylesheet.addStyle(".col9", "width:%");
-	// stylesheet.addStyle(".col10", "width:%");
-
-
 
 	return stylesheet;
 }
