@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.apps.import.de.glsbank.csv
+// @id = ch.banana.scripts.import.glsbank
 // @api = 1.0
-// @pubdate = 2015-30-11
+// @pubdate = 2017-03-13
 // @publisher = fuerstnet GmbH
-// @description = GLS Bank
+// @description = GLS Bank (*.csv)
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
-// @docproperties = ImportDeGlsBankCsv
 // @outputformat = transactions.simple
 // @inputdatasource = openfiledialog
 // @timeout = -1
+// @inputencoding = latin1
 // @inputfilefilter = Text files (*.txt *.csv);;All files (*.*)
+// @inputfilefilter.de = Text (*.txt *.csv);;Alle Dateien (*.*)
+// @inputfilefilter.fr = Texte (*.txt *.csv);;Tous (*.*)
+// @inputfilefilter.it = Testo (*.txt *.csv);;Tutti i files (*.*)
 //
 // Import CSV Umsatzexport file from german GLS Bank.
 
@@ -201,7 +204,7 @@ function convertToBananaFormat(intermediaryData) {
 
 	}
 	//Function call Banana.Converter.objectArrayToCsv() to create a CSV with new data just converted
-	convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
+	var convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
 
 	return convertedCsv;
 }
