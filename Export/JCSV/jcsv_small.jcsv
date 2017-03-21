@@ -1,0 +1,242 @@
+{"jcsv" : {"version" : "1.0", "encoding":"UTF-8"}}
+{"table":"Accounts"}
+{"columns":["Section","Group","Account","Description","BClass","Gr","Opening","Balance"]}
+{"fields":[{"constraints":{},"name":"Section","title":"Section","translations":{"enu":{"name":"Section"}},"type":"string"},{"constraints":{},"description":"Group name","name":"Group","title":"Group","translations":{"enu":{"name":"Group"}},"type":"string"},{"constraints":{},"description":"Account number","name":"Account","title":"Account","translations":{"enu":{"name":"Account"}},"type":"string"},{"constraints":{},"name":"Description","title":"Description","translations":{"enu":{"name":"Description"}},"type":"string"},{"constraints":{"maxLength ":1},"description":"Base class","name":"BClass","title":"BClass","translations":{"enu":{"name":"BClass"}},"type":"string"},{"constraints":{"maxLength ":256},"description":"Belongs to group","name":"Gr","title":"Gr","translations":{"enu":{"name":"Gr"}},"type":"string"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Opening balance","name":"Opening","title":"Opening","translations":{"enu":{"name":"Opening"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Balance","name":"Balance","title":"Balance","translations":{"enu":{"name":"Balance"}},"type":"number"}]}
+{"row":{"styleNumber":1144}}
+["*","","","BALANCE SHEET","","",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["1","","","ASSETS","","",0,0]
+["","","1000","Cash on hand","1","10",100,100]
+["","","1010","Post office current account","1","10",200,200]
+["","","1020","Bank account","1","10",0,0]
+["","","1090","Internal transfers","1","10",0,0]
+["","","1099","Amounts to be clarified","1","10",0,0]
+["","","1100","Due from Clients or Debtors","1","10",0,0]
+["","","1176","Witholding tax","1","10",0,0]
+["","","1191","Securities","1","10",0,0]
+["","","1300","Prepaid expenses","1","10",0,0]
+{"row":{"styleNumber":1024}}
+["","10","","Current assets","","1",300,300]
+["","","","","","",0,0]
+["","","1500","Machinery","1","14",0,0]
+["","","1540","Tools and equipment","1","14",0,0]
+{"row":{"styleNumber":1024}}
+["","14","","Fixed Assets","","1",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["","1","","TOTAL ASSETS","","00",300,300]
+["","","","","","",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["2","","","LIABILITIES","","",0,0]
+["","","2000","Suppliers or Creditors","2","20",-50,-50]
+["","","2100","Due to banks short-term","2","20",0,0]
+["","","2270","Due to employees and social security institutions","2","20",0,0]
+["","","2300","Transitory liabilities","2","20",0,0]
+{"row":{"styleNumber":1024}}
+["","20","","Short-term third party capital","","2",-50,-50]
+["","","","","","",0,0]
+["","","2400","Due to banks ","2","24",0,0]
+["","","2500","Other long-term debts (non-onorous)","2","24",0,0]
+["","","2600","Provisions","2","24",0,0]
+{"row":{"styleNumber":1024}}
+["","24","","Long-term third party capital","","2",0,0]
+["","","","","","",0,0]
+["","","2800","Share capital","2","28",-250,-250]
+["","","2970","Profit (Loss) carried forward","2","28",0,0]
+{"row":{"styleNumber":1024}}
+["","297","","Profit/Loss for the period","","28",0,0]
+{"row":{"styleNumber":1024}}
+["","28","","Equity","","2",-250,-250]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["","2","","TOTAL LIABILITIES","","00",-300,-300]
+{"row":{"styleNumber":1024}}
+["","","","","","",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1144}}
+["*","","","PROFIT & LOSS STATEMENT","","",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["4","","","REVENUE","","",0,0]
+["","","3200","Membership fees","4","3",0,0]
+["","","3400","Other revenue","4","3",0,0]
+["","","3600","Donations","4","3",0,0]
+["","","3710","Own consumption","4","3",0,0]
+{"row":{"styleNumber":1024}}
+["","3","","TOTAL REVENUE","","02",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["3","","","EXPENSES","","",0,0]
+["","","4200","Purchase goods for resale","3","4",0,0]
+["","","5820","Travel and entertainment expenses effective","3","4",0,0]
+["","","5830","Travel and entertainment expense allowance ","3","4",0,0]
+["","","6000","Rent","3","4",0,0]
+["","","6040","Cleaning of facilities","3","4",0,0]
+["","","6200","Car expenses","3","4",0,0]
+["","","6280","Transportation expenses","3","4",0,0]
+["","","6300","Elementary insurance or Damage by natural forces","3","4",0,0]
+["","","6400","Energy and disposal costs","3","4",0,0]
+["","","6500","Office Supplies","3","4",0,0]
+["","","6503","Technical magazines, newspapers, periodicals","3","4",0,0]
+["","","6510","Phone ","3","4",0,0]
+["","","6513","Postage","3","4",0,0]
+["","","6574","Small investments immediately expensed","3","4",0,0]
+["","","6580","Licenses and updates","3","4",0,0]
+["","","6583","Consumables","3","4",0,0]
+["","","6600","Printing & Advertising","3","4",0,0]
+["","","6800","Depreciation and value adjustments of fixed assets","3","4",0,0]
+["","","6900","Financial costs","3","4",0,0]
+["","","6950","Financial revenue","4","4",0,0]
+["","","8900","Income Tax","3","4",0,0]
+{"row":{"styleNumber":1024}}
+["","4","","TOTAL EXPENSES","","02",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["","02","","Profit/Loss for Profit & Loss Statement","","297",0,0]
+["","","","","","",0,0]
+["","00","","Difference should be = 0 (blank cell)","","",0,0]
+["","","","","","",0,0]
+["","","","","","",0,0]
+{"row":{"styleNumber":1024}}
+["*","","","COST CENTERS","","",0,0]
+["","","","","","",0,0]
+["","",";PRO","Project 1","","P",0,0]
+["","",";PRO2","Project 2","","P",0,0]
+{"row":{"styleNumber":1024}}
+["","P","","Total projects","","",0,0]
+{"table":"Transactions"}
+{"columns":["Date","Doc","Description","AccountDebit","AccountCredit","Amount","ProbableIndexGroup","Cc1Amount","Cc2Amount","Cc3Amount","AccountDebitAmount","AccountCreditAmount"]}
+{"fields":[{"constraints":{"maxLength ":256},"name":"Date","title":"Date","translations":{"enu":{"name":"Date"}},"type":"date"},{"constraints":{},"description":"Document number","name":"Doc","title":"Doc","translations":{"enu":{"name":"Doc"}},"type":"string"},{"constraints":{},"name":"Description","title":"Description","translations":{"enu":{"name":"Description"}},"type":"string"},{"constraints":{},"description":"Debit account","name":"AccountDebit","title":"Debit A/C ","translations":{"enu":{"name":"AccountDebit"}},"type":"string"},{"constraints":{},"description":"Credit account","name":"AccountCredit","title":"Credit A/C ","translations":{"enu":{"name":"AccountCredit"}},"type":"string"},{"constraints":{"maxLength ":256,"minimum":"0"},"decimals":2,"name":"Amount","title":"Amount","translations":{"enu":{"name":"Amount"}},"type":"number"},{"constraints":{},"description":"Index of probable group begin","name":"ProbableIndexGroup","title":"Index Group","translations":{"enu":{"name":"ProbableIndexGroup"}},"type":"string"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Amount registered on CC1","name":"Cc1Amount","title":"Amt. CC1","translations":{"enu":{"name":"Cc1Amount"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Amount registered on CC2","name":"Cc2Amount","title":"Amt. CC2","translations":{"enu":{"name":"Cc2Amount"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Amount registered on CC3","name":"Cc3Amount","title":"Amt. CC3","translations":{"enu":{"name":"Cc3Amount"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Amount registered on debit account","name":"AccountDebitAmount","title":"Amt. Debit","translations":{"enu":{"name":"AccountDebitAmount"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Amount registered on credit account","name":"AccountCreditAmount","title":"Amt. Credit","translations":{"enu":{"name":"AccountCreditAmount"}},"type":"number"}]}
+["","","","","",0,"",0,0,0,0,0]
+{"table":"Totals"}
+{"columns":["Group","Description","Gr","Opening","Balance"]}
+{"fields":[{"constraints":{},"description":"Group name","name":"Group","title":"Group","translations":{"enu":{"name":"Group"}},"type":"string"},{"constraints":{},"name":"Description","title":"Description","translations":{"enu":{"name":"Description"}},"type":"string"},{"constraints":{},"name":"Gr","title":"Gr","translations":{"enu":{"name":"Gr"}},"type":"string"},{"constraints":{"maxLength ":256},"decimals":2,"description":"Opening balance","name":"Opening","title":"Opening","translations":{"enu":{"name":"Opening"}},"type":"number"},{"constraints":{"maxLength ":256},"decimals":2,"name":"Balance","title":"Balance","translations":{"enu":{"name":"Balance"}},"type":"number"}]}
+{"row":{"styleNumber":1024}}
+["1","Total Assets","01",300,300]
+{"row":{"styleNumber":1024}}
+["2","Total Liabilities","01",-300,-300]
+{"row":{"styleNumber":1024}}
+["01","Net Profit(+) Loss(-) from Balance Sheet","00",0,0]
+{"row":{"styleNumber":1024}}
+["3","Total Expenses","02",0,0]
+{"row":{"styleNumber":1024}}
+["4","Total Revenue","02",0,0]
+{"row":{"styleNumber":1024}}
+["02","Loss(+)  Profit(-) from Profit & Loss Statement","00",0,0]
+{"row":{"styleNumber":1024}}
+["00","Difference should be = 0 (or empty)","",0,0]
+{"row":{"styleNumber":1024}}
+["5","Total off balance sheet: Assets","",0,0]
+{"row":{"styleNumber":1024}}
+["6","Total off balance sheet: Liabilities","",0,0]
+{"row":{"styleNumber":1024}}
+["7","Total class 7","",0,0]
+{"row":{"styleNumber":1024}}
+["8","Total class 8","",0,0]
+{"row":{"styleNumber":1024}}
+["9","Total class 9","",0,0]
+{"row":{"styleNumber":1024}}
+["","","",0,0]
+{"table":"FileInfo"}
+{"columns":["Description","Value"]}
+{"fields":[{"constraints":{},"name":"Description","title":"Description","translations":{"enu":{"name":"Description"}},"type":"string"},{"constraints":{},"name":"Value","title":"Value","translations":{"enu":{"name":"Value"}},"type":"string"}]}
+{"row":{"styleNumber":1024}}
+["File info",""]
+["Date","19.11.2016"]
+["Time","11:06:51"]
+["Program version","8.0.4.160915"]
+["Hash algorithm","Sha2-256"]
+["Total Hash",""]
+["",""]
+{"row":{"styleNumber":1024}}
+["File",""]
+["File Name","C:/Users/Domenico/Documents/GitHub/General/Export/JCSV/jcsv_example.ac2"]
+["Date last saved","19.11.2016"]
+["Time last saved","11:06:23"]
+["File size","197846"]
+["File password protected","No"]
+["Header Left","Non Profit Organization XX"]
+["Header Right","Accounting 2015"]
+["Decimal points for amounts","2"]
+["Rounding Type","3:Commercial/Arithmetic (Half up)"]
+["Language in use","English"]
+["Language used to create","English"]
+["Desired language","English"]
+["Version Creation","8.0.4.151204"]
+["Version Last saved","8.0.4.151204"]
+["Version Max saved","8.0.4.151204"]
+["Version compatibility","5.0.11"]
+["Type","Double-entry"]
+["Group type","100"]
+["Number type","100"]
+["Version type","100"]
+["Company",""]
+["Courtesy",""]
+["Name",""]
+["Family Name",""]
+["Address 1",""]
+["Address 2",""]
+["Zip",""]
+["City",""]
+["State",""]
+["Country",""]
+["Web",""]
+["Email",""]
+["Phone",""]
+["Mobile",""]
+["Fax",""]
+["Fiscal number",""]
+["VAT Number",""]
+["",""]
+{"row":{"styleNumber":1024}}
+["Free texts",""]
+["",""]
+["",""]
+{"row":{"styleNumber":1024}}
+["Accounting data base",""]
+["Entire recalculation","No"]
+["Basic Currency","CHF"]
+["Decimal points for amounts in foreign currency","2"]
+["Opening date","01.01.2015"]
+["Closure date","31.12.2015"]
+["Obligatory transaction date","Yes"]
+["Cost center sign relative to amount","No"]
+["File from previous year",""]
+["Difference on initial balance",""]
+["Debit/credit difference",""]
+["",""]
+{"row":{"styleNumber":1024}}
+["Table name","Accounts"]
+["Xml Table name","Accounts"]
+["Table header","Accounts"]
+["Number of rows","84"]
+["Rows with errors","0"]
+["Rows with messages","0"]
+["Protected rows","0"]
+["Locked rows","0"]
+["Number of groups","13"]
+["Number of accounts","47"]
+["Number of accounts with a balance","4"]
+["Number of accounts with transactions",""]
+["Hash of the balance","6QTrfffnWjPsj_nPigUyhSCPelw7t32R"]
+["Number of accounts with opening balance","4"]
+["Hash of the opening balance","6QTrfffnWjPsj_nPigUyhSCPelw7t32R"]
+["",""]
+{"row":{"styleNumber":1024}}
+["Table name","Transactions"]
+["Xml Table name","Transactions"]
+["Table header","Transactions"]
+["Number of rows","1"]
+["Rows with errors","0"]
+["Rows with messages","0"]
+["Protected rows","0"]
+["Locked rows","0"]
+["Earliest transaction date",""]
+["Latest transaction date",""]
+["Transaction lock is used","No"]
+["",""]
+{"row":{"styleNumber":1024}}
+["LockTransactions",""]
+["Transaction lock is used","No"]

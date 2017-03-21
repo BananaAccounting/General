@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:type="TaskPaneApp">
+        <Id>94cee320-9a62-4382-9908-97886c335493</Id>
+        <Version>1.0.0.0</Version>
+        <ProviderName>Banana.ch SA</ProviderName>
+        <DefaultLocale>en-US</DefaultLocale>
+        <DisplayName DefaultValue="Account Card" />
+        <Description DefaultValue="Account Card" />
+        <Hosts>
+            <Host Name="Document"/>
+        </Hosts>
+        <DefaultSettings>
+            <SourceLocation DefaultValue="http://localhost:8081/v1/files/OfficeAddIns\WordAddIns\AccountCard/Home.html"/>
+        </DefaultSettings>
+        <Permissions>ReadWriteDocument</Permissions>
+    </OfficeApp>

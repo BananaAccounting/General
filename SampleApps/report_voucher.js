@@ -25,16 +25,16 @@
 
 var param = {};
 param = {
-    "systemPaymentVoucherNo" : "00001",
-    "projectName" : "Vietnam Disaster Risk Reduction",
-    "projectNumber" : "123456",
-    "paidTo" : "Mario Rossi",
-    "description" : "Project monitoring expenses Jan 2014",
-    "paidIn" : "",
-    "chequeNumber" : "",
-    "preparedBy" : "Person 1",
-    "verifiedBy" : "Person 2",
-    "approvedBy" : "Person 3"
+    //"systemPaymentVoucherNo" : "00001",
+    "projectName" : Banana.document.info("Base","HeaderLeft"),
+    "projectNumber" : Banana.document.info("Base","HeaderRight"),
+    //"paidTo" : "Mario Rossi",
+    //"description" : "Project monitoring expenses Jan 2014",
+    //"paidIn" : "Cash",
+    //"chequeNumber" : "",
+    //"preparedBy" : "Person 1",
+    //"verifiedBy" : "Person 2",
+    //"approvedBy" : "Person 3"
 }
 
 
@@ -45,7 +45,22 @@ function exec(string) {
     //Create the report
     var report = Banana.Report.newReport("Payment Voucher");
     
-    createReport(report);
+    try {
+
+        //Table Transactions
+        var transactions = Banana.document.table('Transactions');
+        
+        //Get the Doc value selected by the mouse cursor of the table transactions  
+        var docNumber = transactions.row(Banana.document.cursor.rowNr).value('Doc');
+        
+        //Function call to create the report
+        createReport(report, docNumber);
+
+    } catch (e) {
+        //If the selected row doesn't contains the Doc value it is displayed a dialog window  
+        Banana.Ui.showInformation('Doc not found', 'Doc not found. Please select a row with values from the Transactions table.');
+        return;
+    }
 
     //Add the styles
     var stylesheet = createStyleSheet();
@@ -54,21 +69,13 @@ function exec(string) {
 
 
 
-function createReport(report) {
+function createReport(report, docNumber) {
     
     addFooter(report);
 
-    //Table Transactions
-    var transactions = Banana.document.table('Transactions');
-
     //Table Journal
     var journal = Banana.document.journal(Banana.document.ORIGINTYPE_CURRENT, Banana.document.ACCOUNTTYPE_NORMAL);
-
-    //Get the Doc value selected by the mouse cursor of the table transactions
-    var docNumber = transactions.row(Banana.document.cursor.rowNr).value('Doc');
-
-
-
+ 
     var date = "";
     var doc = ""; 
     var desc = "";
@@ -80,13 +87,11 @@ function createReport(report) {
         var tRow = journal.row(i);
 
         //Take the row from the journal that has the same "Doc" as the one selectet by the user (cursor)
-        if (tRow.value('Doc') === docNumber)
+        if (docNumber && tRow.value('Doc') === docNumber)
         {
             date = tRow.value("Date");
             doc = tRow.value("Doc");
             desc = tRow.value("Description");
-
-
 
             var amount = Banana.SDecimal.abs(tRow.value('JAmount'));
             // Debit
@@ -100,11 +105,8 @@ function createReport(report) {
         }
     }
 
-
-
-
-    //report.addImage("SwissRedCross.jpg", "img alignCenter");
     report.addParagraph(" ", "");
+
 
     /**
         TABLE 1 
@@ -116,8 +118,6 @@ function createReport(report) {
     tableRow.addCell("Payment Voucher", "styleTitle heading1 alignCenter", 4);
 
     report.addParagraph(" ", "bordersLeftRight");
-
-    //report.addImage("SwissRedCross.jpg", "img");
 
 
     /**
@@ -139,7 +139,8 @@ function createReport(report) {
     tableRow = table.addRow();
     tableRow.addCell(" ", "", 2);
     tableRow.addCell("System Payment Voucer Number", "styleTitle alignRight", 1);
-    tableRow.addCell(param.systemPaymentVoucherNo, "", 1);
+    //tableRow.addCell(param.systemPaymentVoucherNo, "", 1);
+    tableRow.addCell("", "", 1);
 
     tableRow = table.addRow();
     tableRow.addCell("Project Name", "styleTitle alignRight", 1);
@@ -165,24 +166,25 @@ function createReport(report) {
         TABLE 3
     **/
 
-    var table = report.addTable("table");
+   /* var table = report.addTable("table");
 
     tableRow = table.addRow();
     tableRow.addCell("Paid to", "styleTitle alignRight", 1);
-    tableRow.addCell(param.paidTo, "", 1);
-    //tableRow.addCell(" ", "", 1);
+    
+    //Open a dialog window asking the user to insert some text
+    var textPaidTo = Banana.Ui.getText('Paid to', 'Insert some text','');
+    tableRow.addCell(textPaidTo, "", 1);
 
     tableRow = table.addRow();
     tableRow.addCell(" ", "", 3);
 
     tableRow = table.addRow();
     tableRow.addCell("Description", "styleTitle alignRight", 1);
-    tableRow.addCell(param.description, "", 1);
-    //tableRow.addCell(" ", "", 1);
-
+    //tableRow.addCell(param.description, "", 1);
+    tableRow.addCell("                                      ", "", 1);
 
     report.addParagraph(" ", "bordersLeftRight");
-
+*/
 
 
     /**
@@ -191,17 +193,23 @@ function createReport(report) {
 
     var table = report.addTable("table");
 
-    // tableRow = table.addRow();
-    // tableRow.addCell("Amount", "styleTitle", 1);
-    // tableRow.addCell("In Figure", "styleTitle", 1);
-    // tableRow.addCell("1260", "", 1);
+    tableRow = table.addRow();
+    tableRow.addCell("Paid to", "styleTitle alignRight", 1);
+    
+    //Open a dialog window asking the user to insert some text
+    var textPaidTo = Banana.Ui.getText('Paid to', 'Paid to','');
+    tableRow.addCell(textPaidTo, "", 2);
 
-    // tableRow = table.addRow();
-    // tableRow.addCell("Amount", "styleTitle", 1);
-    // tableRow.addCell("In Words", "styleTitle", 1);
-    // tableRow.addCell(numberToEnglish("1260"), "", 1);
+    tableRow = table.addRow();
+    tableRow.addCell(" ", "", 3);
 
+    tableRow = table.addRow();
+    tableRow.addCell("Description", "styleTitle alignRight", 1);
+    //tableRow.addCell(param.description, "", 1);
+    tableRow.addCell("", "", 2);
 
+    tableRow = table.addRow();
+    tableRow.addCell(" ", "", 3);
 
     tableRow = table.addRow();
     var amountCell = tableRow.addCell("", "styleTitle alignRight", 1);
@@ -213,11 +221,10 @@ function createReport(report) {
     amountCell1.addParagraph("In Words", "");
 
     var amountCell2 = tableRow.addCell("", "", 1);
-    amountCell2.addParagraph(Banana.Converter.toLocaleNumberFormat(totDebit), "");
+    amountCell2.addParagraph(Banana.Converter.toLocaleNumberFormat(totDebit, {'decimals':0}), "");
     amountCell2.addParagraph(numberToEnglish(totDebit), "");
 
     report.addParagraph(" ", "bordersLeftRight");
-
 
 
     /**
@@ -226,18 +233,40 @@ function createReport(report) {
 
     var table = report.addTable("table");
 
-    tableRow = table.addRow();
-    tableRow.addCell("Paid In", "styleTitle alignRight", 1);
-    tableRow.addCell("Cash", "styleTitle", 1);
-    tableRow.addCell(" ", "", 1);
-    tableRow.addCell("Cheque", "styleTitle", 1);
-    tableRow.addCell(" ", "", 1);
-    tableRow.addCell("Bank Transfer", "styleTitle", 1);
-    tableRow.addCell(" ", "", 1);
+    //Open a dialog window asking to select a payment method from the list
+    var itemSelected = Banana.Ui.getItem('Paid in', 'Choose a payment method', ['Cash','Cheque','Bank Transfer'], 0, false);
+    var chequeNumber = "";
 
     tableRow = table.addRow();
-    tableRow.addCell("If paid by cheque write down the cheque No.", "styleTitle alignRight", 2);
-    tableRow.addCell(param.chequeNumber, "", 5);
+    tableRow.addCell("Paid In", "styleTitle alignRight", 1);
+    
+    tableRow.addCell("Cash", "styleTitle", 1);
+    if (itemSelected === "Cash") {
+        tableRow.addCell("X", "alignCenter", 1);
+    } else {
+        tableRow.addCell(" ", "", 1);
+    }
+    
+    tableRow.addCell("Cheque", "styleTitle", 1);
+    if (itemSelected === "Cheque") {
+        tableRow.addCell("X", "alignCenter", 1);
+
+        //In case of Cheque, open a dialog window asking to insert the cheque number
+        chequeNumber = Banana.Ui.getText('Cheque number', 'Insert the Cheque number','');
+    } else {
+        tableRow.addCell(" ", "", 1);
+    }
+    
+    tableRow.addCell("Bank Transfer", "styleTitle", 1);
+    if (itemSelected === "Bank Transfer") {
+        tableRow.addCell("X", "alignCenter", 1);
+    } else {
+        tableRow.addCell(" ", "", 1);
+    }
+
+    tableRow = table.addRow();
+    tableRow.addCell("If paid by cheque write down the cheque No.", "styleTitle alignRight", 3);
+    tableRow.addCell(chequeNumber, "", 4);
 
     tableRow = table.addRow();
     tableRow.addCell(" ", "", 7);
@@ -263,9 +292,6 @@ function createReport(report) {
     
     tableRow = table.addRow();
     tableRow.addCell("Swiss Red Cross - Accounting use only", "styleTitle alignCenter", 7);
-
-    //var totDebit = "";
-    //var totCredit = "";
 
     // Column header
     tableRow = table.addRow(); 
@@ -315,34 +341,8 @@ function createReport(report) {
     tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight");
     tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totCredit), "bold alignRight");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     report.addParagraph(" ", "bordersLeftRight");
 
-
-
-    /***********************************************************************************************************/
-    
 
     /**
         TABLE 7
@@ -357,24 +357,22 @@ function createReport(report) {
 
     tableRow = table.addRow();
     tableRow.addCell("Prepared by", "styleTitle alignRight", 1);
-    tableRow.addCell(param.preparedBy + "                                                                                  ", "", 1);
-    tableRow.addCell("Cashier/Office Assistant", "", 1);
+    tableRow.addCell("                                                                                  ", "", 1);
+    //tableRow.addCell("Cashier/Office Assistant", "", 1);
+    tableRow.addCell("", "", 1);
 
     tableRow = table.addRow();
     tableRow.addCell("Verified by", "styleTitle alignRight", 1);
-    tableRow.addCell(param.verifiedBy + "                                                                                  ", "", 1);
-    tableRow.addCell("Finance Officer", "", 1);
+    tableRow.addCell("                                                                                  ", "", 1);
+    //tableRow.addCell("Finance Officer", "", 1);
+    tableRow.addCell("", "", 1);
 
     tableRow = table.addRow();
     tableRow.addCell("Approved by", "styleTitle alignRight", 1);
-    tableRow.addCell(param.approvedBy + "                                                                                  ", "", 1);
-    tableRow.addCell("Head of SRC Vietnam", "", 1);
+    tableRow.addCell("                                                                                  ", "", 1);
+    //tableRow.addCell("Head of SRC Vietnam", "", 1);
+    tableRow.addCell("", "", 1);
 
-
-
-
-    //report.addParagraph(numberToEnglish( "25113" ));
-    //report.addPageBreak();
 }
 
 
@@ -408,8 +406,7 @@ function getDocList() {
 
 
 
-
-
+//Function that converts digits into words
 function numberToEnglish( n ) {
 
     var string = n.toString(), units, tens, scales, start, end, chunks, chunksLen, chunk, ints, i, word, words, and = 'and';
@@ -474,27 +471,23 @@ function numberToEnglish( n ) {
             }
 
             /* Add 'and' string after units or tens integer if: */
-            if( ints[0] || ints[1] ) {
+            if( ints[0] || ints[1]) {
 
                 /* Chunk has a hundreds integer or chunk is the first of multiple chunks */
                 if( ints[2] || ! i && chunksLen ) {
                     words.push( and );
                 }
-
             }
 
             /* Add hundreds word if array item exists */
             if( ( word = units[ ints[2] ] ) ) {
                 words.push( word + ' hundred' );
             }
-
         }
-
     }
-
-    return words.reverse().join( ' ' );
-
+    return words.reverse().join( ' ' ) + " only";
 }
+
 
 
 
@@ -569,3 +562,5 @@ function createStyleSheet() {
     
     return stylesheet;
 }
+
+

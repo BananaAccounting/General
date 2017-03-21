@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <title>Banana Word Add-ins</title>   
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js"></script>
+        <link href="Office.css" rel="stylesheet" type="text/css" />
+        <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js" type="text/javascript"></script>
+        <link href="Common.css" rel="stylesheet" type="text/css" />
+        <script src="Notification.js" type="text/javascript"></script>
+        <script src="Home.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.min.css">
+        <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css">
+
+    </head>
+    <body class="ms-font-m">
+        <div id="content-header">
+            <div class="padding">
+                <h1>Banana Accounting Add-in</h1>
+            </div>
+        </div>
+        <div id="content-main">
+            <div class="padding">
+                <p>This sample shows how to extract some data from Banana document and load it into the worksheet using the Word JavaScript API.</p>
+
+                <h3>1) Update the list with the current opened Banana documents</h3>
+                <button class="ms-Button" id="update-list">Update list</button>
+                <hr />
+
+
+                <h3>2) Select a Banana document file</h3>
+                <select class="ms-List" id="ListBox"></select>
+                <hr />
+
+
+                <h3>3) Update the list with all the accounts</h3>
+                <button class="ms-Button" id="accounts-list">Update list</button>
+                <hr />
+
+                <h3>3) Select an account</h3>
+                <select class="ms-List" id="ListAccounts"></select>
+                <hr />
+
+                <h3>4) Select a period</h3>
+                <select class="ms-List" id="ListPeriod">
+                <option selected="selected">All</option>
+                    <option>Jan</option>
+                    <option>Feb</option>
+                    <option>Mar</option>
+                    <option>Apr</option>
+                    <option>May</option>
+                    <option>Jun</option>
+                    <option>Jul</option>
+                    <option>Aug</option>
+                    <option>Sep</option>
+                    <option>Oct</option>
+                    <option>Nov</option>
+                    <option>Dec</option>
+                    <option>Q1</option>
+                    <option>Q2</option>
+                    <option>Q3</option>
+                    <option>Q4</option>
+                    <option>S1</option>
+                    <option>S2</option>
+                    <option>YTD</option>
+                </select>
+                <hr /> 
+
+
+                <h3>5) Generate the selected account card</h3>
+                <button class="ms-Button" id="load-data-and-create-file">Generate account card</button>
+                <hr />
+
+            </div>
+        </div>
+    </body>
+</html>

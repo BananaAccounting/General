@@ -19,6 +19,7 @@
 // @description = GLS Bank (*.csv)
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
+// @docproperties =
 // @outputformat = transactions.simple
 // @inputdatasource = openfiledialog
 // @timeout = -1

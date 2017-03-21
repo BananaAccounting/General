@@ -1,4 +1,4 @@
-// Copyright [2015] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.apps.import.csvstatemen.template
+// @id = ch.banana.apps.import.csvstatement.template
 // @api = 1.0
-// @pubdate = 2015-30-11
+// @pubdate = 2016-04-06
 // @publisher = Banana.ch SA
 // @description = Import CSV
 // @task = import.transactions
@@ -36,13 +36,16 @@ function exec(inData) {
 	inData = preProcessInData(inData);
 
 	//3. intermediaryData is an array of objects where the property is the banana column name
-	var intermediaryData = convertCsvToIntermediaryData(inData, convertionParam);
+   var intermediaryData = convertToIntermediaryData(inData, convertionParam);
 
 	//4. translate categories and Description 
 	// can define as much postProcessIntermediaryData function as needed
 	postProcessIntermediaryData(intermediaryData);
 
-	//5. convert to banana format 
+   //5. sort data
+   intermediaryData = sortData(intermediaryData, convertionParam);
+
+   //6. convert to banana format
 	//column that start with "_" are not converted
 	return convertToBananaFormat(intermediaryData);	
 }
@@ -56,8 +59,9 @@ function defineConversionParam() {
 	var convertionParam = {};
 
 	/** SPECIFY THE SEPARATOR AND THE TEXT DELIMITER USED IN THE CSV FILE */
-	convertionParam.separator = ';';
-	convertionParam.textDelim = '"';
+   convertionParam.format = "csv"; // available formats are "csv", "html"
+   convertionParam.separator = ';';
+   convertionParam.textDelim = '"';
 
 	/** SPECIFY AT WHICH ROW OF THE CSV FILE IS THE HEADER (COLUMN TITLES)
 	We suppose the data will always begin right away after the header line */
@@ -66,27 +70,35 @@ function defineConversionParam() {
 
 
    /** SPECIFY THE COLUMN TO USE FOR SORTING
-   If empty the data are not sorted */
-   convertionParam.sortColum = "Date";
+   If sortColums is empty the data are not sorted */
+   convertionParam.sortColums = ["Date", "ExternalReference"];
    convertionParam.sortDescending = false;
 	/** END */
 
+	/* rowConvert is a function that convert the inputRow (passed as parameter)
+	*  to a convertedRow object 
+	* - inputRow is an object where the properties is the column name found in the CSV file
+	* - convertedRow is an  object where the properties are the column name to be exported in Banana 
+	* For each column that you need to export in Banana create a line that create convertedRow column 
+	* The right part can be any fuction or value 
+	* Remember that in Banana
+	* - Date must be in the format "yyyy-mm-dd"
+	* - Number decimal separator must be "." and there should be no thousand separator */
 	convertionParam.rowConverter = function(inputRow) {
 		var convertedRow = {};
 
-
 		/** MODIFY THE FIELDS NAME AND THE CONVERTION HERE 
 		*   The right part is a statements that is then executed for each inputRow
-		*   inputRow is a javascript object where the property is the FieldName  */
 		
 		/*   Field that start with the underscore "_" will not be exported 
 		*    Create this fields so that you can use-it in the postprocessing function */
+		/* use the Banana.Converter.toInternalDateFormat to convert to the appropriate date format */
 		convertedRow["Date"] = Banana.Converter.toInternalDateFormat(inputRow["Überweisungsdatum"], "dd.mm.yy");
 		convertedRow["Description"] = inputRow["Kommentar"];
 		convertedRow["_Description2"] = inputRow["Gruppe nach"];
-		convertedRow["Income"] = inputRow["Betrag"];
-		// use the toInternalNumberFormat if the decimal separator is not "."
-		//convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Überweisungsdatum"], ",");
+		/* use the Banana.Converter.toInternalNumberFormat to convert to the appropriate number format 
+		*  we already have negative amounts in Betrag and don't need the to fill the column Expenses*/
+		convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Betrag"], ",");
 		//convertedRow["Expenses"] = inputRow["Total"];
 		convertedRow["VatCode"] = inputRow["MWST Code"];
 		convertedRow["ContraAccount"] = inputRow["Kategorie"];
@@ -192,17 +204,22 @@ function postProcessIntermediaryData(intermediaryData) {
 	for (var i = 0; i < intermediaryData.length; i++) {
 		var convertedData = intermediaryData[i];
 
-		//We delete everything between parentheses
-		var cleanContraAccount = convertedData["ContraAccount"].replace(/\(.*/,'').trim();
-
 		//Convert
-		convertedData["ContraAccount"] = categories[cleanContraAccount];
-		convertedData["Account"] = accounts[convertedData["Account"]];
+      if (convertedData["ContraAccount"]) {
+         var cleanContraAccount = convertedData["ContraAccount"].replace(/\(.*/,'').trim(); //We delete everything between parentheses
+         if (categories.indexOf(cleanContraAccount) > -1)
+            convertedData["ContraAccount"] = categories[cleanContraAccount];
+      }
+
+      if (convertedData["Account"]) {
+         if (accounts.indexOf(convertedData["Account"]) > -1)
+            convertedData["Account"] = accounts[convertedData["Account"]];
+      }
 
 		if (convertedData["_Description2"]) {
 			convertedData["Description"] = convertedData["_Description2"] + ", " + convertedData["Description"];
 		}
-	}
+   }
 }
 
 
@@ -211,6 +228,15 @@ function postProcessIntermediaryData(intermediaryData) {
 
 
 /* DO NOT CHANGE THIS CODE */
+
+// Convert to an array of objects where each object property is the banana columnNameXml
+function convertToIntermediaryData(inData, convertionParam) {
+   if (convertionParam.format === "html") {
+      return convertHtmlToIntermediaryData(inData, convertionParam);
+   } else {
+      return convertCsvToIntermediaryData(inData, convertionParam);
+   }
+}
 
 // Convert to an array of objects where each object property is the banana columnNameXml
 function convertCsvToIntermediaryData(inData, convertionParam) {
@@ -239,6 +265,83 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 	return intermediaryData;
 }
 
+// Convert to an array of objects where each object property is the banana columnNameXml
+function convertHtmlToIntermediaryData(inData, convertionParam) {
+
+   var form = [];
+   var intermediaryData = [];
+
+   //Read the HTML file and create an array with the data
+   var htmlFile = [];
+   var htmlRows = inData.match(/<tr[^>]*>.*?<\/tr>/gi);
+   for (var rowNr = 0; rowNr < htmlRows.length; rowNr++ ) {
+      var htmlRow = [];
+      var htmlFields = htmlRows[rowNr].match(/<t(h|d)[^>]*>.*?<\/t(h|d)>/gi);
+      for (var fieldNr = 0; fieldNr < htmlFields.length; fieldNr++ ) {
+         var htmlFieldRe =  />(.*)</g.exec(htmlFields[fieldNr]);
+         htmlRow.push(htmlFieldRe.length > 1 ? htmlFieldRe[1] : "");
+      }
+      htmlFile.push(htmlRow);
+   }
+
+   //Variables used to save the columns titles and the rows values
+   var columns = getHeaderData(htmlFile, convertionParam.headerLineStart); //array
+   var rows = getRowData(htmlFile, convertionParam.dataLineStart); //array of array
+
+   //Convert header names
+   for (var i = 0; i < columns.length; i++) {
+      var convertedHeader = columns[i];
+      convertedHeader = convertedHeader.toLowerCase();
+      convertedHeader = convertedHeader.replace(" ", "_");
+      var indexOfHeader = columns.indexOf(convertedHeader);
+      if (indexOfHeader >= 0 && indexOfHeader < i) { // Header alreay exist
+         //Avoid headers with same name adding an incremental index
+         var newIndex = 2;
+         while (columns.indexOf(convertedHeader + newIndex.toString()) !== -1 && newIndex < 99)
+            newIndex++;
+         convertedHeader = convertedHeader + newIndex.toString()
+      }
+      columns[i] = convertedHeader;
+   }
+
+   Banana.console.log(JSON.stringify(columns, null, "   "));
+
+   //Load the form with data taken from the array. Create objects
+   loadForm(form, columns, rows);
+
+   //Create the new CSV file with converted data
+   var convertedRow;
+   //For each row of the form, we call the rowConverter() function and we save the converted data
+   for (var i = 0; i < form.length; i++) {
+      convertedRow = convertionParam.rowConverter(form[i]);
+      intermediaryData.push(convertedRow);
+   }
+
+   //Return the converted CSV data into the Banana document table
+   return intermediaryData;
+}
+
+// The purpose of this function is to sort the data
+function sortData(intermediaryData, convertionParam) {
+   if (convertionParam.sortColums && convertionParam.sortColums.length) {
+      intermediaryData.sort(
+               function(row1, row2) {
+                  for (var i = 0; i < convertionParam.sortColums.length; i++) {
+                     var columnName = convertionParam.sortColums[i];
+                     if (row1[columnName] > row2[columnName])
+                        return 1;
+                     else if (row1[columnName] < row2[columnName])
+                        return -1;
+                  }
+                  return 0;
+               });
+
+      if (convertionParam.sortDescending)
+         intermediaryData.reverse();
+   }
+
+   return intermediaryData;
+}
 
 //The purpose of this function is to convert all the data into a format supported by Banana
 function convertToBananaFormat(intermediaryData) {
@@ -253,7 +356,7 @@ function convertToBananaFormat(intermediaryData) {
 		
 	}
 	//Function call Banana.Converter.objectArrayToCsv() to create a CSV with new data just converted
-	convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
+   var convertedCsv = Banana.Converter.objectArrayToCsv(columnTitles, intermediaryData, "\t");
 
 	return convertedCsv;
 }
@@ -262,11 +365,8 @@ function convertToBananaFormat(intermediaryData) {
 //The purpose of this function is to load all the data (titles of the columns and rows) and create a list of objects.
 //Each object represents a row of the csv file
 function loadForm(form, columns, rows) {
-	var obj = new Object;
-
 	for(var j = 0; j < rows.length; j++){
 		var obj = {};
-
 		for(var i = 0; i < columns.length; i++){
 			obj[columns[i]] = rows[j][i];
 		}
@@ -285,9 +385,19 @@ function getHeaderData(csvFile, startLineNumber) {
 
 		headerData[i] = headerData[i].trim();
 
-		if (!headerData[i]) {
-			headerData[i] = i;
-		}
+      if (!headerData[i]) {
+         headerData[i] = i;
+      }
+
+      //Avoid duplicate headers
+      var headerPos = headerData.indexOf(headerData[i]);
+      if (headerPos >= 0 && headerPos < i) { // Header already exist
+         var postfixIndex = 2;
+         while (headerData.indexOf(headerData[i] + postfixIndex.toString()) !== -1 && postfixIndex <= 99)
+            postfixIndex++; // Append an incremental index
+         headerData[i] = headerData[i] + postfixIndex.toString()
+      }
+
 	}
 	return headerData;
 }
