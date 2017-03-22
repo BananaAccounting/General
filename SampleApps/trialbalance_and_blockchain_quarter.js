@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.app.trialbalanceandblockchain
 // @api = 1.0
-// @pubdate = 2017-02-20
+// @pubdate = 2017-03-22
 // @publisher = Banana.ch SA
 // @description = Trial Balance and blockchain
 // @task = app.command
