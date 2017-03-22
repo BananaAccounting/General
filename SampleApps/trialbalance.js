@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.app.trialbalance
 // @api = 1.0
-// @pubdate = 2017-01-23
+// @pubdate = 2017-03-22
 // @publisher = Banana.ch SA
 // @description = Trial Balance
 // @task = app.command
@@ -27,6 +27,10 @@
 
 
 
+var sumDebit = 0;
+var sumCredit = 0;
+
+
 //Main function
 function exec(string) {
 	
@@ -36,7 +40,6 @@ function exec(string) {
 	}
 	
 	var dateform = getPeriodSettings();
-
 	if (dateform) {
 		printReport(dateform.selectionStartDate, dateform.selectionEndDate);
 	}
@@ -46,20 +49,35 @@ function exec(string) {
 //Function that creates and prints the report
 function printReport(startDate, endDate) {
 
-	var report = Banana.Report.newReport("Swiss Red Cross - Trial Balance");
+	//Add a name to the report
+	var report = Banana.Report.newReport("Trial Balance");
 
+	//Add a title
 	report.addParagraph("Trial Balance", "heading1");
 	report.addParagraph(" ", "");
-	report.addParagraph(" ", "");
+
+	//Create a table for the report
+	var table = report.addTable("table");
+	
+	//Add column titles to the table
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 1);
+	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 3);
+
+	tableRow = table.addRow();
+	tableRow.addCell("", " bold borderBottom");
+	tableRow.addCell("", " bold borderBottom");
+	tableRow.addCell("Debit", "alignCenter bold borderBottom");
+	tableRow.addCell("Credit", "alignCenter bold borderBottom");
 
 	/* 1. Print the balance sheet */
-	printBalanceSheet(startDate, endDate, report);
-
-	report.addPageBreak();
+	printBalanceSheet(startDate, endDate, report, table);
 
 	/* 2. Print the profit & loss statement */
-	printProfitLossStatement(startDate, endDate, report);
+	printProfitLossStatement(startDate, endDate, report, table);
 
+	/* 3. Print totals */
+	printTotals(report, table);
 
 	//Add a footer to the report
 	addFooter(report);
@@ -72,102 +90,13 @@ function printReport(startDate, endDate) {
 
 
 
-
 //Function that prints the balance sheet
-function printProfitLossStatement(startDate, endDate, report) {
+function printBalanceSheet(startDate, endDate, report, table) {
 	
-	//Create the table that will be printed on the report
-	var table = report.addTable("table");
-
-	tableRow = table.addRow();
-	tableRow.addCell("PROFIT & LOSS STATEMENT", "bold", 2);
-	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 2);
-
-	//Add column titles to the table report
-	tableRow = table.addRow();
-	tableRow.addCell("", " bold borderBottom");
-	tableRow.addCell("", " bold borderBottom");
-	tableRow.addCell("Debit", "alignCenter bold borderBottom");
-	tableRow.addCell("Credit", "alignCenter bold borderBottom");
-
 	//Get the Accounts table
 	var accountsTab = Banana.document.table("Accounts");
 
-	//Income - Bclass 4
-	var sumTotIncome = 0;
-	for (var i = 0; i < accountsTab.rowCount; i++) {	
-		var tRow = accountsTab.row(i);
-
-		if (tRow.value("Account") && tRow.value("BClass") == "4") {
-			tableRow = table.addRow();
-			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
-			tableRow.addCell(tRow.value("Description"), "", 1);
-			tableRow.addCell("", "", 1);
-			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
-			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
-			sumTotIncome = Banana.SDecimal.add(sumTotIncome, bal);
-		}
-	}
-	
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-
-	//Expenses - Bclass 3
-	var sumTotExpenses = 0;
-	for (var i = 0; i < accountsTab.rowCount; i++) {	
-		var tRow = accountsTab.row(i);
-
-		if (tRow.value("Account") && tRow.value("BClass") == "3") {
-			tableRow = table.addRow();
-			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
-			tableRow.addCell(tRow.value("Description"), "", 1);
-			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
-			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
-			tableRow.addCell("", "", 1);
-			sumTotExpenses = Banana.SDecimal.add(sumTotExpenses, bal);
-		}
-	}
-
-	//Totals
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-	
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 2);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotExpenses), "alignRight bold underline", 1);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotIncome), "alignRight bold underline", 1);
-
-}
-
-
-
-
-
-
-//Function that prints the balance sheet
-function printBalanceSheet(startDate, endDate, report) {
-	
-	//Create the table that will be printed on the report
-	var table = report.addTable("table");
-
-	tableRow = table.addRow();
-	tableRow.addCell("BALANCE SHEET", "bold", 2);
-	tableRow.addCell("Trial Balance at " + Banana.Converter.toLocaleDateFormat(endDate), "alignRight bold", 2);
-
-	//Add column titles to the table report
-	tableRow = table.addRow();
-	tableRow.addCell("", " bold borderBottom");
-	tableRow.addCell("", " bold borderBottom");
-	tableRow.addCell("Debit", "alignCenter bold borderBottom");
-	tableRow.addCell("Credit", "alignCenter bold borderBottom");
-
-	//Get the Accounts table
-	var accountsTab = Banana.document.table("Accounts");
-
-	//Assets - Bclass 1
-	var sumTotAssets = 0;
+	//Assets - BClass 1
 	for (var i = 0; i < accountsTab.rowCount; i++) {	
 		var tRow = accountsTab.row(i);
 
@@ -178,17 +107,11 @@ function printBalanceSheet(startDate, endDate, report) {
 			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
 			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
 			tableRow.addCell("", "", 1);
-			sumTotAssets = Banana.SDecimal.add(sumTotAssets, bal);
+			sumDebit = Banana.SDecimal.add(sumDebit, bal);
 		}
 	}	
 
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-
-	//Liabilities - Bclass 2
-	var sumTotLiabilities = 0;
+	//Liabilities - BClass 2
 	for (var i = 0; i < accountsTab.rowCount; i++) {	
 		var tRow = accountsTab.row(i);
 
@@ -199,42 +122,68 @@ function printBalanceSheet(startDate, endDate, report) {
 			tableRow.addCell("", "", 1);
 			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
 			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
-			sumTotLiabilities = Banana.SDecimal.add(sumTotLiabilities, bal);
+			sumCredit = Banana.SDecimal.add(sumCredit, bal);
 		}
 	}
-
-	//Income or Expense of the current year
-	var res;
-	var resDesc;
-	for (var i = 0; i < accountsTab.rowCount; i++) {
-		var tRow = accountsTab.row(i);
-		if (!tRow.value("BClass") && tRow.value("Gr") === "2") {
-			resDesc = tRow.value("Description");
-		}
-		res = calcBalance("BClass=1|2", "", startDate, endDate);
-	}
-	sumTotLiabilities = Banana.SDecimal.add(sumTotLiabilities, res);
-
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 1);
-	tableRow.addCell(resDesc, "", 1);
-	tableRow.addCell("", "", 1);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(res), "alignRight", 1);
-
-	//Totals
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 4);
-
-	tableRow = table.addRow();
-	tableRow.addCell("", "", 2);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotAssets), "alignRight bold underline", 1);
-	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumTotLiabilities), "alignRight bold underline", 1);
-
 }
 
 
 
 
+//Function that prints the balance sheet
+function printProfitLossStatement(startDate, endDate, report, table) {
+	
+	//Get the Accounts table
+	var accountsTab = Banana.document.table("Accounts");
+
+	//Income - BClass 4
+	for (var i = 0; i < accountsTab.rowCount; i++) {	
+		var tRow = accountsTab.row(i);
+
+		if (tRow.value("Account") && tRow.value("BClass") == "4") {
+			tableRow = table.addRow();
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
+			tableRow.addCell(tRow.value("Description"), "", 1);
+			tableRow.addCell("", "", 1);
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
+			sumCredit = Banana.SDecimal.add(sumCredit, bal);
+		}
+	}
+	
+	//Expenses - BClass 3
+	for (var i = 0; i < accountsTab.rowCount; i++) {	
+		var tRow = accountsTab.row(i);
+
+		if (tRow.value("Account") && tRow.value("BClass") == "3") {
+			tableRow = table.addRow();
+			tableRow.addCell(tRow.value("Account"), "alignRight", 1);
+			tableRow.addCell(tRow.value("Description"), "", 1);
+			var bal = calcBalance(tRow.value("Account"), tRow.value("BClass"), startDate, endDate);
+			if (Banana.SDecimal.sign(bal) > 0 || Banana.SDecimal.sign(bal) == 0) {
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(bal), "alignRight", 1);
+				tableRow.addCell("", "", 1);
+				sumDebit = Banana.SDecimal.add(sumDebit, bal);
+			} else {
+				tableRow.addCell("", "", 1);
+				tableRow.addCell(Banana.Converter.toLocaleNumberFormat(Banana.SDecimal.invert(bal)), "alignRight", 1);
+				sumCredit = Banana.SDecimal.add(sumCredit, Banana.SDecimal.invert(bal));
+			}
+		}
+	}
+}
+
+
+
+
+
+//Function that prints the total of debit and total of credit
+function printTotals(report, table) {
+	tableRow = table.addRow();
+	tableRow.addCell("", "", 2);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumDebit), "alignRight font12 bold", 1);
+	tableRow.addCell(Banana.Converter.toLocaleNumberFormat(sumCredit), "alignRight font12 bold", 1);
+}
 
 
 
@@ -331,7 +280,7 @@ function createStyleSheet() {
 	var stylesheet = Banana.Report.newStyleSheet();
 
     var pageStyle = stylesheet.addStyle("@page");
-    pageStyle.setAttribute("margin", "15mm 15mm 10mm 25mm");
+    pageStyle.setAttribute("margin", "15mm 15mm 15mm 25mm");
 
     stylesheet.addStyle("body", "font-family : Arial");
 
@@ -365,6 +314,9 @@ function createStyleSheet() {
 
 	style = stylesheet.addStyle(".underline");
 	style.setAttribute("text-decoration", "underline");
+
+	style = stylesheet.addStyle(".font12");
+	style.setAttribute("font-size", "12px");
 	//style.setAttribute("border-bottom", "1px double black");
 
 	return stylesheet;
