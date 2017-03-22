@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.scripts.import.glsbank
+// @id = ch.banana.apps.import.de.glsbank.csv
 // @api = 1.0
 // @pubdate = 2017-03-13
 // @publisher = fuerstnet GmbH
