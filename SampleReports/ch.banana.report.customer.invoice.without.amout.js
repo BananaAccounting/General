@@ -1,11 +1,11 @@
 // Copyright [2016] [Banana.ch SA - Lugano Switzerland]
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,13 +26,13 @@ function settingsDialog() {
    var savedParam = Banana.document.scriptReadSettings();
    if (savedParam.length > 0) {
       param = JSON.parse(savedParam);
-   }   
+   }
    param = verifyParam(param);
    var lang = Banana.document.locale;
    if (lang.length>2)
       lang = lang.substr(0,2);
    var texts = setDocumentTexts(lang);
-   
+
    param.isr_bank_name = Banana.Ui.getText('Settings', texts.param_isr_bank_name, param.isr_bank_name);
    if (param.isr_bank_name === undefined)
       return;
@@ -119,7 +119,7 @@ function verifyParam(param) {
      param.isr_position_dY = '0';
    if (!param.isr_type)
      param.isr_type = '04';
-   
+
    return param;
 }
 
@@ -153,7 +153,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
 
   // Invoice document
   var reportObj = Banana.Report;
-  
+
   if (!repDocObj) {
     repDocObj = reportObj.newReport(texts.title);
   } else {
@@ -183,7 +183,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
     }
   }
   cell.addParagraph(business_name, "logo left bold");
-  
+
   tableRow = headerTable.addRow();
   cell = tableRow.addCell("", "", 1);
 
@@ -201,7 +201,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
 
   tableRow = addressTable.addRow();
   var cell1 = tableRow.addCell("", "", 1);
-  var cell2 = tableRow.addCell("","",1); 
+  var cell2 = tableRow.addCell("","",1);
   var addressLines = getInvoiceAddress(invoiceObj.customer_info).split('\n');
   for (var i=0; i < addressLines.length; i++) {
     cell2.addParagraph(addressLines[i], "");
@@ -214,7 +214,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   var docCol1 = docTable.addColumn("doc_col1");
   var docCol2 = docTable.addColumn("doc_col2");
   var docCol3 = docTable.addColumn("doc_col3");
- 
+
   //Date
   tableRow = docTable.addRow();
   tableRow.addCell("", "", 2);
@@ -267,7 +267,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   if (invoiceObj.document_info.currency == "CHF") {
     print_isr(invoiceObj, repDocObj, repStyleObj, param);
   }
-   
+
   //Set document style
   setDocumentStyle(reportObj, repStyleObj, param);
 }
@@ -280,7 +280,7 @@ function toInvoiceAmountFormat(invoice, value) {
 function getInvoiceAddress(invoiceAddress) {
 
   var address = "";
-  
+
   if (invoiceAddress.courtesy) {
       address = invoiceAddress.courtesy + "\n";
   }
@@ -298,19 +298,19 @@ function getInvoiceAddress(invoiceAddress) {
   if (invoiceAddress.business_name) {
     address = address + invoiceAddress.business_name + "\n";
   }
-  
+
   if (invoiceAddress.address1) {
     address = address + invoiceAddress.address1 + "\n";
   }
-  
+
   if (invoiceAddress.address2) {
     address = address + invoiceAddress.address2 + "\n";
   }
-  
+
   if (invoiceAddress.address3) {
     address = address + invoiceAddress.address3 + "\n";
   }
-  
+
   if (invoiceAddress.country) {
     address = address + invoiceAddress.country + "-";
   }
@@ -318,7 +318,7 @@ function getInvoiceAddress(invoiceAddress) {
   if (invoiceAddress.postal_code) {
     address = address + invoiceAddress.postal_code + " ";
   }
-  
+
   if (invoiceAddress.city) {
     address = address + invoiceAddress.city + "\n";
   }
@@ -327,13 +327,13 @@ function getInvoiceAddress(invoiceAddress) {
 }
 
 function getInvoiceSupplier(invoiceSupplier) {
-  
+
   var supplierAddress = "";
 
   if (invoiceSupplier.first_name) {
     supplierAddress = invoiceSupplier.first_name + " ";
   }
-  
+
   if (invoiceSupplier.last_name) {
     supplierAddress = supplierAddress + invoiceSupplier.last_name;
   }
@@ -341,11 +341,11 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (supplierAddress.length>0) {
     supplierAddress = supplierAddress + "\n";
   }
-  
+
   if (invoiceSupplier.address1) {
     supplierAddress = supplierAddress + invoiceSupplier.address1 + "\n";
   }
-  
+
   if (invoiceSupplier.address2) {
     supplierAddress = supplierAddress + invoiceSupplier.address2 + "\n";
   }
@@ -357,7 +357,7 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (invoiceSupplier.postal_code) {
     supplierAddress = supplierAddress + invoiceSupplier.postal_code + " ";
   }
-  
+
   if (invoiceSupplier.city) {
     supplierAddress = supplierAddress + invoiceSupplier.city + "\n";
   }
@@ -365,7 +365,7 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (invoiceSupplier.web) {
     supplierAddress = supplierAddress + invoiceSupplier.web + "\n";
   }
- 
+
   if (invoiceSupplier.email) {
     supplierAddress = supplierAddress + invoiceSupplier.email + "\n";
   }
@@ -373,7 +373,7 @@ function getInvoiceSupplier(invoiceSupplier) {
   if (invoiceSupplier.phone) {
     supplierAddress = supplierAddress + "Tel: " + invoiceSupplier.phone;
   }
-  
+
   return supplierAddress;
 }
 
@@ -538,7 +538,7 @@ function print_isrCustomerInfo(jsonInvoice, report, repStyleObj, param) {
    //Reference number
    var referenceNumber_PAY = report.addSection("referenceNumber_PAY");
    referenceNumber_PAY.addParagraph(pvrReference);
-   
+
 }
 
 //The purpose of this function is to print the supplier informations in the correct position
@@ -608,7 +608,7 @@ function pvrCodeString(amount, pvrReference, ccpAccount, pvrType) {
    if (pvrReference.length !== 27) {
       return "@error Invalid PVR reference code, has to be 27 digit length.";
    }
-   
+
    if (pvrReference[pvrReference.length-1] !== modulo10(pvrReference.substr(0,pvrReference.length-1))) {
       return "@error Invalid PVR reference, wrong control digit.";
    }
@@ -721,10 +721,10 @@ function modulo10(string) {
 
 function setPvrStyle(reportObj, repStyleObj, param) {
 
-   	if (!repStyleObj)
-		repStyleObj = reportObj.newStyleSheet();
+      if (!repStyleObj)
+      repStyleObj = reportObj.newStyleSheet();
 
-	//Overwrite default page margin of 20mm
+   //Overwrite default page margin of 20mm
    var style = repStyleObj.addStyle("@page");
    style.setAttribute("margin", "0mm");
    //isr text position style.setAttribute('transform', 'matrix(1.0, 0.0, 0.0, 1.0, -5mm, -9mm)');
@@ -737,7 +737,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("top", "190mm"); //180
    style.setAttribute("color", "black");
    style.setAttribute("font-size", "10px");
-   
+
    //printPvrBankInfo
    style = repStyleObj.addStyle(".billingInfo_REC");
    style.setAttribute("position", "absolute");
@@ -759,7 +759,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "64mm");
    style.setAttribute("top", "22mm");
-   
+
    //printPvrAccount
    style = repStyleObj.addStyle(".accountNumber_REC");
    style.setAttribute("position", "absolute");
@@ -770,8 +770,8 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "90mm");
    style.setAttribute("top", "42mm");
-   
-   //printPvrAmount 
+
+   //printPvrAmount
    style = repStyleObj.addStyle(".totalInvoiceFr_REC");
    style.setAttribute("position", "absolute");
    style.setAttribute("left", "4mm");
@@ -799,7 +799,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "111mm");
    style.setAttribute("top", "51mm");
    style.setAttribute("font-size", "11px");
-   
+
    //printPvrCustomerInfo
    style = repStyleObj.addStyle(".customerAddress_REC");
    style.setAttribute("position", "absolute");
@@ -812,7 +812,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "125mm");
    style.setAttribute("top", "50mm");
    style.setAttribute("font-size", "10px");
-   
+
    //printPvrReference
    style = repStyleObj.addStyle(".referenceNumber_PAY");
    style.setAttribute("position", "absolute");
@@ -822,7 +822,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("width", "83mm");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
-   
+
    //printPvrCode
    style = repStyleObj.addStyle(".pvrFullCode_PAY");
    style.setAttribute("position", "absolute");
@@ -831,7 +831,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("top", "85mm");// 20th row * (25.4mm / 6)
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
-   
+
    //receiptPvrReference
    style = repStyleObj.addStyle(".pvr_reference");
    style.setAttribute("font-size", "8px");
@@ -842,7 +842,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
 // STYLES
 //====================================================================//
 function setDocumentStyle(reportObj, repStyleObj, param) {
-    
+
     if (!repStyleObj) {
         repStyleObj = reportObj.newStyleSheet();
     }
@@ -852,8 +852,8 @@ function setDocumentStyle(reportObj, repStyleObj, param) {
     //====================================================================//
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
     repStyleObj.addStyle("body", "font-size: 12pt; font-family: Arial, Helvetica, sans-serif");
-    repStyleObj.addStyle(".address_col1","width:43%");
-    repStyleObj.addStyle(".address_col2","width:57%");
+    repStyleObj.addStyle(".address_col1","width:50%");
+    repStyleObj.addStyle(".address_col2","width:50%");
     repStyleObj.addStyle(".amount", "text-align:right;");
     repStyleObj.addStyle(".bold", "font-weight: bold");
     repStyleObj.addStyle(".border-bottom", "border-bottom:2px solid;");
@@ -879,7 +879,8 @@ function setDocumentStyle(reportObj, repStyleObj, param) {
     headerStyle.setAttribute("position", "absolute");
     headerStyle.setAttribute("margin-top", "10mm");
     headerStyle.setAttribute("margin-left", "20mm");
-    headerStyle.setAttribute("margin-right", "4mm");
+    headerStyle.setAttribute("margin-right", "10mm");
+    headerStyle.setAttribute("width", "100%");
 
     var addressStyle = repStyleObj.addStyle(".address_table");
     addressStyle.setAttribute("position", "absolute");
@@ -962,7 +963,7 @@ function setDocumentTexts(language) {
     texts.quote_2 = '10.00 CHF';
     texts.quote_3 = '30.00 CHF';
   }
- 
+
   return texts;
 }
 
