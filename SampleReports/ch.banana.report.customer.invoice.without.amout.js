@@ -852,8 +852,8 @@ function setDocumentStyle(reportObj, repStyleObj, param) {
     //====================================================================//
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
     repStyleObj.addStyle("body", "font-size: 12pt; font-family: Arial, Helvetica, sans-serif");
-    repStyleObj.addStyle(".address_col1","width:50%");
-    repStyleObj.addStyle(".address_col2","width:50%");
+    repStyleObj.addStyle(".address_col1","width:43%");
+    repStyleObj.addStyle(".address_col2","width:57%");
     repStyleObj.addStyle(".amount", "text-align:right;");
     repStyleObj.addStyle(".bold", "font-weight: bold");
     repStyleObj.addStyle(".border-bottom", "border-bottom:2px solid;");
@@ -879,8 +879,7 @@ function setDocumentStyle(reportObj, repStyleObj, param) {
     headerStyle.setAttribute("position", "absolute");
     headerStyle.setAttribute("margin-top", "10mm");
     headerStyle.setAttribute("margin-left", "20mm");
-    headerStyle.setAttribute("margin-right", "10mm");
-    headerStyle.setAttribute("width", "100%");
+    headerStyle.setAttribute("margin-right", "4mm");
 
     var addressStyle = repStyleObj.addStyle(".address_table");
     addressStyle.setAttribute("position", "absolute");
