@@ -14,19 +14,23 @@
 //
 // @id = ch.banana.addon.details
 // @api = 1.0
-// @pubdate = 2015-07-31
+// @pubdate = 2017-04-05
 // @publisher = Banana.ch SA
 // @description = Details
 // @task = app.command
-// @doctype = *.*
-// @docproperties = details
+// @doctype = *;*
+// @docproperties =
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
 
 
+/*
+	This app creates a report with details of groups, accounts and transactions
+*/
 
-var scriptVersion = "script v. 2015-07-31";
+
+var scriptVersion = "script v. 2017-04-05";
 
 
 
@@ -56,7 +60,7 @@ function exec(string) {
 //The table will contain only the rows with an existant and non-zero end balance amount
 function createDetailsReport(banDoc, startDate, endDate) {
 
-	var report = Banana.Report.newReport("Profit/Loss details");
+	var report = Banana.Report.newReport("Details");
 
 
 	//-----------------------------------------------------------------------------//
