@@ -180,7 +180,9 @@ function createReport(report, docNumber) {
 
     tableRow = table.addRow();
     tableRow.addCell("Description", "styleTitle alignRight", 1);
-    //tableRow.addCell(param.description, "", 1);
+    
+    var textDescription = Banana.Ui.getText('Description', 'Insert some text','');
+    tableRow.addCell(textDescription, "", 1);//tableRow.addCell(textdescription, "", 1);
     tableRow.addCell("                                      ", "", 1);
 
     report.addParagraph(" ", "bordersLeftRight");
