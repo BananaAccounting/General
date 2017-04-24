@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file>ch.banana.apps.transactionvoucher.dialog.js</file>
+     <file>ch.banana.apps.transactionvoucher.dialog.ui</file>
+     <file>transaction_voucher_image.png</file>
+ </qresource>
+ </RCC>
