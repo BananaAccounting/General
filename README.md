@@ -1,4 +1,4 @@
-#General 
+## General 
 
 This repository contains file that are of general use.
 
@@ -13,7 +13,7 @@ This repository contains file that are of general use.
 1. Click on the link of the file
 2. Click on the button **Row** or right-click on the button **"Row"** and "Save page as" 
 
-##See a BananaApp in action 
+## See a BananaApp in action 
 By following this step you will see a Banana App voucher report. The voucher report print the transaction's data.  
 
 * Start Banana Accounting
