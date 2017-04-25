@@ -18,7 +18,7 @@ By following this step you will see a Banana App voucher report. The voucher rep
 
 * Start Banana Accounting 8
 * Download and open the file [company-2020.ac2](https://github.com/BananaAccounting/General/raw/master/SampleFiles/Accounting/company-2020.ac2)
-* Download and drag in the Banana Accounting window the file [transactionvoucher.sbaa](https://github.com/BananaAccounting/General/raw/master/SampleApps/Voucher/ch.banana.apps.transactionvoucher.dialog.sbaa)
+* Download and drag in the Banana Accounting window the [transaction voucher .sbaa file](https://github.com/BananaAccounting/General/raw/master/SampleApps/Voucher/ch.banana.apps.transactionvoucher.dialog.sbaa)
 * Position the cursor on the transaction line that you want to print a voucher.
 * Execute the Banana App (menu Apps ->Transaction Voucher)
 
