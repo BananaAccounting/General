@@ -31,9 +31,12 @@ It create incoice transactions, taking all  accounts in the accounting tabl that
 Useful for a not for profit organisation that send Member fee incoices.
  
 
-## ch.banana.apps.transactionvoucher.dialog.js
+## ch.banana.apps.transactionvoucher.dialog.js and ch.banana.apps.transactionvoucher.dialog.ui
 
 This app will show a report containing a detailed payment voucher for the Swiss Red Cross.
+To change the image there are two ways:
+1) In the script folder add an image and name it "transaction_voucher_image.png".
+2) In Banana Accounting add the Documents table (Tools -> Add new functionalities... -> Add Documents table). Now on the Id column insert "transaction_voucher_image" and in the Attachments column add the image (double click on cell -> Image -> Ok)
 
 
 ## trialbalance.js
