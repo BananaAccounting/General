@@ -1,5 +1,12 @@
 # Examples of Banana Apps
 
+## account_card.js
+This app creates an account card for the selected account number and period.
+
+
+## account_statement_with_receipt.js
+This app creates an account statement with a receipt for the selected account number.
+
 
 ## balancedailyinmonth.js
 
@@ -22,9 +29,10 @@ It takes a mt940 or ISO20022 bank statements file, and show if there are differe
 This app will show ho to create a chart using C3 javascript library.  
 It is a very basic, in the function generateChart you specify the accounts or groups number. 
 
-## details.js
+## ch.banana.apps.details.js
 
-This app will show a detailed report of the Profit/Loss Account.
+Balance Sheet and Profit & Loss report with transactions details for each account.
+
 
 ## frommemberfee.js
 It create incoice transactions, taking all  accounts in the accounting tabl that have a value in the column MemberFee.
@@ -44,7 +52,17 @@ To change the image there are two ways:
 This app prints a report containing the balance sheet and the profit/loss statement.
 
 
-## segments.js
+## trialbalance_and_blockchain.js
+
+This app prints a report containing the table Account and the blockchain.
+
+
+## trialbalance_and_blockchain_quarter.js
+
+This app prints a report containing the table Account and the blockchain. The period choice is in quarter.
+
+
+## ch.banana.apps.segments.js
 
 This app will show a report containing a detailed subdivision of the segments with balances.
 
