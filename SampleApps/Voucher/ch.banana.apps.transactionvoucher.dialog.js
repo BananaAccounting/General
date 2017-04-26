@@ -34,9 +34,13 @@
 
 
 var param = {};
-
 var dialog = Banana.Ui.createUi("ch.banana.apps.transactionvoucher.dialog.ui");
 
+
+
+/**
+    Checks all the data: if empty shows an error message
+*/
 dialog.checkdata = function () {
 
     var valid = true;
@@ -109,12 +113,10 @@ dialog.checkdata = function () {
 
 
 
-/** Show the dialog and set the parameters */
+/** 
+    Runs the dialog and set the parameters
+*/
 function dialogExec() {
-
-    // dialog.ChequeNumberLabel.enabled = false;
-    // dialog.ChequeNumberLineEdit.enabled = false;
-    
 
     // Read saved script settings
     initParam();
@@ -125,26 +127,9 @@ function dialogExec() {
         if (data.length > 0) {
             param = JSON.parse(data);
         
-            //dialog.VoucherNumberLineEdit.text = param["voucherNumber"];
+            // Load saved settings
             dialog.PaidToLineEdit.text = param["paidTo"];
             dialog.DescriptionLineEdit.text = param["description"];
-            
-            // if (param["paidIn"] = "Cash") {
-            //     dialog.PaidInComboBox.currentIndex = 0;
-            // }
-            // else if (param["paidIn"] = "Bank") {
-            //     dialog.PaidInComboBox.currentIndex = 1;
-            // }
-            // else if (param["paidIn"] = "Cheque") {
-            //     dialog.PaidInComboBox.currentIndex = 2;
-            // }
-            // else if (param["paidIn"] = "Non Cash or Bank") {
-            //     dialog.PaidInComboBox.currentIndex = 3;
-            // }
-
-            //dialog.ChequeNumberLineEdit.text = param["chequeNumber"];
-            
-
             dialog.PaymentReceivedByLineEdit.text = param["paymentReceivedBy"];
             dialog.PaidByLineEdit.text = param["paidBy"];
             dialog.PreparedByLineEdit.text = param["preparedBy"];
@@ -203,7 +188,9 @@ function dialogExec() {
 
 
 
-/** Initialize dialog values with default values */
+/** 
+    Initialize dialog values with default values 
+*/
 function initParam() {
     param = {
         "voucherNumber": "",
@@ -240,24 +227,70 @@ function initParam() {
 
                 //Banana.console.warn(tRow.value("NewColumn1"));
             }
+            // else if (docNumber === tRow.value("Doc") && !tRow.value("NewColumn1")) {
+            //     dialog.ChequeNumberLineEdit.enabled = false;
+            // }
         }
+    }
+}
 
+
+
+
+/**
+    Update the chequeNumber and paidIn if the doc number in the dialog is manually changed
+*/
+dialog.updateDialog = function () {
+    
+    var transactions = Banana.document.table('Transactions');
+    var docNumber = dialog.VoucherNumberLineEdit.text;
+
+    if (docNumber) {
+        param["voucherNumber"] = docNumber;
+        dialog.VoucherNumberLineEdit.text = param["voucherNumber"];
+
+        for (var i = 0; i < transactions.rowCount; i++) {
+            var tRow = transactions.row(i);
+
+            //For the given Doc number there is a cheque number in transaction table
+            if (docNumber === tRow.value("Doc") && tRow.value("NewColumn1")) {
+                param["paidIn"] = "Cheque";
+                dialog.PaidInComboBox.currentIndex = 2;
+
+                param["chequeNumber"] = tRow.value("NewColumn1");
+                dialog.ChequeNumberLineEdit.text = tRow.value("NewColumn1");
+            }
+            //For the given Doc number there is no cheque number in transaction table
+            else if (docNumber === tRow.value("Doc") && !tRow.value("NewColumn1")) {
+                param["paidIn"] = "Cash";
+                dialog.PaidInComboBox.currentIndex = 0;
+
+                param["chequeNumber"] = "";
+                dialog.ChequeNumberLineEdit.text = "";
+                //dialog.ChequeNumberLineEdit.enabled = false;
+            }
+        }
     } 
 }
+
+
 
 
 
 /**
 * Dialog's events declaration
 */
-dialog.buttonBox.accepted.connect(dialog, "checkdata");
-dialog.buttonBox.rejected.connect(dialog, "close");
+dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
+dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
+dialog.VoucherNumberLineEdit.textEdited.connect(dialog, "updateDialog"); //Voucher Number text is edited
 
 
 
 
 
-// Main function
+/**
+    Main function
+*/
 function exec(inData) {
 
     //Calls dialog
@@ -270,7 +303,7 @@ function exec(inData) {
         //Create the report
         var report = Banana.Report.newReport("Payment Voucher");
 
-        //Function call to create the report
+        //Function call to create the report using the doc number selected
         createReport(report, param["voucherNumber"]);
                 
         //Add the styles
@@ -281,6 +314,10 @@ function exec(inData) {
 
 
 
+/**
+    Using the given docNumber and all the parameters inserted in the dialog,
+    read the journal and take all the data, and at the end creates the report
+*/    
 function createReport(report, docNumber) {
     
     addFooter(report);
@@ -292,15 +329,6 @@ function createReport(report, docNumber) {
     var totDebit = "";
     var totCredit = "";
     
-    // for (i = 0; i < journal.rowCount; i++) {
-    //     var tRow = journal.row(i);
-
-    //     //Take the row from the journal that has the same "Doc" as the one selectet by the user (cursor)
-    //     if (docNumber && tRow.value('Doc') === docNumber) {
-    //         date = tRow.value("Date");
-    //     }
-    // }
-
     report.addParagraph(" ", "");
 
     //Create the table that will be printed on the report
@@ -431,13 +459,13 @@ function createReport(report, docNumber) {
             var amount = Banana.SDecimal.abs(tRow.value('JAmount'));
             // Debit
             if (Banana.SDecimal.sign(tRow.value('JAmount')) > 0 ){
-                totDebit = Banana.SDecimal.add(totDebit, tRow.value('JDebitAmount'), {'decimals':0});
+                totDebit = Banana.SDecimal.add(totDebit, amount, {'decimals':0});
                 tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
                 tableRow.addCell("", "", 1);
             }
             // Credit
             else {
-                totCredit = Banana.SDecimal.add(totCredit, tRow.value('JCreditAmount'), {'decimals':0});
+                totCredit = Banana.SDecimal.add(totCredit, amount, {'decimals':0});
                 tableRow.addCell("", "", 1);
                 tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
             }
@@ -504,7 +532,9 @@ function createReport(report, docNumber) {
 
 
 
-//Function that converts digits into words
+/**
+    Function that converts digits into words
+*/
 function numberToEnglish( n ) {
 
     var string = n.toString(), units, tens, scales, start, end, chunks, chunksLen, chunk, ints, i, word, words, and = 'and';
@@ -590,7 +620,9 @@ function numberToEnglish( n ) {
 
 
 
-//This function adds a Footer to the report
+/**
+    This function adds a Footer to the report
+*/
 function addFooter(report) {
    report.getFooter().addClass("footer");
    var versionLine = report.getFooter().addText("Banana Accounting - Page ", "description");
@@ -599,7 +631,11 @@ function addFooter(report) {
 
 
 
-//The main purpose of this function is to create styles for the report print
+
+
+/**
+    This function creates styles for the print
+*/
 function createStyleSheet() {
     //Create stylesheet
     var stylesheet = Banana.Report.newStyleSheet();
@@ -638,23 +674,23 @@ function createStyleSheet() {
     stylesheet.addStyle(".col1", "width:15%");
     stylesheet.addStyle(".col2", "width:10%");
     stylesheet.addStyle(".col3", "width:40%");
-    stylesheet.addStyle(".col4", "width:10%");
-    stylesheet.addStyle(".col5", "width:10%");
-    stylesheet.addStyle(".col6", "width:10%");
+    stylesheet.addStyle(".col4", "width:12%");
+    stylesheet.addStyle(".col5", "width:12%");
+    stylesheet.addStyle(".col6", "width:12%");
 
     stylesheet.addStyle(".col1a", "width:15%");
     stylesheet.addStyle(".col2a", "width:10%");
     stylesheet.addStyle(".col3a", "width:40%");
-    stylesheet.addStyle(".col4a", "width:10%");
-    stylesheet.addStyle(".col5a", "width:10%");
-    stylesheet.addStyle(".col6a", "width:10%");
+    stylesheet.addStyle(".col4a", "width:12%");
+    stylesheet.addStyle(".col5a", "width:12%");
+    stylesheet.addStyle(".col6a", "width:12%");
 
     stylesheet.addStyle(".col1b", "width:15%");
     stylesheet.addStyle(".col2b", "width:10%");
     stylesheet.addStyle(".col3b", "width:40%");
-    stylesheet.addStyle(".col4b", "width:10%");
-    stylesheet.addStyle(".col5b", "width:10%");
-    stylesheet.addStyle(".col6b", "width:10%");
+    stylesheet.addStyle(".col4b", "width:12%");
+    stylesheet.addStyle(".col5b", "width:12%");
+    stylesheet.addStyle(".col6b", "width:12%");
 
     style = stylesheet.addStyle(".styleTableHeader");
     style.setAttribute("background-color", "#464e7e"); 

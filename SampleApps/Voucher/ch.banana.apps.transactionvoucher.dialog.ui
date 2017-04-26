@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>400</width>
     <height>500</height>
    </rect>
   </property>
@@ -140,7 +140,10 @@
      <item row="0" column="0">
       <widget class="QLabel" name="VoucherNumberLabel">
        <property name="text">
-        <string>Voucher No.</string>
+        <string>&amp;Voucher No.</string>
+       </property>
+       <property name="buddy">
+        <cstring>VoucherNumberLineEdit</cstring>
        </property>
       </widget>
      </item>
@@ -223,11 +226,7 @@
       <widget class="QLineEdit" name="ProjectNumberLineEdit"/>
      </item>
      <item row="0" column="1">
-      <widget class="QLabel" name="VoucherNumberLineEdit">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="VoucherNumberLineEdit"/>
      </item>
     </layout>
    </item>
@@ -254,6 +253,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>VoucherNumberLineEdit</tabstop>
   <tabstop>PaidToLineEdit</tabstop>
   <tabstop>DescriptionLineEdit</tabstop>
   <tabstop>PaidInComboBox</tabstop>
