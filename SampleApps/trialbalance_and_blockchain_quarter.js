@@ -102,7 +102,7 @@ function printAccountsTable(startDate, endDate, report) {
 	var kostenstelleColumn = false;
 	var zuordnungColumn = false;
 
-	if (tColumnNames.indexOf("kostenstelle") > -1 || tColumnNames.indexOf("kostenstellen") > -1) {
+	if (tColumnNames.indexOf("kostenstelle") > -1) {
 		kostenstelleColumn = true;
 	}
 
