@@ -162,7 +162,7 @@ function log(text) {
                 $('#slct1').change(populate);
                 $('#add_to_query_account').click(addToQueryAccount);
                 $('#delete-all').click(deleteActiveWorksheet);
-
+                log("OK");
             } else { //If it's not the Experimental version of Banana Accounting
 
                 app.showNotification("Banana Experimental required. This Office add-in works only with the newest version of Banana Experimental.");
