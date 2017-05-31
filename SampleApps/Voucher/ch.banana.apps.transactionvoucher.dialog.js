@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.apps.transactionvoucher
 // @api = 1.0
-// @pubdate = 2017-04-18
+// @pubdate = 2017-05-30
 // @publisher = Banana.ch SA
 // @description = Transaction Voucher
 // @task = app.command
@@ -55,10 +55,10 @@ dialog.checkdata = function () {
         valid = false;
     }
 
-    if (dialog.DescriptionLineEdit.text.length <= 0) {
-        Banana.Ui.showInformation("Error", "Description text can't be empty");
-        valid = false;
-    }
+    // if (dialog.DescriptionLineEdit.text.length <= 0) {
+    //     Banana.Ui.showInformation("Error", "Description text can't be empty");
+    //     valid = false;
+    // }
 
     if (dialog.PaidInComboBox.text == "Cheque" && dialog.ChequeNumberLineEdit.text.length <= 0) {
         Banana.Ui.showInformation("Error", "Cheque Number text can't be empty");
@@ -95,15 +95,15 @@ dialog.checkdata = function () {
         valid = false;
     }
 
-    if (dialog.ProjectNameLineEdit.text.length <= 0) {
-        Banana.Ui.showInformation("Error", "Project Name text can't be empty");
-        valid = false;
-    }
+    // if (dialog.ProjectNameLineEdit.text.length <= 0) {
+    //     Banana.Ui.showInformation("Error", "Project Name text can't be empty");
+    //     valid = false;
+    // }
 
-    if (dialog.ProjectNumberLineEdit.text.length <= 0) {
-        Banana.Ui.showInformation("Error", "Project Number text can't be empty");
-        valid = false;
-    }
+    // if (dialog.ProjectNumberLineEdit.text.length <= 0) {
+    //     Banana.Ui.showInformation("Error", "Project Number text can't be empty");
+    //     valid = false;
+    // }
 
     if (valid) {
         dialog.accept();
@@ -129,15 +129,15 @@ function dialogExec() {
         
             // Load saved settings
             dialog.PaidToLineEdit.text = param["paidTo"];
-            dialog.DescriptionLineEdit.text = param["description"];
+            // dialog.DescriptionLineEdit.text = param["description"];
             dialog.PaymentReceivedByLineEdit.text = param["paymentReceivedBy"];
             dialog.PaidByLineEdit.text = param["paidBy"];
             dialog.PreparedByLineEdit.text = param["preparedBy"];
             dialog.VerifiedByLineEdit.text = param["verifiedBy"];
             dialog.RecommendedByLineEdit.text = param["recommendedBy"];
             dialog.ApprovedByLineEdit.text = param["approvedBy"];
-            dialog.ProjectNameLineEdit.text = param["projectName"];
-            dialog.ProjectNumberLineEdit.text = param["projectNumber"];
+            // dialog.ProjectNameLineEdit.text = param["projectName"];
+            // dialog.ProjectNumberLineEdit.text = param["projectNumber"];
         }
     }
 
@@ -153,7 +153,7 @@ function dialogExec() {
     // Read all the fields of the dialog and save the values as parameters 
     param["voucherNumber"] = dialog.VoucherNumberLineEdit.text;
     param["paidTo"] = dialog.PaidToLineEdit.text;
-    param["description"] = dialog.DescriptionLineEdit.text;
+    // param["description"] = dialog.DescriptionLineEdit.text;
     
     // Read combobox and assign to each index a value
     var resPaidInComboBox = dialog.PaidInComboBox.currentIndex;
@@ -174,8 +174,8 @@ function dialogExec() {
     param["verifiedBy"] = dialog.VerifiedByLineEdit.text;
     param["recommendedBy"] = dialog.RecommendedByLineEdit.text;
     param["approvedBy"] = dialog.ApprovedByLineEdit.text;
-    param["projectName"] = dialog.ProjectNameLineEdit.text;
-    param["projectNumber"] = dialog.ProjectNumberLineEdit.text;
+    // param["projectName"] = dialog.ProjectNameLineEdit.text;
+    // param["projectNumber"] = dialog.ProjectNumberLineEdit.text;
 
     // Save script settings
     var paramToString = JSON.stringify(param);
@@ -195,7 +195,7 @@ function initParam() {
     param = {
         "voucherNumber": "",
         "paidTo" : "",
-        "description" : "",
+        // "description" : "",
         "paidIn" : "",
         "chequeNumber" : "",
         "paymentReceivedBy" : "",
@@ -204,8 +204,8 @@ function initParam() {
         "verifiedBy" : "",
         "recommendedBy" : "",
         "approvedBy" : "",
-        "projectName" : "",
-        "projectNumber" : "",
+        // "projectName" : "",
+        // "projectNumber" : "",
     };
 
     //If selected take the doc number from the table transactions and insert it in the dialog
@@ -301,7 +301,7 @@ function exec(inData) {
         Banana.document.clearMessages();
 
         //Create the report
-        var report = Banana.Report.newReport("Payment Voucher");
+        var report = Banana.Report.newReport("Transaction Voucher");
 
         //Function call to create the report using the doc number selected
         createReport(report, param["voucherNumber"]);
@@ -324,10 +324,11 @@ function createReport(report, docNumber) {
 
     //Table Journal
     var journal = Banana.document.journal(Banana.document.ORIGINTYPE_CURRENT, Banana.document.ACCOUNTTYPE_NORMAL);
-
-    var date = new Date();
     var totDebit = "";
     var totCredit = "";
+    var date = "";
+    var description = "";
+    var vouchernumber = "";
     
     report.addParagraph(" ", "");
 
@@ -339,7 +340,6 @@ function createReport(report, docNumber) {
     var col4 = table.addColumn("col4");
     var col5 = table.addColumn("col5");
     var col6 = table.addColumn("col6");
-
 
     tableRow = table.addRow();
     tableRow.addCell("Transaction Voucher", "styleTitle heading1 alignCenter", 6);
@@ -356,6 +356,16 @@ function createReport(report, docNumber) {
         imageCell.addImage("file:script/transaction_voucher_image.png", "3.5cm", "1cm");
     }
 
+    //Takes data of the selected doc number transaction
+    for (i = 0; i < journal.rowCount; i++) {
+        var tRow = journal.row(i);
+        if (docNumber && tRow.value('Doc') === docNumber) {
+            date = tRow.value("Date");
+            description = tRow.value("Description");
+            vouchernumber = tRow.value("DocOriginal");
+        }
+    }
+
     var headerCell = tableRow.addCell("", "styleTitle borderBottom", 1);
     headerCell.addParagraph("Date",  "");
     headerCell.addParagraph(" ", "");
@@ -364,15 +374,19 @@ function createReport(report, docNumber) {
     var dateAndDocCell = tableRow.addCell("", "borderBottom", 2);
     dateAndDocCell.addParagraph(Banana.Converter.toLocaleDateFormat(date), "");
     dateAndDocCell.addParagraph(" ", "");
-    dateAndDocCell.addParagraph(docNumber, "");
+    dateAndDocCell.addParagraph(docNumber, ""); //docNumber or vouchernumber
+
+    var project = Banana.document.info("Base","HeaderLeft");
+    var projectnumber = project.split("-")[0].trim();
+    var projectname = project.split("-")[1].trim();
+
+    tableRow = table.addRow();
+    tableRow.addCell("Project Number", "styleTitle ", 2);
+    tableRow.addCell(projectnumber, "", 4);
 
     tableRow = table.addRow();
     tableRow.addCell("Project Name", "styleTitle ", 2);
-    tableRow.addCell(param["projectName"], "", 4);
-    
-    tableRow = table.addRow();
-    tableRow.addCell("Project Number", "styleTitle ", 2);
-    tableRow.addCell(param["projectNumber"], "", 4);
+    tableRow.addCell(projectname, "", 4);
 
     tableRow = table.addRow();
     tableRow.addCell("Currency", "styleTitle ", 2);
@@ -390,7 +404,7 @@ function createReport(report, docNumber) {
 
     tableRow = table.addRow();
     tableRow.addCell("Description", "styleTitle ", 2);
-    tableRow.addCell(param["description"], "", 4);
+    tableRow.addCell(description, "", 4);
 
     tableRow = table.addRow();
     tableRow.addCell(" ", "", 6);
@@ -418,8 +432,6 @@ function createReport(report, docNumber) {
     tableRow.addCell("Paid by", "styleTitle", 2);
     tableRow.addCell(param["paidBy"], "", 4);
 
-    // tableRow = table.addRow();
-    // tableRow.addCell(" ", "", 6);
     report.addParagraph(" ", "");
 
     /***********************************************************************************************************/
@@ -439,57 +451,71 @@ function createReport(report, docNumber) {
     tableRow.addCell("Date", "styleTitle alignCenter", 1);
     tableRow.addCell("Doc Original", "styleTitle alignCenter", 1);
     tableRow.addCell("Description", "styleTitle alignCenter", 1);
-    tableRow.addCell("Account", "styleTitle alignCenter", 1);
-    tableRow.addCell("Debit", "styleTitle alignCenter", 1);
-    tableRow.addCell("Credit", "styleTitle alignCenter", 1);
+    tableRow.addCell("Debit A/C", "styleTitle alignCenter", 1);
+    tableRow.addCell("Credit A/C", "styleTitle alignCenter", 1);
+    tableRow.addCell("Amount", "styleTitle alignCenter", 1);
+
+
+    var transactionRowOrigin = "";
+    var transactionDocOriginal = "";
+    var transactionDescription = "";
+    var transactionDebitAccount = "";
+    var transactionCreditAccount = "";
+    var transactionTotalAmount = "";
 
     //Print transactions row
-    for (i = 0; i < journal.rowCount; i++)
-    {
+    for (i = 0; i < journal.rowCount; i++) {
         var tRow = journal.row(i);
 
         //Take the row from the journal that has the same "Doc" as the one selectet by the user (cursor)
-        if (tRow.value('Doc') === docNumber)
-        {
-            tableRow = table.addRow();  
-            tableRow.addCell(Banana.Converter.toLocaleDateFormat(tRow.value('Date')), "", 1);
-            tableRow.addCell(tRow.value('DocOriginal'), "", 1);
-            tableRow.addCell(tRow.value('Description'), "", 1);
-            tableRow.addCell(tRow.value('JAccount'), "", 1);
+        if (tRow.value('Doc') === docNumber) {
+            
             var amount = Banana.SDecimal.abs(tRow.value('JAmount'));
-            // Debit
-            if (Banana.SDecimal.sign(tRow.value('JAmount')) > 0 ){
+
+            if (Banana.SDecimal.sign(tRow.value('JAmount')) > 0 ) { //Debit
                 totDebit = Banana.SDecimal.add(totDebit, amount, {'decimals':0});
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
-                tableRow.addCell("", "", 1);
-            }
-            // Credit
-            else {
+            } else { //Credit
                 totCredit = Banana.SDecimal.add(totCredit, amount, {'decimals':0});
-                tableRow.addCell("", "", 1);
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
             }
 
+            //Get the value and print in one row
+            if (transactionRowOrigin != tRow.value('JRowOrigin')) {
+
+                transactionRowOrigin = tRow.value('JRowOrigin');
+                transactionDocOriginal = tRow.value('DocOriginal');
+                transactionDescription = tRow.value('Description');
+                transactionDebitAccount = tRow.value('JAccount');;
+                transactionCreditAccount = tRow.value('JContraAccount');;
+                transactionAmount = tRow.value('JAmount');
+
+                tableRow = table.addRow();
+                tableRow.addCell(Banana.Converter.toLocaleDateFormat(tRow.value('Date')), "", 1);
+                tableRow.addCell(transactionDocOriginal, "", 1);
+                tableRow.addCell(transactionDescription, "", 1);
+                tableRow.addCell(transactionDebitAccount, "", 1);
+                tableRow.addCell(transactionCreditAccount, "", 1);
+                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(transactionAmount), "alignRight", 1);
+            }
         }
     }
+
+    transactionTotalAmount = totDebit; //totDebit and totCredit have the same value
+
 
     //Total Line
     tableRow = table.addRow();
     tableRow.addCell("Total Amount","bold styleTitle", 2);
-    tableRow.addCell("","", 2);
+    tableRow.addCell("","", 3);
     //tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "bold alignRight", 1);
-    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight", 1);
-    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totCredit), "bold alignRight", 1);
+    //tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight", 1);
+    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(transactionTotalAmount), "bold alignRight", 1);
 
     tableRow = table.addRow();
     tableRow.addCell("In Words", "bold styleTitle", 2);
-    tableRow.addCell(numberToEnglish(totDebit), "alignRight", 4);
+    tableRow.addCell(numberToEnglish(transactionTotalAmount), "alignRight", 4);
 
     /***********************************************************************************************************/
     
-    // tableRow = table.addRow();
-    // tableRow.addCell(" ", "", 6);
-
     report.addParagraph(" ", "");
     var table = report.addTable("table");
     var col1b = table.addColumn("col1b");
@@ -498,7 +524,6 @@ function createReport(report, docNumber) {
     var col4b = table.addColumn("col4b");
     var col5b = table.addColumn("col5b");
     var col6b = table.addColumn("col6b");
-
 
     tableRow = table.addRow();
     tableRow.addCell("Name and Signature", "styleTitle alignCenter", 3);

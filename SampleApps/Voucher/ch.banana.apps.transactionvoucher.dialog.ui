@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>500</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,13 +38,7 @@
      <property name="verticalSpacing">
       <number>10</number>
      </property>
-     <item row="11" column="1">
-      <widget class="QLineEdit" name="ProjectNameLineEdit"/>
-     </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="DescriptionLineEdit"/>
-     </item>
-     <item row="3" column="1">
       <widget class="QComboBox" name="PaidInComboBox">
        <item>
         <property name="text">
@@ -68,7 +62,7 @@
        </item>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="PreparedByLabel">
        <property name="text">
         <string>Pr&amp;epared by</string>
@@ -88,10 +82,10 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="4" column="1">
       <widget class="QLineEdit" name="PaymentReceivedByLineEdit"/>
      </item>
-     <item row="10" column="0">
+     <item row="9" column="0">
       <widget class="QLabel" name="ApprovedByLabel">
        <property name="text">
         <string>&amp;Approved by</string>
@@ -101,7 +95,7 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="VerifiedByLabel">
        <property name="text">
         <string>Veri&amp;fied by</string>
@@ -111,13 +105,13 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="1">
+     <item row="9" column="1">
       <widget class="QLineEdit" name="ApprovedByLineEdit"/>
      </item>
-     <item row="6" column="1">
+     <item row="5" column="1">
       <widget class="QLineEdit" name="PaidByLineEdit"/>
      </item>
-     <item row="6" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="PaidByLabel">
        <property name="text">
         <string>Paid &amp;by</string>
@@ -127,7 +121,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="ChequeNumberLabel">
        <property name="text">
         <string>&amp;Cheque No.</string>
@@ -150,7 +144,7 @@
      <item row="1" column="1">
       <widget class="QLineEdit" name="PaidToLineEdit"/>
      </item>
-     <item row="9" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="RecommendedByLabel">
        <property name="text">
         <string>&amp;Recommended by</string>
@@ -160,13 +154,13 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="8" column="1">
       <widget class="QLineEdit" name="RecommendedByLineEdit"/>
      </item>
-     <item row="7" column="1">
+     <item row="6" column="1">
       <widget class="QLineEdit" name="PreparedByLineEdit"/>
      </item>
-     <item row="3" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="PaidInLabel">
        <property name="text">
         <string>Paid &amp;in</string>
@@ -176,20 +170,10 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="ChequeNumberLineEdit"/>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="DescriptionLabel">
-       <property name="text">
-        <string>&amp;Description</string>
-       </property>
-       <property name="buddy">
-        <cstring>DescriptionLineEdit</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="PaymentReceivedByLabel">
        <property name="text">
         <string>Payment Rece&amp;ived by</string>
@@ -199,31 +183,8 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="7" column="1">
       <widget class="QLineEdit" name="VerifiedByLineEdit"/>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="ProjectNameLabel">
-       <property name="text">
-        <string>Project &amp;Name</string>
-       </property>
-       <property name="buddy">
-        <cstring>ProjectNameLineEdit</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="ProjectNumberLabel">
-       <property name="text">
-        <string>Project Nu&amp;mber</string>
-       </property>
-       <property name="buddy">
-        <cstring>ProjectNumberLineEdit</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="1">
-      <widget class="QLineEdit" name="ProjectNumberLineEdit"/>
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="VoucherNumberLineEdit"/>
@@ -255,7 +216,6 @@
  <tabstops>
   <tabstop>VoucherNumberLineEdit</tabstop>
   <tabstop>PaidToLineEdit</tabstop>
-  <tabstop>DescriptionLineEdit</tabstop>
   <tabstop>PaidInComboBox</tabstop>
   <tabstop>ChequeNumberLineEdit</tabstop>
   <tabstop>PaymentReceivedByLineEdit</tabstop>
@@ -264,8 +224,6 @@
   <tabstop>VerifiedByLineEdit</tabstop>
   <tabstop>RecommendedByLineEdit</tabstop>
   <tabstop>ApprovedByLineEdit</tabstop>
-  <tabstop>ProjectNameLineEdit</tabstop>
-  <tabstop>ProjectNumberLineEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>
