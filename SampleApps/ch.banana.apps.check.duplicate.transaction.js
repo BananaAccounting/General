@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.apps.check.duplicated.transactions
+// @id = ch.banana.apps.check.duplicate.transaction
 // @api = 1.0
 // @pubdate = 2017-06-06
 // @publisher = Banana.ch SA
-// @description = Check duplicated transactions
+// @description = Duplicate transaction checking
 // @task = app.command
 // @doctype = 100.*
 // @docproperties =
@@ -25,12 +25,12 @@
 // @timeout = -1
 
 // Description:
-// This script check for duplicates transactions
-// A transaction is duplicate if it exists another transaction with the
+// This script checks for duplicate transactions
+// A transaction is duplicate if another transaction exists with the
 // same amount, the same credit account and the same debit account in
 // a time laps of '3' days.
-// If a duplicate is found, a messagge is show to the user.
-// It it possible to skip the check for a transactions, just add a column
+// If a duplicate is found, a message is shown to the user.
+// It is possible to skip the check for a transactions: just add a column
 // with the name 'SkipDuplicateCheck' and insert any value (ie.: 'x') to
 // the transacation to skip.
 
