@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.apps.import.csvstatement.template
+// @id = ch.banana.apps.import.ca.banknovascotia
 // @api = 1.0
-// @pubdate = 2016-04-06
+// @pubdate = 2017-06-16
 // @publisher = Banana.ch SA
-// @description = Import CSV
+// @description = Import Bank Nova Scotia, Canada (*.csv)
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
 // @docproperties = 
@@ -45,9 +45,6 @@ function exec(inData) {
    //5. sort data
    intermediaryData = sortData(intermediaryData, convertionParam);
 
-   //TO DEBUG SHOW THE INTERMEDIARY TEXT
-   //Banana.Ui.showText(intermediaryData);
-   
    //6. convert to banana format
 	//column that start with "_" are not converted
 	var text =  convertToBananaFormat(intermediaryData);	
@@ -68,7 +65,7 @@ function defineConversionParam() {
 
 	/** SPECIFY THE SEPARATOR AND THE TEXT DELIMITER USED IN THE CSV FILE */
    convertionParam.format = "csv"; // available formats are "csv", "html"
-   convertionParam.separator = ';';
+   convertionParam.separator = ',';
    convertionParam.textDelim = '"';
 
 	/** SPECIFY AT WHICH ROW OF THE CSV FILE IS THE HEADER (COLUMN TITLES)
@@ -78,7 +75,8 @@ function defineConversionParam() {
 
 	/** IN CASE THERE IS NO HEADER 
 	*   include the end of line */
-	//convertionParam.header = "Date,Income,_None,Description,_Description2\n";
+	convertionParam.header = "Date,Income,_None,Description,_Description2\n";
+
 
    /** SPECIFY THE COLUMN TO USE FOR SORTING
    If sortColums is empty the data are not sorted */
@@ -104,19 +102,13 @@ function defineConversionParam() {
 		/*   Field that start with the underscore "_" will not be exported 
 		*    Create this fields so that you can use-it in the postprocessing function */
 		/* use the Banana.Converter.toInternalDateFormat to convert to the appropriate date format */
-		convertedRow["Date"] = Banana.Converter.toInternalDateFormat(inputRow["Überweisungsdatum"], "dd.mm.yy");
-		convertedRow["Description"] = inputRow["Kommentar"];
-		convertedRow["_Description2"] = inputRow["Gruppe nach"];
-		/* use the Banana.Converter.toInternalNumberFormat to convert to the appropriate number format 
-		*  we already have negative amounts in Betrag and don't need the to fill the column Expenses*/
-		convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Betrag"], ",");
-		//convertedRow["Expenses"] = inputRow["Total"];
-		convertedRow["VatCode"] = inputRow["MWST Code"];
-		convertedRow["ContraAccount"] = inputRow["Kategorie"];
-		convertedRow["Account"] = inputRow["Art"];
+		convertedRow["Date"] = Banana.Converter.toInternalDateFormat(inputRow["Date"], "mm.dd.yyyy");
+		convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow["Income"], ".");
+		convertedRow["Description"] = inputRow["Description"];
+		if (inputRow["_Description2"]) {
+			convertedRow["Description"] += " " + inputRow["_Description2"];
+		}
 		/** END */
-
-
 		return convertedRow;
 	};
 	return convertionParam;
@@ -125,6 +117,7 @@ function defineConversionParam() {
 
 
 function preProcessInData(inData) {
+	
 	return inData;
 }
 
@@ -140,8 +133,9 @@ function postProcessIntermediaryData(intermediaryData) {
 	var accounts = {
 
 		"Raiffeisen Kontokorrent" : "1020",
-
+		"Bar" : "1000",
 		//...
+
 		"xxxInsertBefore " : "0000"
 		
 	}
@@ -154,10 +148,11 @@ function postProcessIntermediaryData(intermediaryData) {
 	var categories = {
 
 		"Abschreibung Praxisinnenausbau" : "6921",
-		"Abschreibungen mobile Sachanlagen" : "6920",
 
 		//...
 		"xxxInsertBefore " : "0000"
+
+
 		
 	}
 
@@ -204,12 +199,12 @@ function convertCsvToIntermediaryData(inData, convertionParam) {
 
 	var form = [];
 	var intermediaryData = [];
+	
 	//Add the header if present 
 	if (convertionParam.header) {
 		inData = convertionParam.header + inData;
 	}
 
-	//Read the CSV file and create an array with the data
 	var csvFile = Banana.Converter.csvToArray(inData, convertionParam.separator, convertionParam.textDelim);
 
 	//Variables used to save the columns titles and the rows values
