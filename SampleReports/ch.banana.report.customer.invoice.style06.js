@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style06.js
 // @api = 1.0
-// @pubdate = 2017-02-09
+// @pubdate = 2017-02-16
 // @publisher = Banana.ch SA
 // @description = Style 6: logo, address on the right, 1 color
 // @description.it = Stile 6: logo, indirizzo sulla destra, 1 colore
@@ -736,7 +736,7 @@ function print_isrCode(jsonInvoice, report, repStyleObj, param) {
    var pvrReference = pvrReferenceString(param.isr_id, jsonInvoice["customer_info"]["number"],
                                          pvrInvoiceNumber(jsonInvoice) );
    if (pvrReference.indexOf("@error")>=0) {
-       Banana.document.addMessage( pvrReference + " " + jsonInvoice["customer_info"]["number"], "error");
+       Banana.document.addMessage( pvrReference, "error");
    }
 
    if (amount == '')
@@ -744,7 +744,7 @@ function print_isrCode(jsonInvoice, report, repStyleObj, param) {
 
    var pvrFullCode = pvrCodeString(amount, pvrReference, param.isr_account);
    if (pvrFullCode.indexOf("@error")>=0) {
-       Banana.document.addMessage( pvrFullCode+ " " + jsonInvoice["customer_info"]["number"], "error");
+       Banana.document.addMessage( pvrFullCode, "error");
    }
 
    var pvrFullCode_PAY = report.addSection("pvrFullCode_PAY");
@@ -866,7 +866,7 @@ function pvrCodeString(amount, pvrReference, ccpAccount) {
    // The ccp account have to be 8 digit lenght, prepend the second part with zeros
    var cppAccountParts = ccpAccount.split('-');
    if (cppAccountParts.length < 3) {
-      return "@error Invalid CCP account, syntax have to be 'XX-YYYYY-ZZ'";
+      return "@error Invalid CCP account, syntax have to be 'XX-YYYYY-ZZ'. Your CCP account " + ccpAccount;
    }
 
    while (cppAccountParts[0].length + cppAccountParts[1].length < 8) {
@@ -906,17 +906,17 @@ function pvrCodeString(amount, pvrReference, ccpAccount) {
  */
 function pvrReferenceString(pvrId, customerNo, invoiceNo) {
    if (pvrId.length > 8)
-      return "@error pvrId too long, max 8 chars";
+      return "@error pvrId too long, max 8 chars. Your pvrId " + pvrId;
    else if (!pvrId.match(/^[0-9]*$/))
-      return "@error pvrId invalid, only digits are permitted";
+      return "@error pvrId invalid, only digits are permitted. Your pvrId " + pvrId ;
    else if (customerNo.length > 7)
-      return "@error customerNo too long, max 7 digits";
+      return "@error customerNo too long, max 7 digits. Your customerNo " + customerNo;
    else if (!customerNo.match(/^[0-9]*$/))
-      return "@error customerNo invalid, only digits are permitted";
+      return "@error customerNo invalid, only digits are permitted. Your customerNo " + customerNo;
    else if (invoiceNo.length > 7)
-      return "@error invoiceNo too long, max 7 digits";
+      return "@error invoiceNo too long, max 7 digits. Your invoiceNo " + invoiceNo;
    else if (!invoiceNo.match(/^[0-9]*$/))
-      return "@error invoiceNo invalid, only digits are permitted";
+      return "@error invoiceNo invalid, only digits are permitted. Your invoiceNo " + invoiceNo;
 
    var pvrReference = pvrId;
    while (pvrReference.length + customerNo.length < 18)
