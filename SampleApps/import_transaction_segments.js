@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = import_transaction_segments_opening
+// @id = import_transaction_segments
 // @api = 1.0
 // @pubdate = 2017-07-014
 // @publisher = Banana.ch SA
