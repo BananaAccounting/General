@@ -14,9 +14,9 @@
 //
 // @id = import_transaction_segments
 // @api = 1.0
-// @pubdate = 2017-07-014
+// @pubdate = 2017-08-30
 // @publisher = Banana.ch SA
-// @description = Import Transaction with segments
+// @description = Import Transaction segments
 // @task = import.transactions
 // @doctype = 100.*; 110.*; 130.*
 // @docproperties = 
@@ -26,8 +26,8 @@
 
 
 /**
-	This app allows to extract from the previous year ac2 file all the segments balances,
-	and use them to create the opening transactions on the current year ac2 file.
+	This app allows to extract from the previous year ac2 file all the segments balances
+	and import them as transactions on the new year ac2 file.
 */
 
 
@@ -60,6 +60,8 @@ function exec(inData) {
 		if (!previousYearFile.table('Transactions')) { 
 			return; 
 		}
+
+		var segmentSeparator = Banana.Ui.getItem("Segment separator", "Choose a value", [":","-"], 0, false);
 
 
 		//We take the dates from Banana document
@@ -100,6 +102,17 @@ function exec(inData) {
 			var date = year + "-01-01";
 			var doctype = "01";
 			var description = "Segment transaction";
+
+			var tmpOutTextS1 = "";
+			var tmpOutTextS2 = "";
+			var tmpOutTextS3 = "";
+			var tmpOutTextS4 = "";
+			var tmpOutTextS5 = "";
+			var tmpOutTextS6 = "";
+			var tmpOutTextS7 = "";
+			var tmpOutTextS8 = "";
+			var tmpOutTextS9 = "";
+			var tmpOutTextS10 = "";
 		
 			//For each element of segment 1...
 			for (var s1 = 0; s1 < segLv1; s1++) {
@@ -108,9 +121,9 @@ function exec(inData) {
 				if (endBalSegment1) {
 					//Banana.console.log(account + segment1[s1] + " = " + endBalSegment1);
 					if (endBalSegment1 > 0) {
-						outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment1, ".") +"\n";
+						tmpOutTextS1 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment1, ".") +"\n";
 					} else {
-						outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment1, ".") +"\n";
+						tmpOutTextS1 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment1, ".") +"\n";
 					}
 
 					//For each element of segment 2...
@@ -120,9 +133,9 @@ function exec(inData) {
 						if (endBalSegment2) {
 							//Banana.console.log(account + segment1[s1] + segment2[s2] + " = " + endBalSegment2);
 							if (endBalSegment2 > 0) {
-								outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment2, ".") +"\n";
+								tmpOutTextS2 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment2, ".") +"\n";
 							} else {
-								outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment2, ".") +"\n";
+								tmpOutTextS2 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment2, ".") +"\n";
 							}
 						
 							//For each element of segment 3...
@@ -132,9 +145,9 @@ function exec(inData) {
 								if (endBalSegment3) {
 									//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + " = " + endBalSegment3);
 									if (endBalSegment3 > 0) {
-										outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment3, ".") +"\n";
+										tmpOutTextS3 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment3, ".") +"\n";
 									} else {
-										outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment3, ".") +"\n";
+										tmpOutTextS3 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment3, ".") +"\n";
 									}
 
 									//For each element of segment 4...
@@ -144,9 +157,9 @@ function exec(inData) {
 										if (endBalSegment4) {
 											//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + " = " + endBalSegment4);
 											if (endBalSegment4 > 0) {
-												outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment4, ".") +"\n";
+												tmpOutTextS4 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment4, ".") +"\n";
 											} else {
-												outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment4, ".") +"\n";
+												tmpOutTextS4 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment4, ".") +"\n";
 											}
 
 											//For each element of segment 5...
@@ -156,9 +169,9 @@ function exec(inData) {
 												if (endBalSegment5) {
 													//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + " = " + endBalSegment5);
 													if (endBalSegment5 > 0) {
-														outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment5, ".") +"\n";
+														tmpOutTextS5 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment5, ".") +"\n";
 													} else {
-														outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment5, ".") +"\n";
+														tmpOutTextS5 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment5, ".") +"\n";
 													}
 
 													//For each element of segment 6...
@@ -168,9 +181,9 @@ function exec(inData) {
 														if (endBalSegment6) {
 															//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + " = " + endBalSegment6);
 															if (endBalSegment6 > 0) {
-																outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment6, ".") +"\n";
+																tmpOutTextS6 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment6, ".") +"\n";
 															} else {
-																outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment6, ".") +"\n";
+																tmpOutTextS6 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment6, ".") +"\n";
 															}
 
 															//For each element of segment 7...
@@ -180,9 +193,9 @@ function exec(inData) {
 																if (endBalSegment7) {
 																	//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + " = " + endBalSegment7);
 																	if (endBalSegment7 > 0) {
-																		outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment7, ".") +"\n";
+																		tmpOutTextS7 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment7, ".") +"\n";
 																	} else {
-																		outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment7, ".") +"\n";
+																		tmpOutTextS7 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment7, ".") +"\n";
 																	}
 
 																	//For each element of segment 8...
@@ -192,9 +205,9 @@ function exec(inData) {
 																		if (endBalSegment8) {
 																			//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + " = " + endBalSegment8);
 																			if (endBalSegment8 > 0) {
-																				outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment8, ".") +"\n";
+																				tmpOutTextS8 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment8, ".") +"\n";
 																			} else {
-																				outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment8, ".") +"\n";
+																				tmpOutTextS8 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment8, ".") +"\n";
 																			}
 
 																			//For each element of segment 9...
@@ -204,9 +217,9 @@ function exec(inData) {
 																				if (endBalSegment9) {
 																					//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + " = " + endBalSegment9);
 																					if (endBalSegment9 > 0) {
-																						outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment9, ".") +"\n";
+																						tmpOutTextS9 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment9, ".") +"\n";
 																					} else {
-																						outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment9, ".") +"\n";
+																						tmpOutTextS9 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment9, ".") +"\n";
 																					}
 
 																					//For each element of segment 10...
@@ -216,9 +229,9 @@ function exec(inData) {
 																						if (endBalSegment10) {
 																							//Banana.console.log(account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + segment10[s10] + " = " + endBalSegment10);
 																							if (endBalSegment10 > 0) {
-																								outText += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + segment10[s10] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment10, ".") +"\n";
+																								tmpOutTextS10 += date +"\t" + doctype + "\t" + description + "\t"+ account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + segment10[s10] +"\t"+ account + "\t"+ Banana.Converter.toInternalNumberFormat(endBalSegment10, ".") +"\n";
 																							} else {
-																								outText += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + segment10[s10] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment10, ".") +"\n";
+																								tmpOutTextS10 += date +"\t" + doctype + "\t" + description + "\t"+ account + "\t" + account + segment1[s1] + segment2[s2] + segment3[s3] + segment4[s4] + segment5[s5] + segment6[s6] + segment7[s7] + segment8[s8] + segment9[s9] + segment10[s10] + "\t" + Banana.Converter.toInternalNumberFormat(endBalSegment10, ".") +"\n";
 																							}
 																						}
 																					}
@@ -240,7 +253,36 @@ function exec(inData) {
 					}
 				}
 			}
-		} //accounts
+		
+			//Add the transactions text
+			//We take the higher possible level of segments 
+			if (tmpOutTextS10) {
+				outText += tmpOutTextS10;
+			} else if (tmpOutTextS9) {
+				outText += tmpOutTextS9;
+			} else if (tmpOutTextS8) {
+				outText += tmpOutTextS8;
+			} else if (tmpOutTextS7) {
+				outText += tmpOutTextS7;
+			} else if (tmpOutTextS6) {
+				outText += tmpOutTextS6;
+			} else if (tmpOutTextS5) {
+				outText += tmpOutTextS5;
+			} else if (tmpOutTextS4) {
+				outText += tmpOutTextS4;
+			} else if (tmpOutTextS3) {
+				outText += tmpOutTextS3;
+			} else if (tmpOutTextS2) {
+				outText += tmpOutTextS2;
+			} else if (tmpOutTextS1) {
+				outText += tmpOutTextS1;
+			}
+		}
+
+		//replace all the segments separator ":" with "-"
+		if (segmentSeparator === "-") { 
+			outText = outText.replace(/:/g, "-"); //global replacement
+		}
 		
 		return outText;
 	}
