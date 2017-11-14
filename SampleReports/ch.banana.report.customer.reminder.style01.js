@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2016-10-06
+// @pubdate = 2016-11-14
 // @publisher = Banana.ch SA
 // @description = Payment reminder
 // @description.it = Richiamo di pagamento 
@@ -22,6 +22,7 @@
 // @description.fr = Rappel de paiement 
 // @description.nl = Betalingsherinnering
 // @description.en = Payment reminder
+// @doctype = *
 // @task = report.customer.reminder
 
 var rowNumber = 0;

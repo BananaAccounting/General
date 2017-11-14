@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style02.js
 // @api = 1.0
-// @pubdate = 2017-02-16
+// @pubdate = 2017-11-14
 // @publisher = Banana.ch SA
 // @description = Style 2: invoice and shipping address on the left, 3 colors
 // @description.it = Stile 2: indirizzo fatturazione e spedizione sulla sinistra, 3 colori
@@ -22,6 +22,7 @@
 // @description.fr = Style 2: adresse de facturation et de livraison à gauche, 3 couleurs
 // @description.nl = Stijl 2: factuur- en leveringsadres links, 3 kleuren
 // @description.en = Style 2: invoice and shipping addresses on the left, 3 colors
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -1149,6 +1150,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "122mm");
    style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
+   style.setAttribute("line-break-inside", "avoid");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
    

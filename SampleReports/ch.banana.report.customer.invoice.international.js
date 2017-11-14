@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.international.js
 // @api = 1.0
-// @pubdate = 2016-12-21
+// @pubdate = 2017-11-14
 // @publisher = Banana.ch SA
 // @description = Style International
 // @description.it = Style International
@@ -22,6 +22,7 @@
 // @description.fr = Style International
 // @description.nl = Style International
 // @description.en = Style International
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -102,16 +103,6 @@ function verifyParam(param) {
    
    return param;
 }
-
-//Return the invoice number without the prefix
-function pvrInvoiceNumber(jsonInvoice) {
-  var prefixLength = jsonInvoice["document_info"]["number"].indexOf('-');
-  if (prefixLength >= 0) {
-    return jsonInvoice["document_info"]["number"].substr(prefixLength + 1);
-  }
-  return jsonInvoice["document_info"]["number"]
-}
-
 
 function printDocument(jsonInvoice, repDocObj, repStyleObj) {
   var param = initParam();
@@ -569,275 +560,6 @@ function printItemsHeader(invoiceObj, repDocObj, param, texts, rowNumber) {
 }
 
 //====================================================================//
-// PVRCODE
-//====================================================================//
-/**
- * The function pvrCodeString build the code on the pvr,
- * as described under the document "Postinance, Descrizione dei record,
- * Servizi elettronici".
- * @param amount The amount of the pvr, have to contains 2 decimals (ex.: 1039.75).
- * @param pvrReference The refecence code of the pvr, have to be 27 digit length.
- * @param ccpAccount The CCP account number, the syntax have to be XX-YYYYY-ZZ.
- */
-function pvrCodeString(amount, pvrReference, ccpAccount) {
-
-   // The amout have to be 10 digit lenght, prepend with zeros
-   // Example: '18.79' => '00001879'
-   if (amount.lastIndexOf('.') !== amount.length - 3) {
-      return "@error Invalid amount, have to contain 2 decimals.";
-   }
-   
-   var pvrAmount = amount.replace('.','').replace(' ', '');
-   while (pvrAmount.length < 10) {
-      pvrAmount = '0' + pvrAmount;
-   }
-
-   // The ccp account have to be 8 digit lenght, prepend the second part with zeros
-   var cppAccountParts = ccpAccount.split('-');
-   if (cppAccountParts.length < 3) {
-      return "@error Invalid CCP account, syntax have to be 'XX-YYYYY-ZZ'";
-   }
-
-   while (cppAccountParts[0].length + cppAccountParts[1].length < 8) {
-      cppAccountParts[1] = '0' + cppAccountParts[1];
-   }
-
-   // Verify control digit of ccp account
-   if (cppAccountParts[2] !== modulo10(cppAccountParts[0] + cppAccountParts[1])) {
-      return "@error Invalid CCP, wrong control digit.";
-   }
-
-   var pvrAccount = cppAccountParts[0] + cppAccountParts[1] + cppAccountParts[2];
-
-   // Verify control digit of CCP reference
-   pvrReference = pvrReference.replace(/\s+/g, ''); //remove "white" spaces
-   if (pvrReference.length !== 27) {
-      return "@error Invalid PVR reference code, has to be 27 digit length.";
-   }
-   
-   if (pvrReference[pvrReference.length-1] !== modulo10(pvrReference.substr(0,pvrReference.length-1))) {
-      return "@error Invalid PVR reference, wrong control digit.";
-   }
-
-   var pvrType = "01";
-   var pvrAmountControlDigit = modulo10(pvrType + pvrAmount);
-   var pvrFullCode = pvrType + pvrAmount + pvrAmountControlDigit + '>' + pvrReference + "+ " + pvrAccount + ">";
-
-   return pvrFullCode;
-}
-
-/**
- * The function pvrReferenceString build the pvr reference,
- * containg the pvr identification, the customer and the invoice number.
- * @param pvrId The pvr idetification number (given by the bank). Max 8 chars.
- * @param customerNo The customer number. Max 7 chars.
- * @param invoiceNo The invoice/oder number. Max 7 chars.
- */
-function pvrReferenceString(pvrId, customerNo, invoiceNo) {
-   if (pvrId.length > 8)
-      return "@error pvrId too long, max 8 chars";
-   else if (!pvrId.match(/^[0-9]*$/))
-      return "@error pvrId invalid, only digits are permitted";
-   else if (customerNo.length > 7)
-      return "@error customerNo too long, max 7 digits";
-   else if (!customerNo.match(/^[0-9]*$/))
-      return "@error customerNo invalid, only digits are permitted";
-   else if (invoiceNo.length > 7)
-      return "@error invoiceNo too long, max 7 digits";
-   else if (!invoiceNo.match(/^[0-9]*$/))
-      return "@error invoiceNo invalid, only digits are permitted";
-
-   var pvrReference = pvrId;
-   while (pvrReference.length + customerNo.length < 18)
-      pvrReference += "0";
-   pvrReference += customerNo;
-   while (pvrReference.length + invoiceNo.length < 25)
-      pvrReference += "0";
-   pvrReference += invoiceNo;
-   pvrReference += "0";
-   pvrReference += modulo10(pvrReference);
-
-   return pvrReference;
-}
-
-/**
- * The function modulo10 calculate the modulo 10 of a string,
- * as described under the document "Postinance, Descrizione dei record,
- * Servizi elettronici".
- */
-function modulo10(string) {
-
-   // Description of algorithm on
-   // Postinance, Descrizione dei record, Servizi elettronici
-   var modulo10Table = [
-            [0, 9, 4, 6, 8, 2, 7, 1, 3, 5, "0"],
-            [9, 4, 6, 8, 2, 7, 1, 3, 5, 0, "9"],
-            [4, 6, 8, 2, 7, 1, 3, 5, 0, 9, "8"],
-            [6, 8, 2, 7, 1, 3, 5, 0, 9, 4, "7"],
-            [8, 2, 7, 1, 3, 5, 0, 9, 4, 6, "6"],
-            [2, 7, 1, 3, 5, 0, 9, 4, 6, 8, "5"],
-            [7, 1, 3, 5, 0, 9, 4, 6, 8, 2, "4"],
-            [1, 3, 5, 0, 9, 4, 6, 8, 2, 7, "3"],
-            [3, 5, 0, 9, 4, 6, 8, 2, 7, 1, "2"],
-            [5, 0, 9, 4, 6, 8, 2, 7, 1, 3, "1"],
-         ];
-
-   var module10Report = 0;
-
-   if (string) {
-      for (var i = 0; i < string.length; i++) {
-         switch (string[i]) {
-         case "0":
-            module10Report = modulo10Table[module10Report][0];
-            break;
-         case "1":
-            module10Report = modulo10Table[module10Report][1];
-            break;
-         case "2":
-            module10Report = modulo10Table[module10Report][2];
-            break;
-         case "3":
-            module10Report = modulo10Table[module10Report][3];
-            break;
-         case "4":
-            module10Report = modulo10Table[module10Report][4];
-            break;
-         case "5":
-            module10Report = modulo10Table[module10Report][5];
-            break;
-         case "6":
-            module10Report = modulo10Table[module10Report][6];
-            break;
-         case "7":
-            module10Report = modulo10Table[module10Report][7];
-            break;
-         case "8":
-            module10Report = modulo10Table[module10Report][8];
-            break;
-         case "9":
-            module10Report = modulo10Table[module10Report][9];
-            break;
-         }
-      }
-   }
-
-   return modulo10Table[module10Report][10];
-}
-
-function setPvrStyle(reportObj, repStyleObj) {
-
-   	if (!repStyleObj)
-		repStyleObj = reportObj.newStyleSheet();
-
-	//Overwrite default page margin of 20mm
-   var style = repStyleObj.addStyle("@page");
-   style.setAttribute("margin", "0mm");
-
-   //PVR form position
-   style = repStyleObj.addStyle(".pvr_Form");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "0mm");
-   style.setAttribute("top", "190mm"); //180
-   style.setAttribute("color", "black");
-   style.setAttribute("font-size", "10px");
-   
-   //printPvrBankInfo
-   style = repStyleObj.addStyle(".billingInfo_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "4mm");
-   style.setAttribute("top", "9mm");
-
-   style = repStyleObj.addStyle(".billingInfo_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "64mm");
-   style.setAttribute("top", "9mm");
-
-   //printPvrSupplierInfo
-   style = repStyleObj.addStyle(".supplierInfo_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "4mm");
-   style.setAttribute("top", "22mm");
-
-   style = repStyleObj.addStyle(".supplierInfo_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "64mm");
-   style.setAttribute("top", "22mm");
-   
-   //printPvrAccount
-   style = repStyleObj.addStyle(".accountNumber_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "30mm");
-   style.setAttribute("top", "41mm"); //42
-
-   style = repStyleObj.addStyle(".accountNumber_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "90mm");
-   style.setAttribute("top", "41mm"); //42
-   
-   //printPvrAmount 
-   style = repStyleObj.addStyle(".totalInvoiceFr_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "4mm");
-   style.setAttribute("top", "50mm"); //51
-   style.setAttribute("width", "37mm");
-   style.setAttribute("font-size", "11px");
-   style.setAttribute("text-align", "right");
-
-   style = repStyleObj.addStyle(".totalInvoiceCts_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "50mm");
-   style.setAttribute("top", "50mm"); //51
-   style.setAttribute("font-size", "11px");
-
-   style = repStyleObj.addStyle(".totalInvoiceFr_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "65mm");
-   style.setAttribute("top", "50mm"); //51
-   style.setAttribute("width", "37mm");
-   style.setAttribute("font-size", "11px");
-   style.setAttribute("text-align", "right");
-
-   style = repStyleObj.addStyle(".totalInvoiceCts_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "111mm");
-   style.setAttribute("top", "50mm"); //51
-   style.setAttribute("font-size", "11px");
-   
-   //printPvrCustomerInfo
-   style = repStyleObj.addStyle(".customerAddress_REC");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "4mm");
-   style.setAttribute("top", "62mm");
-   style.setAttribute("font-size", "10px");
-
-   style = repStyleObj.addStyle(".customerAddress_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("left", "125mm");
-   style.setAttribute("top", "50mm");
-   style.setAttribute("font-size", "10px");
-   
-   //printPvrReference
-   style = repStyleObj.addStyle(".referenceNumber_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("text-align", "center");
-   style.setAttribute("left", "122mm"); //124
-   style.setAttribute("top", "34.1mm"); //34.5
-   style.setAttribute("width", "83mm");
-   style.setAttribute("font-size", "12pt");
-   style.setAttribute("font-family", "OCR-B 10 BT");
-   
-   //printPvrCode
-   style = repStyleObj.addStyle(".pvrFullCode_PAY");
-   style.setAttribute("position", "absolute");
-   style.setAttribute("right", "8mm");
-   style.setAttribute("text-align", "right");
-   style.setAttribute("top", "90mm"); //85  // 20th row * (25.4mm / 6)
-   style.setAttribute("font-size", "12pt");
-   style.setAttribute("font-family", "OCR-B 10 BT");
-
-}
-
-//====================================================================//
 // STYLES
 //====================================================================//
 function setInvoiceStyle(reportObj, repStyleObj, param) {
@@ -959,7 +681,6 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     itemsStyle.setAttribute("width", "100%");
 
 }
-
 
 
 function setInvoiceTexts(language) {

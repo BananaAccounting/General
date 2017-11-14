@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style06.js
 // @api = 1.0
-// @pubdate = 2017-02-16
+// @pubdate = 2017-11-14
 // @publisher = Banana.ch SA
 // @description = Style 6: logo, address on the right, 1 color
 // @description.it = Stile 6: logo, indirizzo sulla destra, 1 colore
@@ -22,6 +22,7 @@
 // @description.fr = Style 6: logo, adresse à droite, 1 couleur
 // @description.nl = Stijl 6: logo, adres rechts, 1 kleur
 // @description.en = Style 6: logo, address on the right, 1 color
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -1096,6 +1097,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "122mm");
    style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
+   style.setAttribute("line-break-inside", "avoid");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
    
