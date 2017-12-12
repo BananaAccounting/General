@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+ 	<file alias="manifest.json">ch.banana.apps.voucherhelvetas.manifest.json</file>
+    <file>ch.banana.apps.voucherhelvetas.dialog.js</file>
+    <file>ch.banana.apps.voucherhelvetas.dialog.ui</file>
+    <file>written-number.min.js</file>
+    <file>logo.png</file>
+ </qresource>
+ </RCC>

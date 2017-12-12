@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.apps.transactionvoucherhelvetas
 // @api = 1.0
-// @pubdate = 2017-10-06
+// @pubdate = 2017-10-24
 // @publisher = Banana.ch SA
 // @description = Transaction Voucher
 // @task = app.command
@@ -22,7 +22,7 @@
 // @outputformat = none
 // @inputdatasource = none
 // @timeout = -1
-
+// @includejs = written-number.min.js
 
 
 /**
@@ -30,7 +30,11 @@
     A dialog is used to let the user insert all the required settings.
     The settings are then saved and used as default settings for the future times.
 
-    The voucher is created using Helvetas template.
+    To Convert numbers to words we use the "written-number.min.js"
+    Source of the repository on github: https://github.com/yamadapc/js-written-number
+    Source of the .js on github: https://raw.githubusercontent.com/yamadapc/js-written-number/master/dist/written-number.min.js
+
+    We use the function writtenNumber(1234, { lang: 'es' }); // => 'mil doscientos treinta y cuatro'
 */
 
 
@@ -146,10 +150,16 @@ function initParam() {
 }
 
 /**
-* Dialog's events declaration
+    Dialog's events declaration
 */
-dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
-dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
+var requiredVersion = "8.0.7.171016";
+if (Banana.compareVersion && Banana.compareVersion(Banana.application.version, requiredVersion) >= 0) {
+    dialog.buttonBox.accepted.connect(dialog.checkdata); //Clicked Ok button
+    dialog.buttonBox.rejected.connect(dialog.close);  //Clicked Cancel button
+} else {
+    dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
+    dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
+}
 
 /**
     Main function
@@ -210,13 +220,7 @@ function createReport(report, docNumber) {
     //Add the image located in the script folder
     tableRow = table.addRow();
     var imageCell = tableRow.addCell("","",2);
-    //If the table Documents contains an image we use it
-    if (Banana.document.table("Documents") && Banana.document.table("Documents").findRowByValue("RowId", "logo").value("Attachments")) {
-        imageCell.addImage("documents:logo", "", "");
-    }
-    else {
-        imageCell.addParagraph(" ", "");
-    }
+    imageCell.addImage("file:script/logo.png", "4cm", "1.5cm");
 
     //Takes data of the selected DocOriginal transaction
     for (i = 0; i < journal.rowCount; i++) {
@@ -305,11 +309,11 @@ function createReport(report, docNumber) {
     tableRow = tableHeader.addRow();  
 
     // tableRow.addCell("Date", "styleTitle alignCenter", 1);
-    tableRow.addCell("CENTRO DE COSTOS", "styleTitle alignCenter", 1);
-    tableRow.addCell("CUENTA", "styleTitle alignCenter", 1);
-    tableRow.addCell("DESCRIPCION", "styleTitle alignCenter", 1);
-    tableRow.addCell("DEBE BS", "styleTitle alignCenter", 1);
-    tableRow.addCell("HABER BS", "styleTitle alignCenter", 1);
+    tableRow.addCell("CENTRO DE COSTOS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell("CUENTA", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell("DESCRIPCION", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell("DEBE BS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell("HABER BS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
 
     //Print transactions row
     for (i = 0; i < journal.rowCount; i++) {
@@ -317,40 +321,94 @@ function createReport(report, docNumber) {
 
         //Take the row from the journal that has the same "Doc" as the one selectet by the user (cursor)
         if (tRow.value('Doc') === docNumber) {
-            tableRow = table.addRow();  
-            // tableRow.addCell(Banana.Converter.toLocaleDateFormat(tRow.value('Date')), "", 1);
-            tableRow.addCell(tRow.value('Cc1'), "", 1);
-            tableRow.addCell(tRow.value('JAccount'), "", 1);
-            tableRow.addCell(tRow.value('Description'), "", 1);
+            tableRow = table.addRow();
 
+            // 1. CC1/CC2
+            tableRow.addCell("", "borderLeft", 1);
+
+            // 2. ACCOUNT
+            tableRow.addCell(tRow.value('JAccount'), "borderLeft", 1);
+
+            // 3. ACCOUNT DESCRIPTION
+            tableRow.addCell(tRow.value('JAccountDescription'), "bold borderLeft", 1);
+
+            // 4. ACCOUNT AMOUNT
             var amount = Banana.SDecimal.abs(tRow.value('JAmount'));
             // Debit
             if (Banana.SDecimal.sign(tRow.value('JAmount')) > 0 ) {
                 totDebit = Banana.SDecimal.add(totDebit, tRow.value('JDebitAmount'), {'decimals':2});
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(""), "alignRight", 1);
+                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight borderLeft borderRight", 1);
+                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(""), "alignRight borderLeft borderRight", 1);
             }
             // Credit
             else {
                 totCredit = Banana.SDecimal.add(totCredit, tRow.value('JCreditAmount'), {'decimals':2});
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(""), "alignRight", 1);
-                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight", 1);
+                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(""), "alignRight borderLeft borderRight", 1);
+                tableRow.addCell(Banana.Converter.toLocaleNumberFormat(amount), "alignRight borderLeft borderRight", 1);
             }
+
+            //5. TRANSACTION DESCRIPTION
+            tableRow = table.addRow();
+            tableRow.addCell("", "borderLeft", 1);
+            tableRow.addCell("", "borderLeft", 1);
+            tableRow.addCell(tRow.value('Description'), "borderLeft", 1);
+            tableRow.addCell("", "borderLeft", 1);
+            tableRow.addCell("", "borderLeft borderRight", 1);
+
+            //6. CC1
+            if (tRow.value('JCC1')) {
+                tableRow = table.addRow();
+                tableRow.addCell(tRow.value('JCC1'), "borderLeft", 1);
+                tableRow.addCell("", "borderLeft", 1);
+                tableRow.addCell(getDescription(tRow.value('JCC1')), "borderLeft", 1);
+                tableRow.addCell("", "borderLeft", 1);
+                tableRow.addCell("", "borderLeft borderRight", 1);
+            }
+            //7. CC2
+            if (tRow.value('JCC2')) {
+                tableRow = table.addRow();
+                tableRow.addCell(tRow.value('JCC2'), "borderLeft", 1);
+                tableRow.addCell("", "borderLeft", 1);
+                tableRow.addCell(getDescription(tRow.value('JCC2')), "borderLeft", 1);
+                tableRow.addCell("", "borderLeft", 1);
+                tableRow.addCell("", "borderLeft borderRight", 1);
+            }
+
+            tableRow = table.addRow();
+            tableRow.addCell("", "borderLeft borderRight borderBottom", 1);
+            tableRow.addCell("", "borderLeft borderRight borderBottom", 1);
+            tableRow.addCell("", "borderLeft borderRight borderBottom", 1);
+            tableRow.addCell("", "borderLeft borderRight borderBottom", 1);
+            tableRow.addCell("", "borderLeft borderRight borderBottom", 1);
         }
     }
 
     //Total Line
     tableRow = table.addRow();
-    tableRow.addCell("TOTALES","bold alignRight", 3);
-    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight", 1);
-    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totCredit), "bold alignRight", 1);
+    tableRow.addCell("TOTALES","bold alignRight borderLeft borderRight borderTop borderBottom", 3);
+    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totCredit), "bold alignRight borderLeft borderRight borderTop borderBottom", 1);
 
     /***********************************************************************************************************
         AMOUNT IN WORDS
     ***********************************************************************************************************/
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
-    report.addParagraph("SON: " + getDigits(totDebit));
+    //report.addParagraph("SON: " + getDigits(totDebit));
+
+    /* Convert number in spanish words:
+        - the writtenNumber() function returns a text with rounding (ex. 952.90 => noveceientos cincuenta y tres)
+        - we need the right value without rounding:
+            . we save the cents
+            . we save the value without cents
+            . we convert in words the value without cents (ex 952 => noveceientos cincuenta y dos)
+            . we take the cents and use them to build the final string (ex .90 => 90/100 bolivianos)
+            => the final string for "952.90" is "noveceientos cincuenta y dos 90/100 bolivianos"
+    **/
+    var totaleSenzaCentesimi = totDebit.replace(/\..*/, '');
+    var centesimi = getCentesimi(totDebit);
+    report.addParagraph("SON: " + writtenNumber(totaleSenzaCentesimi, { lang: 'es' }) + " " + centesimi + "/100 bolivianos");
+
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
 
@@ -408,136 +466,166 @@ function createReport(report, docNumber) {
     tableRow.addCell("RECIBI CONFORME", "styleTitle alignCenter", 1);
 }
 
-/** 
-    Function that takes a number, split the digits and convert them in words 
-*/
-function getDigits(num) {
-
-    var c2,c1,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11 = ""; //max number = 999'999'999'999.99
-    var numberInWords = "";
-
-    //replace everything except numbers to remove "."
-    var arr = num.replace(/\D/g,''); //ex. 1'250.37 => arr=[1,2,5,0,3,7]
-        
-    if (arr[arr.length - 1]) {    
-        c2 = numberToSpanish(arr[arr.length - 1]);
-    }
-
-    if (arr[arr.length - 2]) {
-        c1 = numberToSpanish(arr[arr.length - 2]);
-    }
-
-    if (arr[arr.length - 3]) {
-        a0 = numberToSpanish(arr[arr.length - 3]);
-    }
-
-    if (arr[arr.length - 4]) {
-        a1 = numberToSpanish(arr[arr.length - 4]);
-    }
-        
-    if (arr[arr.length - 5]) {
-        a2 = numberToSpanish(arr[arr.length - 5]);
-    }
-    
-    if (arr[arr.length - 6]) {
-        a3 = numberToSpanish(arr[arr.length - 6]);
-    }
-        
-    if (arr[arr.length - 7]) {
-        a4 = numberToSpanish(arr[arr.length - 7]);
-    }
-        
-    if (arr[arr.length - 8]) {
-        a5 = numberToSpanish(arr[arr.length - 8]);
-    }
-
-    if (arr[arr.length - 9]) {
-        a6 = numberToSpanish(arr[arr.length - 9]);
-    }
-        
-    if (arr[arr.length - 10]) {
-        a7 = numberToSpanish(arr[arr.length - 10]);
-    }
-       
-    if (arr[arr.length - 11]) {
-        a8 = numberToSpanish(arr[arr.length - 11]);
-    }
-
-    if (arr[arr.length - 12]) {
-        a9 = numberToSpanish(arr[arr.length - 12]);
-    }
-
-    if (arr[arr.length - 13]) {
-        a10 = numberToSpanish(arr[arr.length - 13]);
-    }
-
-    if (arr[arr.length - 14]) {
-        a11 = numberToSpanish(arr[arr.length - 14]);
-    }
-
-    if (a11){ numberInWords += a11 + " "};
-    if (a10){ numberInWords += a10 + " "};
-    if (a9){ numberInWords += a9 + " "};
-    if (a8){ numberInWords += a8 + " "};
-    if (a7){ numberInWords += a7 + " "};
-    if (a6){ numberInWords += a6 + " "};
-    if (a5){ numberInWords += a5 + " "};
-    if (a4){ numberInWords += a4 + " "};
-    if (a3){ numberInWords += a3 + " "};
-    if (a2){ numberInWords += a2 + " "};
-    if (a1){ numberInWords += a1 + " "};
-    if (a0){ numberInWords += a0 + " "};
-    numberInWords += "punto ";
-    if (c1){ numberInWords += c1 + " "};
-    if (c2){ numberInWords += c2 + " "};
-
-    return numberInWords;
-}
-
 /**
-    Function that converts numbers to words
+    Function that takes the description for the given account
 */
-function numberToSpanish(n) {
-    var res = "";
-    if (n === "0") {
-        res = "cero";
+function getDescription(account) {
+    var description = "";
+    var table = Banana.document.table("Accounts");
+    for (var i = 0; i < table.rowCount; i++) {
+        var tRow = table.row(i);
+        var accountstring1 = "."+account;
+        var accountstring2 = ","+account;
+        var accountstring3 = ";"+account;
+
+        if (accountstring1 === tRow.value("Account") || 
+            accountstring2 === tRow.value("Account") || 
+            accountstring3 === tRow.value("Account")) {
+
+            description = tRow.value("Description");
+            return description;
+        }
     }
-    else if (n === "1") { 
-        res = "uno";
-    }
-    else if (n === "2") { 
-        res = "dos";
-    }
-    else if (n === "3") { 
-        res = "tres";
-    }
-    else if (n === "4") { 
-        res = "cuatro";
-    }
-    else if (n === "5") { 
-        res = "cinco";
-    }
-    else if (n === "6") { 
-        res = "seis";
-    }
-    else if (n === "7") { 
-        res = "siete";
-    }
-    else if (n === "8") { 
-        res = "ocho";
-    }
-    else if (n === "9") { 
-        res = "nueve";
-    }    
-    return res;
 }
+
+function getCentesimi(num) {
+    var c2,c1;
+    var arr = num.replace(/\D/g,''); //ex. 1'250.37 => arr=[1,2,5,0,3,7]
+    c2 = arr[arr.length - 1];
+    c1 = arr[arr.length - 2];
+    return c1+c2; //37
+}
+
+// /** 
+//     Function that takes a number, split the digits and convert them in words 
+// */
+// function getDigits(num) {
+
+//     var c2,c1,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11 = ""; //max number = 999'999'999'999.99
+//     var numberInWords = "";
+
+//     //replace everything except numbers to remove "."
+//     var arr = num.replace(/\D/g,''); //ex. 1'250.37 => arr=[1,2,5,0,3,7]
+        
+//     if (arr[arr.length - 1]) {    
+//         c2 = numberToSpanish(arr[arr.length - 1]);
+//     }
+
+//     if (arr[arr.length - 2]) {
+//         c1 = numberToSpanish(arr[arr.length - 2]);
+//     }
+
+//     if (arr[arr.length - 3]) {
+//         a0 = numberToSpanish(arr[arr.length - 3]);
+//     }
+
+//     if (arr[arr.length - 4]) {
+//         a1 = numberToSpanish(arr[arr.length - 4]);
+//     }
+        
+//     if (arr[arr.length - 5]) {
+//         a2 = numberToSpanish(arr[arr.length - 5]);
+//     }
+    
+//     if (arr[arr.length - 6]) {
+//         a3 = numberToSpanish(arr[arr.length - 6]);
+//     }
+        
+//     if (arr[arr.length - 7]) {
+//         a4 = numberToSpanish(arr[arr.length - 7]);
+//     }
+        
+//     if (arr[arr.length - 8]) {
+//         a5 = numberToSpanish(arr[arr.length - 8]);
+//     }
+
+//     if (arr[arr.length - 9]) {
+//         a6 = numberToSpanish(arr[arr.length - 9]);
+//     }
+        
+//     if (arr[arr.length - 10]) {
+//         a7 = numberToSpanish(arr[arr.length - 10]);
+//     }
+       
+//     if (arr[arr.length - 11]) {
+//         a8 = numberToSpanish(arr[arr.length - 11]);
+//     }
+
+//     if (arr[arr.length - 12]) {
+//         a9 = numberToSpanish(arr[arr.length - 12]);
+//     }
+
+//     if (arr[arr.length - 13]) {
+//         a10 = numberToSpanish(arr[arr.length - 13]);
+//     }
+
+//     if (arr[arr.length - 14]) {
+//         a11 = numberToSpanish(arr[arr.length - 14]);
+//     }
+
+//     if (a11){ numberInWords += a11 + " "};
+//     if (a10){ numberInWords += a10 + " "};
+//     if (a9){ numberInWords += a9 + " "};
+//     if (a8){ numberInWords += a8 + " "};
+//     if (a7){ numberInWords += a7 + " "};
+//     if (a6){ numberInWords += a6 + " "};
+//     if (a5){ numberInWords += a5 + " "};
+//     if (a4){ numberInWords += a4 + " "};
+//     if (a3){ numberInWords += a3 + " "};
+//     if (a2){ numberInWords += a2 + " "};
+//     if (a1){ numberInWords += a1 + " "};
+//     if (a0){ numberInWords += a0 + " "};
+//     numberInWords += "punto ";
+//     if (c1){ numberInWords += c1 + " "};
+//     if (c2){ numberInWords += c2 + " "};
+
+//     return numberInWords;
+// }
+
+// /**
+//     Function that converts numbers to words
+// */
+// function numberToSpanish(n) {
+//     var res = "";
+//     if (n === "0") {
+//         res = "cero";
+//     }
+//     else if (n === "1") { 
+//         res = "uno";
+//     }
+//     else if (n === "2") { 
+//         res = "dos";
+//     }
+//     else if (n === "3") { 
+//         res = "tres";
+//     }
+//     else if (n === "4") { 
+//         res = "cuatro";
+//     }
+//     else if (n === "5") { 
+//         res = "cinco";
+//     }
+//     else if (n === "6") { 
+//         res = "seis";
+//     }
+//     else if (n === "7") { 
+//         res = "siete";
+//     }
+//     else if (n === "8") { 
+//         res = "ocho";
+//     }
+//     else if (n === "9") { 
+//         res = "nueve";
+//     }    
+//     return res;
+// }
 
 /**
     This function adds a Footer to the report
 */
 function addFooter(report) {
    report.getFooter().addClass("footer");
-   var versionLine = report.getFooter().addText("Banana Accounting 8", "description");
+   var versionLine = report.getFooter().addText("Banana Accounting", "description");
    //report.getFooter().addFieldPageNr();
 }
 
@@ -561,6 +649,11 @@ function createStyleSheet() {
     stylesheet.addStyle(".alignRight", "text-align:right");
     stylesheet.addStyle(".alignCenter", "text-align:center");
     stylesheet.addStyle(".styleTitle", "font-weight:bold;background-color:#eeeeee");
+    stylesheet.addStyle(".underline", "text-decoration:underline;");
+    stylesheet.addStyle(".borderLeft", "border-left:thin solid black");
+    stylesheet.addStyle(".borderTop", "border-top:thin solid black");
+    stylesheet.addStyle(".borderRight", "border-right:thin solid black");
+    stylesheet.addStyle(".borderBottom", "border-bottom:thin solid black");
     
     //Table header
     style = stylesheet.addStyle("table");
@@ -592,7 +685,8 @@ function createStyleSheet() {
     style = stylesheet.addStyle("tableData");
     style.setAttribute("width", "100%");
     style.setAttribute("font-size", "8px");
-    stylesheet.addStyle("table.tableData td", "border: thin solid black; padding-bottom: 2px; padding-top: 5px");
+    //stylesheet.addStyle("table.tableData td", "border: thin solid black; padding-bottom: 2px; padding-top: 5px");
+    stylesheet.addStyle("table.tableData td", "");
     stylesheet.addStyle(".col1a", "width:12%");
     stylesheet.addStyle(".col2a", "width:12%");
     stylesheet.addStyle(".col3a", "");
