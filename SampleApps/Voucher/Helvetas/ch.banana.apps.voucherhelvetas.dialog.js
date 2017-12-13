@@ -30,7 +30,7 @@
     A dialog is used to let the user insert all the required settings.
     The settings are then saved and used as default settings for the future times.
 
-    To Convert numbers to words we use the "written-number.min.js"
+    To Convert numbers to words we use the "written-number.min.js" distributed under The MIT License (MIT)
     Source of the repository on github: https://github.com/yamadapc/js-written-number
     Source of the .js on github: https://raw.githubusercontent.com/yamadapc/js-written-number/master/dist/written-number.min.js
 
