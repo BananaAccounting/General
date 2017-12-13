@@ -459,8 +459,8 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
     var lang = Banana.document.locale;
     if (lang.length>2)
       lang = lang.substr(0,2);
-    var textDefault="";
-    var text="";
+    var textDefault = [];
+    var text = [];
     for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
       var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
       if (textLang =="[default]") {
@@ -472,10 +472,10 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
     }
     if (text.length <= 0)
       text = textDefault;
-    if (text.length > 0) {
+    for (var i=0; i < text.length; i++) {
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
       tableRow = repTableObj.addRow();
-      tableRow.addCell(text, "", 4);
+      tableRow.addCell(text[i], "", 4);
     }
   }
   
