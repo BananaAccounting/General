@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style03.js
 // @api = 1.0
-// @pubdate = 2017-11-14
+// @pubdate = 2017-12-13
 // @publisher = Banana.ch SA
 // @description = Style 3: address on the right, 1 color
 // @description.it = Stile 3: indirizzo sulla destra, 1 colore
@@ -467,6 +467,31 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
       tableRow.addCell(param.personal_text_2, "", 4);
   }
 
+  //Template params
+  if (invoiceObj.template_parameters && invoiceObj.template_parameters.footer_texts) {
+    var lang = Banana.document.locale;
+    if (lang.length>2)
+      lang = lang.substr(0,2);
+    var textDefault="";
+    var text="";
+    for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
+      var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
+      if (textLang =="[default]") {
+        textDefault = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+      else if (textLang == lang) {
+        text = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+    }
+    if (text.length <= 0)
+      text = textDefault;
+    if (text.length > 0) {
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(text, "", 4);
+    }
+  }
+    
   // Pvr
   if (param.print_isr && invoiceObj.document_info.currency == "CHF") {
     
