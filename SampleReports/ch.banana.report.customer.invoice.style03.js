@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style03.js
 // @api = 1.0
-// @pubdate = 2017-12-13
+// @pubdate = 2017-12-23
 // @publisher = Banana.ch SA
 // @description = Style 3: address on the right, 1 color
 // @description.it = Stile 3: indirizzo sulla destra, 1 colore
@@ -267,8 +267,6 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   var c1 = tableRow.addCell("", "bold address_table_header padding-left", 1);
 
   var c2 = tableRow.addCell("", "bold address_table_header padding-left", 1);
-  c2.addParagraph(texts.to + ":", "");
-
 
   var addressTable = repDocObj.addTable("address_table");
   var addressCol1 = addressTable.addColumn("addressCol1");
