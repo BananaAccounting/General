@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style06.js
 // @api = 1.0
-// @pubdate = 2017-12-13
+// @pubdate = 2017-12-23
 // @publisher = Banana.ch SA
 // @description = Style 6: logo, address on the right, 1 color
 // @description.it = Stile 6: logo, indirizzo sulla destra, 1 colore
@@ -438,22 +438,25 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   }
   
   //Template params
+  //Default text starts with "(" and ends with ")" (default), (Vorderfiniert)
   if (invoiceObj.template_parameters && invoiceObj.template_parameters.footer_texts) {
-    var lang = Banana.document.locale;
-    if (lang.length>2)
-      lang = lang.substr(0,2);
+    var lang = '';
+    if (invoiceObj.customer_info.lang )
+      lang = invoiceObj.customer_info.lang;
+    if (lang.length <= 0 && invoiceObj.document_info.locale)
+      lang = invoiceObj.document_info.locale;
     var textDefault = [];
     var text = [];
     for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
       var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
-      if (textLang =="[default]") {
+      if (textLang.indexOf('(') === 0 && textLang.indexOf(')') === textLang.length-1) {
         textDefault = invoiceObj.template_parameters.footer_texts[i].text;
       }
       else if (textLang == lang) {
         text = invoiceObj.template_parameters.footer_texts[i].text;
       }
     }
-    if (text.length <= 0)
+    if (text.join().length <= 0)
       text = textDefault;
     for (var i=0; i < text.length; i++) {
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
