@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style05.js
 // @api = 1.0
-// @pubdate = 2017-12-23
+// @pubdate = 2017-12-24
 // @publisher = Banana.ch SA
 // @description = Style 5: logo, address on the right, 1 colo
 // @description.it = Stile 5: logo, indirizzo sulla destra, 1 colore
@@ -266,7 +266,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   var cell3 = tableRow.addCell("", "", 1);
 
   var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
-  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(getTitle(invoiceObj, texts) + ":", "");
   cell1.addParagraph(texts.date + ":", "");
   cell1.addParagraph(texts.customer + ":", "");
   //Payment Terms
@@ -853,7 +853,7 @@ function printInvoiceDetails(invoiceObj, repDocObj, param, texts, rowNumber) {
   var cell3 = tableRow.addCell("", "", 1);
   
   var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
-  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(getTitle(invoiceObj, texts) + ":", "");
   cell1.addParagraph(texts.date + ":", "");
   cell1.addParagraph(texts.customer + ":", "");
   //Payment Terms
