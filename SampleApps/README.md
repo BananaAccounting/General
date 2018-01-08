@@ -6,8 +6,8 @@ The **@id** attribute is used to identify the script. In order to avoid duplicat
 | Value | Description | Example |
 | ------ | ------ | ------ |
 | developer | The developer of the app. | ch.banana |
-| country | The country for which the app is designed. If the app is not designed for a specific country we use **uni** as universal. | ch, it, de, ... uni|
-| type | The type of the app. | app, invoice, reminder, statement |
+| country | The country for which the app is designed. If the app is not designed for a specific country, use **uni** as universal. | ch, it, de, ... uni|
+| type | The type of the app. | app, import, invoice, reminder, statement |
 | name | The name of the app. | vatreport, template1 |
 
 Examples:
