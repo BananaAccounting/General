@@ -1,4 +1,4 @@
-# @id attribute for the JavaScript apps
+# @id attribute for JavaScript apps
 
 The **@id** attribute is used to identify the script. In order to avoid duplicates banana.ch use the following scheme:
 **developer**.**country**.**type**.**name**
