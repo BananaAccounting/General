@@ -1,3 +1,20 @@
+# @id attribute for the JavaScript apps
+
+The **@id** attribute is used to identify the script. In order to avoid duplicates banana.ch use the following scheme:
+**developer**.**country**.**type**.**name**
+
+| Value | Description | Example |
+| ------ | ------ | ------ |
+| developer | The developer of the app. | ch.banana |
+| country | The country for which the app is designed. If the app is not designed for a specific country we use **uni** as universal. | ch, it, de, ... uni|
+| type | The type of the app. | app, invoice, reminder, statement |
+| name | The name of the app. | vatreport, template1 |
+
+Examples:
+  - @id = ch.banana.uni.invoice.template1
+  - @id = ch.banana.ch.app.vatreport2018
+
+
 # Examples of Banana Apps
 
 ## account_card.js
