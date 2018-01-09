@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style05.js
 // @api = 1.0
-// @pubdate = 2017-12-24
+// @pubdate = 2018-01-09
 // @publisher = Banana.ch SA
 // @description = Style 5: logo, address on the right, 1 colo
 // @description.it = Stile 5: logo, indirizzo sulla destra, 1 colore
@@ -1235,7 +1235,7 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     logoStyle.setAttribute("position", "absolute");
     logoStyle.setAttribute("margin-top", "5mm");
     logoStyle.setAttribute("margin-left", "20mm"); 
-    logoStyle.setAttribute("width", "120px"); 
+    logoStyle.setAttribute("height", "120px"); 
 
 
     //====================================================================//
