@@ -1234,8 +1234,8 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     var logoStyle = repStyleObj.addStyle(".logoStyle");
     logoStyle.setAttribute("position", "absolute");
     logoStyle.setAttribute("margin-top", "5mm");
-    logoStyle.setAttribute("margin-left", "20mm"); 
-    logoStyle.setAttribute("height", "120px"); 
+    logoStyle.setAttribute("margin-left", "20mm");
+    logoStyle.setAttribute("height", "100px");
 
 
     //====================================================================//
