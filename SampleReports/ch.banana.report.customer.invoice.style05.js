@@ -306,7 +306,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
   var dd = repTableObj.getHeader().addRow();
   dd.addCell(texts.description, "doc_table_header", 1);
-  dd.addCell(texts.qty, "doc_table_header", 1);
+  dd.addCell(texts.qty, "doc_table_header amount", 1);
   dd.addCell(texts.unit_price, "doc_table_header amount", 1);
   dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "doc_table_header amount", 1);
 
