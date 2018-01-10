@@ -16,12 +16,12 @@
 // @api = 1.0
 // @pubdate = 2018-01-09
 // @publisher = Banana.ch SA
-// @description = Style 5: logo, address on the right, 1 colo
+// @description = Style 5: logo, address on the right, 1 colour
 // @description.it = Stile 5: logo, indirizzo sulla destra, 1 colore
 // @description.de = Stil 5: Logo, Adresse rechts ausgedruckt, 1 Farbe
 // @description.fr = Style 5: logo, adresse à droite, 1 couleur
 // @description.nl = Stijl 5: logo, adres rechts, 1 kleur
-// @description.en = Style 5: logo, address on the right, 1 color
+// @description.en = Style 5: logo, address on the right, 1 colour
 // @doctype = *
 // @task = report.customer.invoice
 
@@ -231,6 +231,10 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
 
     var cell1 = tableRow.addCell("", "");
     var cell2 = tableRow.addCell("", "amount");
+    var supplierNameLines = getInvoiceSupplierName(invoiceObj.supplier_info).split('\n');
+    for (var i=0; i < supplierNameLines.length; i++) {
+      cell2.addParagraph(supplierNameLines[i], "bold", 1);
+    }
     var supplierLines = getInvoiceSupplier(invoiceObj.supplier_info).split('\n');
     for (var i=0; i < supplierLines.length; i++) {
       cell2.addParagraph(supplierLines[i], "", 1);
@@ -572,32 +576,37 @@ function getInvoiceAddress(invoiceAddress) {
   return address;
 }
 
+function getInvoiceSupplierName(invoiceSupplier) {
+  
+  var supplierName = "";
+
+  if (invoiceSupplier.business_name) {
+    supplierName = invoiceSupplier.business_name + "\n";
+  }
+  
+  if (supplierName.length<=0)
+  {
+    if (invoiceSupplier.first_name) {
+      supplierName = invoiceSupplier.first_name + " ";
+    }
+  
+    if (invoiceSupplier.last_name) {
+      supplierName = supplierName + invoiceSupplier.last_name + "\n";
+    }
+  }
+  return supplierName;
+}
 
 function getInvoiceSupplier(invoiceSupplier) {
   
   var supplierAddress = "";
 
-  if (invoiceSupplier.business_name) {
-    supplierAddress = invoiceSupplier.business_name + "\n";
-  }
-  
-  if (supplierAddress.length<=0)
-  {
-    if (invoiceSupplier.first_name) {
-      supplierAddress = invoiceSupplier.first_name + " ";
-    }
-  
-    if (invoiceSupplier.last_name) {
-      supplierAddress = supplierAddress + invoiceSupplier.last_name + "\n";
-    }
-  }
-
   if (invoiceSupplier.address1) {
-    supplierAddress = supplierAddress + invoiceSupplier.address1 + " ";
+    supplierAddress = supplierAddress + invoiceSupplier.address1 + "\n";
   }
   
   if (invoiceSupplier.address2) {
-    supplierAddress = supplierAddress + invoiceSupplier.address2 + " ";
+    supplierAddress = supplierAddress + invoiceSupplier.address2 + "\n";
   }
 
   if (invoiceSupplier.postal_code) {
