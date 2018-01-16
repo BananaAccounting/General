@@ -166,8 +166,7 @@ function exec() {
     var report = Banana.Report.newReport('Report title');
 
     //Add the image: it's important to specify the full path where the image is saved.
-    //Windows example
-    report.addImage('banana.jpg');
+    report.addImage("documents:logo");
 
     //Print the report
     var stylesheet = Banana.Report.newStyleSheet();
