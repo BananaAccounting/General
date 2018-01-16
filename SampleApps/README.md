@@ -11,8 +11,10 @@ The **@id** attribute is used to identify the script. In order to avoid duplicat
 | name | The name of the app. | vatreport, template1 |
 
 Examples:
-  - @id = ch.banana.uni.invoice.template1
+  - @id = ch.banana.ch.invoice.ch01
+  - @id = ch.banana.uni.invoice.companyxx
   - @id = ch.banana.ch.app.vatreport2018
+
 
 
 # Examples of Banana Apps
