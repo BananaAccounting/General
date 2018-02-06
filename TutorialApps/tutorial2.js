@@ -122,7 +122,7 @@ function exec() {
 //This function adds a Footer to the report
 function addFooter(report) {
     report.getFooter().addClass(".img");
-    report.getFooter().addImage("banana.jpg", "img");
+    report.getFooter().addImage("documents:logo");
 }
 
 
@@ -355,7 +355,7 @@ function createReport(report, accountNumber, openingDate, closureDate) {
 //This function adds a Footer to the report
 function addFooter(report) {
     report.getFooter().addClass(".img");
-    report.getFooter().addImage("banana.jpg", "img");
+    report.getFooter().addImage("documents:logo");
 }
 
 

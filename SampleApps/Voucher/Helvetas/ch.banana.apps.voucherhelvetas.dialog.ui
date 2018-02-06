@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TransactionVoucherDialog</class>
+ <widget class="QDialog" name="TransactionVoucherDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>463</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Transaction Voucher</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>15</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_general">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>10</number>
+     </property>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="CanceladoALineEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="DireccionLabel">
+       <property name="text">
+        <string>Dirección</string>
+       </property>
+       <property name="buddy">
+        <cstring>DireccionLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="BancosLineEdit"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="PorConceptoDeLineEdit"/>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLineEdit" name="ElaboradoLineEdit"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="GestionLabel">
+       <property name="text">
+        <string>Gestion</string>
+       </property>
+       <property name="buddy">
+        <cstring>GestionLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="CanceladoALabel">
+       <property name="text">
+        <string>Cancelado a</string>
+       </property>
+       <property name="buddy">
+        <cstring>CanceladoALineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="GestionLineEdit"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="DireccionLineEdit"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="PorConceptoDeLabel">
+       <property name="text">
+        <string>Por concepto de</string>
+       </property>
+       <property name="buddy">
+        <cstring>PorConceptoDeLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="ChequeLineEdit"/>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="EfectivoLineEdit"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="VoucherNumberLineEdit"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="EfectivoLabel">
+       <property name="text">
+        <string>Efectivo</string>
+       </property>
+       <property name="buddy">
+        <cstring>EfectivoLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="BancosLabel">
+       <property name="text">
+        <string>Bancos</string>
+       </property>
+       <property name="buddy">
+        <cstring>BancosLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="CequeLabel">
+       <property name="text">
+        <string>Cheque</string>
+       </property>
+       <property name="buddy">
+        <cstring>ChequeLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="ElaboradoLabel">
+       <property name="text">
+        <string>Elaborado</string>
+       </property>
+       <property name="buddy">
+        <cstring>ElaboradoLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLineEdit" name="AutorizadoLineEdit"/>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLineEdit" name="RecibiConformeLineEdit"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="AutorizadoLabel">
+       <property name="text">
+        <string>Autorizado</string>
+       </property>
+       <property name="buddy">
+        <cstring>AutorizadoLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="RecibiConformeLabel">
+       <property name="text">
+        <string>Recibi conforme</string>
+       </property>
+       <property name="buddy">
+        <cstring>RecibiConformeLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="InstitucionLabel">
+       <property name="text">
+        <string>Institución</string>
+       </property>
+       <property name="buddy">
+        <cstring>InstitucionLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="InstitucionLineEdit"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="VoucherNumberLabel">
+       <property name="text">
+        <string>Nº de Comprobante</string>
+       </property>
+       <property name="buddy">
+        <cstring>VoucherNumberLineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>VoucherNumberLineEdit</tabstop>
+  <tabstop>InstitucionLineEdit</tabstop>
+  <tabstop>DireccionLineEdit</tabstop>
+  <tabstop>GestionLineEdit</tabstop>
+  <tabstop>CanceladoALineEdit</tabstop>
+  <tabstop>PorConceptoDeLineEdit</tabstop>
+  <tabstop>EfectivoLineEdit</tabstop>
+  <tabstop>ChequeLineEdit</tabstop>
+  <tabstop>BancosLineEdit</tabstop>
+  <tabstop>ElaboradoLineEdit</tabstop>
+  <tabstop>AutorizadoLineEdit</tabstop>
+  <tabstop>RecibiConformeLineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>checkdata()</slot>
+ </slots>
+</ui>

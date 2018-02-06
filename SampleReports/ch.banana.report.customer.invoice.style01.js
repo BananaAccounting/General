@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style01.js
 // @api = 1.0
-// @pubdate = 2017-02-16
+// @pubdate = 2017-12-23
 // @publisher = Banana.ch SA
 // @description = Style 1: address on the right, 2 colors
 // @description.it = Stile 1: indirizzo sulla destra, 2 colori
@@ -22,6 +22,7 @@
 // @description.fr = Style 1: adresse à droite, 2 couleurs
 // @description.nl = Stijl 1: adres rechts, 2 kleuren
 // @description.en = Style 1: address on the right, 2 colors
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -422,6 +423,34 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
     tableRow.addCell(param.personal_text_2, "", 3);
   }
 
+  //Template params
+  //Default text starts with "(" and ends with ")" (default), (Vorderfiniert)
+  if (invoiceObj.template_parameters && invoiceObj.template_parameters.footer_texts) {
+    var lang = '';
+    if (invoiceObj.customer_info.lang )
+      lang = invoiceObj.customer_info.lang;
+    if (lang.length <= 0 && invoiceObj.document_info.locale)
+      lang = invoiceObj.document_info.locale;
+    var textDefault = [];
+    var text = [];
+    for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
+      var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
+      if (textLang.indexOf('(') === 0 && textLang.indexOf(')') === textLang.length-1) {
+        textDefault = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+      else if (textLang == lang) {
+        text = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+    }
+    if (text.join().length <= 0)
+      text = textDefault;
+    for (var i=0; i < text.length; i++) {
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(text[i], "", 3);
+    }
+  }
+  
   // Pvr
   if (param.print_isr && invoiceObj.document_info.currency == "CHF") {
     
@@ -1090,6 +1119,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "122mm");
    style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
+   style.setAttribute("line-break-inside", "avoid");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
    

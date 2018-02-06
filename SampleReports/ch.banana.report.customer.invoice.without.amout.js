@@ -14,10 +14,11 @@
 //
 // @id = ch.banana.report.customer.invoice.without.amount.js
 // @api = 1.0
-// @pubdate = 2017-02-24
+// @pubdate = 2017-11-14
 // @publisher = Banana.ch SA
 // @description = Swiss invoice with ISR without amount
 // @description.it = Fattura svizzera con PVR senza importo
+// @doctype = *
 // @task = report.customer.invoice
 
 /*Update script's parameters*/

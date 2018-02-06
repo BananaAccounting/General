@@ -14,14 +14,15 @@
 //
 // @id = ch.banana.report.customer.invoice.style05.js
 // @api = 1.0
-// @pubdate = 2017-02-16
+// @pubdate = 2018-01-09
 // @publisher = Banana.ch SA
-// @description = Style 5: logo, address on the right, 1 colo
+// @description = Style 5: logo, address on the right, 1 colour
 // @description.it = Stile 5: logo, indirizzo sulla destra, 1 colore
 // @description.de = Stil 5: Logo, Adresse rechts ausgedruckt, 1 Farbe
 // @description.fr = Style 5: logo, adresse à droite, 1 couleur
 // @description.nl = Stijl 5: logo, adres rechts, 1 kleur
-// @description.en = Style 5: logo, address on the right, 1 color
+// @description.en = Style 5: logo, address on the right, 1 colour
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -230,6 +231,10 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
 
     var cell1 = tableRow.addCell("", "");
     var cell2 = tableRow.addCell("", "amount");
+    var supplierNameLines = getInvoiceSupplierName(invoiceObj.supplier_info).split('\n');
+    for (var i=0; i < supplierNameLines.length; i++) {
+      cell2.addParagraph(supplierNameLines[i], "bold", 1);
+    }
     var supplierLines = getInvoiceSupplier(invoiceObj.supplier_info).split('\n');
     for (var i=0; i < supplierLines.length; i++) {
       cell2.addParagraph(supplierLines[i], "", 1);
@@ -265,7 +270,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   var cell3 = tableRow.addCell("", "", 1);
 
   var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
-  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(getTitle(invoiceObj, texts) + ":", "");
   cell1.addParagraph(texts.date + ":", "");
   cell1.addParagraph(texts.customer + ":", "");
   //Payment Terms
@@ -305,7 +310,7 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
   rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
   var dd = repTableObj.getHeader().addRow();
   dd.addCell(texts.description, "doc_table_header", 1);
-  dd.addCell(texts.qty, "doc_table_header", 1);
+  dd.addCell(texts.qty, "doc_table_header amount", 1);
   dd.addCell(texts.unit_price, "doc_table_header amount", 1);
   dd.addCell(texts.total + " " + invoiceObj.document_info.currency, "doc_table_header amount", 1);
 
@@ -435,6 +440,34 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
       tableRow = repTableObj.addRow();
       tableRow.addCell(param.personal_text_2, "", 4);
   }
+
+  //Template params
+  //Default text starts with "(" and ends with ")" (default), (Vorderfiniert)
+  if (invoiceObj.template_parameters && invoiceObj.template_parameters.footer_texts) {
+    var lang = '';
+    if (invoiceObj.customer_info.lang )
+      lang = invoiceObj.customer_info.lang;
+    if (lang.length <= 0 && invoiceObj.document_info.locale)
+      lang = invoiceObj.document_info.locale;
+    var textDefault = [];
+    var text = [];
+    for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
+      var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
+      if (textLang.indexOf('(') === 0 && textLang.indexOf(')') === textLang.length-1) {
+        textDefault = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+      else if (textLang == lang) {
+        text = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+    }
+    if (text.join().length <= 0)
+      text = textDefault;
+    for (var i=0; i < text.length; i++) {
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(text[i], "", 4);
+    }
+  }
   
   // Pvr
   if (param.print_isr && invoiceObj.document_info.currency == "CHF") {
@@ -543,32 +576,37 @@ function getInvoiceAddress(invoiceAddress) {
   return address;
 }
 
+function getInvoiceSupplierName(invoiceSupplier) {
+  
+  var supplierName = "";
+
+  if (invoiceSupplier.business_name) {
+    supplierName = invoiceSupplier.business_name + "\n";
+  }
+  
+  if (supplierName.length<=0)
+  {
+    if (invoiceSupplier.first_name) {
+      supplierName = invoiceSupplier.first_name + " ";
+    }
+  
+    if (invoiceSupplier.last_name) {
+      supplierName = supplierName + invoiceSupplier.last_name + "\n";
+    }
+  }
+  return supplierName;
+}
 
 function getInvoiceSupplier(invoiceSupplier) {
   
   var supplierAddress = "";
 
-  if (invoiceSupplier.business_name) {
-    supplierAddress = invoiceSupplier.business_name + "\n";
-  }
-  
-  if (supplierAddress.length<=0)
-  {
-    if (invoiceSupplier.first_name) {
-      supplierAddress = invoiceSupplier.first_name + " ";
-    }
-  
-    if (invoiceSupplier.last_name) {
-      supplierAddress = supplierAddress + invoiceSupplier.last_name + "\n";
-    }
-  }
-
   if (invoiceSupplier.address1) {
-    supplierAddress = supplierAddress + invoiceSupplier.address1 + " ";
+    supplierAddress = supplierAddress + invoiceSupplier.address1 + "\n";
   }
   
   if (invoiceSupplier.address2) {
-    supplierAddress = supplierAddress + invoiceSupplier.address2 + " ";
+    supplierAddress = supplierAddress + invoiceSupplier.address2 + "\n";
   }
 
   if (invoiceSupplier.postal_code) {
@@ -824,7 +862,7 @@ function printInvoiceDetails(invoiceObj, repDocObj, param, texts, rowNumber) {
   var cell3 = tableRow.addCell("", "", 1);
   
   var invoiceDate = Banana.Converter.toLocaleDateFormat(invoiceObj.document_info.date);
-  cell1.addParagraph(getTitle(invoiceObj, texts) + " #", "");
+  cell1.addParagraph(getTitle(invoiceObj, texts) + ":", "");
   cell1.addParagraph(texts.date + ":", "");
   cell1.addParagraph(texts.customer + ":", "");
   //Payment Terms
@@ -1120,6 +1158,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "122mm");
    style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
+   style.setAttribute("line-break-inside", "avoid");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
    
@@ -1203,9 +1242,9 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     //====================================================================//
     var logoStyle = repStyleObj.addStyle(".logoStyle");
     logoStyle.setAttribute("position", "absolute");
-    logoStyle.setAttribute("margin-top", "5mm");
-    logoStyle.setAttribute("margin-left", "20mm"); 
-    logoStyle.setAttribute("width", "120px"); 
+    logoStyle.setAttribute("margin-top", "10mm");
+    logoStyle.setAttribute("margin-left", "20mm");
+    logoStyle.setAttribute("height", "100px");
 
 
     //====================================================================//

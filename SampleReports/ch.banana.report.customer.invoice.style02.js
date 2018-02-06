@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.invoice.style02.js
 // @api = 1.0
-// @pubdate = 2017-02-16
+// @pubdate = 2017-12-23
 // @publisher = Banana.ch SA
 // @description = Style 2: invoice and shipping address on the left, 3 colors
 // @description.it = Stile 2: indirizzo fatturazione e spedizione sulla sinistra, 3 colori
@@ -22,6 +22,7 @@
 // @description.fr = Style 2: adresse de facturation et de livraison à gauche, 3 couleurs
 // @description.nl = Stijl 2: factuur- en leveringsadres links, 3 kleuren
 // @description.en = Style 2: invoice and shipping addresses on the left, 3 colors
+// @doctype = *
 // @task = report.customer.invoice
 
 var rowNumber = 0;
@@ -451,6 +452,34 @@ function printInvoice(jsonInvoice, repDocObj, repStyleObj, param) {
       rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
       tableRow = repTableObj.addRow();
       tableRow.addCell(param.personal_text_2, "", 4);
+  }
+  
+  //Template params
+  //Default text starts with "(" and ends with ")" (default), (Vorderfiniert)
+  if (invoiceObj.template_parameters && invoiceObj.template_parameters.footer_texts) {
+    var lang = '';
+    if (invoiceObj.customer_info.lang )
+      lang = invoiceObj.customer_info.lang;
+    if (lang.length <= 0 && invoiceObj.document_info.locale)
+      lang = invoiceObj.document_info.locale;
+    var textDefault = [];
+    var text = [];
+    for (var i = 0; i < invoiceObj.template_parameters.footer_texts.length; i++) {
+      var textLang = invoiceObj.template_parameters.footer_texts[i].lang;
+      if (textLang.indexOf('(') === 0 && textLang.indexOf(')') === textLang.length-1) {
+        textDefault = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+      else if (textLang == lang) {
+        text = invoiceObj.template_parameters.footer_texts[i].text;
+      }
+    }
+    if (text.join().length <= 0)
+      text = textDefault;
+    for (var i=0; i < text.length; i++) {
+      rowNumber = checkFileLength(invoiceObj, repDocObj, param, texts, rowNumber);
+      tableRow = repTableObj.addRow();
+      tableRow.addCell(text[i], "", 4);
+    }
   }
   
   // Pvr
@@ -1149,6 +1178,7 @@ function setPvrStyle(reportObj, repStyleObj, param) {
    style.setAttribute("left", "122mm");
    style.setAttribute("top", "34mm");
    style.setAttribute("width", "83mm");
+   style.setAttribute("line-break-inside", "avoid");
    style.setAttribute("font-size", "10pt");
    style.setAttribute("font-family", "OCRB");
    

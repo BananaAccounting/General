@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.statement.style01.js
 // @api = 1.0
-// @pubdate = 2016-10-06
+// @pubdate = 2016-11-14
 // @publisher = Banana.ch SA
 // @description = Customer Statement
 // @description.it = Estratto cliente 
@@ -22,6 +22,7 @@
 // @description.fr = Extrait de compte client
 // @description.nl = Rekeninguittreksel klant
 // @description.en = Customer statement
+// @doctype = *
 // @task = report.customer.statement
 
 var rowNumber = 0;
