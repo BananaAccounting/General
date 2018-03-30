@@ -23,9 +23,9 @@ You can run a test case in two ways (both availables starting Banana Accounting 
    * Click over 'Show details'
    * Click on the button 'Run test case'
    
-* Though the command lines
+* Though the command line
    * `banana90.exe -cmd=runtestsapps -p1=path_to_testcase.js|folder`
-   * As parameter p1 you can specify a test case file, or a folder. 
+   * As parameter `p1` you can specify the path to a test case file, or the path of a folder. 
    * In case of a folder all files in the folder and subfolders ending with `.test.js` are run.
    
      
