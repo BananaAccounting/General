@@ -165,16 +165,20 @@ TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
 
    Test.logger.addText("This test split the results over more files");
 
+   // Write results in a new file called testresults 
    var testLogger = Test.logger.newLogger("testresults");
    testLogger.addText("This text will be written in file testresults.txt");
    testLogger.close();
 
+   // Write results in a new new folder called testgroup
    var groupLogger = Test.logger.newGroupLogger("testgroup");
 
+   // Write results in a new file called testgroup/testresults1
    var test1Logger = groupLogger.newLogger("testresults1");
    test1Logger.addText("This text will be written in file testgroup/testresults1.txt");
    test1Logger.close();
 
+   // Write results in a new file called testgroup/testresults2
    var test2Logger = groupLogger.newLogger("testresults2");
    test1Logger.addText("This text will be written in file testgroup/testresults2.txt")
    test2Logger.close();
