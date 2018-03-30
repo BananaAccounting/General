@@ -13,4 +13,21 @@ This test case is a simple example where all the functionalities of the [BananaA
 * Verify that the test terminated succesfully
 * If you have differences and they are correct, copy the test results from the folder `test/testresults` to the folder `test/testexpected`
 
+## Run a test case
+
+You can run a test case in two ways (both availables starting Banana Accounting 9.0.4):
+
+* Through the [Manage Apps](https://www.banana.ch/doc9/en/node/4727) dialog
+   * Open the Manage Apps dialog
+   * Select the BananaApp to test
+   * Click over 'Show details'
+   * Click on the button 'Run test case'
+   
+* Though the command lines
+   * `banana90.exe -cmd=runtestsapps -p1=path_to_testcase.js|folder`
+   * As parameter p1 you can specify a test case file, or a folder. 
+   * In case of a folder all files in the folder and subfolders ending with `.test.js` are run.
+   
+     
+
 
