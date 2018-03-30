@@ -6,4 +6,4 @@ The BananaApps Test Framework is used to determine whether a BananaApp is workin
 
 To start writing a test case look at the example [SampleTest1](SampleTest1).
 
-* Directory SampleTest1. This is a simple test case that show all the functionality of the BananaApps Test Framework. This example is ideal as template for new test cases.
+* [SampleTest1](SampleTest1). This is a simple test case that show all the functionality of the BananaApps Test Framework. This example is ideal as template for new test cases.
