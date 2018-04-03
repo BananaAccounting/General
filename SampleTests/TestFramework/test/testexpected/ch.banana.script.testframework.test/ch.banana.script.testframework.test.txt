@@ -12,6 +12,7 @@
 \newcommand{\info}[2]{\textit{#1: #2}\\}
 \newcommand{\fatalerror}[1]{\textbf{\textcolor[rgb]{1,0,0}{Fatal error: #1}}\\}
 \newcommand{\keyvalue}[2]{\textbf{Keyvalue: #1} #2\\}
+\newcommand{\textvalue}[1]{#1\\}
 \newcommand{\excltest}[1]{\\Excluded from compare: #1}
 \newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
 \newenvironment{test}[1]{\section*{Test case: #1}}{}
@@ -19,24 +20,24 @@
 %%SCRIPT{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/TestFramework/test/ch.banana.script.testframework.test.js}
 \begin{testcase}{TestFrameworkExample}
 \begin{test}{testOk}
-This test will pass :-)
+\textvalue{This test will pass :-)}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testFailure}
-This test will fail :-(
+\textvalue{This test will fail :-(}
 \keyvalue{Result}{Failed}
 \fatalerror{Error: Assertion failed}
 \info{Location}{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/TestFramework/test/ch.banana.script.testframework.test.js - 75}
 \end{test}
 \begin{test}{testVerifyMethods}
-The object Test defines methods to verify conditions.
+\textvalue{The object Test defines methods to verify conditions.}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testOutputMethods}
-The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.
+\textvalue{The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.}
 %This is a comment
-\info{This is an info}{3 aprile 2018 13:37:15 CEST}
-This is a text
+\info{This is an info}{3 aprile 2018 14:28:15 CEST}
+\textvalue{This is a text}
 \begin{jsonvalue}{This is a json value}
 {
     "color": "yellow",
@@ -70,16 +71,16 @@ Date & Description & Amount\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testBananaApps}
-This test will tests the BananaApp ch.banana.script.bananaapp.js
+\textvalue{This test will tests the BananaApp ch.banana.script.bananaapp.js}
 \keyvalue{Result of methos 'findBiggestTransactionAmount()'}{8000.00}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testResultsSplitting}
-This test split the results over more files
+\textvalue{This test split the results over more files}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testLocalMethod}
-I'm just a local function
+\textvalue{I'm just a local function}
 \keyvalue{Result}{Passed}
 \end{test}
 \fatalerror{Error: One or more tests failed}
