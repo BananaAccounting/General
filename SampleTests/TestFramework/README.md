@@ -58,3 +58,5 @@ test/
       *.txt
     ...  
 ```
+
+If you want to put the test scripts in another folder, you can specify the path through the BananaApp parameter [`@testapp`](https://www.banana.ch/doc9/en/node/4715#attribute_testapp)
