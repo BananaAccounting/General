@@ -1,4 +1,4 @@
-# SampleTest1
+# TestFramework example
 
 This test case is a simple example where all the functionalities of the [BananaApps Test Framework](https://www.banana.ch/doc9/en/node/9026) are showed. This example is ideal as template for new test cases.
 
