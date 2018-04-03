@@ -15,7 +15,7 @@
 
 // @id = ch.banana.script.bananaapp.test
 // @api = 1.0
-// @pubdate = 2018-03-30
+// @pubdate = 2018-04-03
 // @publisher = Banana.ch SA
 // @description = Simple test case
 // @task = app.command
@@ -25,12 +25,13 @@
 // @inputdataform = none
 // @timeout = -1
 
+// Include the BananaApp to test
 // @includejs = ../ch.banana.script.bananaapp.js
 
-// Register test case to be executed
+// Register this test case to be executed
 Test.registerTestCase(new TestLoggerSimpleExample());
 
-// Here we define the class, the name of the class is not important
+// Define the test class, the name of the class is not important
 function TestLoggerSimpleExample() {
 
 }
@@ -55,6 +56,10 @@ TestLoggerSimpleExample.prototype.cleanup = function() {
 
 }
 
+// Every method with the prefix 'test' are executed automatically as test method
+// You can defiend as many test methods as you need
+
+// This is test method
 TestLoggerSimpleExample.prototype.testOk = function() {
 
    Test.logger.addText("This test will pass :-)");
@@ -62,6 +67,7 @@ TestLoggerSimpleExample.prototype.testOk = function() {
    Test.assert(true);
 }
 
+// This is an other test method
 TestLoggerSimpleExample.prototype.testFailure = function() {
 
    Test.logger.addText("This test will fail :-(");
@@ -165,7 +171,7 @@ TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
 
    Test.logger.addText("This test split the results over more files");
 
-   // Write results in a new file called testresults 
+   // Write results in a new file called testresults
    var testLogger = Test.logger.newLogger("testresults");
    testLogger.addText("This text will be written in file testresults.txt");
    testLogger.close();
@@ -186,3 +192,12 @@ TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
    groupLogger.close();
 }
 
+TestLoggerSimpleExample.prototype.testLocalMethod = function() {
+
+   Test.logger.addText(this.localMethod());
+}
+
+// This method doesn't start with 'test', it will not be runned by the test case, but can be used by any method
+TestLoggerSimpleExample.prototype.localMethod = function() {
+   return "I'm just a local function";
+}

@@ -16,7 +16,7 @@
 \newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
 \newenvironment{test}[1]{\section*{Test case: #1}}{}
 %Begin test data
-%%SCRIPT{/Users/lorenzo/Desktop/Test.logger/test/ch.banana.script.bananaapp.test.js}
+%%SCRIPT{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/SampleTest1/test/ch.banana.script.bananaapp.test.js}
 \begin{testcase}{TestLoggerSimpleExample}
 \begin{test}{testOk}
 This test will pass :-)\newline
@@ -26,7 +26,7 @@ This test will pass :-)\newline
 This test will fail :-(\newline
 \keyvalue{Result}{Failed}
 \fatalerror{Error: Assertion failed}
-\info{Location}{/Users/lorenzo/Desktop/Test.logger/test/ch.banana.script.bananaapp.test.js - 69}
+\info{Location}{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/SampleTest1/test/ch.banana.script.bananaapp.test.js - 75}
 \end{test}
 \begin{test}{testVerifyMethods}
 The object Test defines methods to verify conditions.\newline
@@ -35,7 +35,7 @@ The object Test defines methods to verify conditions.\newline
 \begin{test}{testOutputMethods}
 The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.\newline
 %This is a comment
-\info{This is an info}{29 marzo 2018 16:07:39 CEST}
+\info{This is an info}{3 aprile 2018 08:32:32 CEST}
 This is a text\newline
 \begin{jsonvalue}{This is a json value}
 {
@@ -76,6 +76,10 @@ This test will tests the BananaApp ch.banana.script.bananaapp.js\newline
 \end{test}
 \begin{test}{testResultsSplitting}
 This test split the results over more files\newline
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testLocalMethod}
+I'm just a local function\newline
 \keyvalue{Result}{Passed}
 \end{test}
 \fatalerror{Error: One or more tests failed}
