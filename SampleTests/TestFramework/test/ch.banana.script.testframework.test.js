@@ -129,7 +129,7 @@ TestFrameworkExample.prototype.testOutputMethods = function() {
       'count': 100,
       'color': "yellow"
    };
-   Test.logger.addJsonValue("This is a json value", JSON.stringify(obj));
+   Test.logger.addJson("This is a json value", JSON.stringify(obj));
 
    // This add an xml value
    var xml =
@@ -139,7 +139,7 @@ TestFrameworkExample.prototype.testOutputMethods = function() {
          "<heading>Reminder</heading>" +
          "<body>Don't forget me this weekend!</body>" +
          "</note>";
-   Test.logger.addXmlValue("This is a xml value", xml);
+   Test.logger.addXml("This is a xml value", xml);
 
    // This add a report
    var report = Banana.Report.newReport("Report title");
