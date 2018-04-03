@@ -5,7 +5,7 @@ This test case is a simple example where all the functionalities of the [BananaA
 ## Create a new test case
 
 * Create a folder `test` in the same folder where the BananaApp is located.
-* Copy the file ['test/ch.banana.script.testframework.test.js'](test/ch.banana.script.bananaapp.test.js) to the `test` folder.
+* Copy the file ['test/ch.banana.script.testframework.test.js'](test/ch.banana.script.testframework.test.js) to the `test` folder.
 * Rename the file with the same file name as the BananaApp, set the extention as `.test.js`.
 * If you have `ac2` files for the test case, create a folder `test/testcases` and copy the files there.
 * If you are working with GIT copy the `.gitignore` file too.
