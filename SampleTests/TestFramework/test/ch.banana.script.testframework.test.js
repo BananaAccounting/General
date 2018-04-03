@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-// @id = ch.banana.script.bananaapp.test
+// @id = ch.banana.script.testframework.test
 // @api = 1.0
 // @pubdate = 2018-04-03
 // @publisher = Banana.ch SA
@@ -26,33 +26,33 @@
 // @timeout = -1
 
 // Include the BananaApp to test
-// @includejs = ../ch.banana.script.bananaapp.js
+// @includejs = ../ch.banana.script.testframework.js
 
 // Register this test case to be executed
-Test.registerTestCase(new TestLoggerSimpleExample());
+Test.registerTestCase(new TestFrameworkExample());
 
 // Define the test class, the name of the class is not important
-function TestLoggerSimpleExample() {
+function TestFrameworkExample() {
 
 }
 
 // This method will be called at the beginning of the test case
-TestLoggerSimpleExample.prototype.initTestCase = function() {
+TestFrameworkExample.prototype.initTestCase = function() {
    this.progressBar = Banana.application.progressBar;
 }
 
 // This method will be called at the end of the test case
-TestLoggerSimpleExample.prototype.cleanupTestCase = function() {
+TestFrameworkExample.prototype.cleanupTestCase = function() {
 
 }
 
 // This method will be called before every test method is executed
-TestLoggerSimpleExample.prototype.init = function() {
+TestFrameworkExample.prototype.init = function() {
 
 }
 
 // This method will be called after every test method is executed
-TestLoggerSimpleExample.prototype.cleanup = function() {
+TestFrameworkExample.prototype.cleanup = function() {
 
 }
 
@@ -60,7 +60,7 @@ TestLoggerSimpleExample.prototype.cleanup = function() {
 // You can defiend as many test methods as you need
 
 // This is test method
-TestLoggerSimpleExample.prototype.testOk = function() {
+TestFrameworkExample.prototype.testOk = function() {
 
    Test.logger.addText("This test will pass :-)");
 
@@ -68,14 +68,14 @@ TestLoggerSimpleExample.prototype.testOk = function() {
 }
 
 // This is an other test method
-TestLoggerSimpleExample.prototype.testFailure = function() {
+TestFrameworkExample.prototype.testFailure = function() {
 
    Test.logger.addText("This test will fail :-(");
 
    Test.assert(false);
 }
 
-TestLoggerSimpleExample.prototype.testVerifyMethods = function() {
+TestFrameworkExample.prototype.testVerifyMethods = function() {
 
    Test.logger.addText("The object Test defines methods to verify conditions.");
 
@@ -108,7 +108,7 @@ TestLoggerSimpleExample.prototype.testVerifyMethods = function() {
    Test.assertMatchRegExp("Text ends with", /ends/);
 }
 
-TestLoggerSimpleExample.prototype.testOutputMethods = function() {
+TestFrameworkExample.prototype.testOutputMethods = function() {
 
    Test.logger.addText("The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.");
 
@@ -157,7 +157,7 @@ TestLoggerSimpleExample.prototype.testOutputMethods = function() {
 
 }
 
-TestLoggerSimpleExample.prototype.testBananaApps = function() {
+TestFrameworkExample.prototype.testBananaApps = function() {
 
    Test.logger.addText("This test will tests the BananaApp ch.banana.script.bananaapp.js");
 
@@ -167,7 +167,7 @@ TestLoggerSimpleExample.prototype.testBananaApps = function() {
    Test.logger.addKeyValue("Result of methos 'findBiggestTransactionAmount()'", findBiggestTransactionAmount(document));
 }
 
-TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
+TestFrameworkExample.prototype.testResultsSplitting = function() {
 
    Test.logger.addText("This test split the results over more files");
 
@@ -192,12 +192,12 @@ TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
    groupLogger.close();
 }
 
-TestLoggerSimpleExample.prototype.testLocalMethod = function() {
+TestFrameworkExample.prototype.testLocalMethod = function() {
 
    Test.logger.addText(this.localMethod());
 }
 
 // This method doesn't start with 'test', it will not be runned by the test case, but can be used by any method
-TestLoggerSimpleExample.prototype.localMethod = function() {
+TestFrameworkExample.prototype.localMethod = function() {
    return "I'm just a local function";
 }
