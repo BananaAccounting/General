@@ -15,7 +15,7 @@
 
 // @id = ch.banana.script.testframework.test
 // @api = 1.0
-// @pubdate = 2018-04-03
+// @pubdate = 2018-04-04
 // @publisher = Banana.ch SA
 // @description = Simple test case
 // @task = app.command
@@ -150,6 +150,20 @@ TestFrameworkExample.prototype.testOutputMethods = function() {
    var document = Banana.application.openDocument("file:script/../test/testcases/ch.banana.script.bananaapp.testcase.ac2");
    Test.assert(document);
    Test.logger.addTable("This is a table", document.table("Transactions"), ["Date", "Description", "Amount"]);
+
+   // This add a csv string
+   var csv = [
+            ["Date", "Description", "Amount", "Account", "Category"].join("\t"),
+            ["20180105", "Purchase", "100.00", "Bank", "Office"].join("\t"),
+            ["20180112", "Sales", "50.00", "Cash", "Goods"].join("\t"),
+            ["20180121", "Sales", "120.00", "Cash", "Goods"].join("\t")
+         ].join("\n");
+
+   Test.logger.addCsv("This is a csv value", csv);
+   Test.logger.addCsv("This is a subset of a csv value", csv, ["Date", "Category", "Description"]);
+
+   // This add a raw text
+   Test.logger.addRawText("This is a raw text.\\\\"); // Notice the four \ for endline
 
    // This add a fatal error to the test log file
    // A fatal error will be reported while comparing the current results with the expeceted results
