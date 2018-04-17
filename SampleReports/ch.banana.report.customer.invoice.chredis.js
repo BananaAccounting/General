@@ -59,26 +59,26 @@ function settingsDialog() {
       return;
 
    if (param.print_isr === 1) {
-      param.PagamentoPer_riga1 = Banana.Ui.getText('Settings', texts.param_PagamentoPer_riga1, param.PagamentoPer_riga1);
-      if (param.PagamentoPer_riga1 === undefined)
+      param.einzahlungFur_row1 = Banana.Ui.getText('Settings', texts.param_einzahlungFur_row1, param.einzahlungFur_row1);
+      if (param.einzahlungFur_row1 === undefined)
          return;
-      param.PagamentoPer_riga2 = Banana.Ui.getText('Settings', texts.param_PagamentoPer_riga2, param.PagamentoPer_riga2);
-      if (param.PagamentoPer_riga2 === undefined)
+      param.einzahlungFur_row2 = Banana.Ui.getText('Settings', texts.param_einzahlungFur_row2, param.einzahlungFur_row2);
+      if (param.einzahlungFur_row2 === undefined)
          return;
-      param.isr_account = Banana.Ui.getText('Settings', texts.param_isr_account, param.isr_account);
-      if (param.isr_account === undefined)
+      param.post_account = Banana.Ui.getText('Settings', texts.param_post_account, param.post_account);
+      if (param.post_account === undefined)
          return;
 	 
-      param.aFavoreDi_IBAN = Banana.Ui.getText('Settings', texts.param_aFavoreDi_IBAN, param.aFavoreDi_IBAN);
-      if (param.aFavoreDi_IBAN === undefined)
+      param.zugunstenVon_IBAN = Banana.Ui.getText('Settings', texts.param_zugunstenVon_IBAN, param.zugunstenVon_IBAN);
+      if (param.zugunstenVon_IBAN === undefined)
          return;
 	  	 
       param.isr_id = Banana.Ui.getText('Settings', texts.param_isr_id, param.isr_id);
       if (param.isr_id === undefined)
          return;
 	 
-	  param.isr_communication = Banana.Ui.getText('Settings', texts.param_isr_communication, param.isr_communication);
-      if (param.isr_communication === undefined)
+	  param.isr_zahlungszweck = Banana.Ui.getText('Settings', texts.param_isr_zahlungszweck, param.isr_zahlungszweck);
+      if (param.isr_zahlungszweck === undefined)
          return;
 	 
       param.isr_position_scaleX = Banana.Ui.getText('Settings', texts.param_isr_position_scaleX, param.isr_position_scaleX);
