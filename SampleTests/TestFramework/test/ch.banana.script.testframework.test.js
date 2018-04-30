@@ -13,9 +13,9 @@
 // limitations under the License.
 //
 
-// @id = ch.banana.script.bananaapp.test
+// @id = ch.banana.script.testframework.test
 // @api = 1.0
-// @pubdate = 2018-03-30
+// @pubdate = 2018-04-04
 // @publisher = Banana.ch SA
 // @description = Simple test case
 // @task = app.command
@@ -25,51 +25,57 @@
 // @inputdataform = none
 // @timeout = -1
 
-// @includejs = ../ch.banana.script.bananaapp.js
+// Include the BananaApp to test
+// @includejs = ../ch.banana.script.testframework.js
 
-// Register test case to be executed
-Test.registerTestCase(new TestLoggerSimpleExample());
+// Register this test case to be executed
+Test.registerTestCase(new TestFrameworkExample());
 
-// Here we define the class, the name of the class is not important
-function TestLoggerSimpleExample() {
+// Define the test class, the name of the class is not important
+function TestFrameworkExample() {
 
 }
 
 // This method will be called at the beginning of the test case
-TestLoggerSimpleExample.prototype.initTestCase = function() {
+TestFrameworkExample.prototype.initTestCase = function() {
    this.progressBar = Banana.application.progressBar;
 }
 
 // This method will be called at the end of the test case
-TestLoggerSimpleExample.prototype.cleanupTestCase = function() {
+TestFrameworkExample.prototype.cleanupTestCase = function() {
 
 }
 
 // This method will be called before every test method is executed
-TestLoggerSimpleExample.prototype.init = function() {
+TestFrameworkExample.prototype.init = function() {
 
 }
 
 // This method will be called after every test method is executed
-TestLoggerSimpleExample.prototype.cleanup = function() {
+TestFrameworkExample.prototype.cleanup = function() {
 
 }
 
-TestLoggerSimpleExample.prototype.testOk = function() {
+// Every method with the prefix 'test' are executed automatically as test method
+// You can defiend as many test methods as you need
+
+// This is test method
+TestFrameworkExample.prototype.testOk = function() {
 
    Test.logger.addText("This test will pass :-)");
 
    Test.assert(true);
 }
 
-TestLoggerSimpleExample.prototype.testFailure = function() {
+// This is an other test method
+TestFrameworkExample.prototype.testFailure = function() {
 
    Test.logger.addText("This test will fail :-(");
 
    Test.assert(false);
 }
 
-TestLoggerSimpleExample.prototype.testVerifyMethods = function() {
+TestFrameworkExample.prototype.testVerifyMethods = function() {
 
    Test.logger.addText("The object Test defines methods to verify conditions.");
 
@@ -102,7 +108,7 @@ TestLoggerSimpleExample.prototype.testVerifyMethods = function() {
    Test.assertMatchRegExp("Text ends with", /ends/);
 }
 
-TestLoggerSimpleExample.prototype.testOutputMethods = function() {
+TestFrameworkExample.prototype.testOutputMethods = function() {
 
    Test.logger.addText("The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.");
 
@@ -123,7 +129,7 @@ TestLoggerSimpleExample.prototype.testOutputMethods = function() {
       'count': 100,
       'color': "yellow"
    };
-   Test.logger.addJsonValue("This is a json value", JSON.stringify(obj));
+   Test.logger.addJson("This is a json value", JSON.stringify(obj));
 
    // This add an xml value
    var xml =
@@ -133,7 +139,7 @@ TestLoggerSimpleExample.prototype.testOutputMethods = function() {
          "<heading>Reminder</heading>" +
          "<body>Don't forget me this weekend!</body>" +
          "</note>";
-   Test.logger.addXmlValue("This is a xml value", xml);
+   Test.logger.addXml("This is a xml value", xml);
 
    // This add a report
    var report = Banana.Report.newReport("Report title");
@@ -145,13 +151,27 @@ TestLoggerSimpleExample.prototype.testOutputMethods = function() {
    Test.assert(document);
    Test.logger.addTable("This is a table", document.table("Transactions"), ["Date", "Description", "Amount"]);
 
+   // This add a csv string
+   var csv = [
+            ["Date", "Description", "Amount", "Account", "Category"].join("\t"),
+            ["20180105", "Purchase", "100.00", "Bank", "Office"].join("\t"),
+            ["20180112", "Sales", "50.00", "Cash", "Goods"].join("\t"),
+            ["20180121", "Sales", "120.00", "Cash", "Goods"].join("\t")
+         ].join("\n");
+
+   Test.logger.addCsv("This is a csv value", csv);
+   Test.logger.addCsv("This is a subset of a csv value", csv, ["Date", "Category", "Description"]);
+
+   // This add a raw text
+   Test.logger.addRawText("This is a raw text.\\\\"); // Notice the four \ for endline
+
    // This add a fatal error to the test log file
    // A fatal error will be reported while comparing the current results with the expeceted results
    Test.logger.addFatalError("This is a fatal error message");
 
 }
 
-TestLoggerSimpleExample.prototype.testBananaApps = function() {
+TestFrameworkExample.prototype.testBananaApps = function() {
 
    Test.logger.addText("This test will tests the BananaApp ch.banana.script.bananaapp.js");
 
@@ -161,11 +181,11 @@ TestLoggerSimpleExample.prototype.testBananaApps = function() {
    Test.logger.addKeyValue("Result of methos 'findBiggestTransactionAmount()'", findBiggestTransactionAmount(document));
 }
 
-TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
+TestFrameworkExample.prototype.testResultsSplitting = function() {
 
    Test.logger.addText("This test split the results over more files");
 
-   // Write results in a new file called testresults 
+   // Write results in a new file called testresults
    var testLogger = Test.logger.newLogger("testresults");
    testLogger.addText("This text will be written in file testresults.txt");
    testLogger.close();
@@ -186,3 +206,12 @@ TestLoggerSimpleExample.prototype.testResultsSplitting = function() {
    groupLogger.close();
 }
 
+TestFrameworkExample.prototype.testLocalMethod = function() {
+
+   Test.logger.addText(this.localMethod());
+}
+
+// This method doesn't start with 'test', it will not be runned by the test case, but can be used by any method
+TestFrameworkExample.prototype.localMethod = function() {
+   return "I'm just a local function";
+}

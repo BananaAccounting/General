@@ -1,11 +1,11 @@
-# SampleTest1
+# TestFramework example
 
 This test case is a simple example where all the functionalities of the [BananaApps Test Framework](https://www.banana.ch/doc9/en/node/9026) are showed. This example is ideal as template for new test cases.
 
 ## Create a new test case
 
 * Create a folder `test` in the same folder where the BananaApp is located.
-* Copy the file ['test/ch.banana.script.bananaapp.test.js'](test/ch.banana.script.bananaapp.test.js) to the `test` folder.
+* Copy the file ['test/ch.banana.script.testframework.test.js'](test/ch.banana.script.testframework.test.js) to the `test` folder.
 * Rename the file with the same file name as the BananaApp, set the extention as `.test.js`.
 * If you have `ac2` files for the test case, create a folder `test/testcases` and copy the files there.
 * If you are working with GIT copy the `.gitignore` file too.
@@ -58,3 +58,5 @@ test/
       *.txt
     ...  
 ```
+
+If you want to put the test scripts in another folder, you can specify the path through the BananaApp parameter [`@testapp`](https://www.banana.ch/doc9/en/node/4715#attribute_testapp)

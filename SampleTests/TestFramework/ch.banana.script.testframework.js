@@ -13,11 +13,11 @@
 // limitations under the License.
 //
 
-// @id = ch.banana.script.bananaapp
+// @id = ch.banana.script.testframework
 // @api = 1.0
 // @pubdate = 2018-03-30
 // @publisher = Banana.ch SA
-// @description = Simple app for using Test.logger class
+// @description = Banana Test Framework Example
 // @task = app.command
 // @doctype = *.*
 // @docproperties = 
