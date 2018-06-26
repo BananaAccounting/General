@@ -22,14 +22,13 @@
 %
 \begin{testcase}{TestFrameworkExample}
 \begin{test}{testOk}
-\textvalue{This test will pass :-)}\\
+\textvalue{This test will pass}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testFailure}
-\textvalue{This test will fail :-(}\\
-\keyvalue{Result}{Failed}
-\fatalerror{Error: Assertion failed}
-\info{Location}{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/TestFramework/test/ch.banana.script.testframework.test.js - 75}
+\textvalue{This test will verify that a failure occurs}\\
+\textvalue{Error: Assertion failed}\\
+\keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testVerifyMethods}
 \textvalue{The object Test defines methods to verify conditions.}\\
@@ -38,7 +37,7 @@
 \begin{test}{testOutputMethods}
 \textvalue{The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.}\\
 %This is a comment
-\info{This is an info}{25 giugno 2018 14:34:15 CEST}
+\info{This is an info}{26 giugno 2018 11:29:57 CEST}
 \textvalue{This is a text}\\
 \begin{jsonvalue}{This is a json value}
 {
@@ -82,7 +81,7 @@ Date & Category & Description\\
 20180121 & Goods & Sales\\
 \end{tablevalue}
 This is a raw text.\\
-\fatalerror{This is a fatal error message}
+\textvalue{ignored fatal error: This is a fatal error message}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testBananaApps}
@@ -98,6 +97,5 @@ This is a raw text.\\
 \textvalue{I'm just a local function}\\
 \keyvalue{Result}{Passed}
 \end{test}
-\fatalerror{Error: One or more tests failed}
 \end{testcase}
 \end{document}
