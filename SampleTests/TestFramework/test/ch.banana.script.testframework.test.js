@@ -59,7 +59,7 @@ TestFrameworkExample.prototype.cleanup = function() {
 // Every method with the prefix 'test' are executed automatically as test method
 // You can defiend as many test methods as you need
 
-// This is test method
+// This is a test method
 TestFrameworkExample.prototype.testOk = function() {
 
    Test.logger.addText("This test will pass");
