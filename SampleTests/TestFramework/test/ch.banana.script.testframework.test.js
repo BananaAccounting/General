@@ -59,10 +59,10 @@ TestFrameworkExample.prototype.cleanup = function() {
 // Every method with the prefix 'test' are executed automatically as test method
 // You can defiend as many test methods as you need
 
-// This is test method
+// This is a test method
 TestFrameworkExample.prototype.testOk = function() {
 
-   Test.logger.addText("This test will pass :-)");
+   Test.logger.addText("This test will pass");
 
    Test.assert(true);
 }
@@ -70,9 +70,14 @@ TestFrameworkExample.prototype.testOk = function() {
 // This is an other test method
 TestFrameworkExample.prototype.testFailure = function() {
 
-   Test.logger.addText("This test will fail :-(");
+   Test.logger.addText("This test will verify that a failure occurs");
 
-   Test.assert(false);
+   try {
+      Test.assert(false);
+      Test.logger.addFatalError("Should not be called");
+   } catch (err) {
+      Test.logger.addText(err);
+   }
 }
 
 TestFrameworkExample.prototype.testVerifyMethods = function() {
@@ -167,7 +172,9 @@ TestFrameworkExample.prototype.testOutputMethods = function() {
 
    // This add a fatal error to the test log file
    // A fatal error will be reported while comparing the current results with the expeceted results
+   Test.logger.ignoreFatalErrors(true);
    Test.logger.addFatalError("This is a fatal error message");
+   Test.logger.ignoreFatalErrors(false);
 
 }
 
@@ -213,5 +220,6 @@ TestFrameworkExample.prototype.testLocalMethod = function() {
 
 // This method doesn't start with 'test', it will not be runned by the test case, but can be used by any method
 TestFrameworkExample.prototype.localMethod = function() {
+
    return "I'm just a local function";
 }

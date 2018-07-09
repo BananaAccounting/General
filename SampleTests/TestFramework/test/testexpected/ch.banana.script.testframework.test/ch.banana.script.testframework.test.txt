@@ -1,12 +1,12 @@
 %%info_test_name{ch.banana.script.testframework.test}
 \documentclass{report}
+\usepackage{longtable}
 \usepackage{color}
-\usepackage{adjustbox}
 \usepackage{listings}
 \usepackage[margin=1cm]{geometry}
 \begin{document}
-\newenvironment{tablevalue}[2]{\textbf{Table: #1}\\\begin{adjustbox}{max width=\textwidth}\tabular{#2}}{\endtabular\end{adjustbox}\\}
-\newenvironment{reportvalue}[1]{\textbf{Report: #1}\\}{\\}
+\newenvironment{tablevalue}[2]{\textbf{Table: #1}\begin{longtable}[l]{#2}}{\end{longtable}}
+\newenvironment{reportvalue}[1]{\textbf{Report: #1}\\}{}
 \lstnewenvironment{jsonvalue}[1]{\textbf{Json: #1}\lstset{language=Java}}{}
 \lstnewenvironment{xmlvalue}[1]{\textbf{Xml: #1}\lstset{language=Xml}}{}
 \newcommand{\info}[2]{\textit{#1: #2}\\}
@@ -14,6 +14,7 @@
 \newcommand{\keyvalue}[2]{\textbf{Keyvalue: #1} #2\\}
 \newcommand{\textvalue}[1]{#1\\}
 \newcommand{\excltest}[1]{\\Excluded from compare: #1}
+\newcommand{\lognewpage}{\newpage}
 \newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
 \newenvironment{test}[1]{\section*{Test case: #1}}{}
 %Begin test data
@@ -21,24 +22,23 @@
 %
 \begin{testcase}{TestFrameworkExample}
 \begin{test}{testOk}
-\textvalue{This test will pass :-)}
+\textvalue{This test will pass}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testFailure}
-\textvalue{This test will fail :-(}
-\keyvalue{Result}{Failed}
-\fatalerror{Error: Assertion failed}
-\info{Location}{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/TestFramework/test/ch.banana.script.testframework.test.js - 75}
+\textvalue{This test will verify that a failure occurs}\\
+\textvalue{Error: Assertion failed}\\
+\keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testVerifyMethods}
-\textvalue{The object Test defines methods to verify conditions.}
+\textvalue{The object Test defines methods to verify conditions.}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testOutputMethods}
-\textvalue{The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.}
+\textvalue{The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.}\\
 %This is a comment
-\info{This is an info}{4 aprile 2018 11:49:51 CEST}
-\textvalue{This is a text}
+\info{This is an info}{26 giugno 2018 11:29:57 CEST}
+\textvalue{This is a text}\\
 \begin{jsonvalue}{This is a json value}
 {
     "color": "yellow",
@@ -81,22 +81,21 @@ Date & Category & Description\\
 20180121 & Goods & Sales\\
 \end{tablevalue}
 This is a raw text.\\
-\fatalerror{This is a fatal error message}
+\textvalue{ignored fatal error: This is a fatal error message}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testBananaApps}
-\textvalue{This test will tests the BananaApp ch.banana.script.bananaapp.js}
+\textvalue{This test will tests the BananaApp ch.banana.script.bananaapp.js}\\
 \keyvalue{Result of methos 'findBiggestTransactionAmount()'}{8000.00}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testResultsSplitting}
-\textvalue{This test split the results over more files}
+\textvalue{This test split the results over more files}\\
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testLocalMethod}
-\textvalue{I'm just a local function}
+\textvalue{I'm just a local function}\\
 \keyvalue{Result}{Passed}
 \end{test}
-\fatalerror{Error: One or more tests failed}
 \end{testcase}
 \end{document}
