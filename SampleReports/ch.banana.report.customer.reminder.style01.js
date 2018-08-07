@@ -14,10 +14,10 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2016-11-14
+// @pubdate = 2018-08-07
 // @publisher = Banana.ch SA
 // @description = Payment reminder
-// @description.it = Richiamo di pagamento 
+// @description.it = Richiamo di pagamento
 // @description.de = Zahlungserinnerung
 // @description.fr = Rappel de paiement 
 // @description.nl = Betalingsherinnering
@@ -143,7 +143,7 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
         business_name += reminderObj.supplier_info.last_name;
       }
     }
-    tableRow.addCell(business_name.toUpperCase(), "logo left bold");
+    tableRow.addCell(business_name.toUpperCase(), "logo right bold");
     
     tableRow = tab.addRow();
     var cell = tableRow.addCell("");
@@ -441,6 +441,7 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".subtotal_cell", "font-weight:bold;");
     repStyleObj.addStyle(".center", "text-align:center");
     repStyleObj.addStyle(".left", "text-align:left");
+    repStyleObj.addStyle(".right", "text-align:right");
     repStyleObj.addStyle(".bold", "font-weight: bold");
     repStyleObj.addStyle(".title", "font-size:18pt;");
     repStyleObj.addStyle(".items_table_header", "font-weight:bold; background-color:" + param.color_2);
