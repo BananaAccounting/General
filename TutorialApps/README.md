@@ -6,7 +6,7 @@
 2. clic on the button **Row** or right clic on the button **Row** and choose "Save as"
 
 ## Documentation
-* [BananaApp Documentation] (http://doc8.banana.ch/en/node/4065)
+* [BananaApp Documentation] (https://www.banana.ch/doc9/en/node/4065)
 
 ##Tutorial as an embedded BananaApp
 BananaApps can be embedded in the accounting file.
