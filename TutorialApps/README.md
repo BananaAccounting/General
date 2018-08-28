@@ -15,7 +15,7 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 
 ### Use the tutorial: 
 
-1. Start Banana Accounting 8
+1. Start Banana Accounting
 2. Download and open the ac2 tutorial file 
 3. Move to  the table "Documents"
 4. Select cell of the column **Attachments**
