@@ -8,12 +8,12 @@
 ## Documentation
 * [BananaApp Documentation] (https://www.banana.ch/doc9/en/node/4065)
 
-##Tutorial as an embedded BananaApp
+### Tutorial as an embedded BananaApp
 BananaApps can be embedded in the accounting file.
 Embedded script run only for the specific file, but don't need to be installed. 
 A  tutorial is a  Banana accounting file that includes many BananaApps that show how to construct the BananaApp and let  experiment by changing the code. 
 
-##Use the tutorial: 
+### Use the tutorial: 
 
 1. Start Banana Accounting 8
 2. Download and open the ac2 tutorial file 
