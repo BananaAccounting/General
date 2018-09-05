@@ -10,9 +10,6 @@
 
 ![search_tutorial_template](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/search_tutorial_templates.png)
 
-## Documentation
-* [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065)
-
 ### Tutorial as an embedded BananaApp
 BananaApps can be embedded in the accounting file.
 Embedded script run only for the specific file, but don't need to be installed. 
@@ -39,3 +36,5 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 
 [tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial2.js) contains all the javascript codes used for the [Tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true).
 
+## Documentation
+* [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065)
