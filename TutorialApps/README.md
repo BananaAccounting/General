@@ -26,6 +26,14 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 
 ![manage_tutorial_apps](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/manage_tutorial_app.png)
 
+By clicking the first icon the BananaApps is executed and returns a report like the following:
+
+![report_example](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/report_example.png)
+
+By clicking the second icon, an editor is opened and it is possible to see and modify the JavaScript code:
+
+![javascript_editor](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/javascript_editor.png)
+
 ## Tutorial available
 [Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
 
