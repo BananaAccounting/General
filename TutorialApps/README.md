@@ -1,6 +1,6 @@
 # BananaApp Tutorial
 
-**To download the files**
+**Download template files**
 
 1. Start Banana Accounting
 2. Click on menu **File** -> **New**
