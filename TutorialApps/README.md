@@ -18,8 +18,8 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 ### Use the tutorial: 
 
 1. Start Banana Accounting
-2. Download and open the ac2 tutorial file 
-3. Move to  the table **Documents**
+2. Open the ac2 tutorial file 
+3. Move to the table **Documents**
 4. Select cell of the column **Attachments**
    * Choose the **first icon** to start the scripts
    * Choose the **second icon** to edit and experiment with the script 
