@@ -1,12 +1,15 @@
-#BananaApp Tutorial
+# BananaApp Tutorial
 
 **To download the files**
 
-1. clic on the link of the file name
-2. clic on the button **Row** or right clic on the button **Row** and choose "Save as"
+1. Start Banana Accounting
+2. Click on menu **File** -> **New**
+3. On the Search section digit "Tutorial"
+4. On the right side select **Tutorial 1** or **Tutorial 2** from the templates
+5. The selected tutorial template is now ready to be used
 
 ## Documentation
-* [BananaApp Documentation] (https://www.banana.ch/doc9/en/node/4065)
+* [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065)
 
 ### Tutorial as an embedded BananaApp
 BananaApps can be embedded in the accounting file.
@@ -17,18 +20,18 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 
 1. Start Banana Accounting
 2. Download and open the ac2 tutorial file 
-3. Move to  the table "Documents"
+3. Move to  the table **Documents**
 4. Select cell of the column **Attachments**
    * Choose the **first icon** to start the scripts
    * Choose the **second icon** to edit and experiment with the script 
 
 ## Tutorial available
-[Tutorial1.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
+[Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
 
-[Tutorial2.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
+[Tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
  
 ## Tutorial javascript codes
-[tutorial1.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial1.js) contains all the javascript codes used for the [Tutorial1.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true).
+[tutorial1.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial1.js) contains all the javascript codes used for the [Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true).
 
-[tutorial2.js] (https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial2.js) contains all the javascript codes used for the [Tutorial2.ac2] (https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true).
+[tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial2.js) contains all the javascript codes used for the [Tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true).
 
