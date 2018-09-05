@@ -8,6 +8,8 @@
 4. On the right side select **Tutorial 1** or **Tutorial 2** from the templates
 5. The selected tutorial template is now ready to be used
 
+![search_tutorial_template](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/search_tutorial_templates.png)
+
 ## Documentation
 * [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065)
 
@@ -24,6 +26,8 @@ A  tutorial is a  Banana accounting file that includes many BananaApps that show
 4. Select cell of the column **Attachments**
    * Choose the **first icon** to start the scripts
    * Choose the **second icon** to edit and experiment with the script 
+
+![manage_tutorial_apps](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/manage_tutorial_app.png)
 
 ## Tutorial available
 [Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
