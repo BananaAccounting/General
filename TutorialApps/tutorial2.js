@@ -1,4 +1,4 @@
-// Copyright [2015] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2018] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 /** 
     File:        tutorial2.ac2
-    Id:          001
+    Id:          100
     Description: Account statement - account and period choice
 */
 //@description="Return a table with all transactions for the given account and period"
@@ -206,7 +206,7 @@ function createStyleSheet() {
 
 /** 
     File:        tutorial2.ac2
-    Id:          002
+    Id:          101
     Description: Account statement - more accounts print (without accounts/period choice)
 */
 //@description = "Account statement - two accounts report"
@@ -439,7 +439,7 @@ function createStyleSheet() {
 
 /** 
     File:        tutorial2.ac2
-    Id:          003
+    Id:          300
     Description: Export a value from Banana into a text file (.txt)
 */
 // @id = ch.banana.apps.export
@@ -472,13 +472,13 @@ function exec() {
 
 /** 
     File:        tutorial2.ac2
-    Id:          004
-    Description: Export tutorial javascript codes
+    Id:          301
+    Description: Export Tutorial2 javascript codes
 */
-// @id = ch.banana.apps.exportjavascriptcodes.js
+// @id = ch.banana.apps.exportjavascriptcodestutorial2.js
 // @api = 1.0
 // @publisher = Banana.ch SA
-// @description = Export javascript codes of the tutorial examples
+// @description = Export javascript codes of the tutorial 2 examples
 // @task = export.file
 // @doctype = *.*
 // @docproperties = 
@@ -504,7 +504,7 @@ function exec() {
         //We use this variable to save all the codes
         var jsCode = '';
 
-        jsCode += '// Copyright [2015] [Banana.ch SA - Lugano Switzerland]' + '\n';
+        jsCode += '// Copyright [2018] [Banana.ch SA - Lugano Switzerland]' + '\n';
         jsCode += '// ' + '\n';
         jsCode += '// Licensed under the Apache License, Version 2.0 (the "License");' + '\n';
         jsCode += '// you may not use this file except in compliance with the License.' + '\n';
@@ -565,6 +565,26 @@ function getJavascriptCode(jsCode, documents) {
     //Finally we return the variable containing all the codes of all the examples
     return jsCode;
 }
+
+
+
+
+
+
+/** 
+    File:        tutorial2.ac2
+    Id:          logo
+    Description: banana.jpg image
+*/
+{
+    "_attachements": {
+        "_0": {
+            "contentType": "image/jpg",
+            "data": "0000095978da9dd57938d46b1b07f0df2c8c3dc3d865981924868c6590b1240aa79721913524d9c3c1d80f2a92f7286b542447284cd6c91a92e92884b18d7d575a66aca3339957e77a977fde3fcefb7eefebf9ebbeaffb7a3ed7f3c7c399e0cc03c25616961600080402ce1e16c09902cc001e6e6e1837170f0c06e3e5e5e11340080af0f30b4889881e411c9546ca1d95969595c7a82bcba3d4d0b2b2c7f02a6a2734b5b5b591cafa043d9ca1ba9636eec712102f2faf00bf80a4a0a0244e415601f73f87d309c079000c500e01a100301c048183383d001200405ca03f03fc33203004cac50de3e1e5e33f1c681406c02008040c85707141a187ddf8c33e0085738928689a728b123d61a850042ee96e090ffa546d9798dd1003a3e51596cccb272e212925ada8a47c4ce5b8b68e2e5e4fdfc0ecb4b9c599b39656f6e71d2e383a5d74f6beec73c5f7aa9f7ff8cf119151a4e89894eb376ea6a6dd4acfcacec9cdcbbf5750f8b8f4b7b227e515954febea1b1a9b282f9a5bba5ff5bceea5bef9bd6f7884363a363e31495f585c5a5e595d5bfff091b9b9b5bdb3bbc7dafff6c3050220a07fe5bfbae0872e30140a81c27eb840e0a81f037028978226b7882911e6192a8ac225f1204edd2da9ede2456bd931c4bcc286f8c431da0b8acc1fb43f657f0d96fc7fc9fe0dfb8f8b0e084040878f078103c6c0de471c21e06d07c1460d291465a6da3b1798166c21cf0124ca48f949713255acd529dbc2390f71afc12ba7b7f0832ff02f91513b95b7dbd9491f42b436be4c133d14d92798baeda571e6cf47501d798bb38b5f3fedc1a36f0cf55e738ad7bc13ff6cbd18c13ecd984b59768a0818a6a8b5f6c0d5d7a636d2cb0394d49b0c5a54fb038d0c58a883154fbce38549bdb950ee517697ce282bbb3746e3865a1039c2252b6f0f5ba76c3e2db94468af40de7d4f748f4a6492bb9ce3abdb56bff9b177a6d1c9d877a5189f9b16068ec41212c59c297e9d3e504caabefccb7e0d0750b90dc1e8c65c0a3791c9712c986593188407ab8acdadcd10d67ccaf1449c6a19839cc93eb9a4944590db8b63aaefdd34a72fc4874edbc26c2c5d716c5746c86ec62ecedf422ae85db2194a18f1244c6baeccf431db8791d05a452d9b9ab191dd6c7a53486a2a6dba06e87f9dd2c646c29eac3d1a72dd4b37f42b2119cdea47dc1fe2cd3772f5c79f5caae10ad3e500726c78a85e5a7f2c8f3115db814838fdbe1132b2fe740c3f46cfcdc1378563c6b6e449cb6677fa6269f5d647db34b4076a7bd32fce0c809368d913c4e758cb63641d9a910109d5bdf248c2d1516f29be4d267f0be3e8b0502cb5eeae4189fe3960e501351387d36df1a5d91e314b448fa5efabbe2a5270535e326da3ed48793e4fb56dc6d5b78a11b792a8e3625f5a347a6d601b2d7d7e91e3f654c3cc3aa522ec2db42f00293ad8c6da5dda0e924b3147d8c2720ede2337cfbdfcbca9b1e18e65ac753e5b9289b79ceb817ff0f03d76e273a656e4d7d0116475bc0253a2ab8eb5f40a39293cab58baff41e3deba535cf392945ce3f2db3ff0fe7e0f8b9429ae3baf5b13990e9a17da3940f5cddd33452c970bf73b8de1a3d5eeb3df2fbdd025a3d45772f19772b63142825148c48e0d3725537dfea0fbf0f20fd7b38de905deea6226e6c4f10ca193ab2d837c71a091ed73eee344da0ebe23d65744edf87de1e7cbbe95bdb176aca9f98c0e05a62bfd20b78a5fdf3754ed164a9c3e2f743e597344c7edc62c3523ee54d368094dedf2a821c1a764ff4ec22a7dd464dfb4d7252b7ca7666b31bce125344e60c05211b5cc01c6455d0cca3b056d1c9dbe90db9cf60cee8b28e5916eabb87786178fb5d8c0d92aede307c87523198336787fd9dd0276d60573a0a27350d62bb33e44736ed6e6cd668007787d338ebb85e952957a5e149cd9b670fe27f454668952c381a8fb87c86221c3abf40d2bbaed26b4b6a7472b78fa85e4ba6527d9366521b7c798c78761b3fbc0c23768ce7ff3d7a13f86946706620422aae604d8e2e754bb6376932a3fde0e17af5c8163347334257f97dffc5b34ea7ea2c4ce84b5cfc7e890547741f7d809b6ccbc9e2f976ebf7a89e63d93723d7d3d08da38d794813b93b95896ce2d6f68af9a341d1d18ba9fe43696cd90701b718f25b15d833e055fa3a884c8a85aa518ca854e8f51528c786748277b9be8cbced3f6539dc3207e13b33a5cdd2f2e7a83e846bd86e23776746ae655ba2239ed00a79b1ddbfa89229db368920aad509f180c5c421419beff6ca8cab45ab3194e791d047ddf66d264e5436cf943d4fdeda3388996a10e54793af2e24da7bc8f17d94920c15401cd07bb33964bc6c9e309c799ed8369e8314fcaaf57d2f6b1202fddc764570e506f25ad37b7c612c3466784fcbda53ce5111301f72f74982d795a5d973933dd40ecb95e2b2bf4dbf241eeea01be69d4f1d4b06f33a3ba28f55258deac534f5d06240f934788dd2307b17219b107a2f15e04e7413bf1fc533ae9e65984be4e5fa877c9da764dc2debc3af9d944e5a8a19b62ff27173b518c4fe9596aa0e8035ad9230ffbf0058f5bda2f85d8b2c3649dd6ed468a563f9f6101dac8fb4e1b64ddaf582ccec5b3260e4d0b66132ab0fdf5aed420ed5ab0e61bc5686a057bfd058b101fc1e81ee916ac9a4a6deac05b872ecb8a2974b8fad6386d39cf0ab32e72a7ce9fb3eea6bf7e1773a37dfbb3aaf655fb600780aa7cc75ebf1c1bf23d121158154ded3ac2c5f2ee291427475475898df659af4487e1bf55eca6b4c58858ae7d2fdce8906645751a28a79dee403255e7fcd5c81279c3dea4e5bb14885e6f22dfda95ef0f7754030a12ebd83fa129092798cfbd0892955d35530bd46e552478a6a38c30d94e9b1408509aa9942e6a3d53b9c301a49f3df9a2dc98c93dd460ed01675f0e52da8b9a0cd651e94912e2b575ab2d9aec55318c2ea1931c1773078acb60e974de125252604e5f69c4ae527bbe094b23e2f0bfb04118d50bd46269f5fb60b08c90a4b7fee796ecde44ae1ab6c3526cb1f099aa5721b2fdf04d67704f90b97b3307b892a31dfa729071dc794baedb80686daec085209afcd583e44cfe036b535188"
+        }
+    }
+}
+
 
 
 

@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.app.accountstatementwithreceipt
 // @api = 1.0
-// @pubdate = 2017-02-24
+// @pubdate = 2017-08-21
 // @publisher = Banana.ch SA
 // @description = Account Statement with receipt
 // @task = app.command
@@ -264,7 +264,7 @@ function exec(string) {
 			//Footer
 			var pageFooter = report.getFooter();
 			pageFooter.addClass("footer");
-			pageFooter.addText("Banana Accounting, v. " + Banana.document.info("Base", "ProgramVersion") + ", script v. " + pubdate, "footer");
+			//pageFooter.addText("Banana Accounting, v. " + Banana.document.info("Base", "ProgramVersion") + ", script v. " + pubdate, "footer");
 			
 			
 			//------------------------------------------------------------------------------//
