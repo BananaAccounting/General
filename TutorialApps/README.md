@@ -8,7 +8,7 @@
 4. On the right side select **JavaScript Tutorial 1** or **JavaScript Tutorial 2** from the templates
 5. The selected tutorial template is now ready to be used
 
-![search_tutorial_template](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/search_tutorial_templates.png)
+
 
 ### Tutorial as an embedded BananaApp
 BananaApps can be embedded in the accounting file.
