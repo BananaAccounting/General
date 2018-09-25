@@ -15,8 +15,7 @@ BananaApps can be embedded in the accounting file.
 Embedded script run only for the specific file, but don't need to be installed. 
 A  tutorial is a  Banana accounting file that includes many BananaApps that show how to construct the BananaApp and let  experiment by changing the code. 
 
-### Use the tutorial: 
-
+### Use the JavaScript Tutorial BananaApp:
 1. Start Banana Accounting
 2. Open the ac2 tutorial file 
 3. Move to the table **Documents**
