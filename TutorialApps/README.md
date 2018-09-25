@@ -5,7 +5,7 @@
 1. Start Banana Accounting
 2. Click on menu **File** -> **New**
 3. On the Search section digit "Tutorial"
-4. On the right side select **Tutorial 1** or **Tutorial 2** from the templates
+4. On the right side select **javascript_tutorial 1** or **javascript_tutorial 2** from the templates
 5. The selected tutorial template is now ready to be used
 
 ![search_tutorial_template](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/search_tutorial_templates.png)
