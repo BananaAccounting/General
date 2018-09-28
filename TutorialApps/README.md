@@ -1,4 +1,4 @@
-# BananaApp JavaScript Tutorial
+# BananaApps JavaScript Tutorial
 
 **Download template files**
 
