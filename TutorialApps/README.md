@@ -1,4 +1,4 @@
-# Embedded JavaScript BananaApps Tutorial
+# Embedded BananaApps JavaScript Tutorial
 
 **Download template files**
 
