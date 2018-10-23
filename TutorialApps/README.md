@@ -39,9 +39,9 @@ By clicking the second icon, an editor is opened and it is possible to see and m
 [embedded_javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
  
 ## Tutorial javascript codes
-[embedded_javascript_tutorial1.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial1.js) contains all the javascript codes used for the [javascript_tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/javascript_tutorial1.ac2?raw=true).
+[embedded_javascript_tutorial1.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial1.js) contains all the javascript codes used for the [embedded_javascript_tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial1.ac2?raw=true).
 
-[embedded_javascript_tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial2.js) contains all the javascript codes used for the [javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/javascript_tutorial2.ac2?raw=true).
+[embedded_javascript_tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial2.js) contains all the javascript codes used for the [embedded_javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial2.ac2?raw=true).
 
 ## Documentation
 * See the [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065) to discover all the available features that allow you to create your own BananaApps.
