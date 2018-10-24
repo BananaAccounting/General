@@ -44,4 +44,4 @@ By clicking the second icon, an editor is opened and it is possible to see and m
 [embedded_javascript_tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial2.js) contains all the javascript codes used for the [embedded_javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial2.ac2?raw=true).
 
 ## Documentation
-* See the [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065) to discover all the available features that allow you to create your own BananaApps.
+* See the [BananaApps Documentation](https://www.banana.ch/doc9/en/node/4065) to discover all the available features that allow you to create your own BananaApps.
