@@ -1,6 +1,12 @@
-# Embedded BananaApps JavaScript Tutorial
+# BananaApps JavaScript and API Tutorial
 
-**Download template files**
+Banana does allow to have BananaApps that are embedded within a Banana File.
+We have prepared tutorial files that include samples code for most API.
+- You can see how the API works and experiment with it.
+- Just downaload and open a tutorial file in Banana.
+
+
+## Download template files
 
 1. Start Banana Accounting
 2. Click on menu **File** -> **New**
