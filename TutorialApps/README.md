@@ -1,11 +1,17 @@
-# BananaApp Tutorial
+# BananaApps JavaScript and API Tutorial
 
-**Download template files**
+Banana does allow to have BananaApps that are embedded within a Banana File.
+We have prepared tutorial files that include samples code for most API.
+- You can see how the API works and experiment with it.
+- Just downaload and open a tutorial file in Banana.
+
+
+## Download template files
 
 1. Start Banana Accounting
 2. Click on menu **File** -> **New**
 3. On the Search section digit "Tutorial"
-4. On the right side select **Tutorial 1** or **Tutorial 2** from the templates
+4. On the right side select **JavaScript Tutorial 1** or **JavaScript Tutorial 2** from the templates
 5. The selected tutorial template is now ready to be used
 
 ![search_tutorial_template](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/search_tutorial_templates.png)
@@ -15,8 +21,7 @@ BananaApps can be embedded in the accounting file.
 Embedded script run only for the specific file, but don't need to be installed. 
 A  tutorial is a  Banana accounting file that includes many BananaApps that show how to construct the BananaApp and let  experiment by changing the code. 
 
-### Use the tutorial: 
-
+### Use the JavaScript Tutorial BananaApp:
 1. Start Banana Accounting
 2. Open the ac2 tutorial file 
 3. Move to the table **Documents**
@@ -35,14 +40,14 @@ By clicking the second icon, an editor is opened and it is possible to see and m
 ![javascript_editor](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/images/javascript_editor.png)
 
 ## Tutorial available
-[Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
+[embedded_javascript_tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial1.ac2?raw=true) let you try the basic functionalities, starting with a "Hello World" example
 
-[Tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
+[embedded_javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial2.ac2?raw=true) let you try the complete examples, starting with a formatted "Account statement"
  
 ## Tutorial javascript codes
-[tutorial1.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial1.js) contains all the javascript codes used for the [Tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial1.ac2?raw=true).
+[embedded_javascript_tutorial1.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial1.js) contains all the javascript codes used for the [embedded_javascript_tutorial1.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial1.ac2?raw=true).
 
-[tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/tutorial2.js) contains all the javascript codes used for the [Tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/tutorial2.ac2?raw=true).
+[embedded_javascript_tutorial2.js](https://raw.githubusercontent.com/BananaAccounting/General/master/TutorialApps/embedded_javascript_tutorial2.js) contains all the javascript codes used for the [embedded_javascript_tutorial2.ac2](https://github.com/BananaAccounting/General/blob/master/TutorialApps/embedded_javascript_tutorial2.ac2?raw=true).
 
 ## Documentation
-* See the [BananaApp Documentation](https://www.banana.ch/doc9/en/node/4065) to discover all the available features that allow you to create your own BananaApps.
+* See the [BananaApps Documentation](https://www.banana.ch/doc9/en/node/4065) to discover all the available features that allow you to create your own BananaApps.
