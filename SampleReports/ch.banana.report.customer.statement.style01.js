@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.statement.style01.js
 // @api = 1.0
-// @pubdate = 2016-11-14
+// @pubdate = 2018-11-28
 // @publisher = Banana.ch SA
 // @description = Customer Statement
 // @description.it = Estratto cliente 
@@ -473,7 +473,7 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".addressCol1R0","width:%");
     repStyleObj.addStyle(".addressCol2R0","width:%");
 
-    repStyleObj.addStyle(".repTableCol1","width:10%"); //10
+    /*repStyleObj.addStyle(".repTableCol1","width:10%"); //10
     repStyleObj.addStyle(".repTableCol2","width:11%"); //11
     repStyleObj.addStyle(".repTableCol3","width:12%"); //12
     repStyleObj.addStyle(".repTableCol4","width:12%"); //12
@@ -482,7 +482,7 @@ function setInvoiceStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".repTableCol7","width:11%"); //11
     repStyleObj.addStyle(".repTableCol8","width:11%"); //11
     repStyleObj.addStyle(".repTableCol9","width:7%");   //-
-    repStyleObj.addStyle(".repTableCol10","width:15%");//15
+    repStyleObj.addStyle(".repTableCol10","width:15%");//15*/
 
 
     //====================================================================//
