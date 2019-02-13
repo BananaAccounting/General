@@ -18,14 +18,20 @@
 
 
 /** 
-    File:        tutorial2.ac2
+    File:        embedded_javascript_tutorial2.ac2
     Id:          100
     Description: Account statement - account and period choice
 */
-//@description="Return a table with all transactions for the given account and period"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialaccountstatement
+// @description = Tutorial: Return an account statement for the given account and period
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -205,14 +211,20 @@ function createStyleSheet() {
 
 
 /** 
-    File:        tutorial2.ac2
+    File:        embedded_javascript_tutorial2.ac2
     Id:          101
     Description: Account statement - more accounts print (without accounts/period choice)
 */
-//@description = "Account statement - two accounts report"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialaccountstatements
+// @description = Tutorial: Return a multiple accounts statements
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -438,15 +450,14 @@ function createStyleSheet() {
 
 
 /** 
-    File:        tutorial2.ac2
+    File:        embedded_javascript_tutorial2.ac2
     Id:          300
     Description: Export a value from Banana into a text file (.txt)
 */
 // @id = ch.banana.apps.export
 // @api = 1.0
 // @doctype = *.*
-// @docproperties = Export
-// @description = Export into a text file (.txt)
+// @description = Tutorial: Export a value from Banana into a text file (*.txt)
 // @task = export.file
 // @exportfiletype = txt
 // @timeout = -1
@@ -471,14 +482,14 @@ function exec() {
 
 
 /** 
-    File:        tutorial2.ac2
+    File:        embedded_javascript_tutorial2.ac2
     Id:          301
     Description: Export Tutorial2 javascript codes
 */
 // @id = ch.banana.apps.exportjavascriptcodestutorial2.js
 // @api = 1.0
 // @publisher = Banana.ch SA
-// @description = Export javascript codes of the tutorial 2 examples
+// @description = Tutorial: Export javascript codes of the tutorial 2 examples
 // @task = export.file
 // @doctype = *.*
 // @docproperties = 
@@ -572,7 +583,7 @@ function getJavascriptCode(jsCode, documents) {
 
 
 /** 
-    File:        tutorial2.ac2
+    File:        embedded_javascript_tutorial2.ac2
     Id:          logo
     Description: banana.jpg image
 */
