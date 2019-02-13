@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2018-08-07
+// @pubdate = 2019-02-13
 // @publisher = Banana.ch SA
 // @description = Payment reminder
 // @description.it = Richiamo di pagamento
@@ -245,6 +245,8 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
     if (status.length>13) {
       status = status.substr(0,13) + ".";
     }
+    if (status == 'paidInvoice')
+       status = texts.paidinvoice;
     tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
   }
 
@@ -571,6 +573,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Divisa';
   texts.invoice_status = 'Situazione';
+  texts.paidinvoice = 'pagato';
   texts.reminder = 'Richiamo di pagamento';
   }
   else if (language == 'de')
@@ -578,13 +581,14 @@ function setTexts(language) {
   texts.customer = 'Kunde-Nr';
   texts.date = 'Datum';
   texts.page = 'Seite';
-  texts.invoice_no = 'Rechnung-Nr';
+  texts.invoice_no = 'Rg.-Nr';
   texts.invoice_date = 'Datum';
   texts.invoice_debit = 'Soll';
   texts.invoice_credit = 'Haben';
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Währung';
   texts.invoice_status = 'Status';
+  texts.paidinvoice = 'bezahlt';
   texts.reminder = 'Zahlungserinnerung';
   }
   else if (language == 'fr')
@@ -599,6 +603,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Solde';
   texts.invoice_currency = 'Devise';
   texts.invoice_status = 'Situation';
+  texts.paidinvoice = 'payé';
   texts.reminder = 'Rappel de paiement';
   }
   else if (language == 'nl')
@@ -613,6 +618,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Valuta';
   texts.invoice_status = 'Status';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Betalingsherinnering';
   }
   else
@@ -627,6 +633,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Balance';
   texts.invoice_currency = 'Currency';
   texts.invoice_status = 'Status';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Payment reminder';
   }
   return texts;
