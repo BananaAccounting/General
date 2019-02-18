@@ -367,7 +367,7 @@ function printReminder(jsonObj, repDocObj, repStyleObj, param) {
        status = texts.paidinvoice;
     else if (status == 'openBalance')
        status = texts.openBalance;
-    tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
+    tableRow.addCell(status, "status padding-left padding-right border-left" + classTotal, 1);
   }
 
   tableRow = repTableObj.addRow();
@@ -482,6 +482,7 @@ function setStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".padding-right", "padding-right:5px");
     repStyleObj.addStyle(".padding-left", "padding-left:5px");
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
+    repStyleObj.addStyle(".status", "font-size:10pt;");
     repStyleObj.addStyle(".subtotal_cell", "font-weight:bold; background-color:" + param.color_1 + "; color: " + param.color_2 + "; padding:5px");
     repStyleObj.addStyle(".thin-border-top", "border-top:thin solid " + param.color_1);
     repStyleObj.addStyle(".title", "font-size:18pt;padding-bottom:10px");

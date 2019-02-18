@@ -249,7 +249,7 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
        status = texts.paidinvoice;
     else if (status == 'openBalance')
        status = texts.openBalance;
-    tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
+    tableRow.addCell(status, "status padding-left padding-right border-left" + classTotal, 1);
   }
 
   //Set reminder style
@@ -458,6 +458,7 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".padding-right", "padding-right:3px");
     repStyleObj.addStyle(".padding-left", "padding-left:3px");
     repStyleObj.addStyle(".padding-bottom", "padding-bottom:5px");
+    repStyleObj.addStyle(".status", "font-size:10pt;");
     repStyleObj.addStyle(".addressCol1","width:43%");
     repStyleObj.addStyle(".addressCol2","width:43%");
     repStyleObj.addStyle(".addressCol1R0","width:100%");
