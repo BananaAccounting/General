@@ -247,6 +247,8 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
     }
     if (status == 'paidInvoice')
        status = texts.paidinvoice;
+    else if (status == 'openBalance')
+       status = texts.openBalance;
     tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
   }
 
@@ -573,6 +575,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Divisa';
   texts.invoice_status = 'Situazione';
+  texts.openbalance = 'saldo apertura';
   texts.paidinvoice = 'pagato';
   texts.reminder = 'Richiamo di pagamento';
   }
@@ -588,6 +591,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Währung';
   texts.invoice_status = 'Status';
+  texts.openbalance = 'Eröffnungssaldo';
   texts.paidinvoice = 'bezahlt';
   texts.reminder = 'Zahlungserinnerung';
   }
@@ -603,6 +607,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Solde';
   texts.invoice_currency = 'Devise';
   texts.invoice_status = 'Situation';
+  texts.openbalance = 'solde ouvert';
   texts.paidinvoice = 'payé';
   texts.reminder = 'Rappel de paiement';
   }
@@ -618,6 +623,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Valuta';
   texts.invoice_status = 'Status';
+  texts.openbalance = 'open balance';
   texts.paidinvoice = 'paid';
   texts.reminder = 'Betalingsherinnering';
   }
@@ -633,6 +639,7 @@ function setTexts(language) {
   texts.invoice_balance = 'Balance';
   texts.invoice_currency = 'Currency';
   texts.invoice_status = 'Status';
+  texts.openbalance = 'open balance';
   texts.paidinvoice = 'paid';
   texts.reminder = 'Payment reminder';
   }

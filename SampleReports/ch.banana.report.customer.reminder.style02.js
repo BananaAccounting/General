@@ -365,6 +365,8 @@ function printReminder(jsonObj, repDocObj, repStyleObj, param) {
     }
     if (status == 'paidInvoice')
        status = texts.paidinvoice;
+    else if (status == 'openBalance')
+       status = texts.openBalance;
     tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
   }
 
@@ -577,6 +579,7 @@ function setTexts(language) {
   texts.param_font_family = 'Tipo carattere';
   texts.param_print_header = 'Includi intestazione pagina (1=si, 0=no)';
   texts.param_print_logo = 'Stampa logo (1=si, 0=no)';
+  texts.openbalance = 'saldo apertura';
   texts.paidinvoice = 'pagato';
   texts.reminder = 'Richiamo di pagamento';
   }
@@ -598,6 +601,7 @@ function setTexts(language) {
   texts.param_font_family = 'Typ Schriftzeichen';
   texts.param_print_header = 'Seitenüberschrift einschliessen (1=ja, 0=nein)';
   texts.param_print_logo = 'Logo ausdrucken (1=ja, 0=nein)';
+  texts.openbalance = 'Eröffnungssaldo';
   texts.paidinvoice = 'bezahlt';
   texts.reminder = 'Zahlungserinnerung';
   }
@@ -619,6 +623,7 @@ function setTexts(language) {
   texts.param_font_family = 'Police de caractère';
   texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
   texts.param_print_logo = 'Imprimer logo (1=oui, 0=non)';
+  texts.openbalance = 'solde ouvert';
   texts.paidinvoice = 'payé';
   texts.reminder = 'Rappel de paiement';
   }
@@ -640,6 +645,7 @@ function setTexts(language) {
   texts.param_font_family = 'Lettertype';
   texts.param_print_header = 'Pagina-koptekst opnemen (1=ja, 0=nee)';
   texts.param_print_logo = 'Druklogo (1=ja, 0=nee)';
+  texts.openbalance = 'open balance';
   texts.paidinvoice = 'paid';
   texts.reminder = 'Betalingsherinnering';
   }
@@ -661,6 +667,7 @@ function setTexts(language) {
   texts.param_font_family = 'Font type';
   texts.param_print_header = 'Include page header (1=yes, 0=no)';
   texts.param_print_logo = 'Print logo (1=yes, 0=no)';
+  texts.openbalance = 'open balance';
   texts.paidinvoice = 'paid';
   texts.reminder = 'Payment reminder';
   }
