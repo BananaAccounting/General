@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2018-08-06
+// @pubdate = 2019-02-13
 // @publisher = Banana.ch SA
 // @description = Payment reminder, with logo
 // @description.it = Richiamo di pagamento, con logo
@@ -363,7 +363,11 @@ function printReminder(jsonObj, repDocObj, repStyleObj, param) {
     if (status.length>13) {
       status = status.substr(0,13) + ".";
     }
-    tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
+    if (status == 'paidInvoice')
+       status = texts.paidinvoice;
+    else if (status == 'openBalance')
+       status = texts.openBalance;
+    tableRow.addCell(status, "status padding-left padding-right border-left" + classTotal, 1);
   }
 
   tableRow = repTableObj.addRow();
@@ -478,6 +482,7 @@ function setStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".padding-right", "padding-right:5px");
     repStyleObj.addStyle(".padding-left", "padding-left:5px");
     repStyleObj.addStyle(".pageReset", "counter-reset: page");
+    repStyleObj.addStyle(".status", "font-size:10pt;");
     repStyleObj.addStyle(".subtotal_cell", "font-weight:bold; background-color:" + param.color_1 + "; color: " + param.color_2 + "; padding:5px");
     repStyleObj.addStyle(".thin-border-top", "border-top:thin solid " + param.color_1);
     repStyleObj.addStyle(".title", "font-size:18pt;padding-bottom:10px");
@@ -575,6 +580,8 @@ function setTexts(language) {
   texts.param_font_family = 'Tipo carattere';
   texts.param_print_header = 'Includi intestazione pagina (1=si, 0=no)';
   texts.param_print_logo = 'Stampa logo (1=si, 0=no)';
+  texts.openBalance = 'saldo apertura';
+  texts.paidinvoice = 'pagato';
   texts.reminder = 'Richiamo di pagamento';
   }
   else if (language == 'de')
@@ -583,7 +590,7 @@ function setTexts(language) {
   texts.date = 'Datum';
   texts.err_msg01 = 'Logo nicht gefunden. Benutzen Sie bitte den Befehl \'Datei - Logo einrichten...\'';
   texts.page = 'Seite';
-  texts.invoice_no = 'Rechnung-Nr';
+  texts.invoice_no = 'Rg.-Nr';
   texts.invoice_date = 'Datum';
   texts.invoice_debit = 'Soll';
   texts.invoice_credit = 'Haben';
@@ -595,6 +602,8 @@ function setTexts(language) {
   texts.param_font_family = 'Typ Schriftzeichen';
   texts.param_print_header = 'Seitenüberschrift einschliessen (1=ja, 0=nein)';
   texts.param_print_logo = 'Logo ausdrucken (1=ja, 0=nein)';
+  texts.openBalance = 'Eröffnungssaldo';
+  texts.paidinvoice = 'bezahlt';
   texts.reminder = 'Zahlungserinnerung';
   }
   else if (language == 'fr')
@@ -615,6 +624,8 @@ function setTexts(language) {
   texts.param_font_family = 'Police de caractère';
   texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
   texts.param_print_logo = 'Imprimer logo (1=oui, 0=non)';
+  texts.openBalance = 'solde ouvert';
+  texts.paidinvoice = 'payé';
   texts.reminder = 'Rappel de paiement';
   }
   else if (language == 'nl')
@@ -635,6 +646,8 @@ function setTexts(language) {
   texts.param_font_family = 'Lettertype';
   texts.param_print_header = 'Pagina-koptekst opnemen (1=ja, 0=nee)';
   texts.param_print_logo = 'Druklogo (1=ja, 0=nee)';
+  texts.openBalance = 'open balance';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Betalingsherinnering';
   }
   else
@@ -655,6 +668,8 @@ function setTexts(language) {
   texts.param_font_family = 'Font type';
   texts.param_print_header = 'Include page header (1=yes, 0=no)';
   texts.param_print_logo = 'Print logo (1=yes, 0=no)';
+  texts.openBalance = 'open balance';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Payment reminder';
   }
   return texts;

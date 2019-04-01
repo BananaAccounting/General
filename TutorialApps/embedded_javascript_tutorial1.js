@@ -18,14 +18,20 @@
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          100
     Description: Hello World
 */
-//@description="Hello World"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialhelloworld
+// @description = Tutorial: Hello world
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -45,14 +51,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          200
     Description: Add several paragraphs
 */
-//@description="Stylesheet - Add several paragraphs"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialaddseveralparagraphs
+// @description = Tutorial: Add several paragraphs
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -80,14 +92,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          201
     Description: Add the header
 */
-//@description="Report - Add the header with some styles"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialheaderstyles
+// @description = Tutorial: Add the header with some styles
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -115,14 +133,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          202
     Description: Add the footer
 */
-//@description="Report - Add the footer with some styles"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialfooterstyles
+// @description = Tutorial: Add the footer with some styles
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -153,14 +177,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          203
     Description: Add an image
 */
-//@description="Report - Add an image"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialimage
+// @description = Tutorial: Add an image
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -187,14 +217,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          204
     Description: Add page break
 */
-//@description="Page break"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialpagebreak
+// @description = Tutorial: Page break
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -220,14 +256,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          205
     Description: Add attachments
 */
-//@description="Attachments"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialattachments
+// @description = Tutorial: Attachments
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report attachments');
@@ -264,14 +306,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          206
     Description: Print multiple reports
 */
-//@description="Multiple reports"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialmultiplereports
+// @description = Tutorial: Multiple reports
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
 	var docs = [];
 	var styles = [];
@@ -306,14 +354,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          210
     Description: Create a table with one row
 */
-//@description="Create a table with one row"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtableonerow
+// @description = Tutorial: Create a table with one row
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -338,14 +392,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          211
     Description: Create a table with multiple rows
 */
-//@description="Create a table with multiple rows"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtablemultiplerows
+// @description = Tutorial: Create a table with multiple rows
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -380,14 +440,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          212
     Description: Create a table with multiple rows and a header
 */
-//@description="How to create a table in the report"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtablewithheader
+// @description = Tutorial: Create a table with multiple rows and header
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -430,14 +496,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          213
     Description: Create a table with multiple rows, header and borders
 */
-//@description="Create a table with multiple rows, header and borders"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtablewithheaderandborders
+// @description = Tutorial: Create a table with multiple rows, header and borders
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -486,14 +558,225 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
+    Id:          214
+    Description: Create a table with fixed columns widths
+*/
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtablecolumnswidth
+// @description = Tutorial: Create a table with fixed columns width
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
+function exec() {
+
+   var report = Banana.Report.newReport("Javascrip Tutorial - Table with fixed column widths");
+   
+   /* Create the table */
+   var table = report.addTable("table");
+   
+   /* Add columns */
+   var column1 = table.addColumn("col1");
+   var column2 = table.addColumn("col2");
+   var column3 = table.addColumn("col3");
+   var column4 = table.addColumn("col4");
+
+   var row;
+   
+   /* Add a row with cells */
+   row = table.addRow(); //Add a row
+   row.addCell("A", "", 1); //add first cell
+   row.addCell("B", "", 1); //add second cell
+   row.addCell("C", "", 1); //add third cell
+   row.addCell("D", "", 1); //add fourth cell
+
+   //Add more rows...
+
+   /* Print the report */
+   var stylesheet = createStyleSheet();
+   Banana.Report.preview(report, stylesheet);
+}
+
+function createStyleSheet() {
+   var stylesheet = Banana.Report.newStyleSheet();
+
+   var style = stylesheet.addStyle(".table");
+	style.setAttribute("width","100%"); //table takes all the page width
+	stylesheet.addStyle("table.table td", "border: thin solid black");
+
+   /* Set column widths */
+   stylesheet.addStyle(".col1", "width:10%");
+   stylesheet.addStyle(".col2", "width:55%");
+   stylesheet.addStyle(".col3", "width:30%");
+   stylesheet.addStyle(".col4", "width:5%");
+   
+   return stylesheet;
+}
+
+
+
+
+
+
+/** 
+    File:        embedded_javascript_tutorial1.ac2
+    Id:          215
+    Description: Add multiple paragraphs in one cell
+*/
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcellmultipleparagraphs
+// @description = Tutorial: Add multiple paragraphs in one cell of the table
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
+function exec() {
+   
+   var report = Banana.Report.newReport("Javascrip Tutorial - Add multiple paragraphs in one cell");
+   
+   /* Create the table */
+   var table = report.addTable("table");
+   var row;
+   
+   /* Add a row */
+   row = table.addRow(); 
+   
+   /* Add first cell with paragraphs*/
+   var cell1 = row.addCell("", "", 1);
+   cell1.addParagraph("First paragraph...", "");
+   cell1.addParagraph("Second paragraph...", "");
+   cell1.addParagraph(" "); //empty paragraph
+   cell1.addParagraph("Fourth paragraph...", "");
+
+   /* Add second cell without paragraphs */
+   var cell2 = row.addCell("Cell2...", "", 1);
+
+   /* Print the report */
+   var stylesheet = createStyleSheet();
+   Banana.Report.preview(report, stylesheet);
+
+}
+
+function createStyleSheet() {
+   var stylesheet = Banana.Report.newStyleSheet();
+
+   style = stylesheet.addStyle(".table");
+   style.setAttribute("width","100%");
+   stylesheet.addStyle("table.table td", "border: thin solid black");
+   
+   return stylesheet;
+}
+
+
+
+
+
+
+/** 
+    File:        embedded_javascript_tutorial1.ac2
+    Id:          216
+    Description: Create a table with fixed columns and cells span
+*/
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialtablefixedcolumnscellspan
+// @description = Tutorial: Create a table with fixed columns and cells span
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
+function exec() {
+
+   var report = Banana.Report.newReport("Javascrip Tutorial - Simple Table");
+   
+   /* Create the table */
+   var table = report.addTable("table");
+   
+   /* Add columns */
+   var column1 = table.addColumn("col1");
+   var column2 = table.addColumn("col2");
+   var column3 = table.addColumn("col3");
+   var column4 = table.addColumn("col4");
+   var row;
+   
+   /* 1st row */
+   row = table.addRow();
+   row.addCell("Row 1, Cell 1: span cell over 4 columns", "", 4); //span cell over 4 columns
+
+   /* 2nd row */
+   row = table.addRow();
+   row.addCell("Row 2, Cell 1: span cell over 2 columns", "", 2); //span cell over 2 columns
+   row.addCell("Row 2, Cell 3: span cell over 2 columns", "", 2); //span cell over 2 columns
+
+   /* 3rd row */
+   row = table.addRow();
+   row.addCell("Row 3, Cell 1", "", 1);
+   row.addCell("Row 3, Cell 2: span cell over 2 columns", "", 2); //span cell over 2 columns
+   row.addCell("Row 3, Cell 4", "", 1);
+
+   /* 4th row*/
+   row = table.addRow();
+   row.addCell("Row 4, Cell 1", "", 1);
+   row.addCell("Row 4, Cell 2", "", 1);
+   row.addCell("Row 4, Cell 3", "", 1);
+   row.addCell("Row 4, Cell 4", "", 1);
+
+   /* 5th row */
+   row = table.addRow();
+   row.addCell("Row 5, Cell 1: span cell over 3 columns", "", 3); //span cell over 3 columns
+   row.addCell("Row 5, Cell 4", "", 1);
+
+   /* Print the report */
+   var stylesheet = createStyleSheet();
+   Banana.Report.preview(report, stylesheet);
+
+}
+
+function createStyleSheet() {
+   var stylesheet = Banana.Report.newStyleSheet();
+
+   var style = stylesheet.addStyle(".table");
+   style.setAttribute("width","100%"); //table takes all the page width
+   stylesheet.addStyle("table.table td", "border: thin solid black; padding-top:10px; padding-bottom:10px;");
+
+   /* Set columns' width */
+   stylesheet.addStyle(".col1", "width:25%");
+   stylesheet.addStyle(".col2", "width:25%");
+   stylesheet.addStyle(".col3", "width:25%");
+   stylesheet.addStyle(".col4", "width:25%");
+
+   return stylesheet;
+}
+
+
+
+
+
+
+/** 
+    File:        embedded_javascript_tutorial1.ac2
     Id:          220
     Description: Set page margins
 */
-//@description="Stylesheet - set margins"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialstylesheetsetmargins
+// @description = Tutorial: Stylesheet set margins
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -519,14 +802,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          221
     Description: Set landscape page
 */
-//@description="Stylesheet - set landscape"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialstylesheetsetlandscape
+// @description = Tutorial: Stylesheet set landscape
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -552,14 +841,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          222
     Description: Add bold style to a text
 */
-//@description="Stylesheet - add bold style to a text"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialstylesheetboldtext
+// @description = Tutorial: Stylesheet add bold style to a text
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -585,14 +880,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          223
     Description: Add a font size to a text
 */
-//@description="Stylesheet - add a specific font size to a text"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialstylesheetfontsizetext
+// @description = Tutorial: Stylesheet add a specific font size to a text
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -618,14 +919,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          224
     Description: Add a color to a text
 */
-//@description="Stylesheet - add a color to a text"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialstylesheetcolortext
+// @description = Tutorial: Stylesheet add a color to a text
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -651,14 +958,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          225
     Description: First page/cover example
 */
-//@description="First page/cover example"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcoverpageexample
+// @description = Tutorial: First page/cover example
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport("Cover example");
@@ -715,23 +1028,35 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          300
     Description: Format numbers
 */
-//@description="Format number"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialformatnumbers
+// @description = Tutorial: Format numbers
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
 
     //Convert the value
-    var convertedAmount = Banana.Converter.toLocaleNumberFormat("1200.65");
+    var convertedAmount1 = Banana.Converter.toLocaleNumberFormat("1200.65");
+    var convertedAmount2 = Banana.Converter.toLocaleNumberFormat("0");
+    var convertedAmount3 = Banana.Converter.toLocaleNumberFormat(1234.56);
+    var convertedAmount4 = Banana.Converter.toLocaleNumberFormat(1);
 
     //Add the converted amount to the report's paragraph
-    report.addParagraph(convertedAmount);
+    report.addParagraph(convertedAmount1);
+    report.addParagraph(convertedAmount2);
+    report.addParagraph(convertedAmount3);
+    report.addParagraph(convertedAmount4);
 
     //Print the report
     var stylesheet = Banana.Report.newStyleSheet();
@@ -745,23 +1070,34 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          301
     Description: Format dates
 */
-//@description="Format number"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialformatdates
+// @description = Tutorial: Format dates
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
 
-    //Convert the value
-    var date = Banana.Converter.toLocaleDateFormat('2015-12-31');
+    //Convert the value: parameter is a string
+    var date1 = Banana.Converter.toLocaleDateFormat('2015-12-31');
+
+    //Convert the value: parameter is a date object
+    var d = new Date();
+    var date2 = Banana.Converter.toLocaleDateFormat(d);
 
     //Add the converted amount to the report's paragraph
-    report.addParagraph(date);
+    report.addParagraph(date1);
+    report.addParagraph(date2);
 
     //Print the report
     var stylesheet = Banana.Report.newStyleSheet();
@@ -775,14 +1111,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          302
     Description: Format transactions journal data
 */
-//@description="Format transactions journal data"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialformattransactionjournaldata
+// @description = Tutorial: Format transactions journal data
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -840,18 +1182,23 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          310
     Description: Basic mathematical operations (sum, subtract, multiply, divide)
 */
-//@description="SDecimal() functions - sum, subtract, multiply, divide"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialbasicmathematicaloperations
+// @description = Tutorial: Basic mathematical operations (sum, subtract, multiply, divide)
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
-
 
     //Do some mathematical operations and add the results to the report
 
@@ -883,14 +1230,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          311
-    Description: ABS utility
+    Description: abs function
 */
-//@description="SDecimal() functions - abs utility"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialabsfunction
+// @description = Tutorial: abs function 
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -913,14 +1266,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          312
     Description: Compare two values
 */
-//@description="SDecimal() functions - compare utility"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcomparevalues
+// @description = Tutorial: Compare two values
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -947,14 +1306,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          313
     Description: Invert sign of a value
 */
-//@description="SDecimal() functions - invert sign utility"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialinvertsign
+// @description = Tutorial: Invert value sign
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -980,14 +1345,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          314
     Description: Check the sign of a value
 */
-//@description="SDecimal() functions - check sign utility"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcheckvaluesign
+// @description = Tutorial: Check value sign
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1014,14 +1385,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          315
     Description: Number of decimals and rounding properties 
 */
-//@description="SDecimal() functions - Number of decimals and rounding properties"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialdecimalsrounding
+// @description = Tutorial: Number of decimals and rounding properties
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1055,14 +1432,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          320
     Description: Dialog information
 */
-//@description="Dialog window - information"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialinformationdialog
+// @description = Tutorial: Information dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Open a dialog window with an information
     Banana.Ui.showInformation('Title', 'This is the information message!');
@@ -1074,14 +1457,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          321
     Description: Dialog question
 */
-//@description="Dialog window - question"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialquestiondialog
+// @description = Tutorial: Question dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport("Report title");
@@ -1107,14 +1496,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          322
     Description: Dialog show text
 */
-//@description="Dialog window - show text"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialshowtextdialog
+// @description = Tutorial: Show text dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Open a dialog window showing the text.
     //In this case we want to show the table Accounts as html file
@@ -1128,14 +1523,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          323
     Description: Dialog input text
 */
-//@description="Dialog window - input text"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialinputtextdialog
+// @description = Tutorial: Input text dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport("Report title");
@@ -1158,14 +1559,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          324
     Description: Dialog item selection
 */
-//@description="Dialog window - item selection"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialitemselectiondialog
+// @description = Tutorial: Item selection dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1188,14 +1595,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          325
     Description: Dialog period selection
 */
-//@description="Dialog window - period selection"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialperiodselectiondialog
+// @description = Tutorial: Period selection dialog
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport("Report title");
@@ -1219,14 +1632,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          330
-    Description: Message 
+    Description: Show messages
 */
-//@description="Check length of Transactions Description"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialshowmessages
+// @description = Tutorial: Show messages
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     Banana.document.clearMessages();
 
@@ -1254,14 +1673,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          331
-    Description: Check Length of Transactions Description 
+    Description: Show messages linked to table Transaction
 */
-//@description="Check length of Transactions Description"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialshowmessageslinkedtotable
+// @description = Tutorial: Show messages linked to table Transactions
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     Banana.document.clearMessages();
 
@@ -1289,14 +1714,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          332
     Description: Clear all messages
 */
-//@description="Clear all messages"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialclearmessages
+// @description = Tutorial: Clear all messages
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     Banana.document.clearMessages();
 }
@@ -1307,15 +1738,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          400
-    Description: Save period settings
+    Description: Save settings
 */
-// @id = ch.banana.addons.savesettings
-// @description = Save settings
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialsavesettings
+// @description = Tutorial: Save settings
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
 // @inputdatasource = none
-// @task=app.command
 // @timeout = -1
+
 function exec() {
 
     //Create the report
@@ -1358,14 +1794,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          500
-    Description: Take basic accounting informations
+    Description: Retrieve basic accounting informations
 */
-//@description="Take basic accounting informations"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretrievebasicaccountinginformation
+// @description = Tutorial: Retrieve basic accounting information
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create report
     var report = Banana.Report.newReport('Report title');
@@ -1410,14 +1852,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          501
-    Description: Take address informations
+    Description: Retrieve address informations
 */
-//@description="Take address informations"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretrieveaddressinformation
+// @description = Tutorial: Retrieve address information
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create report
     var report = Banana.Report.newReport('Report title');
@@ -1472,14 +1920,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          510
-    Description: Take values from a table using findRowByValue() function
+    Description: Retrieve rows table values using findRowByValue() function
 */
-//@description="How to take values from a specific row of the table - Version A"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretrieverowstablevaluesusingfindrowbyvalue
+// @description = Tutorial: Retrieve rows table values using findRowByValue() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create report
     var report = Banana.Report.newReport("Report title");
@@ -1504,14 +1958,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          511
-    Description: Take values from a table using row
+    Description: Retrieve specific rows table values
 */
-//@description="Take values from specific row and table - Version B"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretrievespecificrowstablevalues
+// @description = Tutorial: Retrieve specific rows table values
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create report
     var report = Banana.Report.newReport("Report title");
@@ -1550,14 +2010,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          512
-    Description: Take values from a table using all the rows
+    Description: Retrieve rows table values
 */
-//@description="Read a whole table and take values"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretrieverowstablevalues
+// @description = Tutorial: Retrieve rows table values
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport('Report title');
@@ -1591,14 +2057,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          513
-    Description: Take values from a table using all the rows, and print only rows with an account number
+    Description: Retrieve rows table with account number
 */
-//@description="Read a whole table and take values only for rows that have an account number"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretretrieverowstablewithaccountnumber
+// @description = Tutorial: Retrieve rows table with account number
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport('Report title');
@@ -1636,14 +2108,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          514
     Description: Print all table rows in a table format
 */
-//@description="Read a whole table and take values only for rows that have an account number and print into a table"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialretprintrowstablewithaccountnumberintableformat
+// @description = Tutorial: Print rows table with account number in table format
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create a report
     var report = Banana.Report.newReport('Report title');
@@ -1701,14 +2179,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          515
     Description: Find all rows that match a condition using findRows
 */
-//@description="Find all rows that match a condition using findRows"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialfindrows
+// @description = Tutorial: Retrieve all rows table that match a condition using findRows
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     var tableAccounts = Banana.document.table('Accounts');
     var rows = tableAccounts.findRows(accountStartsWith25XX);
@@ -1730,14 +2214,20 @@ function accountStartsWith25XX(rowObj,rowNr,table) {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          516
-    Description: Show all rows that match a condition using extractRows
+    Description: Retrieve all rows that match a condition using extractRows
 */
-//@description="Show all rows that match a condition using extractRows"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialextractrows
+// @description = Tutorial: Retrieve all rows table that match a condition using extractRows
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     var tableAccounts = Banana.document.table('Accounts');
     tableAccounts.extractRows(accountStartsWith25XX, 'Accounts that start with 25XX');
@@ -1754,14 +2244,20 @@ function accountStartsWith25XX(rowObj,rowNr,table) {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          600
     Description: Amount of opening for all transactions for an account
 */
-//@description="Sum the amounts of opening for all transactions for an account"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancesingleaccount
+// @description = Tutorial: Retrieve amount of an account using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1789,14 +2285,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          601
     Description: Amount of opening for all transactions for multiple accounts
 */
-//@description="Sum the amounts of opening for all transactions for multiple accounts"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancemultipleaccounts
+// @description = Tutorial: Retrieve amount of multiple accounts using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1823,14 +2325,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          602
     Description: Amount of opening for all transactions for a single group
 */
-//@description="Sum the amounts of opening for all transactions for a single group"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancesinglegroup
+// @description = Tutorial: Retrieve amount of single group using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1858,14 +2366,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          603
     Description: Amount of opening for all transactions for multiple groups
 */
-//@description="Sum the amounts of opening for all transactions for multiple groups"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancemultiplegroups
+// @description = Tutorial: Retrieve amount of multiple groups using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1892,14 +2406,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          604
     Description: Amount of opening for all transactions for a BClass
 */
-//@description="Sum the amounts of opening for all transactions for a BClass"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancesinglebclass
+// @description = Tutorial: Retrieve amount of a single BClass using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1926,14 +2446,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          605
     Description: Amount of opening for all transactions for multiple BClass values
 */
-//@description="Sum the amounts of opening for all transactions for multiple BClass values"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentbalancemultiplebclass
+// @description = Tutorial: Retrieve amount of multiple BClass using currentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1960,14 +2486,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          610
     Description: Sum the Vat amounts for the specified vat code
 */
-//@description="Sum the vat amounts for the specified vat code"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialvatcurrentbalancesinglevatcode
+// @description = Tutorial: Sum the VAT amounts for single VAT code using vatCurrentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -1994,14 +2526,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          611
     Description: Sum the Vat amounts for multiple vat codes
 */
-//@description="Sum the vat amounts for multiple vat codes"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialvatcurrentbalancemultiplevatcodes
+// @description = Tutorial: Sum the VAT amounts for multiple VAT codes using vatCurrentBalance() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -2028,14 +2566,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          620
     Description: For a given account without specifying the period
 */
-//@description="Return a table with all transactions for the given account"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentcardnoperiod
+// @description = Tutorial: Use currentCard() function for a given account
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -2070,14 +2614,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          621
     Description: For a given account and period
 */
-//@description="Return a table with all transactions for the given account and period"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialcurrentcardwithperiod
+// @description = Tutorial: Use currentCard() function for a given account and period
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -2112,14 +2662,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          630
     Description: Get all transaction for normal accounts
 */
-//@description="Get all transacton for normal accounts"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialjournal
+// @description = Tutorial: Retrieve all transactions for normal accounts using the journal() function
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
     //Create the report
     var report = Banana.Report.newReport('Report title');
@@ -2155,14 +2711,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          700
     Description: Reading an xml file
 */
-//@description="Read an xml file"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialreadxmlfile
+// @description = Tutorial: Read an XML file
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
 
    // The xml file
@@ -2203,14 +2765,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          701
     Description: Writing an xml file
 */
-//@description="Write an xml file"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialwritexmlfile
+// @description = Tutorial: Write an XML file
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
 
    // Create document
@@ -2239,14 +2807,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          702
-    Description: Validating an xml file via xsd
+    Description: Validate an xml file via xsd
 */
-//@description="Validatind an xml file"
-//@inputdatasource = none
-//@task=app.command
-//@timeout = -1
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialxmlvalidation
+// @description = Tutorial: Validate an XML file via XSD
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
 function exec() {
 
    // The xml file
@@ -2279,7 +2853,35 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
+    Id:          710
+    Description: Ouput messages to the debug panel
+*/
+// @api = 1.0
+// @id = ch.banana.uni.app.tutorialdebugmessages
+// @description = Tutorial: Output messages to the debug panel
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Banana.ch SA
+// @pubdate = 2019-01-25
+// @inputdatasource = none
+// @timeout = -1
+
+function exec() {
+    Banana.console.log("An info message");
+    Banana.console.debug("A debug message");
+    Banana.console.warn("A warning message"); // Since Banana 9.0.4 use Banana.console.warning
+    Banana.console.critical("A critical message");
+}
+
+
+
+
+
+
+
+/** 
+    File:        embedded_javascript_tutorial1.ac2
     Id:          logo
     Description: banana.jpg image
 */
@@ -2299,7 +2901,7 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          xml
     Description: xml file
 */
@@ -2320,7 +2922,7 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          xsd
     Description: xsd file
 */
@@ -2360,19 +2962,20 @@ function exec() {
 
 
 /** 
-    File:        tutorial1.ac2
+    File:        embedded_javascript_tutorial1.ac2
     Id:          800
     Description: Export tutorial1 javascript codes
 */
 // @id = ch.banana.apps.exportjavascriptcodestutorial1.js
 // @api = 1.0
 // @publisher = Banana.ch SA
-// @description = Export javascript codes of the Tutorial 1 examples
+// @description = Tutorial: Export javascript codes of the Tutorial 1 examples
 // @task = export.file
 // @doctype = *.*
 // @docproperties = 
 // @timeout = -1
 // @exportfiletype = js
+
 //Main function
 function exec() {
 

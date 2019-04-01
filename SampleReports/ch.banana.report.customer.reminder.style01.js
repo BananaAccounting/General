@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2018-08-07
+// @pubdate = 2019-02-13
 // @publisher = Banana.ch SA
 // @description = Payment reminder
 // @description.it = Richiamo di pagamento
@@ -245,7 +245,11 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
     if (status.length>13) {
       status = status.substr(0,13) + ".";
     }
-    tableRow.addCell(status, "center padding-left padding-right border-left" + classTotal, 1);
+    if (status == 'paidInvoice')
+       status = texts.paidinvoice;
+    else if (status == 'openBalance')
+       status = texts.openBalance;
+    tableRow.addCell(status, "status padding-left padding-right border-left" + classTotal, 1);
   }
 
   //Set reminder style
@@ -454,6 +458,7 @@ function setReminderStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".padding-right", "padding-right:3px");
     repStyleObj.addStyle(".padding-left", "padding-left:3px");
     repStyleObj.addStyle(".padding-bottom", "padding-bottom:5px");
+    repStyleObj.addStyle(".status", "font-size:10pt;");
     repStyleObj.addStyle(".addressCol1","width:43%");
     repStyleObj.addStyle(".addressCol2","width:43%");
     repStyleObj.addStyle(".addressCol1R0","width:100%");
@@ -571,6 +576,8 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Divisa';
   texts.invoice_status = 'Situazione';
+  texts.openBalance = 'saldo apertura';
+  texts.paidinvoice = 'pagato';
   texts.reminder = 'Richiamo di pagamento';
   }
   else if (language == 'de')
@@ -578,13 +585,15 @@ function setTexts(language) {
   texts.customer = 'Kunde-Nr';
   texts.date = 'Datum';
   texts.page = 'Seite';
-  texts.invoice_no = 'Rechnung-Nr';
+  texts.invoice_no = 'Rg.-Nr';
   texts.invoice_date = 'Datum';
   texts.invoice_debit = 'Soll';
   texts.invoice_credit = 'Haben';
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Währung';
   texts.invoice_status = 'Status';
+  texts.openBalance = 'Eröffnungssaldo';
+  texts.paidinvoice = 'bezahlt';
   texts.reminder = 'Zahlungserinnerung';
   }
   else if (language == 'fr')
@@ -599,6 +608,8 @@ function setTexts(language) {
   texts.invoice_balance = 'Solde';
   texts.invoice_currency = 'Devise';
   texts.invoice_status = 'Situation';
+  texts.openBalance = 'solde ouvert';
+  texts.paidinvoice = 'payé';
   texts.reminder = 'Rappel de paiement';
   }
   else if (language == 'nl')
@@ -613,6 +624,8 @@ function setTexts(language) {
   texts.invoice_balance = 'Saldo';
   texts.invoice_currency = 'Valuta';
   texts.invoice_status = 'Status';
+  texts.openBalance = 'open balance';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Betalingsherinnering';
   }
   else
@@ -627,6 +640,8 @@ function setTexts(language) {
   texts.invoice_balance = 'Balance';
   texts.invoice_currency = 'Currency';
   texts.invoice_status = 'Status';
+  texts.openBalance = 'open balance';
+  texts.paidinvoice = 'paid';
   texts.reminder = 'Payment reminder';
   }
   return texts;

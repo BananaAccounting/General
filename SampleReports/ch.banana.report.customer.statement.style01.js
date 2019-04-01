@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.statement.style01.js
 // @api = 1.0
-// @pubdate = 2018-11-28
+// @pubdate = 2019-02-13
 // @publisher = Banana.ch SA
 // @description = Customer Statement
 // @description.it = Estratto cliente 
@@ -572,11 +572,11 @@ function setTexts(language) {
     texts.invoice_currency = 'Währung';
     texts.invoice_date = 'Datum';
     texts.invoice_debit = 'Soll';
-    texts.invoice_due_date = 'Due date';
-    texts.invoice_due_days = 'Due days';
-    texts.invoice_last_reminder = 'Paym. Reminder';
-    texts.invoice_no = 'Rechnung-Nr.';
-    texts.invoice_payment_date = 'Data pag.';
+    texts.invoice_due_date = 'Fälligkeit';
+    texts.invoice_due_days = 'Überfälligkeit';
+    texts.invoice_last_reminder = 'Mahnung';
+    texts.invoice_no = 'Rg.-Nr.';
+    texts.invoice_payment_date = 'Bezahlung';
     texts.page = 'Seite';
     texts.statement = 'Kontoauszug';
     texts.param_print_header = 'Seitenüberschrift einschliessen (1=true, 0=false)';
@@ -590,11 +590,11 @@ function setTexts(language) {
     texts.invoice_currency = 'Devise';
     texts.invoice_date = 'Date';
     texts.invoice_debit = 'Débit';
-    texts.invoice_due_date = 'Due date';
-    texts.invoice_due_days = 'Due days';
-    texts.invoice_last_reminder = 'Paym. Reminder';
-    texts.invoice_no = 'No. facture';
-    texts.invoice_payment_date = 'Data pag.';
+    texts.invoice_due_date = 'Date échéance';
+    texts.invoice_due_days = 'Jours';
+    texts.invoice_last_reminder = 'Rappel';
+    texts.invoice_no = 'No.Facture';
+    texts.invoice_payment_date = 'Date paiement';
     texts.page = 'Page';
     texts.statement = 'Extrait client';
     texts.param_print_header = 'Inclure en-tête de page (1=true, 0=false)';
