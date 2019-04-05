@@ -1,5 +1,5 @@
 # ExcelSync Functions
-Excel User Defined functions that allow to retrieve data from Banana Accounting into Excel cells (for more information see [ExcelSync functions](https://www.banana.ch/doc9/en/node/4999)).
+Excel User Defined functions that allow to retrieve data from Banana Accounting into Excel cells (for more information see [ExcelSync functions documentation](https://www.banana.ch/doc9/en/node/4999)).
 
 * **BananaSync.xlsm**: Excel file with example Visual Basic User Defined Functions.
 * **BananaSyncUseAll.xlsm**: Excel file with examples for how to use all functions. 
