@@ -3,7 +3,7 @@ Excel User Defined functions that allow to retrieve data from Banana Accounting 
 
 * **BananaSync.xlsm**: Excel file with example Visual Basic User Defined Functions.
 * **BananaSyncUseAll.xlsm**: Excel file with examples for how to use all functions. 
-* **BananaSync.bas**: file with the User defined functions. Use this to add the User Defined Functions to an excisting Excel file. 
+* **BananaSync.bas**: file with the User defined functions. Use this to add the User Defined Functions to an existing Excel file. 
 * **BananaFunctions.zip**: compressed (zipped) folder that include all the necessary files to test the functionalities (Excel and accounting files examples).  
 
 Limitations:
