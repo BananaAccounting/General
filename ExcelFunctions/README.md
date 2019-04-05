@@ -8,8 +8,8 @@ Excel User Defined functions that allow to retrieve data from Banana Accounting 
 * **BananaSync.bas**: file with the User defined functions. Use this to add the User Defined Functions to an excisting Excel file. 
 * **BananaFunctions.zip**: compressed (zipped) folder that include all the necessary files to test the functionalities (Excel and accounting files examples).  
 
-Limitation:
-* Compatible with Excel 2013 and 2016 (Windows only).
+Limitations:
+* Compatible with Excel 2013 and 2016 for Windows.
 * Compatible with Banana Accounting 8 and 9.
 
 Work in progress to overcome the Mac differences that do not allow to connect to the Banana integrated web server.
