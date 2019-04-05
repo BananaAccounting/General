@@ -531,8 +531,16 @@ Private Function BananaIsRunningWindows() As Boolean
     Dim bananaExpm80 As String
     bananaExpm80 = "BananaExpm80.EXE"
 
+    'Banana 9 process
+    Dim banana90 As String
+    banana90 = "Banana90.EXE"
+
+    'Banana Experimental 9 process
+    Dim bananaExpm90 As String
+    bananaExpm90 = "BananaExpm90.EXE"
+    
     'Check if any Banana 8 process is running
-    If (isProcessRunningWindows(bananaExpm80) Or isProcessRunningWindows(banana80)) Then
+    If (isProcessRunningWindows(bananaExpm80) Or isProcessRunningWindows(banana80) Or isProcessRunningWindows(bananaExpm90) Or isProcessRunningWindows(banana90)) Then
         BananaIsRunningWindows = True
     End If
 
