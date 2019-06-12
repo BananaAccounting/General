@@ -1,4 +1,4 @@
-// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2018] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2019-02-13
+// @pubdate = 2019-06-12
 // @publisher = Banana.ch SA
 // @description = Payment reminder
 // @description.it = Richiamo di pagamento
@@ -251,6 +251,38 @@ function printReminder(jsonReminder, repDocObj, repStyleObj, param) {
        status = texts.openBalance;
     tableRow.addCell(status, "status padding-left padding-right border-left" + classTotal, 1);
   }
+
+  tableRow = repTableObj.addRow();
+  tableRow.addCell(" ", "", 7);
+  tableRow = repTableObj.addRow();
+  tableRow.addCell(" ", "", 7);
+
+  //Template params
+  //Default text starts with "(" and ends with ")" (default), (Vorderfiniert)
+  if (reminderObj.template_parameters && reminderObj.template_parameters.footer_texts) {
+    var lang = '';
+    if (reminderObj.customer_info.lang)
+       lang = reminderObj.customer_info.lang;
+    if (lang.length <= 0 && reminderObj.document_info.locale)
+       lang = reminderObj.document_info.locale;
+    var textDefault = [];
+    var text = [];
+    for (var i = 0; i < reminderObj.template_parameters.footer_texts.length; i++) {
+       var textLang = reminderObj.template_parameters.footer_texts[i].lang;
+       if (textLang.indexOf('(') === 0 && textLang.indexOf(')') === textLang.length - 1) {
+          textDefault = reminderObj.template_parameters.footer_texts[i].text;
+       } else if (textLang == lang) {
+          text = reminderObj.template_parameters.footer_texts[i].text;
+       }
+    }
+    if (text.join().length <= 0)
+       text = textDefault;
+    for (var i = 0; i < text.length; i++) {
+       tableRow = repTableObj.addRow();
+       tableRow.addCell(text[i], "", 7);
+    }
+  }
+
 
   //Set reminder style
 	setReminderStyle(reportObj, repStyleObj, param);
