@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2019-02-13
+// @pubdate = 2019-06-17
 // @publisher = Banana.ch SA
 // @description = Payment reminder, with logo
 // @description.it = Richiamo di pagamento, con logo

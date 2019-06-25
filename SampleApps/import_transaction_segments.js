@@ -14,7 +14,7 @@
 //
 // @id = import_transaction_segments
 // @api = 1.0
-// @pubdate = 2019-03-01
+// @pubdate = 2019-05-28
 // @publisher = Banana.ch SA
 // @description = Import Transaction segments
 // @task = import.transactions
@@ -210,7 +210,7 @@ function getSegmentSymbol(banDoc) {
 
 		if (debit.indexOf(":") > -1 || credit.indexOf(":") > -1) {
 			_SEGMENTS_SYMBOL = ":";
-		} else {
+		} else if (debit.indexOf("-") > -1 || credit.indexOf("-") > -1) {
 			_SEGMENTS_SYMBOL = "-";
 		}
 	}

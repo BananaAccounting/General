@@ -1,4 +1,4 @@
-// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2018] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.report.customer.reminder.style01.js
 // @api = 1.0
-// @pubdate = 2019-02-13
+// @pubdate = 2019-06-17
 // @publisher = Banana.ch SA
 // @description = Payment reminder
 // @description.it = Richiamo di pagamento
