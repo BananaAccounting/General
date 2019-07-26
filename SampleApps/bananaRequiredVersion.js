@@ -56,9 +56,9 @@ function bananaRequiredVersion(requiredVersion, expmVersion) {
       
       case "zh":
         if (expmVersion) {
-          msg = "此脚本不适用于此版本的Banana Accounting。 请更新到Banana Experimental ("+ requiredVersion +")。";
+          msg = "脚本无法在此版本的Banana财务会计软件中运行。请更新至 Banana实验版本 (" + requiredVersion + ").";
         } else {
-          msg = "此脚本不适用于此版本的Banana Accounting。 请更新为 "+ requiredVersion +" 版本或更高版本。";
+          msg = "脚本无法在此版本的Banana财务会计软件中运行。请更新至 " + requiredVersion + "版本或之后的版本。";
         }
         break;
       
