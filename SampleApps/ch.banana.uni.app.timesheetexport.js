@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.uni.app.timesheetexport.js
 // @api = 1.0
-// @pubdate = 2019-11-06
+// @pubdate = 2019-11-08
 // @publisher = Banana.ch SA
 // @description = Timesheet Export
 // @task = app.command
@@ -181,13 +181,16 @@ function printTimeSheetJournal(userParam) {
 					var date = Banana.Converter.toDate(tRow.value('Date'));
 					var day = date.getDate();
 					var month = date.getMonth()+1;
+					if (month > 0 && month <= 9) { // 1, 2, 3 => 01, 02, 03
+						month = "0"+month;
+					}
 					var monthText = getMonthText(month);
 					var quarter = getQuarter(month);
 					var year = date.getFullYear();
 					//Banana.console.log(day + "; " + month + "; " + monthText + "; " + year + "; " + quarter);
 					tableRow.addCell(day,'',1);
-					tableRow.addCell(monthText+'_'+year,'',1);
-					tableRow.addCell(quarter+'_'+year,'',1);
+					tableRow.addCell(month+'-'+year,'',1);
+					tableRow.addCell(quarter+'-'+year,'',1);
 				} else {
 					tableRow.addCell('','',1);
 					tableRow.addCell('','',1);
@@ -301,7 +304,7 @@ function printTimeSheetJournal(userParam) {
 ***********************/
 function convertToHourDecimals(seconds) {
 	if (seconds) {
-		return Banana.SDecimal.divide(seconds,3600);
+		return Banana.SDecimal.divide(seconds,3600, {'decimals':2});
 	}
 }
 
@@ -350,25 +353,25 @@ function getMonthText(month) {
 function getQuarter(month) {
     var quarter = "";
     switch (month) {
-        case 1:
-        case 2:
-        case 3:
-            quarter = "q1";
+        case "01":
+        case "02":
+        case "03":
+            quarter = "Q1";
             break;
-        case 4:
-        case 5:
-        case 6:
-            quarter = "q2";
+        case "04":
+        case "05":
+        case "06":
+            quarter = "Q2";
             break;
-        case 7:
-        case 8:
-        case 9:
-            quarter = "q3";
+        case "07":
+        case "08":
+        case "09":
+            quarter = "Q3";
             break;
         case 10:
         case 11:
         case 12:
-            quarter = "q4";
+            quarter = "Q4";
     }
     return quarter;
 }
