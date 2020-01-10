@@ -14,7 +14,7 @@
       <Override Locale="de-de" Value="Daten von Banana Buchhaltung wiederherstellen"/>
       <Override Locale="fr-fr" Value="Récupérer les données de Banana Comptabilité"/>
    </Description>
-   <IconUrl DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/BananaAccountingSoftwareLogo.png" />
+   <IconUrl DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/BananaAccountingSoftwareLogo.png" />
    <SupportUrl DefaultValue="https://www.banana.ch/doc/en/node/8333" />
    <Hosts>
       <Host Name="Workbook" />
@@ -70,9 +70,9 @@
       </Hosts>
       <Resources>
          <bt:Images>
-            <bt:Image id="icon1_16x16" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_16x16.png" />
-            <bt:Image id="icon1_32x32" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_32x32.png" />
-            <bt:Image id="icon1_80x80" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_80x80.png" />
+            <bt:Image id="icon1_16x16" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_16x16.png" />
+            <bt:Image id="icon1_32x32" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_32x32.png" />
+            <bt:Image id="icon1_80x80" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_80x80.png" />
          </bt:Images>
          <bt:Urls>
             <bt:Url id="residFunctionsUrl" DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Functions.html" />
