@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+      <title>Banana Excel Add-In</title>
+      <script src="JQuery.js"></script>
+      <script src="https://appsforoffice.microsoft.com/lib/1/hosted/Office.js" type="text/javascript"></script>
+      <link href="Common.css" rel="stylesheet" type="text/css" />
+      <script src="Notification.js" type="text/javascript"></script>
+      <script src="Home.js" type="text/javascript"></script>
+      <script src="UIStrings.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.min.css">
+      <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css">
+   </head>
+   <style></style>
+   <body>
+      <ul class="tab">
+         <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Create')" id="defaultOpen"></a></li>
+         <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Update')" id="update"></a></li>
+         <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Logs')" id="logs"></a></li>
+         <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Settings')" id="options"></a></li>
+         <li><a href="javascript:void(0)" class="tablinks" onclick="window.open('https://www.banana.ch/portal/help/exceladdin1/topic/exceladdin1?lng=en')" id="help"></a></li>
+         <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Test')" id="test"></a></li>
+      </ul>
+      <!--
+         ========================================================================================
+         C R E A T E
+         ========================================================================================
+         -->
+      <div id="Create" class="tabcontent">
+         <h3 id="titleSetup"></h3>
+
+         <div id="setAccountingFile">
+            <p>
+               <p id="bananaFile"></p>
+               <p>
+                  <button class="setupButton" id="update-list" style="" ></button>
+               </p>
+               <select class="ms-List" id="ListBox"></select>
+            </p>
+         </div>
+         <hr />
+         <div id="accordion">
+            <button class="accordion" id="setHeader"></button>
+            <div class="panel">
+               <p>
+                  <p id="selectHeader"></p>
+                  <select class="ms-List" id="slctHeader" name="slctHeader" style="">
+                     <option selected="selected" value="predefinedHeader" id="predefinedHeader"></option>
+                     <option value="newHeader" id="emptyHeader"></option>
+                  </select>
+                  <p>
+                     <button class="setupButton" id="load-data" style=""></button>
+                  </p>
+                  <hr />
+                  <p id="textHeaderOptions"></p>
+                  <ul>
+                    <li>
+                        <p id="selectOptionCurrency"></p>
+                        <select class="ms-List" id="slctQueryOptionCurrency" name="slctQueryOptionCurrency" style="">
+                           <option value="repeat" id="repeatCurrency"></option>
+                           <option value="norepeat" id="norepeatCurrency"></option>
+                        </select>
+                    </li>
+                    <li>
+                        <p id="selectOptionHeaderLeft"></p>
+                        <select class="ms-List" id="slctQueryOptionHeaderLeft" name="slctQueryOptionHeaderLeft" style="">
+                           <option value="repeat" id="repeatHeaderLeft"></option>
+                           <option value="norepeat" id="norepeatHeaderLeft"></option>
+                        </select>
+                    </li>
+                    <li>
+                        <p id="selectOptionHeaderRight"></p>
+                        <select class="ms-List" id="slctQueryOptionHeaderRight" name="slctQueryOptionHeaderRight" style="">
+                           <option value="repeat" id="repeatHeaderRight"></option>
+                           <option value="norepeat" id="norepeatHeaderRight"></option>
+                        </select>
+                    </li>
+                  </ul> 
+                  <p>
+                     <button class="setupButton" id="add-header-options" style="" ></button>
+                  </p>
+               </p>
+            </div>
+            <button class="accordion" id="setQueryColumns"></button>
+            <div class="panel">
+               <p>
+                  <p id="textSetQueryColumns"></p>
+                  <ul>
+                     <li>
+                        <p id="slctSheetColumn"></p>
+                        <select class="ms-List" id="slctColumnIndex" name="slctType" style="">
+                           <option value="" id="optSelectAnOption"></option>
+                           <option value="selectedColumn" id="selectedColumn"></option>
+                           <option value="C">C</option>
+                           <option value="D">D</option>
+                           <option value="E">E</option>
+                           <option value="F">F</option>
+                           <option value="G">G</option>
+                           <option value="H">H</option>
+                           <option value="I">I</option>
+                           <option value="J">J</option>
+                           <option value="K">K</option>
+                           <option value="L">L</option>
+                           <option value="M">M</option>
+                           <option value="N">N</option>
+                           <option value="O">O</option>
+                           <option value="P">P</option>
+                           <option value="Q">Q</option>
+                           <option value="R">R</option>
+                           <option value="S">S</option>
+                           <option value="T">T</option>
+                           <option value="U">U</option>
+                           <option value="V">V</option>
+                           <option value="W">W</option>
+                           <option value="X">X</option>
+                           <option value="Y">Y</option>
+                           <option value="Z">Z</option>
+                        </select>
+                     </li>
+                     <!-- FILENAME -->
+                     <li>
+                        <p id="slctFilename"></p>
+                        <p>
+                           <select class="ms-List" id="slctFile" name="slctFile" style="">
+                              <option value="" id="optSelectAnOptionFile"></option>
+                              <option value="current" id="currentFile"></option>
+                              <option value="currentVoid" id="currentVoid"></option>
+                              <option value="p1" id="p1"></option>
+                              <option value="p2" id="p2"></option>
+                              <option value="p3" id="p3"></option>
+                           </select>
+                        </p>
+                     </li>
+                     <!-- TYPE -->
+                     <li>
+                        <p id="slctTypeValue"></p>
+                        <select class="ms-List" id="slctType" name="slctType" style="">
+                           <option value="" id="optSelectAnOptionType"></option>
+                           <option value="Column">Column</option>
+                           <option value="Current">Current</option>
+                           <option value="Budget">Budget</option>
+                           <option value="ColumnVat">ColumnVat</option>
+                           <option value="CurrentVat">CurrentVat</option>
+                        </select>
+                     </li>
+                     <!-- COLUMN -->
+                     <li>
+                        <p id="slctColumnValue"></p>
+                        <select class="ms-List" id="slctColumn" style="">
+                           <option value="" id="optSelectAnOptionColumn"></option>
+                        </select>
+                     </li>
+                     <!-- SEGMENTS -->
+                     <li>
+                        <p id="slctSegmentValue"></p>
+                        <select class="ms-List" id="slctSegment" style="">
+                           <option value="" id="optSelectAnOptionSegment"></option>
+                        </select>
+                     </li>
+                     <!-- PERIODS -->
+                     <li>
+                        <p id="slctPeriodValue"></p>
+                        <p>
+                           <select class="ms-List" id="slctDateStart" name="slctDateStart" style="">
+                              <option selected="selected" value="" id="allVoid"></option>
+                              <option value="CustomDate" id="customDate"></option>
+                              <optgroup label="----">
+                              <option value="M1" id="M1"></option>
+                              <option value="M2" id="M2"></option>
+                              <option value="M3" id="M3"></option>
+                              <option value="M4" id="M4"></option>
+                              <option value="M5" id="M5"></option>
+                              <option value="M6" id="M6"></option>
+                              <option value="M7" id="M7"></option>
+                              <option value="M8" id="M8"></option>
+                              <option value="M9" id="M9"></option>
+                              <option value="M10" id="M10"></option>
+                              <option value="M11" id="M11"></option>
+                              <option value="M12" id="M12"></option>
+                              <optgroup label="----">
+                              <option value="Q1" id="Q1"></option>
+                              <option value="Q2" id="Q2"></option>
+                              <option value="Q3" id="Q3"></option>
+                              <option value="Q4" id="Q4"></option>
+                              <optgroup label="----">
+                              <option value="S1" id="S1"></option>
+                              <option value="S2" id="S2"></option>
+                              <optgroup label="----">
+                              <option value="Y1" id="Y1"></option>
+                              <option value="Y2" id="Y2"></option>
+                           </select>
+                        </p>
+                        <div id="custom-period">
+                           Start date<br>
+                           <input type="text" id="start-date-input" name="start-date-input" placeholder="ex. 01.01.2019">
+                           <br>
+                           <br>
+                           End date<br>
+                           <input type="text" id="end-date-input" name="end-date-input" placeholder="ex. 01.01.2019">
+                        </div>
+                     </li>
+                  </ul>
+                  <p>
+                     <button class="setupButton" id="load-all-column" style=""></button>
+                  </p>
+               </p>
+            </div>
+            <button class="accordion" id="setQueryAccounts"></button>
+            <div class="panel">
+               <p>
+                  <!-- QUERYACCOUNTS -->
+                  <p id="addAccounts"></p>
+                  <select class="ms-List" id="slct1" name="slct1">
+                     <option value="" id="optSelectAnOptionAccounts"></option>
+                     <option value="Accounts" id="qaAccounts"></option>
+                     <option value="Groups" id="qaGroups"></option>
+                     <option value="CostCenters" id="qaCostCenters"></option>
+                     <option value="Segments" id="qaSegments"></option>
+                     <option value="All" id="qaAll"></option>
+                     <option value="VatCodes" id="qaVatCodes"></option>
+                  </select>
+                  <p>
+                     <button class="setupButton" id="add_to_query_account" style=""></button>
+                  </p>
+               
+                  <br />
+                  <div id="select-all-div">
+                     <input id="select-all" type="checkbox" onclick="selectAll(this);" /><br />
+                  </div>
+                  <div id="slct2" name="slct2" style="font-size:11px;"></div>
+                  <!-- QUERYOPTIONS -->
+                  <p id="qaOptions"></p>
+                  <select class="ms-List" id="slctQueryOptions" name="slctQueryOptions" style="">
+                     <option value="" id="optSelectAnOptionOptions"></option>
+                     <option value="invert" id="invert"></option>
+                     <option value="budget" id="budget"></option>
+                     <option value="budgetinvert" id="budgetinvert"></option>
+                  </select>
+                  <p>
+                     <button class="setupButton" id="add_to_query_options" style=""></button>
+                  </p>
+               </p>
+            </div>
+         </div>
+      </div>
+      <!--
+         ========================================================================================
+         U P D A T E
+         ========================================================================================
+         -->
+      <div id="Update" class="tabcontent">
+         <h3 id="titleUpdate"></h3>
+         <p id="textUpdate"></p>
+         <button class="setupButton" id="update-data"></button>
+         <p />
+         <div id="loader"></div>
+      </div>
+      <!--
+         ========================================================================================
+         L O G S
+         ========================================================================================
+         -->
+      <div id="Logs" class="tabcontent">
+         <div id="textarea" style="font-family:Helvetica;font-size:12px;">
+         </div>
+      </div>
+      <!--
+         ========================================================================================
+         S E T T I N G S
+         ========================================================================================
+         -->
+      <div id="Settings" class="tabcontent">
+         <h3 id="titleSettings"></h3>
+         <!-- SERVER SETTINGS -->
+         <div>
+         <p id="serverInformation"></p>
+         <select class="ms-List" id="slctServerUrl" name="slctServerUrl" style="width:220px" onchange="changeUrl()">
+            <option value="urlDefault1" id="urlDefault1">https://127.0.0.1:8089</option>
+            <option value="urlDefault2" id="urlDefault2">https://banana.localhost:8089</option>
+            <option value="urlOther" id="urlOther"></option>
+         </select>
+         <ul id="server-url-token">
+            <li>
+               <!-- SERVER URL -->
+               <p id="insertServerUrl"></p>
+               <p id="defaultUrl"></p>
+               <input type="text" id="settingsServerUrl" value="" size="35">
+            </li> 
+            <li>
+               <!-- CONNECTION TOKEN -->
+               <p id="insertToken"></p>
+               <input type="text" id="settingsToken" value="" size="35">
+               <!-- <button class="setupButton" id="settings-token">OK</button> -->
+            </li>
+         </ul>
+         </div>
+         <!-- LANGUAGE SETTING -->
+         <div>
+         <p id="changeLanguage"></p>
+         <select class="ms-List" id="settingsLanguage" style="width:220px">
+            <option value="excelPredefined" id="excelPredefined"></option>
+            <option value="de-DE">Deutsch</option>
+            <option value="en-US">English</option>
+            <option value="fr-FR">Français</option>
+            <option value="it-IT">Italiano</option>
+         </select>
+         <p />
+         </div>
+         <div style="float:right">
+            <p />
+            <button class="setupButton" id="" onclick="openConfirm()">OK</button>
+            <p />
+         </div>
+
+         <div id="confirmationModal" class="modal">
+           <div class="modal-content">
+               <div class="padding">
+                  <div id="confirmation-message-header"></div>
+                  <p />
+                  <div id="confirmation-message-body"></div>
+                  <p />
+                  <div id="confirmation-message-body2"></div>
+               </div>
+               <p />
+               <div style="float:right">
+                  <button class="ms-Button" id="confirm-yes" onclick="confirmationAnswer(true)" style="border:thin solid #ccc"></button>
+                  <button class="ms-Button" id="confirm-no" onclick="confirmationAnswer(false)" style="border:thin solid #ccc"></button>
+               </div>
+           </div>
+         </div>
+
+         <hr />
+         <!-- DEVELOPER SETTINGS -->
+         <p id="dev"></p>
+         <input type="password" id="devsTestSettings" value="*******">
+         <button class="ms-Button" id="devsTestButton" onclick="checkDevsPassword()">OK</button>
+         <p />
+      </div>
+      <!--
+         ========================================================================================
+         T E S T
+         ========================================================================================
+         -->
+      <div id="Test" class="tabcontent">
+         <button class="setupButton" id="create-test-current" style="width:157px">Create test current</button><p />
+         <button class="setupButton" id="create-test-all" style="width:157px">Create test all</button><p />
+         <p />
+         <hr />
+         <button class="setupButton" id="test-data" style="width:157px">Start test</button>
+         <p />
+         <hr />
+         <button class="setupButton" id="delete-all">DELETE WORKSHEET</button>
+      </div>
+      <!--
+         ========================================================================================
+         S C R I P T
+         ========================================================================================
+         -->
+      <script>
+
+         document.getElementById("defaultOpen").click(); // Get the element with id="defaultOpen" and click on it
+         document.getElementById("select-all-div").style.display = "none";
+         document.getElementById('loader').style.display = 'none';
+         document.getElementById('custom-period').style.display = 'none';
+         document.getElementById('test').style.display = 'none';
+         document.getElementById('server-url-token').style.display = 'none';
+         
+         //Accordion 
+         var acc = document.getElementsByClassName("accordion");
+         for (var i = 0; i < acc.length; i++) {
+            acc[i].onclick = function() {
+               this.classList.toggle("active");
+               var panel = this.nextElementSibling;
+               if (panel.style.maxHeight) {
+                  panel.style.maxHeight = null;
+               } else {
+                  panel.style.maxHeight = "100%"; //panel.scrollHeight + "px";
+               }
+            }
+         }
+
+      </script>
+   </body>
+</html>

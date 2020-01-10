@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+   <Id>04531efc-4dea-450a-9408-a2ecc7e04252</Id>
+   <Version>1.0.0.0</Version>
+   <ProviderName>Banana.ch SA</ProviderName>
+   <DefaultLocale>en-US</DefaultLocale>
+   <DisplayName DefaultValue="Banana Accounting Excel Reports">
+      <Override Locale="it-it" Value="Banana Contabilità Rapporti Excel" />
+      <Override Locale="de-de" Value="Banana Buchhaltung Excel Berichte" />
+      <Override Locale="fr-fr" Value="Banana Comptabilité Rapports Excel" />
+   </DisplayName>
+   <Description DefaultValue="Retrieve data from Banana Accounting">
+      <Override Locale="it-it" Value="Recuperare dati da Banana Contabilità"/>
+      <Override Locale="de-de" Value="Daten von Banana Buchhaltung wiederherstellen"/>
+      <Override Locale="fr-fr" Value="Récupérer les données de Banana Comptabilité"/>
+   </Description>
+   <IconUrl DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/BananaAccountingSoftwareLogo.png" />
+   <SupportUrl DefaultValue="https://www.banana.ch/doc/en/node/8333" />
+   <Hosts>
+      <Host Name="Workbook" />
+   </Hosts>
+   <Requirements>
+      <Sets DefaultMinVersion="1.1">
+         <Set Name="ExcelApi" MinVersion="1.1"/>
+      </Sets>
+   </Requirements>
+   <DefaultSettings>
+      <SourceLocation DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Home.html" />
+   </DefaultSettings>
+   <Permissions>ReadWriteDocument</Permissions>
+   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+      <Hosts>
+         <Host xsi:type="Workbook">
+            <DesktopFormFactor>
+               <GetStarted>
+                  <Title resid="GetStartedTitle" />
+                  <Description resid="GetStartedDescription" />
+                  <LearnMoreUrl resid="GetStartedLearnMoreUrl" />
+               </GetStarted>
+               <FunctionFile resid="residFunctionsUrl" />
+               <ExtensionPoint xsi:type="PrimaryCommandSurface">
+                  <OfficeTab id="TabHome">
+                     <Group id="Group1Id1">
+                        <Label resid="residLabel2" />
+                        <Icon>
+                           <bt:Image size="16" resid="icon1_16x16" />
+                           <bt:Image size="32" resid="icon1_32x32" />
+                           <bt:Image size="80" resid="icon1_80x80" />
+                        </Icon>
+                        <Control xsi:type="Button" id="Button1Id1">
+                           <Label resid="residLabel" />
+                           <Supertip>
+                              <Title resid="residLabel" />
+                              <Description resid="residToolTip" />
+                           </Supertip>
+                           <Icon>
+                              <bt:Image size="16" resid="icon1_16x16" />
+                              <bt:Image size="32" resid="icon1_32x32" />
+                              <bt:Image size="80" resid="icon1_80x80" />
+                           </Icon>
+                           <Action xsi:type="ShowTaskpane">
+                              <SourceLocation resid="residTaskPaneUrl" />
+                           </Action>
+                        </Control>
+                     </Group>
+                  </OfficeTab>
+               </ExtensionPoint>
+            </DesktopFormFactor>
+         </Host>
+      </Hosts>
+      <Resources>
+         <bt:Images>
+            <bt:Image id="icon1_16x16" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_16x16.png" />
+            <bt:Image id="icon1_32x32" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_32x32.png" />
+            <bt:Image id="icon1_80x80" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin_local/images/icon1_80x80.png" />
+         </bt:Images>
+         <bt:Urls>
+            <bt:Url id="residFunctionsUrl" DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Functions.html" />
+            <bt:Url id="residTaskPaneUrl" DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Index.html" />
+            <bt:Url id="GetStartedLearnMoreUrl" DefaultValue="https://www.banana.ch/doc/en/node/8801" />
+         </bt:Urls>
+         <bt:ShortStrings>
+            <!-- ShortStrings max characters==125 -->
+            <bt:String id="residLabel" DefaultValue="Banana Accounting">
+               <bt:Override Locale="it-it" Value="Banana Contabilità" />
+               <bt:Override Locale="de-de" Value="Banana Buchhaltung" />
+               <bt:Override Locale="fr-fr" Value="Banana Comptabilité" />
+            </bt:String>
+            <bt:String id="residLabel2" DefaultValue="Banana Accounting">
+               <bt:Override Locale="it-it" Value="Banana Contabilità" />
+               <bt:Override Locale="de-de" Value="Banana Buchhaltung" />
+               <bt:Override Locale="fr-fr" Value="Banana Comptabilité" />
+            </bt:String>
+            <bt:String id="GetStartedTitle" DefaultValue="Banana Accounting Loaded Successfully">
+               <bt:Override Locale="it-it" Value="Banana Contabilità caricato con successo" />
+               <bt:Override Locale="de-de" Value="Banana Buchhaltung erfolgreich geladen" />
+               <bt:Override Locale="fr-fr" Value="Banana Comptabilité chargé avec succès" />
+            </bt:String>
+         </bt:ShortStrings>
+         <bt:LongStrings>
+            <!-- LongStrings max characters==250 -->
+            <bt:String id="residToolTip" DefaultValue="Use the add-in pane to create accounting reports">
+               <bt:Override Locale="it-it" Value="Utilizzare il riquadro componente aggiuntivo per creare report contabili" />
+               <bt:Override Locale="de-de" Value="Add-In verwenden, um Buchhaltungsberichte zu erstellen" />
+               <bt:Override Locale="fr-fr" Value="Utiliser le volet complément pour créer des rapports comptables" />
+            </bt:String>
+            <bt:String id="GetStartedDescription" DefaultValue="Open the HOME tab on the Ribbon and click the BANANA ACCOUNTING button to try this Add-in">
+               <bt:Override Locale="it-it" Value="Apri la scheda HOME sulla barra multifunzione e clicca sul bottone BANANA CONTABILITA per provare questo componente aggiuntivo" />
+               <bt:Override Locale="de-de" Value="HOME-Registerkarte auf das Menüband öffnen und auf die Schaltfläche BANANA BUCHHALTUNG klicken, um dieses Add-In zu testen" />
+               <bt:Override Locale="fr-fr" Value="Ouvrir l'onglet HOME sur le ruban et cliquer sur le bouton BANANA COMPTABILITE pour essayer ce complément" />
+            </bt:String>
+         </bt:LongStrings>
+      </Resources>
+   </VersionOverrides>
+</OfficeApp>
