@@ -280,10 +280,15 @@ dialog.updateDialog = function () {
 /**
 * Dialog's events declaration
 */
-dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
-dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
-dialog.VoucherNumberLineEdit.textEdited.connect(dialog, "updateDialog"); //Voucher Number text is edited
-
+var requiredVersion = "8.0.7.171016";
+if (Banana.compareVersion && Banana.compareVersion(Banana.application.version, requiredVersion) >= 0) {
+    dialog.buttonBox.accepted.connect(dialog.checkdata); //Clicked Ok button
+    dialog.buttonBox.rejected.connect(dialog.close);  //Clicked Cancel button
+} else {
+    dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
+    dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
+    dialog.VoucherNumberLineEdit.textEdited.connect(dialog, "updateDialog"); //Voucher Number text is edited
+}
 
 
 
