@@ -383,15 +383,15 @@ function createReport(report, docNumber) {
 
     var project = Banana.document.info("Base","HeaderLeft");
     var projectnumber = project.split("-")[0].trim();
-    var projectname = project.split("-")[1].trim();
+    //var projectname = project.split("-")[1].trim();
 
     tableRow = table.addRow();
     tableRow.addCell("Project Number", "styleTitle ", 2);
     tableRow.addCell(projectnumber, "", 4);
 
-    tableRow = table.addRow();
-    tableRow.addCell("Project Name", "styleTitle ", 2);
-    tableRow.addCell(projectname, "", 4);
+    // tableRow = table.addRow();
+    // tableRow.addCell("Project Name", "styleTitle ", 2);
+    // tableRow.addCell(projectname, "", 4);
 
     tableRow = table.addRow();
     tableRow.addCell("Currency", "styleTitle ", 2);
