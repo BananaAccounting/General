@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.apps.transactionvoucher
 // @api = 1.0
-// @pubdate = 2017-05-30
+// @pubdate = 2020-01-22
 // @publisher = Banana.ch SA
 // @description = Transaction Voucher
 // @task = app.command
@@ -353,12 +353,12 @@ function createReport(report, docNumber) {
     var imageCell = tableRow.addCell("","",3);
     
     //If the table Documents contains an image we use it
-    //If not, we use the image located in the script folder
-    if (Banana.document.table("Documents") && Banana.document.table("Documents").findRowByValue("RowId", "transaction_voucher_image").value("Attachments")) {
-        imageCell.addImage("documents:transaction_voucher_image", "3.5cm", "1cm");
-    }
-    else {
-        imageCell.addImage("file:script/transaction_voucher_image.png", "3.5cm", "1cm");
+    var documentsTable = Banana.document.table("Documents");
+    for (var i = 0; i < documentsTable.rowCount; i++) {
+        var tRow = documentsTable.row(i);
+        if (tRow.value("RowId") === "transaction_voucher_image") {
+            imageCell.addImage("documents:transaction_voucher_image", "3.5cm", "1cm");
+        }
     }
 
     //Takes data of the selected doc number transaction
