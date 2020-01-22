@@ -354,10 +354,12 @@ function createReport(report, docNumber) {
     
     //If the table Documents contains an image we use it
     var documentsTable = Banana.document.table("Documents");
-    for (var i = 0; i < documentsTable.rowCount; i++) {
-        var tRow = documentsTable.row(i);
-        if (tRow.value("RowId") === "transaction_voucher_image") {
-            imageCell.addImage("documents:transaction_voucher_image", "3.5cm", "1cm");
+    if (documentsTable) {
+        for (var i = 0; i < documentsTable.rowCount; i++) {
+            var tRow = documentsTable.row(i);
+            if (tRow.value("RowId") === "transaction_voucher_image") {
+                imageCell.addImage("documents:transaction_voucher_image", "3.5cm", "1cm");
+            }
         }
     }
 
