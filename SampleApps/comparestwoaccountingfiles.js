@@ -17,7 +17,7 @@
 // @version = 1.0
 // @pubdate = 2016-01-20
 // @publisher = Banana.ch SA
-// @description = Compare two accounting files
+// @description = Compare with another accounting file
 // @task = app.command
 // @doctype = 100.*;110.*;130.*
 // @outputformat = none
