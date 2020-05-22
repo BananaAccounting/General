@@ -1,11 +1,12 @@
-// @id = ch.banana.test.add.documentPatch.ac2
+// @id = ch.banana.documentpatch.sample.add
 // @api = 1.0
 // @pubdate = 2019-10-09
 // @publisher = Banana.ch SA
-// @description = complete operation using JSON Patch
+// @description = DocumentPatch sample for adding, deleting and moving rows
 // @task = app.command
 // @doctype = 100.*;110.*;130.*
 // @includejs = DocumentPatch.js
+// @timeout = -1
 
 function exec(inData) {
     if (!Banana.document)
@@ -51,8 +52,8 @@ function exec(inData) {
     //
 
     transactions.newPatchBlock("Correzione vendite giorno precedente");
-    //
-    transactions.move(2, 15); // aggiungiamo il parametro rowCount opzionale, default = 1
+
+    //transactions.move(2, 15); // aggiungiamo il parametro rowCount opzionale, default = 1
 
     transactions.delete(16, 3); // aggiungiamo il parametro rowCount opzionale, default = 1
     // transactions.replace(10, row); // questa operazione è su una singola riga
@@ -117,6 +118,6 @@ function exec(inData) {
     // transactionsColumns.modify("Transactions", column, columnNr);
 
     // Giusto per debug
-    Banana.Ui.showText("json object: " + docPatch.toJson());
+    //Banana.Ui.showText("json object: " + docPatch.toJson());
     return docPatch.getJson();
 }
