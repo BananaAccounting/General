@@ -2,3 +2,4 @@
 *.autosave
 .DS_Store
 ~$*
+*.pro.user

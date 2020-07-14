@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Dialog.qml</file>
+        <file>translations/translations_de.qm</file>
+        <file>translations/translations_fr.qm</file>
+        <file>translations/translations_it.qm</file>
+        <file>main.js</file>
+    </qresource>
+</RCC>
