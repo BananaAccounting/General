@@ -42,17 +42,25 @@ function exec(string) {
     // NB: The variable myReportTexts.account_card contains the source code string "Account card"
     // You need a Banana.Translator object to translate it in the desired language
 
-    // Translate to Italian
+    // Translate to the document's language
+    var documentLanguage = "en";
+    if (Banana.document) {
+        documentLanguage = Banana.document.locale.substring(0,2);
+    }
+    var docTranslator = Banana.Translations.getTranslator(documentLanguage, "MyReport");
+    var myReportTranslatedText = docTranslator.tr(myReportTexts.account_card); // Translate to the document's language
+
+    // Translate to italian
     var translatorIt = Banana.Translations.getTranslator("it", "MyReport");
     var myReportTranslatedTextIt = translatorIt.tr(myReportTexts.account_card); // Translate to Italian: "Scheda conto"
 
     // Translate to French
     var translatorFr = Banana.Translations.getTranslator("fr", "MyReport");
-    var myReportTranslatedTextFr = translatorFr.tr(myReportTexts.account_card); // Translate to French: "Fiche de
+    var myReportTranslatedTextFr = translatorFr.tr(myReportTexts.account_card); // Translate to French: "Fiche de compte"
 
     // Translate to German
     var translatorDe = Banana.Translations.getTranslator("de", "MyReport");
-    var myReportTranslatedTextDe = translatorDe.tr(myReportTexts.account_card); // Translate to French: "Fiche de
+    var myReportTranslatedTextDe = translatorDe.tr(myReportTexts.account_card); // Translate to German: "Fiche de
 
     // Translate to English
     var translatorEn = Banana.Translations.getTranslator("en", "MyReport");
@@ -70,13 +78,17 @@ function exec(string) {
     text += qsTr("German") + ": " + myReportTranslatedTextDe + "\n";
     text += qsTr("English") + ": " + myReportTranslatedTextEn + "\n";
     text += qsTr("Unknow") + ": " + myReportTranslatedTextXx + "\n";
+    if (Banana.document) {
+        text += "\n";
+        text += qsTr("In the language of the document") + ": " + myReportTranslatedText + "\n";
+    }
 
 
     // Create dialog
     var dlg = Banana.Ui.createQml(qsTr("Text"), "Dialog.qml");
     dlg.qmlObject.text = text;
 
-    // Show dialog
+    // Show dialog with translated text
     Banana.application.progressBar.pause();
     dlg.exec();
     Banana.application.progressBar.resume();

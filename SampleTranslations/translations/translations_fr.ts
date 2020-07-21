@@ -25,32 +25,37 @@
         <translation>Traductions:</translation>
     </message>
     <message>
-        <location filename="../main.js" line="68"/>
+        <location filename="../main.js" line="76"/>
         <source>Italian</source>
         <translation>Italien</translation>
     </message>
     <message>
-        <location filename="../main.js" line="69"/>
+        <location filename="../main.js" line="77"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../main.js" line="70"/>
+        <location filename="../main.js" line="78"/>
         <source>German</source>
         <translation>Allemand</translation>
     </message>
     <message>
-        <location filename="../main.js" line="71"/>
+        <location filename="../main.js" line="79"/>
         <source>English</source>
         <translation>Anglais</translation>
     </message>
     <message>
-        <location filename="../main.js" line="72"/>
+        <location filename="../main.js" line="80"/>
         <source>Unknow</source>
         <translation>Inconnue</translation>
     </message>
     <message>
-        <location filename="../main.js" line="76"/>
+        <location filename="../main.js" line="83"/>
+        <source>In the language of the document</source>
+        <translation>Dans la langue du document</translation>
+    </message>
+    <message>
+        <location filename="../main.js" line="88"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
