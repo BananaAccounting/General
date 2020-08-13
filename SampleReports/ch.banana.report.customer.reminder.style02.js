@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = ch.banana.report.customer.reminder.style01.js
+// @id = ch.banana.report.customer.reminder.style02.js
 // @api = 1.0
-// @pubdate = 2019-06-17
+// @pubdate = 2020-08-20
 // @publisher = Banana.ch SA
 // @description = Payment reminder, with logo
 // @description.it = Richiamo di pagamento, con logo
@@ -466,7 +466,7 @@ function setStyle(reportObj, repStyleObj, param) {
     //====================================================================//
     // GENERAL
     //====================================================================//
-    repStyleObj.addStyle("phead", "margin-bottom: 15em");
+    // repStyleObj.addStyle("phead", "margin-bottom: 15em");
     repStyleObj.addStyle("body", "font-size: 11pt; font-family:" + param.font_family);
     repStyleObj.addStyle(".amount", "text-align:right");
     repStyleObj.addStyle(".bold", "font-weight: bold");
@@ -496,26 +496,21 @@ function setStyle(reportObj, repStyleObj, param) {
     repStyleObj.addStyle(".repTableCol6","width:7%");
     repStyleObj.addStyle(".repTableCol7","width:10%");
     
-    repStyleObj.addStyle(".summary_filename", "margin-left:20mm; font-size:8pt;");
-    repStyleObj.addStyle(".summary_title", "margin-left:20mm; font-size: 18pt; ");
-    repStyleObj.addStyle(".summary_title2", "margin-left:20mm; font-size: 11pt; ");
-    repStyleObj.addStyle(".summary_table_header", "font-weight:bold;");
+    repStyleObj.addStyle(".summary_filename", "padding-left:10mm;font-size:8pt;");
+    repStyleObj.addStyle(".summary_title", "padding-top:40mm;padding-left:10mm; font-size: 16pt; ");
+    repStyleObj.addStyle(".summary_title2", "padding-left:10mm; font-size: 11pt; ");
+    repStyleObj.addStyle(".summary_table_header", "font-weight:bold; background-color:" + param.color_2);
     repStyleObj.addStyle(".summary_table_header td", "padding-top:2mm; padding-bottom:2mm;font-size:12pt;");
     repStyleObj.addStyle(".summary_table_customer", "font-weight:bold; font-size:12pt; padding-top:2mm;padding-bottom:2mm;");
-    repStyleObj.addStyle(".summary_table_details td.detail_row", "padding-top:7px;");
+    repStyleObj.addStyle(".summary_table_details td.detail_row", "");
     repStyleObj.addStyle(".summary_table_details td.date", "padding-left:5mm;padding-right:10mm;");
     repStyleObj.addStyle(".summary_table_details td.number", "padding-right:10mm");
     repStyleObj.addStyle(".summary_table_details td.currency", "padding-right:10mm");
     repStyleObj.addStyle(".summary_table_details td", "font-size:12pt;");
     repStyleObj.addStyle(".summary_table_details tr.total td.amount", "border-top:1px solid black;padding-bottom:5px;font-weight:bold");
     repStyleObj.addStyle(".summary_table_grandtotal td", "font-weight:bold");
-    repStyleObj.addStyle(".summary_table_grandtotal td.amount", "border-top:1px solid black; border-bottom:1px double black;padding-bottom:5px;");
+    repStyleObj.addStyle(".summary_table_grandtotal td.amount", "border-top:1px solid black; border-bottom:1px double black;");
     repStyleObj.addStyle(".summary_table td.status", "padding-left:20px;");
-
-    var rectangleStyle = repStyleObj.addStyle(".rectangle");
-    rectangleStyle.setAttribute("width","50px");
-    rectangleStyle.setAttribute("height","100mm");
-    rectangleStyle.setAttribute("background-color","white");
 
     //====================================================================//
     // LOGO
@@ -538,21 +533,22 @@ function setStyle(reportObj, repStyleObj, param) {
 
     var infoStyle = repStyleObj.addStyle(".info_table");
     infoStyle.setAttribute("position", "absolute");
-    infoStyle.setAttribute("margin-top", "-20mm"); 
+    infoStyle.setAttribute("margin-top", "40mm"); 
     infoStyle.setAttribute("margin-left", "20mm");
     infoStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.info_table td", "border: thin solid black");
 
     var itemsStyle = repStyleObj.addStyle(".doc_table");
-    itemsStyle.setAttribute("margin-top", "35mm");
+    itemsStyle.setAttribute("margin-top", "105mm");
     itemsStyle.setAttribute("margin-left", "23mm");
     itemsStyle.setAttribute("margin-right", "10mm");
     //repStyleObj.addStyle("table.doc_table td", "border: thin solid black; padding: 3px;");
     itemsStyle.setAttribute("width", "100%");
     
     var summaryStyle = repStyleObj.addStyle(".summary_table");
-    summaryStyle.setAttribute("position", "relative");
-    summaryStyle.setAttribute("margin-left", "23mm");
+    summaryStyle.setAttribute("position", "absolute");
+    summaryStyle.setAttribute("margin-top", "70mm"); 
+    summaryStyle.setAttribute("margin-left", "10mm");
     summaryStyle.setAttribute("margin-right", "10mm");
     summaryStyle.setAttribute("margin-bottom", "10mm");
     summaryStyle.setAttribute("width", "100%");
