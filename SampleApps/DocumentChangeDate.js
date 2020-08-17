@@ -14,14 +14,12 @@
 //
 // @id = DocumentChangeDate.js
 // @api = 1.0
-// @pubdate = 2020.08.12
+// @pubdate = 2020.08.17
 // @publisher = Banana.ch SA
-// @description = Modify ac2 file using document changes
+// @description = DocumentChangeDate
 // @task = app.command
-// @doctype = *.*
-// @timeout = -1
+// @doctype = 100.*;110.*;130.*
 
-//ho diviso su 2 documenti perche ce un bug da risolvere.
 function exec(inData, options) {
 
     var param = initParam();
@@ -72,10 +70,6 @@ function exec(inData, options) {
     }
 }
 
-/** 
- * controllo che l'anno degli header corrsiponda a quello della data di apertura, se corrisponde, allora ce una data e l'aggiorno con quella attuale,altrimenti ce altro
- * controllo che l'anno di apertura e di chiusura abbiano l'anno corrente, se non e cosi gli aggiorno con l'anno corrente
- */
 function initParam() {
     var param = {};
     param.differenceyear = 0;
@@ -107,28 +101,30 @@ function initParam() {
 
         param.differenceyear = Banana.SDecimal.subtract(currentYearint, fileYearint);
 
-        if (parseInt(param.differenceyear) != 0) {
-            param.newaccountingopeningdate = param.newaccountingyear.toString() + OpeningDate.toString().substr(4);
-            param.newaccountingopeningdate = param.newaccountingopeningdate.replace(/-/g, "");
-            var closureDate = Banana.document.info("AccountingDataBase", "ClosureDate");
-            if (closureDate && closureDate.length > 4) {
-                var year = closureDate.toString().substr(0, 4);
-                var newyear = parseInt(year) + parseInt(param.differenceyear);
-                param.newaccountingclosuredate = newyear.toString() + closureDate.toString().substr(4);
-                param.newaccountingclosuredate = param.newaccountingclosuredate.replace(/-/g, "");
+        param.newaccountingopeningdate = changeYearInDate(param.differenceyear, OpeningDate);
+        var ClosureDate = Banana.document.info("AccountingDataBase", "ClosureDate");
+        param.newaccountingclosuredate = changeYearInDate(param.differenceyear, ClosureDate);
 
-            }
 
-        }
     }
     return param;
 }
 
-/**¨
- * prende come parametri la data corrente e param per utilizzare i parametri inizializzati nell init param
- * se l'anno dell opening date e l'anno corrente sono uguali ritorno vuoto, perche si fa conto che le date scritte
- * rispecchino gia quella di apertura attuale. se l'anno  e diverso, aggiorno l'anno, ricorstruisco la data aggiornata e la ritorno
- */
+function changeYearInDate(differenceyear, OpeningClosureDate) {
+    if (OpeningClosureDate && OpeningClosureDate.length > 4) {
+        var Year = OpeningClosureDate.toString().substr(0, 4);
+        var newyear = Banana.SDecimal.add(parseInt(Year), parseInt(differenceyear));
+        var changedDate = newyear.toString() + OpeningClosureDate.toString().substr(4);
+        changedDate = changedDate.replace(/-/g, "");
+
+        return changedDate;
+
+    }
+    return "";
+
+}
+
+
 function getNewRowDate(currentDate, param) {
     if (!currentDate || currentDate.length < 4)
         return "";
