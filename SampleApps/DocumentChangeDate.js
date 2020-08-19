@@ -22,9 +22,8 @@
 
 function exec(inData, options) {
 
-    var param = initParam();
-    Banana.console.debug(JSON.stringify(param));
-    var ischange = false;
+    var param = initParam(Banana.document);
+     var ischange = false;
 
     var documentChange = { "format": "documentChange", "error": "", "data": [] };
 
@@ -70,7 +69,7 @@ function exec(inData, options) {
     }
 }
 
-function initParam() {
+function initParam(document) {
     var param = {};
     param.differenceyear = 0;
     param.accountingyear = "";
@@ -81,16 +80,16 @@ function initParam() {
     param.newaccountingheaderright = "";
 
 
-    var OpeningDate = Banana.document.info("AccountingDataBase", "OpeningDate");
+    var OpeningDate = document.info("AccountingDataBase", "OpeningDate");
     if (OpeningDate && OpeningDate.length > 4) {
         param.accountingyear = OpeningDate.toString().substr(0, 4);
-        var Headerleft = Banana.document.info("Base", "HeaderLeft");
+        var Headerleft = document.info("Base", "HeaderLeft");
         if (Headerleft && Headerleft.indexOf(param.accountingyear) >= 0) {
             Headerleft = Headerleft.replace(param.accountingyear, param.newaccountingyear);
             param.newaccountingheaderleft = Headerleft;
 
         }
-        var Headerright = Banana.document.info("Base", "HeaderRight");
+        var Headerright = document.info("Base", "HeaderRight");
         if (Headerright && Headerright.indexOf(param.accountingyear) >= 0) {
             Headerright = Headerright.replace(param.accountingyear, param.newaccountingyear);
             param.newaccountingheaderright = Headerright;
@@ -102,7 +101,7 @@ function initParam() {
         param.differenceyear = Banana.SDecimal.subtract(currentYearint, fileYearint);
 
         param.newaccountingopeningdate = changeYearInDate(param.differenceyear, OpeningDate);
-        var ClosureDate = Banana.document.info("AccountingDataBase", "ClosureDate");
+        var ClosureDate = document.info("AccountingDataBase", "ClosureDate");
         param.newaccountingclosuredate = changeYearInDate(param.differenceyear, ClosureDate);
 
 

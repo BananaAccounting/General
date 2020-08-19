@@ -1,0 +1,68 @@
+%%info_test_name{DocumentChangeDate.test}
+\documentclass{report}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{listings}
+\usepackage[margin=1cm]{geometry}
+\begin{document}
+\newenvironment{tablevalue}[2]{\textbf{Table: #1}\begin{longtable}[l]{#2}}{\end{longtable}}
+\newenvironment{reportvalue}[1]{\textbf{Report: #1}\\}{}
+\lstnewenvironment{jsonvalue}[1]{\textbf{Json: #1}\lstset{language=Java}}{}
+\lstnewenvironment{xmlvalue}[1]{\textbf{Xml: #1}\lstset{language=Xml}}{}
+\newcommand{\info}[2]{\textit{#1: #2}\\}
+\newcommand{\fatalerror}[1]{\textbf{\textcolor[rgb]{1,0,0}{Fatal error: #1}}\\}
+\newcommand{\keyvalue}[2]{\textbf{Keyvalue: #1} #2\\}
+\newcommand{\textvalue}[1]{#1\\}
+\newcommand{\excltest}[1]{\\Excluded from compare: #1}
+\newcommand{\lognewpage}{\newpage}
+\newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
+\newenvironment{test}[1]{\section*{Test case: #1}}{}
+%Begin test data
+%%SCRIPT{C:/Users/claudia/Documents/GitHub/BananaAccounting/General/SampleApps/./test/DocumentChangeDate.test.js}
+%
+\begin{testcase}{TestDocumentChangeDate}
+\begin{test}{test1}
+\keyvalue{fileName\_0}{file:script/testcases/documentchangedate/contabilita budget entrate-uscite 2020-2023.ac2}
+\keyvalue{differenceyear\_0}{0}
+\keyvalue{accountingyear\_0}{2020}
+\keyvalue{newaccountingyear\_0}{2020}
+\keyvalue{newaccountingopeningdate\_0}{20200101}
+\keyvalue{newaccountingclosuredate\_0}{20231231}
+\keyvalue{newaccountingheaderleft\_0}{Contabilità 2020-2023}
+\keyvalue{newaccountingheaderright\_0}{}
+\keyvalue{fileName\_1}{file:script/testcases/documentchangedate/contabilita in partita doppia con IVA 2020.ac2}
+\keyvalue{differenceyear\_1}{0}
+\keyvalue{accountingyear\_1}{2020}
+\keyvalue{newaccountingyear\_1}{2020}
+\keyvalue{newaccountingopeningdate\_1}{20200101}
+\keyvalue{newaccountingclosuredate\_1}{20201231}
+\keyvalue{newaccountingheaderleft\_1}{}
+\keyvalue{newaccountingheaderright\_1}{Accounting 2020}
+\keyvalue{fileName\_2}{file:script/testcases/documentchangedate/contabilita\_parrocchia 2019.ac2}
+\keyvalue{differenceyear\_2}{1}
+\keyvalue{accountingyear\_2}{2019}
+\keyvalue{newaccountingyear\_2}{2020}
+\keyvalue{newaccountingopeningdate\_2}{20200101}
+\keyvalue{newaccountingclosuredate\_2}{20201231}
+\keyvalue{newaccountingheaderleft\_2}{Contabilità 2020}
+\keyvalue{newaccountingheaderright\_2}{}
+\keyvalue{fileName\_3}{file:script/testcases/documentchangedate/cs\_parrocchia 2018.ac2}
+\keyvalue{differenceyear\_3}{2}
+\keyvalue{accountingyear\_3}{2018}
+\keyvalue{newaccountingyear\_3}{2020}
+\keyvalue{newaccountingopeningdate\_3}{20200101}
+\keyvalue{newaccountingclosuredate\_3}{20201231}
+\keyvalue{newaccountingheaderleft\_3}{}
+\keyvalue{newaccountingheaderright\_3}{01.01.2020}
+\keyvalue{fileName\_4}{file:script/testcases/documentchangedate/lc\_parrocchia 2018-2020.ac2}
+\keyvalue{differenceyear\_4}{2}
+\keyvalue{accountingyear\_4}{2018}
+\keyvalue{newaccountingyear\_4}{2020}
+\keyvalue{newaccountingopeningdate\_4}{20200101}
+\keyvalue{newaccountingclosuredate\_4}{20221231}
+\keyvalue{newaccountingheaderleft\_4}{Parrocchia 2020-2020}
+\keyvalue{newaccountingheaderright\_4}{}
+\keyvalue{Result}{Passed}
+\end{test}
+\end{testcase}
+\end{document}
