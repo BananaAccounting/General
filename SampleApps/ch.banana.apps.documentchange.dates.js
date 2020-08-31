@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// @id = DocumentChangeDate.js
+// @id = ch.banana.apps.documentchange.dates.js
 // @api = 1.0
-// @pubdate = 2020.08.17
+// @pubdate = 2020-08-31
 // @publisher = Banana.ch SA
-// @description = DocumentChangeDate
+// @description = Update Dates in the accounting file
 // @task = app.command
 // @doctype = 100.*;110.*;130.*
 
