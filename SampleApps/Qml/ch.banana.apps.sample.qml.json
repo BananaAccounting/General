@@ -1,0 +1,11 @@
+{
+    "category": "productivity",
+    "country": "universal",
+    "countryCode": "un",
+    "description": "QML Samples",
+    "id": "ch.banana.apps.sample.qml",
+    "language": "en",
+    "publisher": "Banana.ch",
+    "title": "QML Samples",
+    "version": "1.0"
+}

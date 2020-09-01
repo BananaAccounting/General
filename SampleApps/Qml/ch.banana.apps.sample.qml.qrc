@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+	<qresource>
+		<file alias="manifest.json">ch.banana.apps.sample.qml.json</file>
+		<file>ch.banana.apps.sample.qml.js</file>
+		<file>dlgMain.qml</file>
+	</qresource>
+</RCC>
