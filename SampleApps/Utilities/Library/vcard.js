@@ -18,7 +18,7 @@
 // @publisher = Banana.ch SA
 // @description = Create vCard from address
 // @task = export.file
-// @doctype = *.*
+// @doctype = 400.140.*;400.120.*
 // @docproperties = 
 // @outputformat = none
 // @inputdatasource = none
