@@ -69,11 +69,13 @@ function exec(inData, options) {
     }
 }
 
-function initParam(document) {
+function initParam(document, isTest) {
     var param = {};
     param.differenceyear = 0;
     param.accountingyear = "";
     param.newaccountingyear = new Date().getFullYear();
+    if (isTest)
+        param.newaccountingyear = "2020";
     param.newaccountingopeningdate = "";
     param.newaccountingclosuredate = "";
     param.newaccountingheaderleft = "";

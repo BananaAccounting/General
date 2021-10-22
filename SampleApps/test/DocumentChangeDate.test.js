@@ -9,7 +9,7 @@
 // @outputformat = none
 // @inputdataform = none
 // @timeout = -1
-// @includejs = ../DocumentChangeDate.js
+// @includejs = ../ch.banana.apps.documentchange.dates.js
 
 // Register this test case to be executed
 Test.registerTestCase(new TestDocumentChangeDate());
@@ -57,7 +57,8 @@ TestDocumentChangeDate.prototype.test1 = function() {
     for (var i = 0; i < this.fileNameList.length; i++) {
         var document = Banana.application.openDocument(this.fileNameList[i]);
         if (document){
-            var param = initParam(document);
+            var isTest = true;
+            var param = initParam(document, isTest);
             Test.logger.addKeyValue("fileName_"+i.toString(), this.fileNameList[i]);
             Test.logger.addKeyValue("differenceyear_"+i.toString(), param.differenceyear.toString());
             Test.logger.addKeyValue("accountingyear_"+i.toString(), param.accountingyear.toString());
