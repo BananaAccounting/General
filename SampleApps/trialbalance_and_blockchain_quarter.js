@@ -1,4 +1,4 @@
-// Copyright [2015] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2022] [Banana.ch SA - Lugano Switzerland]
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.app.trialbalanceandblockchain
 // @api = 1.0
-// @pubdate = 2017-03-22
+// @pubdate = 2022-03-25
 // @publisher = Banana.ch SA
 // @description = Trial Balance and blockchain
 // @task = app.command
@@ -94,19 +94,20 @@ function printAccountsTable(startDate, endDate, report) {
 	//Get the columns names and set all to lower case
 	var accountsTab = Banana.document.table("Accounts");
 	var tColumnNames = accountsTab.columnNames;
+	var columns = [];
 	for (var i = 0; i < tColumnNames.length; i++ ) {
-		tColumnNames[i] = tColumnNames[i].toLowerCase();
+		columns.push(tColumnNames[i].toLowerCase());
 	}
 
 	//Check if "kostenstelle" and "zuordnung" columns exists
 	var kostenstelleColumn = false;
 	var zuordnungColumn = false;
 
-	if (tColumnNames.indexOf("kostenstelle") > -1) {
+	if (columns.indexOf("kostenstelle") > -1) {
 		kostenstelleColumn = true;
 	}
 
-	if (tColumnNames.indexOf("zuordnung") > -1) {
+	if (columns.indexOf("zuordnung") > -1) {
 		zuordnungColumn = true;
 	}
 
