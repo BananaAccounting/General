@@ -355,6 +355,80 @@ function exec() {
 
 /** 
     File:        embedded_javascript_tutorial1.ac2
+    Id:          206
+    Description: Add structured text
+*/
+// @api = 1.2.0
+// @id = ch.banana.uni.app.tutorialstructuredtext
+// @description = Hello world
+// @task = app.command
+// @doctype = nodocument
+// @publisher = Publisher name
+// @pubdate = 2022-05-31
+// @inputdatasource = none
+// @timeout = -1
+
+function exec() {
+
+    //Create the report and the stylesheet
+    var report = Banana.Report.newReport('Tutorial Banana.ReportElement.addStructuredText');
+    var stylesheet = Banana.Report.newStyleSheet();
+    stylesheet.addStyle(".example", "margin-top: 2em; margin-bottom: 0.5em; font-style: italic;");
+
+    report.addParagraph("--- Markdown example ---", "example");
+
+    let mdText = "# Header 1\n";
+    mdText += "## Header 2\n";
+    mdText += "### Header 3\n";
+    mdText += "Markdown text with **bold** and *italic*.  \n";
+    mdText += "[Markdown link](https://www.banana.ch)  \n";
+    mdText += "* List row 1\n";
+    mdText += "* List row 2\n";
+    mdText += "* List row 3\n";
+    report.addStructuredText(mdText, "md");
+    
+    report.addParagraph("--- Simple html example ---", "example");
+
+    let htmlText = "<h1 style=\"color: purple\">Header 1</h1>\n";
+    htmlText += "<p style=\"color: blue\">Paragraph</p>\n";
+    report.addStructuredText(htmlText, "html");
+
+    report.addParagraph("--- Full html example ---", "example");
+
+    htmlText = "<html>\n";
+    htmlText += "<head>\n";
+    htmlText += "<style>\n";
+    htmlText += "p.green {color: green;}\n";
+    htmlText += ".red {color: red;}\n";
+    htmlText += "</style>\n";
+    htmlText += "</head>\n";
+    htmlText += "<body>\n";
+    htmlText += "<h1 class=\"red\">Header 1</h1>\n";
+    htmlText += "<p class=\"green\">Paragraph</p>\n";
+    htmlText += "</body>\n";
+    htmlText += "</html>\n";
+    report.addStructuredText(htmlText, "html", stylesheet);
+
+    report.addParagraph("--- Plain html example ---", "example");
+
+    let plainText = "Testo riga 1\n";
+    plainText += "Testo riga 2\n";
+    plainText += "Testo riga 3\n";
+    report.addStructuredText(plainText, "text");	
+
+    //Print the report
+    Banana.Report.preview(report, stylesheet);
+
+}
+
+
+
+
+
+
+
+/** 
+    File:        embedded_javascript_tutorial1.ac2
     Id:          210
     Description: Create a table with one row
 */
