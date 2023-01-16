@@ -1,0 +1,18 @@
+{
+    "category": "productivity",
+    "country":"",
+    "countryCode":"",
+    "description": "Translations example",
+    "description.en": "Translations example",
+    "description.it": "Esempio traduzioni",
+    "description.de": "Beispiel Übersetzungen",
+    "description.fr": "Exemple traductions",
+    "language":"",
+    "publisher": "Banana.ch",
+    "title": "Translations example",
+    "title.en": "Translations example",
+    "title.it": "Esempio traduzioni",
+    "title.de": "Beispiel Übersetzungen",
+    "title.fr": "Exemple traductions",
+    "version": "1.1"
+}

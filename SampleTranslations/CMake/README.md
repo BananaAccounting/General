@@ -1,10 +1,11 @@
 # Sample Translations
 
-This folder contains a sample extention for translating strings in javascript and qml files.
+This folder contains a sample extention for translating strings in javascript
+and qml files using a CMakeLists.txt project.
 
 Content:
 
-- main.js: the extention.
+- translations.js: the extention.
 - Dialog.qml: a dialog used by the extention.
 - translations.pro: the project used to update and release the translations.
 - translations.qrc: the resource file for creating the extention's package.

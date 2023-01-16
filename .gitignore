@@ -3,3 +3,5 @@
 .DS_Store
 ~$*
 *.pro.user
+**/build-CMake*
+CMakeLists.txt.user
