@@ -8,10 +8,10 @@ set(EXTENSION_ID "ch.banana.sample.fullproject")
 # adapt the path to your environment
 # {
 #     "cmake.configureSettings": {
-#         "BAN_QT_RCC": "C:\users\user_name\AppData\Local\Programs\BananaPlusDev\rcc.exe",
-#         "BAN_EXE_PATH": "C:\users\user_name\AppData\Local\Programs\BananaPlusDev\BananaPlusDev.exe",
-#         "BAN_QT_LUPDATE": "C:\Qt\6.5.2\macos\bin\lupdate",
-#         "BAN_QT_LRELEASE": "C:\Qt\6.5.2\macos\bin\lrelease"
+#         "BAN_QT_RCC": "C:/users/user_name/AppData/Local/Programs/BananaPlusDev/rcc.exe",
+#         "BAN_EXE_PATH": "C:/users/user_name/AppData/Local/Programs/BananaPlusDev/BananaPlusDev.exe",
+#         "BAN_QT_LUPDATE": "C:/Qt/6.5.2/macos/bin/lupdate",
+#         "BAN_QT_LRELEASE": "C:/Qt/6.5.2/macos/bin/lrelease"
 #     }
 # }
 set(BAN_QT_RCC $ENV{BAN_QT_RCC} CACHE FILEPATH "Path to Qt rcc executable")
