@@ -1,0 +1,22 @@
+Test Banana Apps
+----------------
+
+Date:        2018-06-27 11:07:05.684
+Duration:    00:00:00.007
+Application: Banana90 9.0.3
+OS:          macOS High Sierra (10.13)
+Qt:          5.11.1
+
+Test summary
+------------
+
+Test succesfully completed
+
+> Fatal errors:  0
+> Differences:   0
+> Added:         0
+> Deleted:       0
+> Identical:     7
+> Total results: 7
+> Total files:   1
+

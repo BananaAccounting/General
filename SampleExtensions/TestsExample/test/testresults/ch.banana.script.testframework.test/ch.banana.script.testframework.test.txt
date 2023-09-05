@@ -1,0 +1,101 @@
+%%info_test_name{ch.banana.script.testframework.test}
+\documentclass{report}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{listings}
+\usepackage[margin=1cm]{geometry}
+\begin{document}
+\newenvironment{tablevalue}[2]{\textbf{Table: #1}\begin{longtable}[l]{#2}}{\end{longtable}}
+\newenvironment{reportvalue}[1]{\textbf{Report: #1}\\}{}
+\lstnewenvironment{jsonvalue}[1]{\textbf{Json: #1}\lstset{language=Java}}{}
+\lstnewenvironment{xmlvalue}[1]{\textbf{Xml: #1}\lstset{language=Xml}}{}
+\newcommand{\info}[2]{\textit{#1: #2}\\}
+\newcommand{\fatalerror}[1]{\textbf{\textcolor[rgb]{1,0,0}{Fatal error: #1}}\\}
+\newcommand{\keyvalue}[2]{\textbf{Keyvalue: #1} #2\\}
+\newcommand{\textvalue}[1]{#1\\}
+\newcommand{\excltest}[1]{\\Excluded from compare: #1}
+\newcommand{\lognewpage}{\newpage}
+\newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
+\newenvironment{test}[1]{\section*{Test case: #1}}{}
+%Begin test data
+%%SCRIPT{/Users/lorenzo/Programmazione/GitHub/BananaAccounting/General/SampleTests/TestFramework/test/ch.banana.script.testframework.test.js}
+%
+\begin{testcase}{TestFrameworkExample}
+\begin{test}{testOk}
+\textvalue{This test will pass}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testFailure}
+\textvalue{This test will verify that a failure occurs}\\
+\textvalue{Error: Assertion failed}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testVerifyMethods}
+\textvalue{The object Test defines methods to verify conditions.}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testOutputMethods}
+\textvalue{The object Test.logger defines methods to output values, so that they can be compared with the results of previous tests.}\\
+%This is a comment
+\info{This is an info}{27 giugno 2018 11:07:13 CEST}
+\textvalue{This is a text}\\
+\begin{jsonvalue}{This is a json value}
+{
+    "color": "yellow",
+    "count": 100
+}
+\end{jsonvalue}
+\begin{xmlvalue}{This is a xml value}
+<note>
+   <to>Pinco</to>
+   <from>Pallino</from>
+   <heading>Reminder</heading>
+   <body>Don't forget me this weekend!</body>
+</note>
+\end{xmlvalue}
+\begin{reportvalue}{This is a report}
+Hello World !!! \\
+\end{reportvalue}
+\begin{tablevalue}{This is a table}{ l  l  l }
+Date & Description & Amount\\
+2017-01-03 & Withdrawal from post office account & 350.00\\
+2017-01-05 & Office supplies & 80.00\\
+2017-01-06 & Sales in cash & 8000.00\\
+2017-01-20 & Purchase goods at Company 1 & 1500.00\\
+2017-01-28 & Payment Company 1 invoice & 1500.00\\
+2017-02-01 & Payment Electricity and Phone & 300.00\\
+2017-02-01 & Electricity & 200.00\\
+2017-02-01 & Telephone & 100.00\\
+ &  & \\
+\end{tablevalue}
+\begin{tablevalue}{This is a csv value}{ l  l  l  l  l }
+Date & Description & Amount & Account & Category\\
+20180105 & Purchase & 100.00 & Bank & Office\\
+20180112 & Sales & 50.00 & Cash & Goods\\
+20180121 & Sales & 120.00 & Cash & Goods\\
+\end{tablevalue}
+\begin{tablevalue}{This is a subset of a csv value}{ l  l  l }
+Date & Category & Description\\
+20180105 & Office & Purchase\\
+20180112 & Goods & Sales\\
+20180121 & Goods & Sales\\
+\end{tablevalue}
+This is a raw text.\\
+\textvalue{ignored fatal error: This is a fatal error message}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testBananaApps}
+\textvalue{This test will tests the BananaApp ch.banana.script.bananaapp.js}\\
+\keyvalue{Result of methos 'findBiggestTransactionAmount()'}{8000.00}
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testResultsSplitting}
+\textvalue{This test split the results over more files}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\begin{test}{testLocalMethod}
+\textvalue{I'm just a local function}\\
+\keyvalue{Result}{Passed}
+\end{test}
+\end{testcase}
+\end{document}

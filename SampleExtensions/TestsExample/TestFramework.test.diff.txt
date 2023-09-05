@@ -1,0 +1,49 @@
+Test Banana Apps
+----------------
+
+Date:        2018-04-04 11:49:51.404
+Duration:    00:00:00.026
+Application: Banana90 9.0.3
+OS:          macOS High Sierra (10.13)
+Qt:          5.9.4
+
+Test summary
+------------
+
+Test failed
+
+> Fatal errors:  3
+> Differences:   0
+> Added:         13
+> Deleted:       0
+> Identical:     81
+> Total results: 94
+> Total files:   5
+
+Differences Summary
+-------------------
+
+> Files with fatal errors
+>> test/testresults/ch.banana.script.testframework.test/ch.banana.script.testframework.test.txt
+
+> Files with results only in current
+>> test/testresults/ch.banana.script.testframework.test/ch.banana.script.testframework.test.txt
+
+Differences Details
+-------------------
+
+>> test/testresults/ch.banana.script.testframework.test/ch.banana.script.testframework.test.txt
+			48  + \end{tablevalue}
+			49  + \begin{tablevalue}{This is a csv value}{ l  l  l  l  l }
+			50  + Date & Description & Amount & Account & Category\\
+			51  + 20180105 & Purchase & 100.00 & Bank & Office\\
+			52  + 20180112 & Sales & 50.00 & Cash & Goods\\
+			53  + 20180121 & Sales & 120.00 & Cash & Goods\\
+			54  + \end{tablevalue}
+			55  + \begin{tablevalue}{This is a subset of a csv value}{ l  l  l }
+			56  + Date & Category & Description\\
+			57  + 20180105 & Office & Purchase\\
+			58  + 20180112 & Goods & Sales\\
+			59  + 20180121 & Goods & Sales\\
+			61  + This is a raw text.\\
+

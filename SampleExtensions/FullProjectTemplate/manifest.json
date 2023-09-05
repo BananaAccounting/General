@@ -1,0 +1,19 @@
+{ 
+"category": "productivity",
+    "country":"universal",
+    "countryCode":"un",
+    "description": "Simple extension project",
+    "description.en": "Simple extension project",
+    "description.it": "Progetto semplice di estensione",
+    "description.fr": "Projet d'extension simple",
+    "description.de": "Einfaches Erweiterungsprojekt",
+    "id": "ch.banana.sample.simpleproject",
+    "language":"en",
+    "publisher": "Banana.ch",
+    "title": "Simple extension project",
+    "title.en": "Simple extension project",
+    "title.it": "Progetto semplice di estensione",
+    "title.fr": "Projet d'extension simple",
+    "title.de": "Einfaches Erweiterungsprojekt",
+    "version": "1.0"
+}
