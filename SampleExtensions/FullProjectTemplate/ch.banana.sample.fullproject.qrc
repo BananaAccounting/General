@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
+<file>ch.banana.sample.fullproject.js</file>
 <file>manifest.json</file>
 <file>translations/translations_de.qm</file>
 <file>translations/translations_fr.qm</file>

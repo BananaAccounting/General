@@ -1,4 +1,4 @@
-%%info_test_name{ch.banana.sample.simpleproject.test}
+%%info_test_name{ch.banana.sample.fullproject.test}
 \documentclass{report}
 \usepackage{longtable}
 \usepackage{color}
@@ -18,9 +18,9 @@
 \newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
 \newenvironment{test}[1]{\section*{Test case: #1}}{}
 %Begin test data
-%%SCRIPT{/Users/lorenzo/Programmazione/Repo/BananaAccounting/General/SampleExtensions/SimpleProjectTemplate/test/ch.banana.sample.simpleproject.test.js}
+%%SCRIPT{/Users/lorenzo/Programmazione/Repo/BananaAccounting/General/SampleExtensions/FullProjectTemplate/test/ch.banana.sample.fullproject.test.js}
 %
-\begin{testcase}{TestSimpleProject}
+\begin{testcase}{TestFullProject}
 \begin{test}{testGetProfit}
 \keyvalue{Result}{Passed}
 \end{test}

@@ -1,8 +1,8 @@
 Test Banana Apps
 ----------------
 
-Date:        2023-09-05 08:34:12.874
-Duration:    00:00:00.024
+Date:        2023-09-05 13:42:18.054
+Duration:    00:00:00.009
 Application: BananaPlus 10.1.10.23240
 OS:          macOS-14.0
 Qt:          6.5.2

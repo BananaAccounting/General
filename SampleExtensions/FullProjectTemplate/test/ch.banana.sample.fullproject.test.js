@@ -9,17 +9,17 @@
 // @outputformat = none
 // @inputdataform = none
 // @timeout = -1
-// @includejs = ../ch.banana.sample.simpleproject.js
+// @includejs = ../ch.banana.sample.fullproject.js
 
 // Register this test case to be executed
-Test.registerTestCase(new TestSimpleProject());
+Test.registerTestCase(new TestFullProject());
 
 // Define the test class, the name of the class is not important
-function TestSimpleProject() {
+function TestFullProject() {
 }
 
 // This method will be called at the beginning of the test case
-TestSimpleProject.prototype.initTestCase = function () {
+TestFullProject.prototype.initTestCase = function () {
   this.testLogger = Test.logger;
   this.progressBar = Banana.application.progressBar;
   this.testFiles = [
@@ -29,18 +29,18 @@ TestSimpleProject.prototype.initTestCase = function () {
 }
 
 // This method will be called at the end of the test case
-TestSimpleProject.prototype.cleanupTestCase = function () {
+TestFullProject.prototype.cleanupTestCase = function () {
 }
 
 // This method will be called before every test method is executed
-TestSimpleProject.prototype.init = function () {
+TestFullProject.prototype.init = function () {
 }
 
 // This method will be called after every test method is executed
-TestSimpleProject.prototype.cleanup = function () {
+TestFullProject.prototype.cleanup = function () {
 }
 
-TestSimpleProject.prototype.testGetProfit = function () {
+TestFullProject.prototype.testGetProfit = function () {
   let parentLogger = this.testLogger;
   this.progressBar.start(this.testFiles.length);
 
@@ -62,7 +62,7 @@ TestSimpleProject.prototype.testGetProfit = function () {
   this.progressBar.finish();
 }
 
-TestSimpleProject.prototype.testGetProfitLabel = function () {
+TestFullProject.prototype.testGetProfitLabel = function () {
   // Verify function's retrun value
   Test.assertIsEqual(getProfitLabel(0), "Profit");
   Test.assertIsEqual(getProfitLabel(1000), "Profit");

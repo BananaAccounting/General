@@ -4,12 +4,14 @@
 <context>
     <name>ch.banana.sample.fullproject</name>
     <message>
+        <location filename="../ch.banana.sample.fullproject.js" line="28"/>
         <source>Profit</source>
-        <translation type="vanished">Utile</translation>
+        <translation>Utile</translation>
     </message>
     <message>
+        <location filename="../ch.banana.sample.fullproject.js" line="30"/>
         <source>Loss</source>
-        <translation type="vanished">Perdita</translation>
+        <translation>Perdita</translation>
     </message>
 </context>
 </TS>
