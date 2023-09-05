@@ -1,8 +1,8 @@
 Test Banana Apps
 ----------------
 
-Date:        2023-09-05 13:42:18.054
-Duration:    00:00:00.009
+Date:        2023-09-05 14:02:11.543
+Duration:    00:00:00.083
 Application: BananaPlus 10.1.10.23240
 OS:          macOS-14.0
 Qt:          6.5.2
@@ -10,13 +10,32 @@ Qt:          6.5.2
 Test summary
 ------------
 
-Test succesfully completed
+Test failed
 
 > Fatal errors:  0
 > Differences:   0
-> Added:         0
+> Added:         8
 > Deleted:       0
 > Identical:     31
-> Total results: 31
+> Total results: 39
 > Total files:   1
+
+Differences Summary
+-------------------
+
+> Files with results only in current
+>> testresults/ch.banana.sample.fullproject.test/ch.banana.sample.fullproject.test.txt
+
+Differences Details
+-------------------
+
+>> testresults/ch.banana.sample.fullproject.test/ch.banana.sample.fullproject.test.txt
+			25  + \section{testcase\_1}
+			26  + \keyvalue{File name}{testcase\_1}
+			27  + \keyvalue{File hash}{9e99a7cbbb2d4bfa2dac437268317ca5}
+			28  + \keyvalue{Profit}{73597.79}
+			29  + \section{testcase\_2}
+			30  + \keyvalue{File name}{testcase\_2}
+			31  + \keyvalue{File hash}{7dbfa249b39e6c36ce39931406e3f0ca}
+			32  + \keyvalue{Profit}{}
 

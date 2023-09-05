@@ -13,20 +13,9 @@
 // @outputformat = none
 // @inputdataform = none
 // @timeout = -1
+// @includejs = ch.banana.sample.fullproject.lib.js
 
 function exec() {
-  let profit = getProfit();
+  let profit = getProfit(Banana.document);
   Banana.Ui.showInformation(`${getProfitLabel(profit)}: ${Banana.converter.toLocalAmountFormat(profit)}`);
-}
-
-function getProfit() {
-  return Banana.document.value('Totals', 2 ,'Balance');
-}
-
-function getProfitLabel(amount) {
-  if (Banana.SDecimal.sign(amount) >= 0) {
-    return qsTr("Profit");
-  } else {
-    return qsTr("Loss");
-  }
 }

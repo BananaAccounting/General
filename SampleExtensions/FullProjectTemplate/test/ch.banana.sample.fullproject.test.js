@@ -1,4 +1,4 @@
-// @id = ch.banana.app/rentsdetailed.test
+// @id = ch.banana.sample.fullproject
 // @api = 1.0
 // @pubdate = 2023-08-23
 // @publisher = Banana.ch SA
@@ -53,10 +53,10 @@ TestFullProject.prototype.testGetProfit = function () {
 
     // Log value to test results, they will be copared with the expected values
     let fileName = Banana.IO.fileCompleteBaseName(this.testFiles[i]);
-    this.testLogger = parentLogger.addSection(fileName);
+    this.testLogger.addSection(fileName);
     this.testLogger.addKeyValue("File name", fileName);
     this.testLogger.addKeyValue("File hash", banDoc.info("Base", "HashTotal"));
-    this.testLogger.addKeyValue("Profit", getProfit());
+    this.testLogger.addKeyValue("Profit", getProfit(banDoc));
   }
 
   this.progressBar.finish();
