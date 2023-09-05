@@ -15,12 +15,12 @@
 // @timeout = -1
 
 function exec() {
-  let profit = getProfit();
+  let profit = getProfit(Banana.document);
   Banana.Ui.showInformation(`${getProfitLabel(profit)}: ${Banana.converter.toLocalAmountFormat(profit)}`);
 }
 
-function getProfit() {
-  return Banana.document.value('Totals', 2 ,'Balance');
+function getProfit(doc) {
+  return doc.value('Totals', 2 ,'Balance');
 }
 
 function getProfitLabel(amount) {

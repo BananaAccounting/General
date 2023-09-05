@@ -22,6 +22,14 @@
 %
 \begin{testcase}{TestSimpleProject}
 \begin{test}{testGetProfit}
+\section{testcase\_1}
+\keyvalue{File name}{testcase\_1}
+\keyvalue{File hash}{9e99a7cbbb2d4bfa2dac437268317ca5}
+\keyvalue{Profit}{73597.79}
+\section{testcase\_2}
+\keyvalue{File name}{testcase\_2}
+\keyvalue{File hash}{7dbfa249b39e6c36ce39931406e3f0ca}
+\keyvalue{Profit}{}
 \keyvalue{Result}{Passed}
 \end{test}
 \begin{test}{testGetProfitLabel}

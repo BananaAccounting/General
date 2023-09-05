@@ -44,19 +44,19 @@ TestSimpleProject.prototype.testGetProfit = function () {
   let parentLogger = this.testLogger;
   this.progressBar.start(this.testFiles.length);
 
-  for (let i = 0; i.length; i++) {
+  for (let i = 0; i < this.testFiles.length; i++) {
 
     if (!this.progressBar.step())
       break;
-    let banDoc = Banana.application.testFiles(testFiles[i]);
-    Test.assert(banDoc, `Banana.document ${testFiles[i]} not found.`);
+    let banDoc = Banana.application.openDocument(this.testFiles[i]);
+    Test.assert(banDoc, `Banana document ${this.testFiles[i]} not found.`);
 
     // Log value to test results, they will be copared with the expected values
-    let fileName = Banana.IO.fileCompleteBaseName(testFiles[i]);
-    this.testLogger = parentLogger.addSection(fileName);
-    this.testLogger.addInfo("File name", fileName);
-    this.testLogger.addInfo("File hash", Banana.document.info("Base", "HashTotal"));
-    this.testLogger.addInfo("Profit", getProfit());
+    let fileName = Banana.IO.fileCompleteBaseName(this.testFiles[i]);
+    this.testLogger.addSection(fileName);
+    this.testLogger.addKeyValue("File name", fileName);
+    this.testLogger.addKeyValue("File hash", banDoc.info("Base", "HashTotal"));
+    this.testLogger.addKeyValue("Profit", getProfit(banDoc));
   }
 
   this.progressBar.finish();
