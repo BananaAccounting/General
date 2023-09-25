@@ -20,7 +20,7 @@ set(BAN_QT_LUPDATE $ENV{BAN_QT_LUPDATE} CACHE FILEPATH "Path to Qt lupdate execu
 set(BAN_QT_LRELEASE $ENV{BAN_QT_LRELEASE} CACHE FILEPATH "Path to Qt lrelease executable")
 
 # This target is used to build the extension to a sbaa package
-add_custom_target(fullproject
+add_custom_target(${PROJECT_NAME}
     COMMAND ${BAN_QT_RCC} -o ${EXTENSION_ID}.sbaa --binary ${EXTENSION_ID}.qrc
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     SOURCES ${EXTENSION_ID}.qrc
