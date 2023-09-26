@@ -19,10 +19,10 @@ This test case is a simple example where all the functionalities of the [BananaA
 You can run a test case in two ways:
 
 * Through Visual Studio Code (this is the preferred method)
-   * Other the cmake project in Visual studio code
+   * Set up the cmake project as described in [Build extensions with VS Code and CMake](https://www.banana.ch/doc/en/node/10058#run_the_tests)
+   * Open the cmake project in Visual studio code
    * From the Activity bar on the left select CMake
    * Right click on the test project and select Run utility
-   * For further details see: [Build extensions with VS Code and CMake](https://www.banana.ch/doc/en/node/10058#run_the_tests)
 
 * Through the [Manage Apps](https://www.banana.ch/doc9/en/node/4727) dialog
    * Open the Manage Apps dialog
