@@ -1,7 +1,7 @@
 // This script calculate an interest rate for the defined period
 // @id = ch.banana.script.calcinterest.js
 // @version = 1.0
-// @pubdate = 2014-01-20
+// @pubdate = 2024-02-22
 // @publisher = Banana.ch SA
 // @description = Calculate interest on account (exact days)
 // @task = app.command
@@ -28,11 +28,11 @@ function exec(string) {
     // Base vor interest calculation, valid number are 360 and 365
     parameters.daysYear = 365;
     // round the interest amount to nr. of decimal  
-    parameters.roundDecimals = 2;
+    parameters.roundDecimals = 3;
     // if true use budget data
     parameters.useBudgetData = false;
     // display account card
-    parameters.addTextAccountCard = false;
+    parameters.addTextAccountCard = true;
 
     var dialogHeader = 'Calculate interest rate';
     parameters.accountId = Banana.Ui.getText(dialogHeader, "Account number");
@@ -54,11 +54,11 @@ function exec(string) {
     parameters.startDate = datePeriod.startDate;
     parameters.endDate = datePeriod.endDate;
 
-    parameters.interestRateDebit = Banana.Ui.getDouble(dialogHeader, 'Interest rate on debit balance in %', 0, 0)
+    parameters.interestRateDebit = Banana.Ui.getDouble(dialogHeader, 'Interest rate on debit balance in %', 0, 0, 100, 3);
 
-    parameters.interestRateCredit = Banana.Ui.getDouble(dialogHeader, 'Interest rate on credit balance in %', 0, 0)
+    parameters.interestRateCredit = Banana.Ui.getDouble(dialogHeader, 'Interest rate on credit balance in %', 0, 0, 100, 3);
 
-    parameters.addTextAccountCard = Banana.Ui.showQuestion(dialogHeader, "Dispaly account card data?");
+    // parameters.addTextAccountCard = Banana.Ui.showQuestion(dialogHeader, "Display account card data?");
 
     //
     // internal variable definition 
@@ -70,6 +70,7 @@ function exec(string) {
     Banana.Ui.showText(returnValue.displayText);
 
 }
+
 function VerifyParameters(param) {
     var returnValue = true;
     if (param.startDate === "undefined" || param.startDate.length == 0) {
