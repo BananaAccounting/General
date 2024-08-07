@@ -68,8 +68,8 @@ It is a very basic, in the function generateChart you specify the accounts or gr
 Balance Sheet and Profit & Loss report with transactions details for each account.
 
 
-## frommemberfee.js
-It create incoice transactions, taking all  accounts in the accounting tabl that have a value in the column MemberFee.
+## ch.banana.script.invoices.frommemberfee.js
+This extension creates invoice transactions, taking all accounts in the accounting table that have a value in the column MemberFee.
 Useful for a not for profit organisation that send Member fee incoices.
  
 
