@@ -317,7 +317,7 @@ function exec(string) {
 			var nomeDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('FirstName');
 			var cognomeDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('FamilyName');
 			var indirizzo1Destinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('Street');
-			var capDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('Zip');
+			var capDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('PostalCode');
 			var luogoDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('Locality');
 			var indirizzo2Destinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('AddressExtra');
 			var nazioneDestinatario = Banana.document.table('Accounts').findRowByValue('Account',conto).value('Country');
