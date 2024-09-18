@@ -2,7 +2,7 @@
 // @version = 1.0
 // @pubdate = 2016-11-29
 // @publisher = Banana.ch SA
-// @description = Create invoice transactions, from account
+// @description = Create invoice transactions from member fee
 // @task = import.transactions
 // @xtask = app.command
 // @outputformat = tablewithheaders
