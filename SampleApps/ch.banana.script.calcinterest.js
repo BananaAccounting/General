@@ -410,14 +410,17 @@ function GetVisibleColumns(tableName, doc) {
         return columns;
     var table = doc.table(tableName);
     if (table) {
-        var tRow = table.row(0);
-        if (tRow) {
+        for (var i = 0; i < table.rowCount; i++) {
+            var tRow = table.row(i);
             var jsonString = tRow.toJSON();
-            var jsonObj = JSON.parse(jsonString);
-            for (var key in jsonObj) {
-                if (IsColumnVisible(key, tableName, doc)) {
-                    columns.push(key);
+            if (jsonString.length > 0) {
+                var jsonObj = JSON.parse(jsonString);
+                for (var key in jsonObj) {
+                    if (IsColumnVisible(key, tableName, doc)) {
+                        columns.push(key);
+                    }
                 }
+                break;
             }
         }
     }
