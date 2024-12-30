@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.apps.parametrizable.import.csv
 // @api = 1.0
-// @pubdate = 2024-12-10
+// @pubdate = 2024-12-30
 // @publisher = Banana.ch SA
 // @description = Parameterizable import CSV
 // @task = import.transactions
@@ -27,38 +27,48 @@
 
 
 
-//The purpose of this function is to let the users define the parameters for the conversion of the CSV file
+//This function defines the parameters specific for the CSV Transactions file to be imported
 function getConversionParamUser(convertionParam) {
     
-    // variable used to specify the separator used in the CSV file (e.g. ';')
+    // The following variables need to be set according to the specific 
+    // CSV file that will be imported
+    
+    // Column separator character.
+    // Use '\t' for tab separated columns.
     convertionParam.column_separator = ';';
 
-    // variable used to specify the text delimiter used in the CSV file (e.g. '"')
+    // Text delimiter character for string
     convertionParam.text_delimiter = '"';
 
-    // variable used to specify the amounts decimal separator used in the CSV file (e.g. ".")
+    // Decimal separator charachter used for amounts
     convertionParam.amounts_decimal_separator = '.';
 
-    // variable used to specify at which row of the CSV file is the header (column titles)
+    // Line number where the column header starts (with the columns name)
+    // First line is 0
     convertionParam.header_line_start = 0;
 
-    // variable used to specify at which row of the CSV file start the transactions rows
+    // Line number where data starts 
+    // Usually header_line_start + 1
     convertionParam.data_line_start = 1;
 
-    // variable used to specify the name for the column with the date transaction used in the CSV file
+    // Column name header for the date transaction 
     convertionParam.column_date_name = '';
 
-    // variable used to specify the date format used in the CSV file (eg. 'dd.mm.yyyy')
+    // Date format for column containing dates 
+    // For example 'dd.mm.yyyy', 'mm/dd/yyyy', 'dd.mm.yy', 'yyyy-mm-dd'
     convertionParam.date_format = '';
 
-    // variable used to specify the name for the column with the transaction description used in the CSV file
+    // Column name for the column description 
     convertionParam.column_description_name = '';
 
-    // variable used to specify the name for the column with the income transaction amount used in the CSV file
+    // Column name for the income amount 
     convertionParam.column_income_name = '';
 
-    // variable used to specify the name for the column with the expenses transaction amount used in the CSV file
+    // Column name for the expenses/outcome amounts 
     convertionParam.column_expenses_name = '';
+
+    // Column name for the external reference of the transaction
+    convertionParam.column_external_reference_name = '';
 }
 
 function rowConverterUser(convertionParam, inputRow, convertedRow) {
@@ -101,6 +111,7 @@ function defineConversionParam() {
     convertionParam.column_description_name = '';
     convertionParam.column_income_name = '';
     convertionParam.column_expenses_name = '';
+    convertionParam.column_external_reference_name = '';
 
     /** IN CASE THERE IS NO HEADER 
      *   include the end of line */
@@ -175,6 +186,8 @@ function rowConverter(convertionParam, inputRow) {
         convertedRow["Income"] = Banana.Converter.toInternalNumberFormat(inputRow[convertionParam.column_income_name], convertionParam.amounts_decimal_separator);
         convertedRow["Expenses"] = '';
     }
+
+    convertedRow["ExternalReference"] = inputRow[convertionParam.column_external_reference_name];
 
     rowConverterUser(convertionParam, inputRow, convertedRow);
 
