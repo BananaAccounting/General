@@ -18,7 +18,7 @@
 // @publisher = Banana.ch SA
 // @description = Trial Balance and blockchain (Quarter periods)
 // @task = app.command
-// @doctype = *;*
+// @doctype = 100.*;110.*;130.*
 // @docproperties =
 // @outputformat = none
 // @inputdatasource = none

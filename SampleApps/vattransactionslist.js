@@ -3,7 +3,7 @@
 // @publisher = Banana.ch SA
 // @description = Vat transactions list
 // @task = app.command
-// @doctype = *;110
+// @doctype = *.110
 // @inputdatasource = none
 // @timeout = -1
 

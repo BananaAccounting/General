@@ -18,7 +18,7 @@
 // @publisher = Banana.ch SA
 // @description = Timesheet Export
 // @task = app.command
-// @doctype = 400.*
+// @doctype = 400.600
 // @docproperties = 
 // @outputformat = none
 // @inputdataform = none
