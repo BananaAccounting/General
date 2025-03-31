@@ -14,8 +14,8 @@
       <Override Locale="de-de" Value="Daten von Banana Buchhaltung wiederherstellen"/>
       <Override Locale="fr-fr" Value="Récupérer les données de Banana Comptabilité"/>
    </Description>
-   <IconUrl DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/BananaAccountingSoftwareLogo.png" />
-   <SupportUrl DefaultValue="https://www.banana.ch/doc/en/node/8333" />
+   <IconUrl DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/images/BananaAccountingSoftwareLogo.png" />
+   <SupportUrl DefaultValue="https://www.banana.ch/doc8/en/node/8333" />
    <Hosts>
       <Host Name="Workbook" />
    </Hosts>
@@ -25,7 +25,7 @@
       </Sets>
    </Requirements>
    <DefaultSettings>
-      <SourceLocation DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Home.html" />
+      <SourceLocation DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/Home.html" />
    </DefaultSettings>
    <Permissions>ReadWriteDocument</Permissions>
    <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
@@ -70,14 +70,14 @@
       </Hosts>
       <Resources>
          <bt:Images>
-            <bt:Image id="icon1_16x16" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_16x16.png" />
-            <bt:Image id="icon1_32x32" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_32x32.png" />
-            <bt:Image id="icon1_80x80" DefaultValue="https://raw.githubusercontent.com/BananaAccounting/General/master/OfficeAddIns/ExcelAddIns/BananaAccounting/msofficeplugin_local/images/icon1_80x80.png" />
+            <bt:Image id="icon1_16x16" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/images/icon1_16x16.png" />
+            <bt:Image id="icon1_32x32" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/images/icon1_32x32.png" />
+            <bt:Image id="icon1_80x80" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/images/icon1_80x80.png" />
          </bt:Images>
          <bt:Urls>
-            <bt:Url id="residFunctionsUrl" DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Functions.html" />
-            <bt:Url id="residTaskPaneUrl" DefaultValue="http://localhost:8081/v1/files/BananaAccountingExcelAddin/Index.html" />
-            <bt:Url id="GetStartedLearnMoreUrl" DefaultValue="https://www.banana.ch/doc/en/node/8801" />
+            <bt:Url id="residFunctionsUrl" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/Functions.html" />
+            <bt:Url id="residTaskPaneUrl" DefaultValue="https://www.banana.ch/accounting/files/msofficeplugin1/Index.html" />
+            <bt:Url id="GetStartedLearnMoreUrl" DefaultValue="https://www.banana.ch/doc8/en/node/8801" />
          </bt:Urls>
          <bt:ShortStrings>
             <!-- ShortStrings max characters==125 -->
