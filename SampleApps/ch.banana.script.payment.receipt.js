@@ -107,7 +107,6 @@ function exec(string) {
       var cell1 = tableRow.addCell();
       var paragraph = cell1.addParagraph();
       paragraph.addImage("documents:logo", "logoStyle");
-      
       tableRow = headerTable.addRow();
       var cell1 = tableRow.addCell("","");
     }
@@ -178,7 +177,7 @@ function exec(string) {
     //tableRow = docTable.addRow();
     //tableRow.addCell(texts.report_paid_from, "title", 2);
   }
-  
+
   //Report Description
   tableRow = docTable.addRow();  
   tableRow.addCell(texts.report_description, "title", 2);
@@ -214,18 +213,18 @@ function exec(string) {
 }
 
 function isLogoAvailable() {
+  var isLogoAvailable = false;
   var documentsTable = Banana.document.table("Documents");
   if (documentsTable) {
-    for (var i = 0; i < documentsTable.rowCount; i++) {
-      var tRow = documentsTable.row(i);
-      var id = tRow.value("RowId");
-      if (id === "logo") {
-        return true;  
+    var imageLogo = Banana.document.table('Documents').findRowByValue('RowId', "logo");
+    if (imageLogo) {
+      var attachment = imageLogo.value("Attachments");
+      if (attachment) {
+        return true;
       }
-      return false;
     }
   }
-  return false;
+  return isLogoAvailable;
 }
 
 /*
