@@ -1,4 +1,4 @@
-// Copyright [2016] [Banana.ch SA - Lugano Switzerland]
+// Copyright [2025] [Banana.ch SA - Lugano Switzerland]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.script.payment.receipt.js
 // @api = 1.0
-// @pubdate = 2017-04-05
+// @pubdate = 2025-04-28
 // @publisher = Banana.ch SA
 // @description = Payment receipt for cashbook
 // @description.it = Ricevuta di pagamento per libro cassa
@@ -54,6 +54,7 @@ function exec(string) {
         continue;
 
       var rowObject = {};
+      var transactionDate = tRow.value('JDate');
       var amount = Banana.SDecimal.invert(tRow.value('JAmount'));
       if (!Banana.SDecimal.isZero(amount)) {
         rowObject.amount = amount;
@@ -97,9 +98,21 @@ function exec(string) {
   // Report Header
   var headerTable = report.addTable("header_table");
   var col1 = headerTable.addColumn("header_col1");
-  var tableRow = headerTable.addRow();
+  var tableRow;
+  
   if (param.print_header) {
-    report.addImage("documents:logo", "logoStyle");
+    var isLogoPresent = isLogoAvailable();
+    if (isLogoPresent) {
+      tableRow = headerTable.addRow();
+      var cell1 = tableRow.addCell();
+      var paragraph = cell1.addParagraph();
+      paragraph.addImage("documents:logo", "logoStyle");
+      
+      tableRow = headerTable.addRow();
+      var cell1 = tableRow.addCell("","");
+    }
+    
+    tableRow = headerTable.addRow();
     var cell1 = tableRow.addCell("", "sender");
     var senderLines = getSenderAddress().split('\n');
     for (var i=0; i < senderLines.length; i++) {
@@ -165,7 +178,6 @@ function exec(string) {
     //tableRow = docTable.addRow();
     //tableRow.addCell(texts.report_paid_from, "title", 2);
   }
-
   
   //Report Description
   tableRow = docTable.addRow();  
@@ -191,7 +203,7 @@ function exec(string) {
   tableRow = docTable.addRow();
   tableRow.addCell(texts.report_date, "title", 2);
   tableRow = docTable.addRow();
-  tableRow.addCell("", "dots", 2);
+  tableRow.addCell(Banana.Converter.toLocaleDateFormat(transactionDate));
   tableRow = docTable.addRow();
   tableRow.addCell(texts.report_received_by, "title", 2);
   tableRow = docTable.addRow();
@@ -199,6 +211,21 @@ function exec(string) {
   
   // Print preview
   Banana.Report.preview(report, stylesheet);
+}
+
+function isLogoAvailable() {
+  var documentsTable = Banana.document.table("Documents");
+  if (documentsTable) {
+    for (var i = 0; i < documentsTable.rowCount; i++) {
+      var tRow = documentsTable.row(i);
+      var id = tRow.value("RowId");
+      if (id === "logo") {
+        return true;  
+      }
+      return false;
+    }
+  }
+  return false;
 }
 
 /*
@@ -219,9 +246,9 @@ function createStylesheet(param) {
   style.setAttribute("text-align", "right");
 
   style = stylesheet.addStyle(".doc_table");
-  style.setAttribute("margin-top", "25mm");
+  style.setAttribute("margin-top", "5mm");
   style.setAttribute("margin-right", "10mm");
-  style.setAttribute("position", "absolute");
+  //style.setAttribute("position", "absolute");
   style.setAttribute("width", "100%");
 
   style = stylesheet.addStyle(".doc_table td");
@@ -236,15 +263,15 @@ function createStylesheet(param) {
   style.setAttribute("padding-top", "15px");
 
   style = stylesheet.addStyle(".header_table");
-  style.setAttribute("margin-top", "10mm");
+  style.setAttribute("margin-top", "0mm");
   style.setAttribute("margin-right", "10mm");
-  style.setAttribute("position", "absolute");
+  //style.setAttribute("position", "absolute");
   style.setAttribute("width", "100%");
 
   style = stylesheet.addStyle(".logoStyle");
   style.setAttribute("margin-top", "0mm");
   style.setAttribute("margin-left", "0mm"); 
-  style.setAttribute("position", "absolute");
+  //style.setAttribute("position", "absolute");
   style.setAttribute("width", "120px"); 
 
   style = stylesheet.addStyle(".pageReset");
