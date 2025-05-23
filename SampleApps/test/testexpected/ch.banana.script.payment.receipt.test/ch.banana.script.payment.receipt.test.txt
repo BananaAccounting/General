@@ -1,0 +1,124 @@
+%%info_test_name{ch.banana.script.payment.receipt.test}
+\documentclass{report}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{listings}
+\usepackage[margin=1cm]{geometry}
+\begin{document}
+\newenvironment{tablevalue}[2]{\textbf{Table: #1}\begin{longtable}[l]{#2}}{\end{longtable}}
+\newenvironment{reportvalue}[1]{\textbf{Report: #1}\\}{}
+\lstnewenvironment{jsonvalue}[1]{\textbf{Json: #1}\lstset{language=Java}}{}
+\lstnewenvironment{xmlvalue}[1]{\textbf{Xml: #1}\lstset{language=Xml}}{}
+\newcommand{\info}[2]{\textit{#1: #2}\\}
+\newcommand{\fatalerror}[1]{\textbf{\textcolor[rgb]{1,0,0}{Fatal error: #1}}\\}
+\newcommand{\keyvalue}[2]{\textbf{Keyvalue: #1} #2\\}
+\newcommand{\textvalue}[1]{#1\\}
+\newcommand{\excltest}[1]{\\Excluded from compare: #1}
+\newcommand{\lognewpage}{\newpage}
+\newenvironment{testcase}[1]{\section*{Test: #1}}{\newpage}
+\newenvironment{test}[1]{\section*{Test case: #1}}{}
+%Begin test data
+%%SCRIPT{/Users/ivan/GitHub/BananaAccounting/General/SampleApps/test/ch.banana.script.payment.receipt.test.js}
+%
+\begin{testcase}{ReportPaymentReceiptTest}
+\begin{test}{testBananaApp}
+%****************************************************************************** TEST #1 ******************************************************************************
+\begin{reportvalue}{Test\#1}
+\begin{longtable}[l]{ l }
+\newline \\
+\\
+Sports centre Go!  \newline LSE Houghton Street London WC2A 2AE UK \newline +4420 7400 info@gocentre.com http://www.gocentre.com  \newline \newline \\
+\end{longtable}
+\begin{longtable}[l]{ l  l }
+\multicolumn{2}{l}{Payment receipt No. 1 }\\
+\multicolumn{2}{l}{CHF 30.00 }\\
+\multicolumn{2}{l}{Paid from: }\\
+\multicolumn{2}{l}{Sports centre Go! \newline London WC2A 2AE UK \newline \newline }\\
+\multicolumn{2}{l}{}\\
+\multicolumn{2}{l}{Description: }\\
+Refund of expenses \newline \newline  & \\
+Paid to: \newline \newline  & \\
+Carlos \newline \newline  & \\
+\multicolumn{2}{l}{Date: }\\
+02.01.2025 \\
+\multicolumn{2}{l}{Received by: }\\
+\multicolumn{2}{l}{}\\
+\end{longtable}
+\end{reportvalue}
+%****************************************************************************** TEST #2 ******************************************************************************
+\begin{reportvalue}{Test\#2}
+\begin{longtable}[l]{ l }
+\newline \\
+\\
+Sports centre Go!  \newline LSE Houghton Street London WC2A 2AE UK \newline +4420 7400 info@gocentre.com http://www.gocentre.com  \newline \newline \\
+\end{longtable}
+\begin{longtable}[l]{ l  l }
+\multicolumn{2}{l}{Payment receipt No. 2 }\\
+\multicolumn{2}{l}{CHF 10'208.55 }\\
+\multicolumn{2}{l}{Paid from: }\\
+\multicolumn{2}{l}{Sports centre Go! \newline London WC2A 2AE UK \newline \newline }\\
+\multicolumn{2}{l}{}\\
+\multicolumn{2}{l}{Description: }\\
+Organization symposium \newline \newline  & 10'258.55 \\
+Previous cash account \newline \newline  & -50.00 \\
+Paid to: \newline \newline  & \\
+Adams Tyler \newline \newline  & \\
+London City \newline \newline  & \\
+E16 2PX \newline \newline  & \\
+\multicolumn{2}{l}{Date: }\\
+06.01.2025 \\
+\multicolumn{2}{l}{Received by: }\\
+\multicolumn{2}{l}{}\\
+\end{longtable}
+\end{reportvalue}
+%****************************************************************************** TEST #3 ******************************************************************************
+\begin{reportvalue}{Test\#3}
+\begin{longtable}[l]{ l }
+\newline \\
+\\
+Sports centre Go!  \newline LSE Houghton Street London WC2A 2AE UK \newline +4420 7400 info@gocentre.com http://www.gocentre.com  \newline \newline \\
+\end{longtable}
+\begin{longtable}[l]{ l  l }
+\multicolumn{2}{l}{Payment receipt No. 3 }\\
+\multicolumn{2}{l}{CHF 1'100.00 }\\
+\multicolumn{2}{l}{Paid from: }\\
+\multicolumn{2}{l}{Sports centre Go! \newline London WC2A 2AE UK \newline \newline }\\
+\multicolumn{2}{l}{}\\
+\multicolumn{2}{l}{Description: }\\
+School class trip - transportation \newline \newline  & 400.00 \\
+School class trip - accomodation \newline \newline  & 700.00 \\
+\multicolumn{2}{l}{Date: }\\
+06.01.2025 \\
+\multicolumn{2}{l}{Received by: }\\
+\multicolumn{2}{l}{}\\
+\end{longtable}
+\end{reportvalue}
+%****************************************************************************** TEST #4 ******************************************************************************
+\begin{reportvalue}{Test\#4}
+\begin{longtable}[l]{ l }
+\newline \\
+\\
+Sports centre Go!  \newline LSE Houghton Street London WC2A 2AE UK \newline +4420 7400 info@gocentre.com http://www.gocentre.com  \newline \newline \\
+\end{longtable}
+\begin{longtable}[l]{ l  l }
+\multicolumn{2}{l}{Payment receipt No. 6 }\\
+\multicolumn{2}{l}{CHF 2'200.00 }\\
+\multicolumn{2}{l}{Paid to: }\\
+\multicolumn{2}{l}{Sports centre Go! \newline London WC2A 2AE UK \newline \newline }\\
+\multicolumn{2}{l}{}\\
+\multicolumn{2}{l}{Description: }\\
+Museum subscription \newline \newline  & 2'000.00 \\
+Taxes \newline \newline  & 200.00 \\
+Subscriber: \newline \newline  & \\
+John Hellmüller \newline \newline  & \\
+CH-8000 Zürich \newline \newline  & \\
+\multicolumn{2}{l}{Date: }\\
+07.01.2025 \\
+\multicolumn{2}{l}{Received by: }\\
+\multicolumn{2}{l}{}\\
+\end{longtable}
+\end{reportvalue}
+\keyvalue{Result}{Passed}
+\end{test}
+\end{testcase}
+\end{document}

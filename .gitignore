@@ -1,9 +1,13 @@
 *.bak
 *.autosave
 .DS_Store
+*.test.diff.txt
+**/test/testresults
 ~$*
 *.pro.user
+**/.vscode/
 **/.vscode/settings.json
 **/build-CMake*
 **/build/*
+*.user
 CMakeLists.txt.user

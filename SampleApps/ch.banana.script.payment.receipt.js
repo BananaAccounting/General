@@ -14,13 +14,13 @@
 //
 // @id = ch.banana.script.payment.receipt.js
 // @api = 1.0
-// @pubdate = 2025-04-28
+// @pubdate = 2025-05-06
 // @publisher = Banana.ch SA
 // @description = Payment receipt for cashbook
 // @description.it = Ricevuta di pagamento per libro cassa
-// @description.de = Payment receipt for cashbook
-// @description.fr = Payment receipt for cashbook
-// @description.nl = Payment receipt for cashbook
+// @description.de = Zahlungseingang für Kassenbuch
+// @description.fr = Reçu de paiement pour le livre de caisse
+// @description.nl = Betalingsbewijs voor kasboek
 // @description.en = Payment receipt for cashbook
 // @task = app.command
 // @doctype = 130.*
@@ -34,23 +34,60 @@ function exec(string) {
   if (!Banana.document)
     return;
 
-  // Load data
+  // Report params
+  var param = initParam();
+  var savedParam = Banana.document.getScriptSettings();
+  if (savedParam.length > 0) {
+    param = JSON.parse(savedParam);
+  }
+  // If needed show the settings dialog to the user
+  if (!options || !options.useLastSettings) {
+    param = settingsDialog(); // From properties
+  }
+  if (!param) {
+    return "@Cancel";
+  }
+
+  // Get the Doc or the row where ther cursor is positioned in table Transactions
   var transactions = Banana.document.table('Transactions');
-  var journal = Banana.document.journal(Banana.document.ORIGINTYPE_CURRENT, Banana.document.ACCOUNTTYPE_NORMAL);
   if (!transactions.row(Banana.document.cursor.rowNr))
     return;
   var tDoc = transactions.row(Banana.document.cursor.rowNr).value('Doc');
-  var tRow = Banana.document.table('Transactions').row(Banana.document.cursor.rowNr);
   if (!tDoc)
     return;
+
+  // Translated texts
+  var lang = Banana.document.locale;
+  if (lang.length>2)
+    lang = lang.substr(0,2);
+  var texts = getTexts(lang);
+
+  // Report
+  var report = Banana.Report.newReport(texts.report_title + ' ' + tDoc);
+
+  printPaymentReceipt(Banana.document, report, param, tDoc);
+
+  // Stylesheet
+  var stylesheet = createStylesheet(param);
+  // Print preview
+  Banana.Report.preview(report, stylesheet);
+
+}
+
+function printPaymentReceipt(banDoc, report, param, tDoc) {
+  
+  // Load data
+  var journal = banDoc.journal(banDoc.ORIGINTYPE_CURRENT, banDoc.ACCOUNTTYPE_NORMAL);
+  var tRow = banDoc.table('Transactions').row(banDoc.cursor.rowNr);
+
   // Transaction rows
   var rowList = [];
   var totalAmount = "";
-  for ( i=0; i< journal.rowCount; i++) {
+  for ( var i=0; i< journal.rowCount; i++) {
     var tRow = journal.row(i);
     if (tRow.value('Doc') == tDoc)
     {
-      if (!isAccount(tRow.value('JAccount')))
+      if (!isAccount(banDoc, tRow.value('JAccount')))
         continue;
 
       var rowObject = {};
@@ -75,25 +112,11 @@ function exec(string) {
   rowObject.type = 'total';
   rowList.push(rowObject);
 
-  // Report params
-  var param = initParam();
-  var savedParam = Banana.document.scriptReadSettings();
-  if (savedParam.length > 0) {
-    param = JSON.parse(savedParam);
-    param = verifyParam(param);
-  }
-
   // Translated texts
-  var lang = Banana.document.locale;
+  var lang = banDoc.locale;
   if (lang.length>2)
     lang = lang.substr(0,2);
   var texts = getTexts(lang);
-
-  // Stylesheet
-  var stylesheet = createStylesheet(param);
-
-  // Report
-  var report = Banana.Report.newReport(texts.report_title + ' ' + tDoc);
 
   // Report Header
   var headerTable = report.addTable("header_table");
@@ -101,7 +124,7 @@ function exec(string) {
   var tableRow;
   
   if (param.print_header) {
-    var isLogoPresent = isLogoAvailable();
+    var isLogoPresent = isLogoAvailable(banDoc);
     if (isLogoPresent) {
       tableRow = headerTable.addRow();
       var cell1 = tableRow.addCell();
@@ -113,7 +136,7 @@ function exec(string) {
     
     tableRow = headerTable.addRow();
     var cell1 = tableRow.addCell("", "sender");
-    var senderLines = getSenderAddress().split('\n');
+    var senderLines = getSenderAddress(banDoc).split('\n');
     for (var i=0; i < senderLines.length; i++) {
       var className = "";
       if (i==0)
@@ -134,7 +157,7 @@ function exec(string) {
   // Report Amount
   for ( i=0; i< rowList.length; i++) {
     if (rowList[i].type == 'total') {
-      var currency = Banana.document.info("AccountingDataBase", "BasicCurrency");
+      var currency = banDoc.info("AccountingDataBase", "BasicCurrency");
       var amount = Banana.SDecimal.abs(rowList[i].amount);
       tableRow = docTable.addRow();
       tableRow.addCell(currency + ' ' + Banana.Converter.toLocaleNumberFormat(amount), "total", 2);
@@ -148,7 +171,7 @@ function exec(string) {
     tableRow.addCell(texts.report_paid_from, "title", 2);
     tableRow = docTable.addRow();
     var cell1 = tableRow.addCell("", "", 2);
-    var senderLines = getSenderName().split('\n');
+    var senderLines = getSenderName(banDoc).split('\n');
     for (var i=0; i < senderLines.length; i++) {
       cell1.addParagraph(senderLines[i]);
     }
@@ -166,7 +189,7 @@ function exec(string) {
     tableRow.addCell(texts.report_paid_to, "title", 2);
     tableRow = docTable.addRow();
     var cell1 = tableRow.addCell("", "", 2);
-    var senderLines = getSenderName().split('\n');
+    var senderLines = getSenderName(banDoc).split('\n');
     for (var i=0; i < senderLines.length; i++) {
       cell1.addParagraph(senderLines[i]);
     }
@@ -184,8 +207,23 @@ function exec(string) {
   for ( i=0; i< rowList.length; i++) {
     if (rowList[i].type == 'total')
       continue;
-    tableRow = docTable.addRow();  
-    tableRow.addCell(rowList[i].description);
+    
+    // when used "#paidto" in descripion, we replace it with the "Paid to:" texts.
+    if (rowList[i].description === "#paidto") {
+      tableRow = docTable.addRow();
+      tableRow.addCell(" ","");
+      tableRow = docTable.addRow();
+      var strpadito = rowList[i].description;
+      strpadito = strpadito.replace("#paidto", texts.report_paid_to);
+      tableRow.addCell(strpadito, "senderFirstRow");
+    }
+    else {
+      tableRow = docTable.addRow();
+      var cell = tableRow.addCell("","cellparagraph");
+      var p = cell.addParagraph();
+      addMdBoldText(p,rowList[i].description);
+    }
+
     if (Banana.SDecimal.isZero(rowList[i].amount) || rowList[i].amount == totalAmount) {
       tableRow.addCell("", rowList[i].type);
     }
@@ -202,25 +240,26 @@ function exec(string) {
   tableRow = docTable.addRow();
   tableRow.addCell(texts.report_date, "title", 2);
   tableRow = docTable.addRow();
-  tableRow.addCell(Banana.Converter.toLocaleDateFormat(transactionDate));
+  if (param.print_date) {
+    tableRow.addCell(Banana.Converter.toLocaleDateFormat(transactionDate));
+  } else {
+    tableRow.addCell("", "dots", 2);
+  }
   tableRow = docTable.addRow();
   tableRow.addCell(texts.report_received_by, "title", 2);
   tableRow = docTable.addRow();
   tableRow.addCell("", "dots", 2);
-  
-  // Print preview
-  Banana.Report.preview(report, stylesheet);
 }
 
-function isLogoAvailable() {
+function isLogoAvailable(banDoc) {
   var isLogoAvailable = false;
-  var documentsTable = Banana.document.table("Documents");
+  var documentsTable = banDoc.table("Documents");
   if (documentsTable) {
-    var imageLogo = Banana.document.table('Documents').findRowByValue('RowId', "logo");
+    var imageLogo = banDoc.table('Documents').findRowByValue('RowId', "logo");
     if (imageLogo) {
       var attachment = imageLogo.value("Attachments");
       if (attachment) {
-        return true;
+        isLogoAvailable = true;
       }
     }
   }
@@ -294,29 +333,33 @@ function createStylesheet(param) {
   style.setAttribute("font-weight", "bold");
   style.setAttribute("padding-bottom", "5mm");
   
+  style = stylesheet.addStyle(".cellparagraph");
+  style.setAttribute("padding-top", "-3px");
+  style.setAttribute("padding-bottom", "-3px");
+
   return stylesheet;
 }
 
-function getSenderAddress() {
+function getSenderAddress(banDoc) {
   
   var address = "";
 
-  var accountingDataBase_Company = Banana.document.info("AccountingDataBase", "Company");
-  var accountingDataBase_Name = Banana.document.info("AccountingDataBase", "Name");
-  var accountingDataBase_FamilyName = Banana.document.info("AccountingDataBase", "FamilyName");
-  var accountingDataBase_Address1 = Banana.document.info("AccountingDataBase", "Address1");
-  var accountingDataBase_Address2 = Banana.document.info("AccountingDataBase", "Address2");
-  var accountingDataBase_Zip = Banana.document.info("AccountingDataBase", "Zip");
-  var accountingDataBase_City = Banana.document.info("AccountingDataBase", "City");
-  var accountingDataBase_State = Banana.document.info("AccountingDataBase", "State");
-  var accountingDataBase_Country = Banana.document.info("AccountingDataBase", "Country");
-  var accountingDataBase_Web = Banana.document.info("AccountingDataBase", "Web");
-  var accountingDataBase_Email = Banana.document.info("AccountingDataBase", "Email");
-  var accountingDataBase_Phone = Banana.document.info("AccountingDataBase", "Phone");
-  var accountingDataBase_Mobile = Banana.document.info("AccountingDataBase", "Mobile");
-  var accountingDataBase_Fax = Banana.document.info("AccountingDataBase", "Fax");
-  var accountingDataBase_FiscalNumber = Banana.document.info("AccountingDataBase", "FiscalNumber");
-  var accountingDataBase_VatNumber = Banana.document.info("AccountingDataBase", "VatNumber");
+  var accountingDataBase_Company = banDoc.info("AccountingDataBase", "Company");
+  var accountingDataBase_Name = banDoc.info("AccountingDataBase", "Name");
+  var accountingDataBase_FamilyName = banDoc.info("AccountingDataBase", "FamilyName");
+  var accountingDataBase_Address1 = banDoc.info("AccountingDataBase", "Address1");
+  var accountingDataBase_Address2 = banDoc.info("AccountingDataBase", "Address2");
+  var accountingDataBase_Zip = banDoc.info("AccountingDataBase", "Zip");
+  var accountingDataBase_City = banDoc.info("AccountingDataBase", "City");
+  var accountingDataBase_State = banDoc.info("AccountingDataBase", "State");
+  var accountingDataBase_Country = banDoc.info("AccountingDataBase", "Country");
+  var accountingDataBase_Web = banDoc.info("AccountingDataBase", "Web");
+  var accountingDataBase_Email = banDoc.info("AccountingDataBase", "Email");
+  var accountingDataBase_Phone = banDoc.info("AccountingDataBase", "Phone");
+  var accountingDataBase_Mobile = banDoc.info("AccountingDataBase", "Mobile");
+  var accountingDataBase_Fax = banDoc.info("AccountingDataBase", "Fax");
+  var accountingDataBase_FiscalNumber = banDoc.info("AccountingDataBase", "FiscalNumber");
+  var accountingDataBase_VatNumber = banDoc.info("AccountingDataBase", "VatNumber");
 
   if (accountingDataBase_Company) {
     address = accountingDataBase_Company + " ";
@@ -385,16 +428,16 @@ function getSenderAddress() {
   return address;
 }
 
-function getSenderName() {
+function getSenderName(banDoc) {
   
   var address = "";
 
-  var accountingDataBase_Company = Banana.document.info("AccountingDataBase", "Company");
-  var accountingDataBase_Name = Banana.document.info("AccountingDataBase", "Name");
-  var accountingDataBase_FamilyName = Banana.document.info("AccountingDataBase", "FamilyName");
-  var accountingDataBase_Zip = Banana.document.info("AccountingDataBase", "Zip");
-  var accountingDataBase_City = Banana.document.info("AccountingDataBase", "City");
-  var accountingDataBase_Country = Banana.document.info("AccountingDataBase", "Country");
+  var accountingDataBase_Company = banDoc.info("AccountingDataBase", "Company");
+  var accountingDataBase_Name = banDoc.info("AccountingDataBase", "Name");
+  var accountingDataBase_FamilyName = banDoc.info("AccountingDataBase", "FamilyName");
+  var accountingDataBase_Zip = banDoc.info("AccountingDataBase", "Zip");
+  var accountingDataBase_City = banDoc.info("AccountingDataBase", "City");
+  var accountingDataBase_Country = banDoc.info("AccountingDataBase", "Country");
 
   if (accountingDataBase_Company) {
     address = accountingDataBase_Company + "\n";
@@ -437,77 +480,90 @@ function getTexts(language) {
   {
     texts.param_font_family = 'Tipo carattere';
     texts.param_print_header = 'Includi intestazione pagina (1=si, 0=no)';
+    texts.param_print_header_n = 'Includi intestazione pagina';
+    texts.param_print_date = 'Data automatica (1=si, 0=no)';
+    texts.param_print_date_n = 'Data automatica';
     texts.report_date = 'Data:';
     texts.report_description = 'Descrizione:';
     texts.report_paid_from = 'Pagato da:';
-    texts.report_paid_to = 'A favore di:';
+    texts.report_paid_to = 'Pagato a:';
     texts.report_received_by = 'Ricevuto da';
     texts.report_title = 'Ricevuta di pagamento n.';
+    texts.report_signature = 'Firma:';
   }
   else if (language == 'de')
   {
     texts.param_font_family = 'Schriftart';
     texts.param_print_header = 'Seitenüberschrift einschliessen (1=ja, 0=nein)';
-    texts.report_date = 'Date:';
-    texts.report_description = 'Description:';
-    texts.report_paid_from = 'Paid from:';
-    texts.report_paid_to = 'Paid to:';
-    texts.report_received_by = 'Received by:';
-    texts.report_title = 'Payment receipt No.';
+    texts.param_print_header_n = 'Seitenüberschrift einschliessen';
+    texts.param_print_date = 'Automatisches Datum (1=ja, 0=nein)';
+    texts.param_print_date_n = 'Automatisches Datum';
+    texts.report_date = 'Datum:';
+    texts.report_description = 'Beschreibung:';
+    texts.report_paid_from = 'Bezahlt von:';
+    texts.report_paid_to = 'Bezahlt an:';
+    texts.report_received_by = 'Empfangen von:';
+    texts.report_title = 'Zahlungseingang Nr.';
+    texts.report_signature = 'Unterschrift:';
   }
   else if (language == 'fr')
   {
     texts.param_font_family = 'Police de caractère';
     texts.param_print_header = 'Inclure en-tête de page (1=oui, 0=non)';
-    texts.report_date = 'Date:';
-    texts.report_description = 'Description:';
-    texts.report_paid_from = 'Paid from:';
-    texts.report_paid_to = 'Paid to:';
-    texts.report_received_by = 'Received by:';
-    texts.report_title = 'Payment receipt No.';
+    texts.param_print_header_n = 'Inclure en-tête de page';
+    texts.param_print_date = 'Date automatique (1=oui, 0=non)';
+    texts.param_print_date_n = 'Date automatique';
+    texts.report_date = 'Date :';
+    texts.report_description = 'Description :';
+    texts.report_paid_from = 'Payé par :';
+    texts.report_paid_to = 'Payé à :';
+    texts.report_received_by = 'Reçu par :';
+    texts.report_title = 'No de reçu de paiement';
+    texts.report_signature = 'Signature:';
   }
   else if (language == 'nl')
   {
     texts.param_font_family = 'Lettertype';
     texts.param_print_header = 'Pagina-koptekst opnemen (1=ja, 0=nee)';
-    texts.report_date = 'Date:';
-    texts.report_description = 'Description:';
-    texts.report_paid_from = 'Paid from:';
-    texts.report_paid_to = 'Paid to:';
-    texts.report_received_by = 'Received by:';
-    texts.report_title = 'Payment receipt No.';
+    texts.param_print_header_n = 'Pagina-koptekst opnemen';
+    texts.param_print_date = 'Automatische datum (1=ja, 0=nee)';
+    texts.param_print_date_n = 'Automatische datum';
+    texts.report_date = 'Datum:';
+    texts.report_description = 'Omschrijving:';
+    texts.report_paid_from = 'Betaald van:';
+    texts.report_paid_to = 'Betaald aan:';
+    texts.report_received_by = 'Ontvangen door:';
+    texts.report_title = 'Betalingsbewijs Nr.';
+    texts.report_signature = 'Handtekening:';
   }
   else
   {
     texts.param_font_family = 'Font type';
     texts.param_print_header = 'Include page header (1=yes, 0=no)';
+    texts.param_print_header_n = 'Include page header';
+    texts.param_print_date = 'Automatic date (1=yes, 0=no)';
+    texts.param_print_date_n = 'Automatic date';
     texts.report_date = 'Date:';
     texts.report_description = 'Description:';
     texts.report_paid_from = 'Paid from:';
     texts.report_paid_to = 'Paid to:';
     texts.report_received_by = 'Received by:';
     texts.report_title = 'Payment receipt No.';
+    texts.report_signature = 'Signature:';
   }
 
   return texts;
 }
 
-function initParam() {
-  var param = {};
-  param.print_header = true;
-  param.font_family = '';
-  return param;
-}
-
 /*
  * Check if the account number belongs to the account table
  */
-function isAccount(accountId) {
+function isAccount(banDoc, accountId) {
   if (!accountId || accountId.length <= 0)
     return false;
-  if (!Banana.document)
+  if (!banDoc)
     return false;
-  var tableAccounts = Banana.document.table('Accounts');
+  var tableAccounts = banDoc.table('Accounts');
   if (tableAccounts) {
     var accountRow = tableAccounts.findRowByValue('Account', accountId);
     if (accountRow)
@@ -516,36 +572,142 @@ function isAccount(accountId) {
   return false;
 }
 
+function addMdBoldText(reportElement, text) {
+  var p = reportElement.addParagraph();
+  let printBold = false;
+  let startPosition = 0;
+
+  // Check for malformed bold delimiters
+  // var boldDelimiterCount = (text.match(/\*\*/g) || []).length;
+  // if (boldDelimiterCount % 2 !== 0) {
+  //   Banana.console.log("Warning: unmatched '**' delimiters in text: " + text);
+  // }
+  while (startPosition < text.length) {
+    var endPosition = text.indexOf("**", startPosition);
+    var nextPosition = endPosition === -1 ? text.length : endPosition;
+    var segment = text.substring(startPosition, nextPosition);
+
+    if (segment.length > 0) {
+      var span = p.addText(segment, "");
+      if (printBold) {
+        span.setStyleAttribute("font-weight", "bold");
+      }
+    }
+
+    printBold = !printBold;
+    startPosition = endPosition === -1 ? text.length : endPosition + 2;
+  }
+}
+
 /*
  * Update script's parameters
 */
 function settingsDialog() {
   var param = initParam();
-  var savedParam = Banana.document.scriptReadSettings();
+  var savedParam = Banana.document.getScriptSettings();
   if (savedParam.length > 0) {
     param = JSON.parse(savedParam);
   }
   param = verifyParam(param);
-  var lang = Banana.document.locale;
-  if (lang.length>2)
-    lang = lang.substr(0,2);
-  var texts = getTexts(lang);
 
-  param.print_header = Banana.Ui.getInt('Settings', texts.param_print_header, param.print_header);
-  if (param.print_header === undefined)
-    return;
+  if (typeof (Banana.Ui.openPropertyEditor) !== 'undefined') {
+    var dialogTitle = 'Settings';
+    var convertedParam = convertParam(param);
+    var pageAnchor = 'dlgSettings';
+    if (!Banana.Ui.openPropertyEditor(dialogTitle, convertedParam, pageAnchor))
+       return;
+    for (var i = 0; i < convertedParam.data.length; i++) {
+       // Read values to param (through the readValue function)
+       convertedParam.data[i].readValue();
+    }
+ }
+ else {
+    var lang = Banana.document.locale;
+    if (lang.length>2)
+      lang = lang.substr(0,2);
+    var texts = getTexts(lang);
 
-  param.font_family = Banana.Ui.getText('Settings', texts.param_font_family, param.font_family);
-  if (param.font_family === undefined)
-    return;
+    param.print_header = Banana.Ui.getInt('Settings', texts.param_print_header, param.print_header);
+    if (param.print_header === undefined)
+      return;
+
+    param.print_date = Banana.Ui.getInt('Settings', texts.param_print_date, param.print_date);
+    if (param.print_date === undefined)
+      return;
+
+    param.font_family = Banana.Ui.getText('Settings', texts.param_font_family, param.font_family);
+    if (param.font_family === undefined)
+      return;
+  }
 
   var paramToString = JSON.stringify(param);
-  var value = Banana.document.scriptSaveSettings(paramToString);
+  Banana.document.setScriptSettings(paramToString);
+  
+  return param;
+}
+
+function convertParam(param) {
+  var lang = 'en';
+  if (Banana.document.locale)
+    lang = Banana.document.locale;
+  if (lang.length > 2)
+     lang = lang.substr(0, 2);
+  var texts = getTexts(lang);
+
+  var convertedParam = {};
+  convertedParam.version = '1.0';
+  /*array dei parametri dello script*/
+  convertedParam.data = [];
+  
+  var currentParam = {};
+  currentParam.name = 'print_header';
+  currentParam.title = texts.param_print_header_n;
+  currentParam.type = 'bool';
+  currentParam.value = param.print_header ? true : false;
+  currentParam.defaultvalue = true;
+  currentParam.readValue = function() {
+    param.print_header = this.value;
+  }
+  convertedParam.data.push(currentParam);
+
+  var currentParam = {};
+  currentParam.name = 'print_date';
+  currentParam.title = texts.param_print_date_n;
+  currentParam.type = 'bool';
+  currentParam.value = param.print_date ? true : false;
+  currentParam.defaultvalue = true;
+  currentParam.readValue = function() {
+    param.print_date = this.value;
+  }
+  convertedParam.data.push(currentParam);
+
+  currentParam = {};
+  currentParam.name = 'font_family';
+  currentParam.title = texts.param_font_family;
+  currentParam.type = 'string';
+  currentParam.value = param.font_family ? param.font_family : '';
+  currentParam.defaultvalue = '';
+  currentParam.readValue = function() {
+    param.font_family = this.value;
+  }
+  convertedParam.data.push(currentParam);
+
+  return convertedParam;
+}
+
+function initParam() {
+  var param = {};
+  param.print_header = true;
+  param.print_date = true;
+  param.font_family = '';
+  return param;
 }
 
 function verifyParam(param) {
   if (!param.print_header)
    param.print_header = false;
+  if (!param.print_date)
+    param.print_date = false;
   if (!param.font_family)
    param.font_family = '';
 
