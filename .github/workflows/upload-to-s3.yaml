@@ -1,0 +1,29 @@
+name: Upload-To-S3
+
+on:
+  push:
+    branches:
+      - 'master'
+
+env:
+  AWS_ENDPOINT: https://s3-ti.tinext.cloud
+
+jobs:
+  upload-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  
+      - name: Sync files to S3 bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+        run: |
+          for file in $(git diff-tree --no-commit-id --name-only --diff-filter ACMRT -r ${{ github.sha }}); \
+          do \
+            aws s3 cp --endpoint-url ${{ env.AWS_ENDPOINT }} \
+            $file s3://files.banana.ch/portal/repodata/ghba/General/$file;
+          done
