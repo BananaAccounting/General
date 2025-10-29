@@ -1,0 +1,36 @@
+name: Force-S3-Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Force files resync to S3?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+        - 'yes'
+        - 'no'
+
+env:
+  AWS_ENDPOINT: https://s3-ti.tinext.cloud
+
+jobs:
+  upload-files:
+    if: ${{ inputs.action == 'yes' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Sync files to S3 bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+        run: |
+          aws s3 sync --delete \
+          --endpoint-url ${{ env.AWS_ENDPOINT }} \
+          --exclude ".git*" \
+          --exclude "*.gitignore" \
+          --exclude ".github*" \
+          . s3://files.banana.ch/portal/repodata/ghba/General/;
