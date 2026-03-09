@@ -1,7 +1,7 @@
 // This script calculate an interest rate for the defined period
 // @id = ch.banana.script.calcinterest.js
 // @version = 1.0
-// @pubdate = 2024-10-10
+// @pubdate = 2026-03-09
 // @publisher = Banana.ch SA
 // @description = Calculate interest on account (exact days)
 // @task = app.command
@@ -223,14 +223,14 @@ function CreateTransactionsDoubleEntry(doc, param, calcInterests, accountingInfo
     if (!calcInterests)
         return output;
     var tableName = "Transactions";
-    var currentDate = Banana.Converter.toInternalDateFormat(new Date());
+    // The transaction will be saved using the closing date entered by the user.
+    // var currentDate = Banana.Converter.toInternalDateFormat(new Date());
     var columns = GetVisibleColumns(tableName, doc);
     var texts = SetTexts(doc);
 
     if (!Banana.SDecimal.isZero(calcInterests.interestAmountDebit)) {
         output = CreateTransactionsDoubleEntryHeader(tableName, columns, doc);
-        //Date
-        output += currentDate + "\t";
+        output += param.endDate + "\t";
         //Doc
         if (columns.indexOf("Doc") >= 0)
             output += "\t";
@@ -250,7 +250,7 @@ function CreateTransactionsDoubleEntry(doc, param, calcInterests, accountingInfo
         if (output.length <= 0)
             output = CreateTransactionsDoubleEntryHeader(tableName, columns, doc);
         //Date
-        output += currentDate + "\t";
+        output += param.endDate + "\t";
         //Doc
         if (columns.indexOf("Doc") >= 0)
             output += "\t";
@@ -287,14 +287,15 @@ function CreateTransactionsIncomeExpenses(doc, param, calcInterests, accountingI
     if (!calcInterests)
         return output;
     var tableName = "Transactions";
-    var currentDate = Banana.Converter.toInternalDateFormat(new Date());
+    // The transaction will be saved using the closing date entered by the user.
+    //var currentDate = Banana.Converter.toInternalDateFormat(new Date());
     var columns = GetVisibleColumns(tableName, doc);
     var texts = SetTexts(doc);
 
     if (!Banana.SDecimal.isZero(calcInterests.interestAmountDebit)) {
         output = CreateTransactionsIncomeExpensesHeader(tableName, columns, doc);
         //Date
-        output += currentDate + "\t";
+        output += param.endDate + "\t";
         //Doc
         if (columns.indexOf("Doc") >= 0)
             output += "\t";
@@ -316,7 +317,7 @@ function CreateTransactionsIncomeExpenses(doc, param, calcInterests, accountingI
         if (output.length <= 0)
             output = CreateTransactionsIncomeExpensesHeader(tableName, columns, doc);
         //Date
-        output += currentDate + "\t";
+        output += param.endDate + "\t";
         //Doc
         if (columns.indexOf("Doc") >= 0)
             output += "\t";
