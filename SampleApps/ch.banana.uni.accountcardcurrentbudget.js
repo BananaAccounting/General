@@ -14,7 +14,7 @@
 //
 // @id = ch.banana.uni.accountcard.current.budget
 // @api = 1.0
-// @pubdate = 2026-03-24
+// @pubdate = 2026-03-30
 // @publisher = Banana.ch SA
 // @description = Account card (current vs budget)
 // @task = app.command
@@ -321,11 +321,8 @@ function stampaReport(param) {
 
             var diffValue = "";
 
-            diffValue = Banana.SDecimal.subtract(
-                Banana.Converter.toInternalNumberFormat(lastBudgetBalance),
-                Banana.Converter.toInternalNumberFormat(lastCurrentBalance)
-            );
-
+            diffValue = Banana.SDecimal.subtract(lastBudgetBalance, lastCurrentBalance);
+            
             row.addCell(diffValue !== "" ? Banana.Converter.toLocaleNumberFormat(diffValue) : "", "amount");
         }
     }
