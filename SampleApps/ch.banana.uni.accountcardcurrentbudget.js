@@ -322,7 +322,7 @@ function stampaReport(param) {
             var diffValue = "";
 
             diffValue = Banana.SDecimal.subtract(lastBudgetBalance, lastCurrentBalance);
-            
+
             row.addCell(diffValue !== "" ? Banana.Converter.toLocaleNumberFormat(diffValue) : "", "amount");
         }
     }
@@ -485,10 +485,7 @@ function stampaReport(param) {
                     budBalForDiff = budgetRows[i].value("JBalance");
                 }
 
-                diffValue = Banana.SDecimal.subtract(
-                    Banana.Converter.toInternalNumberFormat(budBalForDiff),
-                    Banana.Converter.toInternalNumberFormat(currBalForDiff)
-                );
+                diffValue = Banana.SDecimal.subtract(budBalForDiff, currBalForDiff);
 
                 row.addCell(diffValue !== "" ? Banana.Converter.toLocaleNumberFormat(diffValue) : "", "amount");
             }
@@ -536,10 +533,7 @@ function stampaReport(param) {
         var tLast = transTab.row(transTab.rowCount - 1);
         var bLast = budgetTransTab.row(budgetTransTab.rowCount - 1);
 
-        totalDiff = Banana.SDecimal.subtract(
-            Banana.Converter.toInternalNumberFormat(bLast.value("JBalance")),
-            Banana.Converter.toInternalNumberFormat(tLast.value("JBalance"))
-        );
+        totalDiff = Banana.SDecimal.subtract(bLast.value("JBalance"), tLast.value("JBalance"));
     }
 
     lastRow.addCell(totalDiff !== "" ? Banana.Converter.toLocaleNumberFormat(totalDiff) : "","amount");
