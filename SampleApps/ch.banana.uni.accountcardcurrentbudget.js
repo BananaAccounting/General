@@ -233,34 +233,34 @@ function stampaReport(param) {
     table.addColumn("colAmount");
 
     // Header principale (sezioni)
-    var headerRow = table.getHeader().addRow("headerMain");
-    headerRow.addCell("CURRENT", "headerSection aligncenter", 6);
-    headerRow.addCell("", "");
-    headerRow.addCell("BUDGET", "headerSection aligncenter", 6);
-    headerRow.addCell("", "");
-    headerRow.addCell("DIFF.", "headerSection aligncenter");
+    var headerRow = table.getHeader().addRow("");
+    headerRow.addCell("CURRENT", "headerMain headerSection aligncenter", 6);
+    headerRow.addCell("", "colSeparator");
+    headerRow.addCell("BUDGET", "headerMain headerSection aligncenter", 6);
+    headerRow.addCell("", "colSeparator");
+    headerRow.addCell("DIFF.", "headerMain headerSection aligncenter");
 
     // Header colonne
-    headerRow = table.getHeader().addRow("headerSub");
-    headerRow.addCell("Date");
-    headerRow.addCell("Doc");
-    headerRow.addCell("Description");
-    headerRow.addCell("Debit", "amount");
-    headerRow.addCell("Credit", "amount");
-    headerRow.addCell("Balance", "amount");
+    headerRow = table.getHeader().addRow("");
+    headerRow.addCell("Date", "headerSub");
+    headerRow.addCell("Doc", "headerSub");
+    headerRow.addCell("Description", "headerSub");
+    headerRow.addCell("Debit", "headerSub amount");
+    headerRow.addCell("Credit", "headerSub amount");
+    headerRow.addCell("Balance", "headerSub amount");
 
-    headerRow.addCell("", "");
+    headerRow.addCell("", "colSeparator");
 
-    headerRow.addCell("Date");
-    headerRow.addCell("Doc");
-    headerRow.addCell("Description");
-    headerRow.addCell("Debit", "amount");
-    headerRow.addCell("Credit", "amount");
-    headerRow.addCell("Balance", "amount");
+    headerRow.addCell("Date", "headerSub");
+    headerRow.addCell("Doc", "headerSub");
+    headerRow.addCell("Description", "headerSub");
+    headerRow.addCell("Debit", "headerSub amount");
+    headerRow.addCell("Credit", "headerSub amount");
+    headerRow.addCell("Balance", "headerSub amount");
 
-    headerRow.addCell("", "");
+    headerRow.addCell("", "colSeparator");
 
-    headerRow.addCell("Bud. - Curr.", "amount");
+    headerRow.addCell("Bud. - Curr.", "headerSub amount");
 
     //---------------------------------------------------
     // NORMAL MODE
@@ -414,12 +414,12 @@ function stampaReport(param) {
 
             var maxRows = Math.max(currentRows.length, budgetRows.length);
 
-            var titleRow = table.addRow("month");
-            titleRow.addCell(label, "aligncenter", 6);
-            titleRow.addCell("", "");
-            titleRow.addCell(label, "aligncenter", 6);
-            titleRow.addCell("");
-            titleRow.addCell("");
+            var titleRow = table.addRow("");
+            titleRow.addCell(label, "month aligncenter", 6);
+            titleRow.addCell("", "month colSeparator");
+            titleRow.addCell(label, "month aligncenter", 6);
+            titleRow.addCell("", "month colSeparator");
+            titleRow.addCell("", "month");
 
             for (var i = 0; i < maxRows; i++) {
 
@@ -571,7 +571,7 @@ function defineStyles(stylesheet, param) {
     stylesheet.addStyle("table.schedaTable td", "border: thin solid black; padding: 2px;");
     stylesheet.addStyle("tr.header td", "font-weight: bold;");
     stylesheet.addStyle("tr.total td", "font-weight: bold;");
-    stylesheet.addStyle("tr.month td","font-weight:bold; background-color:#f7f7f7; border-top:2px solid #999999; border-bottom:1px solid #dddddd; padding:6px 0;");
+    stylesheet.addStyle(".month","font-weight:bold; background-color:#f7f7f7; border-top:2px solid #999999; border-bottom:1px solid #dddddd; padding:6px 0;");
     stylesheet.addStyle(".amount", "text-align:right;");
     stylesheet.addStyle(".aligncenter", "text-align:center;");
     stylesheet.addStyle(".separator", "background-color:#e0e0e0; width:8px;");
@@ -581,7 +581,7 @@ function defineStyles(stylesheet, param) {
     stylesheet.addStyle(".colDoc", "width:5%");
     stylesheet.addStyle(".colDesc", "width:24%");
     stylesheet.addStyle(".colAmount", "width:12%");
-    stylesheet.addStyle(".colSeparator", "width:1%");
+    stylesheet.addStyle(".colSeparator", "width:1%; background-color:black;");
     stylesheet.addStyle(".colDiff", "width:8%;");
     stylesheet.addStyle(".title", "font-size:18px; font-weight:bold; margin-bottom:10px;");
     stylesheet.addStyle(".summaryTitle", "font-size:14px; font-weight:bold; margin-top:15px; margin-bottom:5px;");
@@ -593,7 +593,7 @@ function defineStyles(stylesheet, param) {
     stylesheet.addStyle("table.summaryTable", "font-size:10pt;");
     stylesheet.addStyle(".headerSection","font-weight:bold; font-size:12px; background-color: #e6e6e6;");
     stylesheet.addStyle("tr.headerMain td","border: thin solid black; padding:4px; background-color: #e6e6e6;");
-    stylesheet.addStyle("tr.headerSub td", "font-weight:bold; background-color: #e6e6e6; border-bottom:2px solid black;");
+    stylesheet.addStyle(".headerSub", "font-weight:bold; background-color: #e6e6e6; border-bottom:2px solid black;");
     stylesheet.addStyle(".footer", "text-align:center; font-size:6px; font-family:Courier New;");
 }
 
