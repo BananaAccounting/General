@@ -581,7 +581,7 @@ function defineStyles(stylesheet, param) {
     stylesheet.addStyle(".colDoc", "width:5%");
     stylesheet.addStyle(".colDesc", "width:24%");
     stylesheet.addStyle(".colAmount", "width:12%");
-    stylesheet.addStyle(".colSeparator", "width:1%; background-color:black;");
+    stylesheet.addStyle(".colSeparator", "width:1%; background-color: #e6e6e6;");
     stylesheet.addStyle(".colDiff", "width:8%;");
     stylesheet.addStyle(".title", "font-size:18px; font-weight:bold; margin-bottom:10px;");
     stylesheet.addStyle(".summaryTitle", "font-size:14px; font-weight:bold; margin-top:15px; margin-bottom:5px;");
