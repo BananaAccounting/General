@@ -1,0 +1,18 @@
+{
+    "category": "productivity",
+    "country":"universal",
+    "countryCode":"",
+    "description" : "Trial balance with closing transactions analysis",
+    "description.it" : "Bilancio di verifica con analisi registrazioni di chiusura",
+    "description.de" : "Probebilanz mit Analyse der Abschlussbuchungen",
+    "description.fr" : "Balance de vérification avec analyse des écritures de clôture",
+    "description.en" : "Trial balance with closing transactions analysis",
+    "language":"",
+    "publisher": "Banana.ch",
+    "title" : "Trial balance with closing transactions analysis",
+    "title.it" : "Bilancio di verifica con analisi registrazioni di chiusura",
+    "title.de" : "Probebilanz mit Analyse der Abschlussbuchungen",
+    "title.fr" : "Balance de vérification avec analyse des écritures de clôture",
+    "title.en" : "Trial balance with closing transactions analysis",
+    "version": "1.0"
+}

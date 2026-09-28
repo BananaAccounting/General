@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+   <file>ch.banana.trialbalance.closing.transactions.manifest.json</file>
+   <file>ch.banana.trialbalance.closing.transactions.js</file>
+ </qresource>
+ </RCC>
