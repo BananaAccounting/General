@@ -550,7 +550,7 @@ function stampaReport(param) {
 function stampaFooter(report) {
     var date = Banana.Converter.toLocaleDateFormat(new Date());
     report.getFooter().addClass("footer");
-    var textfield = report.getFooter().addText("Banana Accounting - Account Card Report (Beta version) - " + date + " - Page ", "");
+    var textfield = report.getFooter().addText(date + " - Page ", "");
     if (textfield.excludeFromTest) {
         textfield.excludeFromTest();
     }
