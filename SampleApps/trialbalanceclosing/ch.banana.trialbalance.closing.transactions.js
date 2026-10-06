@@ -1017,7 +1017,7 @@ function buildParamDescriptors(param) {
 
     out.data.push({ name: "splitByBClass", parentObject: "groupReport",
         title: texts.paramSplitByBClass, type: "bool",
-        value: param.splitByBClass, defaultvalue: true,
+        value: param.splitByBClass, defaultvalue: false,
         readValue: function() { param.splitByBClass = this.value; } });
 
     out.data.push({ name: "showZeroAmounts", parentObject: "groupReport",
@@ -1124,7 +1124,7 @@ function initParam() {
     return {
         printLandscape:             false,
         showClosingDetails:         false,
-        splitByBClass:              true,
+        splitByBClass:              false,
         showZeroAmounts:            false,
         showNegativeInRed:          true,
         showCostCentersSegments:    true,
