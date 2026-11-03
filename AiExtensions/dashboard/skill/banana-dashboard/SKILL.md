@@ -1,8 +1,8 @@
 ---
 name: banana-dashboard
-description: Guides the user step by step to create a dashboard extension for Banana Accounting Plus (double-entry accounting) - a QML dialog with ready-made widgets (indicators, QtGraphs charts, lists) chosen in the chat, with a period, a color palette and widget settings the user can change in the dashboard and that are saved in the accounting file. Use when the user wants to create, change or fix a Banana dashboard.
+description: Guides the user step by step to create a dashboard extension for Banana Accounting Plus (double-entry accounting) - a QML dialog with ready-made widgets (indicators, QtGraphs charts, lists) chosen in the chat, with a period, a color palette and widget settings the user can change in the dashboard and that are saved in the accounting file. Delivered as a package (.qrc and manifest, compiled by the user into an .sbaa extension). Use when the user wants to create, change or fix a Banana dashboard.
 metadata:
-  version: "0.11"
+  version: "0.13"
 ---
 
 # Banana Dashboard Builder
@@ -110,8 +110,8 @@ title for the dashboard and a name for the extension (shown in the Extensions me
 ### Step 3 - Confirm and build
 Repeat the chosen widgets in plain words and **wait for confirmation**. Read the files of the chosen
 widgets (section 8). Create the files of section 4. Give the extension a unique `@id` (e.g.
-`ch.<company>.dashboard`) and a main file with the same name. Start with `version` "1.0". Widgets are
-shown in the order of the catalog.
+`ch.<company>.dashboard`); the main file, the package file and the manifest take the same name
+(section 4a). Start with `version` "1.0". Widgets are shown in the order of the catalog.
 
 ### Step 4 - Checklist before every delivery
 Fix anything that fails:
@@ -140,11 +140,14 @@ Fix anything that fails:
 - [ ] Pie: `seriesColors` in the theme and a `color` for each slice.
 - [ ] Appearance as in section 7a: flat gear icons, horizontal grid only, left legends, muted notes with
       only the variation colored, local dates, summary in equal columns.
-- [ ] `version` increased since the previous delivery.
+- [ ] Package (section 4a): `<id>.qrc` lists **every** file of the folder, with exactly the same names
+      and capitalization, and nothing else; `<id>.manifest.json` is valid JSON.
+- [ ] `version` increased since the previous delivery, the same in the footer and in the manifest.
 
 ### Step 5 - Deliver
-- If you can create files, deliver a **zip** of the folder; otherwise give **every file** in its own
-  code block with its exact file name, and tell the user to save them all in one folder.
+- If you can create files, deliver a **zip** of the folder, package files included (section 4a);
+  otherwise give **every file** in its own code block with its exact file name, and tell the user to
+  save them all in one folder.
 - Give the installation steps of section 9 in the user's language.
 - Tell the user that at the first opening the dashboard asks the period and the colors, and that the
   gear buttons change them; to keep the settings, save the accounting file.
@@ -166,11 +169,14 @@ The user may ask in the chat to change the look (colors, sizes, spacing, fonts).
 
 ## 4. Structure of the extension
 
-One folder with these files (names in quotes are suggestions, keep them consistent):
+One folder, named as the extension id, with these files (names in quotes are suggestions, keep them
+consistent):
 
 | File | Role |
 |---|---|
 | `ch.<company>.dashboard.js` | Main file. Header attributes; `exec()`: creates the dialog with `Banana.Ui.createQml(title, "Dashboard.qml")`, checks it, reads the saved settings with `Banana.document.getScriptSettings()` and passes them (a JSON string, possibly empty) to `dialog.qmlObject.init(...)`, then `dialog.exec()`. After `exec()`: if `dialog.qmlObject.settingsModified` is true, saves `dialog.qmlObject.settingsJson` with `Banana.document.setScriptSettings(...)`. |
+| `ch.<company>.dashboard.qrc` | The package file (section 4a). |
+| `ch.<company>.dashboard.manifest.json` | The manifest of the extension (section 4a). |
 | `Dashboard.qml` | **Safe loader, minimal and always the same** (rule 17). Root element an `Item` (rule 18). Imports only `QtQuick` and `QtQuick.Controls`: no `Style`, no `data.js`, no component of the extension, fixed colors. Properties `banana`, `settingsJson` (string) and `settingsModified` (bool); `init(savedJson)` stores the saved settings, creates `Content.qml` with the safe creation of rule 17 passing `banana` and the saved settings, connects its signal `settingsSaved(json)` to update `settingsJson` and set `settingsModified`, then calls its `init()` inside try/catch. Any error is shown in red, as selectable text. Footer with the version and a Close button (`Qt.quit()`). |
 | `Content.qml` | The dashboard itself. Header: company, the global period in words, a gear button at the top right. Reads the settings (section 5a), shows the setup panel at the first opening, computes the context with `Data.context(banana, period)`, creates the widgets in a `GridLayout` with 4 columns inside a `Flickable` (each widget spans the columns given in its file), each from its file with the safe creation of rule 17. Emits `settingsSaved(json)` whenever a parameter is applied. Hosts the settings panels (rule 19). |
 | `data.js` | All the calculations, plain JavaScript (`.pragma library`). `context(banana, period)`: what all widgets share (document, accounting period, selected period, months, today, the date of the last transaction (section 7), account list). **One function per widget** that receives the context and the widget's settings and returns one object with everything the widget shows. Period computation (section 5a), formatting of amounts and dates. |
@@ -199,6 +205,29 @@ that widget. Then `settingsSaved` is emitted; the script saves after the dialog 
 - a widget whose file has an error is replaced by a red card with the message (rule 17); a widget whose
   data function fails shows the message in its error line;
 - the footer shows the version, increased at every delivery.
+
+### 4a. Package
+
+The extension is installed as a **package** (`.sbaa` file). You deliver the files to build it; the user
+compiles it in Banana by dragging the `.qrc` file onto Banana (section 9).
+
+- **Names:** with the extension id `ch.<company>.dashboard`, the main file is
+  `ch.<company>.dashboard.js`, the package file `ch.<company>.dashboard.qrc` and the manifest
+  `ch.<company>.dashboard.manifest.json`; the compiled package will be `ch.<company>.dashboard.sbaa`.
+- **`.qrc` file:** an XML file with the root `<RCC>`, one `<qresource prefix="/">` and inside it one
+  `<file>` line per file of the extension, with its path relative to the folder (all files are in the
+  folder itself, so just the name): the main `.js` file first, then the manifest, then every `.js`,
+  `.qml` file and `qmldir`. Every file you create must be listed, with exactly the same name and
+  capitalization: a file missing from the `.qrc` is missing from the package, and the dashboard or a
+  widget fails only after installation. Do not list the `.qrc` itself, the `.sbaa` or other files.
+  When you add, remove or rename a file, update the `.qrc` in the same delivery.
+- **Manifest:** a JSON file with these fields: `"category": "productivity"`, `"country": ""`,
+  `"countryCode": ""`, `"description"` (one sentence in the user's language), `"language"` (the
+  two-letter code of the user's language, e.g. `"it"`), `"publisher"` (the user's company, or
+  `"Custom"`), `"title"` (the extension name chosen by the user) and `"version"` (the same version
+  shown in the footer). Valid JSON: double quotes, no trailing comma.
+- **Paths:** `Banana.Ui.createQml(title, "Dashboard.qml")` and `Qt.createComponent(...)` use the same
+  relative names inside the package as in the folder; keep all files in the same folder.
 
 ## 5. Rules (from real problems in Banana)
 
@@ -521,14 +550,20 @@ user which one is missing instead of building the widget from memory.
 
 ## 9. Installation and test in Banana (tell the user)
 
-1. Save all the files of the dashboard in one folder and keep them together.
-2. In Banana Accounting Plus open a double-entry accounting file (better a copy, see the notice).
-3. Menu **Extensions > Manage Extensions**, then **Add from file**, and choose the main `.js` file.
-4. Run it from the **Extensions** menu. The first time, choose the period and the colors.
-5. Check the version in the footer: it must be the one just delivered.
-6. To keep the settings, save the accounting file.
-7. After changing files, close and reopen the dashboard; if the old version is still shown, remove
-   the extension in Manage Extensions and add it again.
+1. Unzip the zip into a folder and keep all the files together.
+2. **Compile the package:** drag the `.qrc` file (e.g. `ch.<company>.dashboard.qrc`) onto the Banana
+   Accounting Plus window. Banana creates the package `ch.<company>.dashboard.sbaa`.
+3. Open a double-entry accounting file (better a copy, see the notice).
+4. Menu **Extensions > Manage Extensions**, then **Add from file**, and choose the `.sbaa` file.
+5. **Grant the permissions** (once): in **Extensions > Manage Extensions** select the extension; its
+   "Permissions status" is "Revoked": click **Grant**, then close the dialog. The extension needs this
+   permission to open its QML window (`@permissions = allow-qml`, rule 1).
+6. Run the dashboard from the **Extensions** menu. The first time, choose the period and the colors.
+7. Check the version in the footer: it must be the one just delivered.
+8. To keep the settings, save the accounting file.
+9. **New version:** replace all the files in the folder, drag the `.qrc` onto Banana again to compile
+   the new `.sbaa`, then **Extensions > Manage Extensions > Update extensions**. If the footer still
+   shows the old version, remove the extension in Manage Extensions and add the `.sbaa` again.
 
 ## 10. Problems and solutions
 
@@ -548,6 +583,9 @@ user which one is missing instead of building the widget from memory.
 | Text or marker over a chart missing | Inside the `GraphsView` | Rule 7 |
 | Settings panel opens a separate window or does not open | `Dialog`, `Popup` or `Window` used | Rule 19 |
 | Everything black or tiny | Style not a singleton | Rule 5 |
-| Footer shows an old version | Old files loaded | Close and reopen; remove and add the extension again; check the files were replaced |
+| Footer shows an old version | Package not compiled again, or old package loaded | Drag the `.qrc` onto Banana again, update the extensions; if needed remove and add the `.sbaa` again |
+| Works from the folder but, after installing the `.sbaa`, a red message says a file cannot be found | File missing from the `.qrc` or with a different name | Section 4a: list every file in the `.qrc` with its exact name |
+| The `.sbaa` is not created when dragging the `.qrc` | Error in the `.qrc` (XML) or a listed file does not exist | Check the `.qrc` against the files of the folder |
+| The dashboard does not open after installing | Permissions not granted (status "Revoked") | Section 9, step 5: **Grant** in Manage Extensions |
 | Liquidity empty | No accounts chosen | The user chooses them with the widget's gear |
 | Budget values zero | No budget for those accounts | Explain; the user fills in the budget |
