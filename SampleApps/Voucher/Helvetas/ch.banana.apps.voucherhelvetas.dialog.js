@@ -1,11 +1,11 @@
 // Copyright [2015] [Banana.ch SA - Lugano Switzerland]
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,11 +38,170 @@
 */
 
 
+/***********************************************************************************************************
+    TRANSLATIONS
+    To add a language:
+      1. add an entry to TEXTS (same keys as "es")
+      2. add its code to LANGUAGES
+      3. add an item to LanguageComboBox in the .ui file, at the same position as in LANGUAGES
+    "numberLang" must be a language supported by written-number.min.js (en, es, pt, fr, it, ...)
+***********************************************************************************************************/
+
+// Order must match the items of LanguageComboBox in the .ui file
+var LANGUAGES = ["es", "en"];
+
+var TEXTS = {
+    "es": {
+        "numberLang": "es",
+        "currency": "bolivianos",
+
+        // Dialog
+        "dialogTitle": "Comprobante de transacción",
+        "lblLanguage": "Idioma",
+        "lblVoucherNumber": "Nº de Comprobante",
+        "lblInstitucion": "Institución",
+        "lblDireccion": "Dirección",
+        "lblGestion": "Gestion",
+        "lblCanceladoA": "Cancelado a",
+        "lblPorConceptoDe": "Por concepto de",
+        "lblEfectivo": "Efectivo",
+        "lblCheque": "Cheque",
+        "lblBancos": "Bancos",
+        "lblElaborado": "Elaborado",
+        "lblAutorizado": "Autorizado",
+        "lblRecibiConforme": "Recibi conforme",
+        "errorTitle": "Error",
+        "errorEmptyVoucher": "El Nº de comprobante no puede estar vacío",
+
+        // Report
+        "reportTitle": "Comprobante de transacción",
+        "hdrInstitucion": "INSTITUCIÓN:",
+        "hdrDireccion": "DIRECCIÓN:",
+        "hdrGestion": "GESTION:",
+        "hdrFecha": "FECHA:",
+        "hdrTipoCambio": "T. de C.:",
+        "hdrNit": "NIT:",
+        "hdrPagina": "N° DE PAG",
+        "voucherTitle": "COMPROBANTE",
+        "voucherNumber": "Nº DE COMPROBANTE: ",
+        "infoCanceladoA": "CANCELADO A:",
+        "infoPorConceptoDe": "POR CONCEPTO DE: ",
+        "infoEfectivo": "EFECTIVO:",
+        "infoCheque": "CHEQUE:",
+        "infoBancos": "BANCOS:",
+        "colCostCenter": "CENTRO DE COSTOS",
+        "colAccount": "CUENTA",
+        "colDescription": "DESCRIPCION",
+        "colDebit": "DEBE BS",
+        "colCredit": "HABER BS",
+        "totals": "TOTALES",
+        "amountInWords": "SON: ",
+        "signElaborado": "ELABORADO",
+        "signAutorizado": "AUTORIZADO",
+        "signRecibiConforme": "RECIBI CONFORME"
+    },
+    "en": {
+        "numberLang": "en",
+        "currency": "bolivianos",
+
+        // Dialog
+        "dialogTitle": "Transaction Voucher",
+        "lblLanguage": "Language",
+        "lblVoucherNumber": "Voucher No.",
+        "lblInstitucion": "Institution",
+        "lblDireccion": "Address",
+        "lblGestion": "Fiscal year",
+        "lblCanceladoA": "Paid to",
+        "lblPorConceptoDe": "Concept",
+        "lblEfectivo": "Cash",
+        "lblCheque": "Cheque",
+        "lblBancos": "Bank",
+        "lblElaborado": "Prepared by",
+        "lblAutorizado": "Authorized by",
+        "lblRecibiConforme": "Received by",
+        "errorTitle": "Error",
+        "errorEmptyVoucher": "Voucher number can't be empty",
+
+        // Report
+        "reportTitle": "Transaction Voucher",
+        "hdrInstitucion": "INSTITUTION:",
+        "hdrDireccion": "ADDRESS:",
+        "hdrGestion": "FISCAL YEAR:",
+        "hdrFecha": "DATE:",
+        "hdrTipoCambio": "EXCHANGE RATE:",
+        "hdrNit": "TAX ID:",
+        "hdrPagina": "PAGE NO.",
+        "voucherTitle": "VOUCHER",
+        "voucherNumber": "VOUCHER NO.: ",
+        "infoCanceladoA": "PAID TO:",
+        "infoPorConceptoDe": "CONCEPT: ",
+        "infoEfectivo": "CASH:",
+        "infoCheque": "CHEQUE:",
+        "infoBancos": "BANK:",
+        "colCostCenter": "COST CENTER",
+        "colAccount": "ACCOUNT",
+        "colDescription": "DESCRIPTION",
+        "colDebit": "DEBIT BS",
+        "colCredit": "CREDIT BS",
+        "totals": "TOTALS",
+        "amountInWords": "THE SUM OF: ",
+        "signElaborado": "PREPARED BY",
+        "signAutorizado": "AUTHORIZED BY",
+        "signRecibiConforme": "RECEIVED BY"
+    }
+};
+
+function getTexts(lang) {
+    return TEXTS[lang] || TEXTS[LANGUAGES[0]];
+}
+
+/**
+    Default language when nothing is saved: document locale, then application locale, then first language
+*/
+function getDefaultLanguage() {
+    var locale = "";
+    if (Banana.document && Banana.document.locale) {
+        locale = Banana.document.locale;
+    } else if (Banana.application && Banana.application.locale) {
+        locale = Banana.application.locale;
+    }
+    var lang = String(locale).substr(0, 2).toLowerCase();
+    return LANGUAGES.indexOf(lang) >= 0 ? lang : LANGUAGES[0];
+}
+
 
 var param = {};
 var dialog = Banana.Ui.createUi("ch.banana.apps.voucherhelvetas.dialog.ui");
 
 
+function getSelectedLanguage() {
+    return LANGUAGES[dialog.LanguageComboBox.currentIndex] || LANGUAGES[0];
+}
+
+/**
+    Sets all dialog labels in the given language
+*/
+function updateDialogTexts(lang) {
+    var t = getTexts(lang);
+    dialog.windowTitle = t.dialogTitle;
+    dialog.LanguageLabel.text = t.lblLanguage;
+    dialog.VoucherNumberLabel.text = t.lblVoucherNumber;
+    dialog.InstitucionLabel.text = t.lblInstitucion;
+    dialog.DireccionLabel.text = t.lblDireccion;
+    dialog.GestionLabel.text = t.lblGestion;
+    dialog.CanceladoALabel.text = t.lblCanceladoA;
+    dialog.PorConceptoDeLabel.text = t.lblPorConceptoDe;
+    dialog.EfectivoLabel.text = t.lblEfectivo;
+    dialog.CequeLabel.text = t.lblCheque;
+    dialog.BancosLabel.text = t.lblBancos;
+    dialog.ElaboradoLabel.text = t.lblElaborado;
+    dialog.AutorizadoLabel.text = t.lblAutorizado;
+    dialog.RecibiConformeLabel.text = t.lblRecibiConforme;
+}
+
+dialog.onLanguageChanged = function () {
+    updateDialogTexts(getSelectedLanguage());
+}
 
 /**
     Checks all the data: if empty shows an error message
@@ -52,7 +211,8 @@ dialog.checkdata = function () {
     var valid = true;
 
     if (dialog.VoucherNumberLineEdit.text.length <= 0) {
-        Banana.Ui.showInformation("Error", "Text can't be empty");
+        var t = getTexts(getSelectedLanguage());
+        Banana.Ui.showInformation(t.errorTitle, t.errorEmptyVoucher);
         valid = false;
     }
 
@@ -62,7 +222,7 @@ dialog.checkdata = function () {
 
 }
 
-/** 
+/**
     Runs the dialog and set the parameters
 */
 function dialogExec() {
@@ -74,8 +234,15 @@ function dialogExec() {
     if (Banana.document) {
         var data = Banana.document.scriptReadSettings();
         if (data.length > 0) {
-            param = JSON.parse(data);
-        
+            // Merge over defaults so settings saved by older versions (without "language") still work.
+            // voucherNumber is kept from the cursor, not from the saved settings.
+            var saved = JSON.parse(data);
+            for (var key in saved) {
+                if (key !== "voucherNumber") {
+                    param[key] = saved[key];
+                }
+            }
+
             // Load saved settings
             dialog.InstitucionLineEdit.text = param["Institucion"];
             dialog.DireccionLineEdit.text = param["Direccion"];
@@ -91,6 +258,13 @@ function dialogExec() {
         }
     }
 
+    // Language
+    if (LANGUAGES.indexOf(param["language"]) < 0) {
+        param["language"] = getDefaultLanguage();
+    }
+    dialog.LanguageComboBox.currentIndex = LANGUAGES.indexOf(param["language"]);
+    updateDialogTexts(param["language"]);
+
     // Pause and resume are used to change the cursor aspect
     Banana.application.progressBar.pause();
     var dlgResult = dialog.exec();
@@ -100,7 +274,8 @@ function dialogExec() {
         return false;
     }
 
-    // Read all the fields of the dialog and save the values as parameters 
+    // Read all the fields of the dialog and save the values as parameters
+    param["language"] = getSelectedLanguage();
     param["voucherNumber"] = dialog.VoucherNumberLineEdit.text;
     param["Institucion"] = dialog.InstitucionLineEdit.text;
     param["Direccion"] = dialog.DireccionLineEdit.text;
@@ -121,11 +296,12 @@ function dialogExec() {
     return true;
 }
 
-/** 
-    Initialize dialog values with default values 
+/**
+    Initialize dialog values with default values
 */
 function initParam() {
     param = {
+        "language": "",
         "voucherNumber": "",
         "Institucion": "",
         "Direccion": "",
@@ -156,9 +332,11 @@ var requiredVersion = "8.0.7.171016";
 if (Banana.compareVersion && Banana.compareVersion(Banana.application.version, requiredVersion) >= 0) {
     dialog.buttonBox.accepted.connect(dialog.checkdata); //Clicked Ok button
     dialog.buttonBox.rejected.connect(dialog.close);  //Clicked Cancel button
+    dialog.LanguageComboBox.currentIndexChanged.connect(dialog.onLanguageChanged);
 } else {
     dialog.buttonBox.accepted.connect(dialog, "checkdata"); //Clicked Ok button
     dialog.buttonBox.rejected.connect(dialog, "close"); //Clicked Cancel button
+    dialog.LanguageComboBox.currentIndexChanged.connect(dialog, "onLanguageChanged");
 }
 
 /**
@@ -174,8 +352,8 @@ function exec(inData) {
         Banana.document.clearMessages();
 
         //Create the report
-        var report = Banana.Report.newReport("Voucher Transaction");
-                
+        var report = Banana.Report.newReport(getTexts(param["language"]).reportTitle);
+
         //Function call to create the report using the Doc selected
         createReport(report, param["voucherNumber"]);
 
@@ -188,20 +366,23 @@ function exec(inData) {
 /**
     Using the given docNumber and all the parameters inserted in the dialog,
     read the journal and take all the data, and at the end creates the report
-*/    
+*/
 function createReport(report, docNumber) {
-    
+
+    var t = getTexts(param["language"]);
+
     addFooter(report);
 
     //Table Journal
     var journal = Banana.document.journal(Banana.document.ORIGINTYPE_CURRENT, Banana.document.ACCOUNTTYPE_NORMAL);
-    var totDebit = "";
-    var totCredit = "";
+    // Start from "0" so totals and amount in words are valid even if no row matches
+    var totDebit = "0";
+    var totCredit = "0";
     var date = "";
     var description = "";
     var vouchernumber = "";
     var exchange = "";
-    
+
     /***********************************************************************************************************
         HEADER TABLE
     ***********************************************************************************************************/
@@ -235,9 +416,9 @@ function createReport(report, docNumber) {
     }
 
     var headerCell1 = tableRow.addCell("", "borderBottom", 1);
-    headerCell1.addParagraph("INSTITUCIÓN:",  "bold");
-    headerCell1.addParagraph("DIRECCIÓN:", "");
-    headerCell1.addParagraph("GESTION:", "");
+    headerCell1.addParagraph(t.hdrInstitucion,  "bold");
+    headerCell1.addParagraph(t.hdrDireccion, "");
+    headerCell1.addParagraph(t.hdrGestion, "");
 
     var headerCell2 = tableRow.addCell("", "borderBottom", 1);
     headerCell2.addParagraph(param["Institucion"], "");
@@ -245,10 +426,10 @@ function createReport(report, docNumber) {
     headerCell2.addParagraph(param["Gestion"], "");
 
     var headerCell3 = tableRow.addCell("", "borderBottom", 1);
-    headerCell3.addParagraph("FECHA:",  "");
-    headerCell3.addParagraph("T. de C.:", "");
-    headerCell3.addParagraph("NIT:", "");
-    headerCell3.addParagraph("N° DE PAG", "");
+    headerCell3.addParagraph(t.hdrFecha,  "");
+    headerCell3.addParagraph(t.hdrTipoCambio, "");
+    headerCell3.addParagraph(t.hdrNit, "");
+    headerCell3.addParagraph(t.hdrPagina, "");
 
     var headerCell4 = tableRow.addCell("", "borderBottom", 1);
     headerCell4.addParagraph(Banana.Converter.toLocaleDateFormat(date), "");
@@ -262,9 +443,9 @@ function createReport(report, docNumber) {
     ***********************************************************************************************************/
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
-    report.addParagraph("COMPROBANTE", "heading1 alignCenter");
+    report.addParagraph(t.voucherTitle, "heading1 alignCenter");
     report.addParagraph(" ", "");
-    report.addParagraph("Nº DE COMPROBANTE: " + docNumber, "heading2 alignCenter");
+    report.addParagraph(t.voucherNumber + docNumber, "heading2 alignCenter");
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
 
@@ -277,19 +458,19 @@ function createReport(report, docNumber) {
     var colInfo6 = table.addColumn("colInfo6");
 
     tableRow = table.addRow();
-    tableRow.addCell("CANCELADO A:", "styleTitle ", 1);
+    tableRow.addCell(t.infoCanceladoA, "styleTitle ", 1);
     tableRow.addCell(param["CanceladoA"], "", 5);
 
     tableRow = table.addRow();
-    tableRow.addCell("POR CONCEPTO DE: ", "styleTitle ", 1);
+    tableRow.addCell(t.infoPorConceptoDe, "styleTitle ", 1);
     tableRow.addCell(param["PorConceptoDe"], "", 5);
 
     tableRow = table.addRow();
-    tableRow.addCell("EFECTIVO:", "styleTitle ", 1);
+    tableRow.addCell(t.infoEfectivo, "styleTitle ", 1);
     tableRow.addCell(param["Efectivo"], "", 1);
-    tableRow.addCell("CHEQUE:", "styleTitle ", 1);
+    tableRow.addCell(t.infoCheque, "styleTitle ", 1);
     tableRow.addCell(param["Cheque"], "", 1);
-    tableRow.addCell("BANCOS:", "styleTitle ", 1);
+    tableRow.addCell(t.infoBancos, "styleTitle ", 1);
     tableRow.addCell(param["Bancos"], "", 1);
 
     report.addParagraph(" ", "");
@@ -304,16 +485,21 @@ function createReport(report, docNumber) {
     var col3a = table.addColumn("col3a");
     var col4a = table.addColumn("col4a");
     var col5a = table.addColumn("col5a");
-    // var col6a = table.addColumn("col6a");
     var tableHeader = table.getHeader();
-    tableRow = tableHeader.addRow();  
+    tableRow = tableHeader.addRow();
 
-    // tableRow.addCell("Date", "styleTitle alignCenter", 1);
-    tableRow.addCell("CENTRO DE COSTOS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
-    tableRow.addCell("CUENTA", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
-    tableRow.addCell("DESCRIPCION", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
-    tableRow.addCell("DEBE BS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
-    tableRow.addCell("HABER BS", "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(t.colCostCenter, "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(t.colAccount, "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(t.colDescription, "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(t.colDebit, "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+    tableRow.addCell(t.colCredit, "styleTitle alignCenter borderLeft borderRight borderTop borderBottom", 1);
+
+    // Journal column -> prefix used in the Accounts table
+    var costCenters = [
+        { column: 'JCC1', prefix: '.' },
+        { column: 'JCC2', prefix: ',' },
+        { column: 'JCC3', prefix: ';' }
+    ];
 
     //Print transactions row
     for (i = 0; i < journal.rowCount; i++) {
@@ -323,7 +509,7 @@ function createReport(report, docNumber) {
         if (tRow.value('Doc') === docNumber) {
             tableRow = table.addRow();
 
-            // 1. CC1/CC2
+            // 1. CC1/CC2/CC3
             tableRow.addCell("", "borderLeft", 1);
 
             // 2. ACCOUNT
@@ -355,23 +541,17 @@ function createReport(report, docNumber) {
             tableRow.addCell("", "borderLeft", 1);
             tableRow.addCell("", "borderLeft borderRight", 1);
 
-            //6. CC1
-            if (tRow.value('JCC1')) {
-                tableRow = table.addRow();
-                tableRow.addCell(tRow.value('JCC1'), "borderLeft", 1);
-                tableRow.addCell("", "borderLeft", 1);
-                tableRow.addCell(getDescription(tRow.value('JCC1')), "borderLeft", 1);
-                tableRow.addCell("", "borderLeft", 1);
-                tableRow.addCell("", "borderLeft borderRight", 1);
-            }
-            //7. CC2
-            if (tRow.value('JCC2')) {
-                tableRow = table.addRow();
-                tableRow.addCell(tRow.value('JCC2'), "borderLeft", 1);
-                tableRow.addCell("", "borderLeft", 1);
-                tableRow.addCell(getDescription(tRow.value('JCC2')), "borderLeft", 1);
-                tableRow.addCell("", "borderLeft", 1);
-                tableRow.addCell("", "borderLeft borderRight", 1);
+            //6. CC1, CC2, CC3
+            for (var c = 0; c < costCenters.length; c++) {
+                var cc = tRow.value(costCenters[c].column);
+                if (cc) {
+                    tableRow = table.addRow();
+                    tableRow.addCell(cc, "borderLeft", 1);
+                    tableRow.addCell("", "borderLeft", 1);
+                    tableRow.addCell(getDescription(cc, costCenters[c].prefix), "borderLeft", 1);
+                    tableRow.addCell("", "borderLeft", 1);
+                    tableRow.addCell("", "borderLeft borderRight", 1);
+                }
             }
 
             tableRow = table.addRow();
@@ -385,7 +565,7 @@ function createReport(report, docNumber) {
 
     //Total Line
     tableRow = table.addRow();
-    tableRow.addCell("TOTALES","bold alignRight borderLeft borderRight borderTop borderBottom", 3);
+    tableRow.addCell(t.totals,"bold alignRight borderLeft borderRight borderTop borderBottom", 3);
     tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totDebit), "bold alignRight borderLeft borderRight borderTop borderBottom", 1);
     tableRow.addCell(Banana.Converter.toLocaleNumberFormat(totCredit), "bold alignRight borderLeft borderRight borderTop borderBottom", 1);
 
@@ -394,20 +574,7 @@ function createReport(report, docNumber) {
     ***********************************************************************************************************/
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
-    //report.addParagraph("SON: " + getDigits(totDebit));
-
-    /* Convert number in spanish words:
-        - the writtenNumber() function returns a text with rounding (ex. 952.90 => noveceientos cincuenta y tres)
-        - we need the right value without rounding:
-            . we save the cents
-            . we save the value without cents
-            . we convert in words the value without cents (ex 952 => noveceientos cincuenta y dos)
-            . we take the cents and use them to build the final string (ex .90 => 90/100 bolivianos)
-            => the final string for "952.90" is "noveceientos cincuenta y dos 90/100 bolivianos"
-    **/
-    var totaleSenzaCentesimi = totDebit.replace(/\..*/, '');
-    var centesimi = getCentesimi(totDebit);
-    report.addParagraph("SON: " + writtenNumber(totaleSenzaCentesimi, { lang: 'es' }) + " " + centesimi + "/100 bolivianos");
+    report.addParagraph(t.amountInWords + getAmountInWords(totDebit, t));
 
     report.addParagraph(" ", "");
     report.addParagraph(" ", "");
@@ -461,164 +628,37 @@ function createReport(report, docNumber) {
     cell3.addParagraph(" ", "");
 
     tableRow = table.addRow();
-    tableRow.addCell("ELABORADO", "styleTitle alignCenter", 1);
-    tableRow.addCell("AUTORIZADO", "styleTitle alignCenter", 1);
-    tableRow.addCell("RECIBI CONFORME", "styleTitle alignCenter", 1);
+    tableRow.addCell(t.signElaborado, "styleTitle alignCenter", 1);
+    tableRow.addCell(t.signAutorizado, "styleTitle alignCenter", 1);
+    tableRow.addCell(t.signRecibiConforme, "styleTitle alignCenter", 1);
 }
 
 /**
-    Function that takes the description for the given account
+    Converts an amount string (ex. "952.90") into words without rounding:
+    "952.90" => "novecientos cincuenta y dos 90/100 bolivianos".
+    writtenNumber() rounds, so integer part and cents are handled separately.
 */
-function getDescription(account) {
-    var description = "";
+function getAmountInWords(amount, t) {
+    var parts = String(amount || "0").replace("-", "").split(".");
+    var integerPart = parts[0] || "0";
+    var cents = ((parts[1] || "") + "00").substr(0, 2);
+    return writtenNumber(integerPart, { lang: t.numberLang }) + " " + cents + "/100 " + t.currency;
+}
+
+/**
+    Returns the description of the given cost center.
+    prefix: "." for CC1, "," for CC2, ";" for CC3
+*/
+function getDescription(account, prefix) {
     var table = Banana.document.table("Accounts");
     for (var i = 0; i < table.rowCount; i++) {
         var tRow = table.row(i);
-        var accountstring1 = "."+account;
-        var accountstring2 = ","+account;
-        var accountstring3 = ";"+account;
-
-        if (accountstring1 === tRow.value("Account") || 
-            accountstring2 === tRow.value("Account") || 
-            accountstring3 === tRow.value("Account")) {
-
-            description = tRow.value("Description");
-            return description;
+        if (prefix + account === tRow.value("Account")) {
+            return tRow.value("Description");
         }
     }
+    return "";
 }
-
-function getCentesimi(num) {
-    var c2,c1;
-    var arr = num.replace(/\D/g,''); //ex. 1'250.37 => arr=[1,2,5,0,3,7]
-    c2 = arr[arr.length - 1];
-    c1 = arr[arr.length - 2];
-    return c1+c2; //37
-}
-
-// /** 
-//     Function that takes a number, split the digits and convert them in words 
-// */
-// function getDigits(num) {
-
-//     var c2,c1,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11 = ""; //max number = 999'999'999'999.99
-//     var numberInWords = "";
-
-//     //replace everything except numbers to remove "."
-//     var arr = num.replace(/\D/g,''); //ex. 1'250.37 => arr=[1,2,5,0,3,7]
-        
-//     if (arr[arr.length - 1]) {    
-//         c2 = numberToSpanish(arr[arr.length - 1]);
-//     }
-
-//     if (arr[arr.length - 2]) {
-//         c1 = numberToSpanish(arr[arr.length - 2]);
-//     }
-
-//     if (arr[arr.length - 3]) {
-//         a0 = numberToSpanish(arr[arr.length - 3]);
-//     }
-
-//     if (arr[arr.length - 4]) {
-//         a1 = numberToSpanish(arr[arr.length - 4]);
-//     }
-        
-//     if (arr[arr.length - 5]) {
-//         a2 = numberToSpanish(arr[arr.length - 5]);
-//     }
-    
-//     if (arr[arr.length - 6]) {
-//         a3 = numberToSpanish(arr[arr.length - 6]);
-//     }
-        
-//     if (arr[arr.length - 7]) {
-//         a4 = numberToSpanish(arr[arr.length - 7]);
-//     }
-        
-//     if (arr[arr.length - 8]) {
-//         a5 = numberToSpanish(arr[arr.length - 8]);
-//     }
-
-//     if (arr[arr.length - 9]) {
-//         a6 = numberToSpanish(arr[arr.length - 9]);
-//     }
-        
-//     if (arr[arr.length - 10]) {
-//         a7 = numberToSpanish(arr[arr.length - 10]);
-//     }
-       
-//     if (arr[arr.length - 11]) {
-//         a8 = numberToSpanish(arr[arr.length - 11]);
-//     }
-
-//     if (arr[arr.length - 12]) {
-//         a9 = numberToSpanish(arr[arr.length - 12]);
-//     }
-
-//     if (arr[arr.length - 13]) {
-//         a10 = numberToSpanish(arr[arr.length - 13]);
-//     }
-
-//     if (arr[arr.length - 14]) {
-//         a11 = numberToSpanish(arr[arr.length - 14]);
-//     }
-
-//     if (a11){ numberInWords += a11 + " "};
-//     if (a10){ numberInWords += a10 + " "};
-//     if (a9){ numberInWords += a9 + " "};
-//     if (a8){ numberInWords += a8 + " "};
-//     if (a7){ numberInWords += a7 + " "};
-//     if (a6){ numberInWords += a6 + " "};
-//     if (a5){ numberInWords += a5 + " "};
-//     if (a4){ numberInWords += a4 + " "};
-//     if (a3){ numberInWords += a3 + " "};
-//     if (a2){ numberInWords += a2 + " "};
-//     if (a1){ numberInWords += a1 + " "};
-//     if (a0){ numberInWords += a0 + " "};
-//     numberInWords += "punto ";
-//     if (c1){ numberInWords += c1 + " "};
-//     if (c2){ numberInWords += c2 + " "};
-
-//     return numberInWords;
-// }
-
-// /**
-//     Function that converts numbers to words
-// */
-// function numberToSpanish(n) {
-//     var res = "";
-//     if (n === "0") {
-//         res = "cero";
-//     }
-//     else if (n === "1") { 
-//         res = "uno";
-//     }
-//     else if (n === "2") { 
-//         res = "dos";
-//     }
-//     else if (n === "3") { 
-//         res = "tres";
-//     }
-//     else if (n === "4") { 
-//         res = "cuatro";
-//     }
-//     else if (n === "5") { 
-//         res = "cinco";
-//     }
-//     else if (n === "6") { 
-//         res = "seis";
-//     }
-//     else if (n === "7") { 
-//         res = "siete";
-//     }
-//     else if (n === "8") { 
-//         res = "ocho";
-//     }
-//     else if (n === "9") { 
-//         res = "nueve";
-//     }    
-//     return res;
-// }
 
 /**
     This function adds a Footer to the report
@@ -626,7 +666,6 @@ function getCentesimi(num) {
 function addFooter(report) {
    report.getFooter().addClass("footer");
    var versionLine = report.getFooter().addText("Banana Accounting", "description");
-   //report.getFooter().addFieldPageNr();
 }
 
 /**
@@ -635,7 +674,7 @@ function addFooter(report) {
 function createStyleSheet() {
     //Create stylesheet
     var stylesheet = Banana.Report.newStyleSheet();
-    
+
     //Set page layout
     var pageStyle = stylesheet.addStyle("@page");
     pageStyle.setAttribute("margin", "15mm 10mm 10mm 20mm");
@@ -654,13 +693,12 @@ function createStyleSheet() {
     stylesheet.addStyle(".borderTop", "border-top:thin solid black");
     stylesheet.addStyle(".borderRight", "border-right:thin solid black");
     stylesheet.addStyle(".borderBottom", "border-bottom:thin solid black");
-    
+
     //Table header
     style = stylesheet.addStyle("table");
     style.setAttribute("width", "100%");
     style.setAttribute("font-size", "8px");
     stylesheet.addStyle("table.table td", "padding-bottom: 2px; padding-top: 5px");
-    //stylesheet.addStyle("table.table td", "border: thin solid black; padding-bottom: 2px; padding-top: 5px");
     stylesheet.addStyle(".col1", "width:10%");
     stylesheet.addStyle(".col2", "width:5%");
     stylesheet.addStyle(".col3", "width:7%");
@@ -673,7 +711,6 @@ function createStyleSheet() {
     style.setAttribute("width", "100%");
     style.setAttribute("font-size", "8px");
     stylesheet.addStyle("table.tableInfo td", "padding-bottom: 2px; padding-top: 5px");
-    //stylesheet.addStyle("table.tableInfo td", "border: thin solid black; padding-bottom: 2px; padding-top: 5px");
     stylesheet.addStyle(".colInfo1", "width:17%");
     stylesheet.addStyle(".colInfo2", "width:20%");
     stylesheet.addStyle(".colInfo3", "width:10%");
@@ -685,7 +722,6 @@ function createStyleSheet() {
     style = stylesheet.addStyle("tableData");
     style.setAttribute("width", "100%");
     style.setAttribute("font-size", "8px");
-    //stylesheet.addStyle("table.tableData td", "border: thin solid black; padding-bottom: 2px; padding-top: 5px");
     stylesheet.addStyle("table.tableData td", "");
     stylesheet.addStyle(".col1a", "width:12%");
     stylesheet.addStyle(".col2a", "width:12%");
@@ -704,5 +740,3 @@ function createStyleSheet() {
 
     return stylesheet;
 }
-
-
