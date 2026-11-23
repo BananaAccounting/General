@@ -27,6 +27,9 @@
 // @timeout = -1
 
 
+// Minimum Banana version required by this extension
+var BAN_VERSION_MIN = "10.0.2";
+
 
 // Main entry point called by Banana when the extension runs.
 // Opens the settings dialog, builds the context object, then
@@ -35,6 +38,10 @@ function exec() {
 
     if (!Banana.document) {
         return;
+    }
+
+    if (!isBananaVersionSupported(Banana.document)) {
+        return "@Cancel";
     }
 
     var param = settingsDialog();
@@ -57,6 +64,18 @@ function exec() {
     buildReport(ctx, report);
     defineStyles(stylesheet, param);
     Banana.Report.preview(report, stylesheet);
+}
+
+// Returns false (and shows a message) if the running Banana version is below the minimum.
+// A missing compareVersion means a version older than the minimum.
+function isBananaVersionSupported(banDoc) {
+    if (!Banana.compareVersion
+        || Banana.compareVersion(Banana.application.version, BAN_VERSION_MIN) < 0) {
+        var msg = getTexts(banDoc).errorVersion.replace("%1", BAN_VERSION_MIN);
+        banDoc.addMessage(msg);
+        return false;
+    }
+    return true;
 }
 
 
@@ -1222,6 +1241,7 @@ function getTexts(banDoc) {
         t.errorDocKeywordEmpty          = "Metodo \"Codici nella colonna Doc\" selezionato, ma nessun codice è stato inserito. Nessuna registrazione è stata considerata di chiusura.";
         t.errorDescriptionKeywordEmpty  = "Metodo \"Testo nella colonna Descrizione\" selezionato, ma nessun testo è stato inserito. Nessuna registrazione è stata considerata di chiusura.";
         t.errorCustomFunction           = "La funzione personalizzata per identificare le registrazioni di chiusura è vuota o non valida. Nessuna registrazione è stata considerata di chiusura.";
+        t.errorVersion                  = "Questa estensione richiede Banana Contabilità Plus versione %1 o successiva.";
         t.paramDebitBefore             = "Provvisorio - Dare";
         t.paramCreditBefore            = "Provvisorio - Avere";
         t.paramBalanceBefore           = "Provvisorio - Saldo";
@@ -1280,6 +1300,7 @@ function getTexts(banDoc) {
         t.errorDocKeywordEmpty          = "Methode \"Codes in der Spalte Doc\" gewählt, aber es wurde kein Code eingegeben. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorDescriptionKeywordEmpty  = "Methode \"Text in der Spalte Beschreibung\" gewählt, aber es wurde kein Text eingegeben. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorCustomFunction           = "Die benutzerdefinierte Funktion zur Identifikation der Abschlussbuchungen ist leer oder ungültig. Keine Buchung wurde als Abschlussbuchung erkannt.";
+        t.errorVersion                  = "Diese Erweiterung erfordert Banana Buchhaltung Plus Version %1 oder höher.";
         t.paramDebitBefore             = "Provisorisch - Soll";
         t.paramCreditBefore            = "Provisorisch - Haben";
         t.paramBalanceBefore           = "Provisorisch - Saldo";
@@ -1338,6 +1359,7 @@ function getTexts(banDoc) {
         t.errorDocKeywordEmpty          = "Méthode \"Codes dans la colonne Doc\" sélectionnée, mais aucun code n'a été saisi. Aucune écriture n'a été considérée comme écriture de clôture.";
         t.errorDescriptionKeywordEmpty  = "Méthode \"Texte dans la colonne Libellé\" sélectionnée, mais aucun texte n'a été saisi. Aucune écriture n'a été considérée comme écriture de clôture.";
         t.errorCustomFunction           = "La fonction personnalisée pour identifier les écritures de clôture est vide ou non valide. Aucune écriture n'a été considérée comme écriture de clôture.";
+        t.errorVersion                  = "Cette extension nécessite Banana Comptabilité Plus version %1 ou ultérieure.";
         t.paramDebitBefore             = "Provisoire - Débit";
         t.paramCreditBefore            = "Provisoire - Crédit";
         t.paramBalanceBefore           = "Provisoire - Solde";
@@ -1396,6 +1418,7 @@ function getTexts(banDoc) {
         t.errorDocKeywordEmpty          = "\"Codes in the Doc column\" method selected, but no code was entered. No entry was considered a closing entry.";
         t.errorDescriptionKeywordEmpty  = "\"Text in the Description column\" method selected, but no text was entered. No entry was considered a closing entry.";
         t.errorCustomFunction           = "The custom function to identify closing entries is empty or invalid. No entry was considered a closing entry.";
+        t.errorVersion                  = "This extension requires Banana Accounting Plus version %1 or later.";
         t.paramDebitBefore             = "Unadjusted - Debit";
         t.paramCreditBefore            = "Unadjusted - Credit";
         t.paramBalanceBefore           = "Unadjusted - Balance";
