@@ -55,7 +55,8 @@ function exec() {
         banDoc:        Banana.document,
         param:         param,
         texts:         getTexts(Banana.document),
-        closingFilter: getClosingFilter(Banana.document, param)
+        closingFilter: getClosingFilter(Banana.document, param),
+        customColumnXml: getCustomColumnXml(Banana.document, param)
     };
 
     var report     = Banana.Report.newReport(ctx.texts.reportTitle);
@@ -76,6 +77,27 @@ function isBananaVersionSupported(banDoc) {
         return false;
     }
     return true;
+}
+
+// Returns the XML name of the custom column to print, or "" when the column is
+// disabled, not specified or not present in the Accounts table (with a warning).
+// Resolved once here so the warning is not repeated for every table.
+function getCustomColumnXml(banDoc, param) {
+    if (!param.showCustomColumn) {
+        return "";
+    }
+    var texts = getTexts(banDoc);
+    var xml   = param.customColumnXmlName ? param.customColumnXmlName.trim() : "";
+    if (xml === "") {
+        banDoc.addMessage(texts.errorCustomColumnEmpty);
+        return "";
+    }
+    var names = banDoc.table("Accounts").columnNames;
+    if (!names || names.indexOf(xml) < 0) {
+        banDoc.addMessage(texts.errorCustomColumnNotFound.replace("%1", xml));
+        return "";
+    }
+    return xml;
 }
 
 
@@ -215,7 +237,7 @@ function printBlock(ctx, table, columns, bClass, accountsWithClosings, grandTota
         accumulateTotals(grandTotals,   data);
 
         var row = table.addRow(rowIndex % 2 === 0 ? "" : "alternateRow");
-        renderDataRow(ctx, row, columns, account, rowAccount.value("Description"), data);
+        renderDataRow(ctx, row, columns, rowAccount, data);
         rowIndex++;
     }
 
@@ -264,7 +286,7 @@ function printPrefixSection(ctx, report, prefixes, title, accountsWithClosings) 
         }
 
         var row = table.addRow(rowIndex % 2 === 0 ? "" : "alternateRow");
-        renderDataRow(ctx, row, columns, account, rowAccount.value("Description"), data);
+        renderDataRow(ctx, row, columns, rowAccount, data);
         rowIndex++;
     }
 }
@@ -433,7 +455,7 @@ function createTable(report, columns, texts) {
     var headerRow = table.getHeader().addRow();
     for (var c = 0; c < columns.length; c++) {
         var col = columns[c];
-        if (col.id === "account" || col.id === "description") {
+        if (col.id === "account" || col.id === "description" || col.id === "notes" || col.id === "custom") {
             headerRow.addCell(col.header, "textHeader");
         }
         else if (col.id === "lastDate") {
@@ -448,7 +470,10 @@ function createTable(report, columns, texts) {
 }
 
 // Fills a single data row with account values.
-function renderDataRow(ctx, row, columns, account, description, data) {
+function renderDataRow(ctx, row, columns, rowAccount, data) {
+
+    var account     = rowAccount.value("Account");
+    var description = rowAccount.value("Description");
 
     //var hasClosing = hasClosingMovements(data);
 
@@ -511,6 +536,14 @@ function renderDataRow(ctx, row, columns, account, description, data) {
 
         else if (col.id === "lastDate") {
             row.addCell(formatDate(data.lastDate), "tableCell dateCell");
+        }
+
+        else if (col.id === "notes") {
+            row.addCell(rowAccount.value("Notes"), "tableCell");
+        }
+
+        else if (col.id === "custom") {
+            row.addCell(rowAccount.value(ctx.customColumnXml), "tableCell");
         }
 
         else {
@@ -628,6 +661,15 @@ function buildColumns(ctx, includeOpening) {
 
     if (param.showLastDate) {
         cols.push({ id: "lastDate", header: texts.lastDate });
+    }
+
+    if (param.showNotes) {
+        cols.push({ id: "notes", header: texts.notes });
+    }
+
+    // Header is the XML name: the column title defined by the user is not read
+    if (ctx.customColumnXml) {
+        cols.push({ id: "custom", header: ctx.customColumnXml });
     }
 
     return cols;
@@ -1127,6 +1169,21 @@ function buildParamDescriptors(param) {
         value: param.showLastDate, defaultvalue: true,
         readValue: function() { param.showLastDate = this.value; } });
 
+    out.data.push({ name: "showNotes", parentObject: "groupColumns",
+        title: texts.notes, type: "bool",
+        value: param.showNotes, defaultvalue: false,
+        readValue: function() { param.showNotes = this.value; } });
+
+    out.data.push({ name: "showCustomColumn", parentObject: "groupColumns",
+        title: texts.paramCustomColumn, type: "bool",
+        value: param.showCustomColumn, defaultvalue: false,
+        readValue: function() { param.showCustomColumn = this.value; } });
+
+    out.data.push({ name: "customColumnXmlName", parentObject: "showCustomColumn",
+        title: texts.paramCustomColumnXmlName, type: "string",
+        value: param.customColumnXmlName, defaultvalue: "",
+        readValue: function() { param.customColumnXmlName = this.value; } });
+
     // Layout
     out.data.push({ name: "groupLayout", title: texts.paramGroupLayout, type: "string", value: "", editable: false, readValue: function() {} });
 
@@ -1164,7 +1221,10 @@ function initParam() {
         showCreditFinal:            false,
         showBalanceFinal:           true,
         showBalanceVariancePercent: false,
-        showLastDate:               true
+        showLastDate:               true,
+        showNotes:                  false,
+        showCustomColumn:           false,
+        customColumnXmlName:        ""
     };
 }
 
@@ -1242,6 +1302,11 @@ function getTexts(banDoc) {
         t.errorDescriptionKeywordEmpty  = "Metodo \"Testo nella colonna Descrizione\" selezionato, ma nessun testo è stato inserito. Nessuna registrazione è stata considerata di chiusura.";
         t.errorCustomFunction           = "La funzione personalizzata per identificare le registrazioni di chiusura è vuota o non valida. Nessuna registrazione è stata considerata di chiusura.";
         t.errorVersion                  = "Questa estensione richiede Banana Contabilità Plus versione %1 o successiva.";
+        t.notes                         = "Note";
+        t.paramCustomColumn             = "Colonna personalizzata";
+        t.paramCustomColumnXmlName      = "Nome XML della colonna personalizzata (tabella Conti)";
+        t.errorCustomColumnEmpty        = "Colonna personalizzata attivata, ma nessun nome XML è stato inserito. La colonna non viene stampata.";
+        t.errorCustomColumnNotFound     = "La colonna \"%1\" non esiste nella tabella Conti. La colonna non viene stampata.";
         t.paramDebitBefore             = "Provvisorio - Dare";
         t.paramCreditBefore            = "Provvisorio - Avere";
         t.paramBalanceBefore           = "Provvisorio - Saldo";
@@ -1301,6 +1366,11 @@ function getTexts(banDoc) {
         t.errorDescriptionKeywordEmpty  = "Methode \"Text in der Spalte Beschreibung\" gewählt, aber es wurde kein Text eingegeben. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorCustomFunction           = "Die benutzerdefinierte Funktion zur Identifikation der Abschlussbuchungen ist leer oder ungültig. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorVersion                  = "Diese Erweiterung erfordert Banana Buchhaltung Plus Version %1 oder höher.";
+        t.notes                         = "Notizen";
+        t.paramCustomColumn             = "Benutzerdefinierte Spalte";
+        t.paramCustomColumnXmlName      = "XML-Name der benutzerdefinierten Spalte (Tabelle Konten)";
+        t.errorCustomColumnEmpty        = "Benutzerdefinierte Spalte aktiviert, aber es wurde kein XML-Name eingegeben. Die Spalte wird nicht gedruckt.";
+        t.errorCustomColumnNotFound     = "Die Spalte \"%1\" existiert nicht in der Tabelle Konten. Die Spalte wird nicht gedruckt.";
         t.paramDebitBefore             = "Provisorisch - Soll";
         t.paramCreditBefore            = "Provisorisch - Haben";
         t.paramBalanceBefore           = "Provisorisch - Saldo";
@@ -1360,6 +1430,11 @@ function getTexts(banDoc) {
         t.errorDescriptionKeywordEmpty  = "Méthode \"Texte dans la colonne Libellé\" sélectionnée, mais aucun texte n'a été saisi. Aucune écriture n'a été considérée comme écriture de clôture.";
         t.errorCustomFunction           = "La fonction personnalisée pour identifier les écritures de clôture est vide ou non valide. Aucune écriture n'a été considérée comme écriture de clôture.";
         t.errorVersion                  = "Cette extension nécessite Banana Comptabilité Plus version %1 ou ultérieure.";
+        t.notes                         = "Notes";
+        t.paramCustomColumn             = "Colonne personnalisée";
+        t.paramCustomColumnXmlName      = "Nom XML de la colonne personnalisée (tableau Comptes)";
+        t.errorCustomColumnEmpty        = "Colonne personnalisée activée, mais aucun nom XML n'a été saisi. La colonne n'est pas imprimée.";
+        t.errorCustomColumnNotFound     = "La colonne \"%1\" n'existe pas dans le tableau Comptes. La colonne n'est pas imprimée.";
         t.paramDebitBefore             = "Provisoire - Débit";
         t.paramCreditBefore            = "Provisoire - Crédit";
         t.paramBalanceBefore           = "Provisoire - Solde";
@@ -1419,6 +1494,11 @@ function getTexts(banDoc) {
         t.errorDescriptionKeywordEmpty  = "\"Text in the Description column\" method selected, but no text was entered. No entry was considered a closing entry.";
         t.errorCustomFunction           = "The custom function to identify closing entries is empty or invalid. No entry was considered a closing entry.";
         t.errorVersion                  = "This extension requires Banana Accounting Plus version %1 or later.";
+        t.notes                         = "Notes";
+        t.paramCustomColumn             = "Custom column";
+        t.paramCustomColumnXmlName      = "XML name of the custom column (Accounts table)";
+        t.errorCustomColumnEmpty        = "Custom column enabled, but no XML name was entered. The column is not printed.";
+        t.errorCustomColumnNotFound     = "The column \"%1\" does not exist in the Accounts table. The column is not printed.";
         t.paramDebitBefore             = "Unadjusted - Debit";
         t.paramCreditBefore            = "Unadjusted - Credit";
         t.paramBalanceBefore           = "Unadjusted - Balance";
