@@ -1366,7 +1366,7 @@ function getTexts(banDoc) {
         t.errorDescriptionKeywordEmpty  = "Methode \"Text in der Spalte Beschreibung\" gewählt, aber es wurde kein Text eingegeben. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorCustomFunction           = "Die benutzerdefinierte Funktion zur Identifikation der Abschlussbuchungen ist leer oder ungültig. Keine Buchung wurde als Abschlussbuchung erkannt.";
         t.errorVersion                  = "Diese Erweiterung erfordert Banana Buchhaltung Plus Version %1 oder höher.";
-        t.notes                         = "Notizen";
+        t.notes                         = "Anmerkungen";
         t.paramCustomColumn             = "Benutzerdefinierte Spalte";
         t.paramCustomColumnXmlName      = "XML-Name der benutzerdefinierten Spalte (Tabelle Konten)";
         t.errorCustomColumnEmpty        = "Benutzerdefinierte Spalte aktiviert, aber es wurde kein XML-Name eingegeben. Die Spalte wird nicht gedruckt.";
